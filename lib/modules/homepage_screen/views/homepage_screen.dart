@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
 class HomepageScreen extends StatelessWidget {
   const HomepageScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +15,15 @@ class HomepageScreen extends StatelessWidget {
           children: [
             Navbar(),
             HeroSection(),
+            TestimonialsSection(),
+
             TrustIndicators(),
 
             WellnessProgramsSection()
 ,
             CommunityActivitiesSection(),
             ResourcesSupportSection(),
-            AccessibilityFeatures()
-            // Footer(),
+            AccessibilityFeatures(),
 
             // ContactSection(),
             // Footer(),/
@@ -32,67 +36,232 @@ class HomepageScreen extends StatelessWidget {
 
 // Navbar Section
 class Navbar extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Container(
-          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        if (constraints.maxWidth > 800) {
+          // Desktop View
+          return WebNavBar();
+        } else {
+          // Mobile View
+          return MobileNavBar();
+        }
+      },
+    );
+  }
+
+
+}
+
+
+
+class WebNavBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Inspiring Seniors',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue[800],
+            ),
+          ),
+          Row(
             children: [
-              Text(
-                "Inspiring Seniors",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue[700],
+              NavItem("Home", () => navigateToSection( "home")),
+              NavItem("Programs", () => navigateToSection( "programs")),
+              NavItem("Activities", () => navigateToSection( "activities")),
+              NavItem("Resources", () => navigateToSection( "resources")),
+              NavItem("Contact", () => navigateToSection( "contact")),
+              SizedBox(width: 16),
+              ElevatedButton(
+                onPressed: () => navigateToSection( "getStarted"),
+                child: Text("Get Started"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue[600],
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
               ),
-              if (constraints.maxWidth > 800)
-                Row(
-                  children: [
-                    NavItem("Home"),
-                    NavItem("Programs"),
-                    NavItem("Activities"),
-                    NavItem("Resources"),
-                    NavItem("Contact"),
-                    SizedBox(width: 16),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text("Get Started"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue[600],
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      ),
-                    ),
-                  ],
-                )
-              else
-                IconButton(
-                  icon: Icon(Icons.menu, size: 28),
-                  onPressed: () {
-                    // Handle mobile menu
-                  },
-                ),
             ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
 
+// Mobile Navigation Bar with Hamburger Menu
+class MobileNavBar extends StatefulWidget {
+  @override
+  _MobileNavBarState createState() => _MobileNavBarState();
+}
+
+class _MobileNavBarState extends State<MobileNavBar> {
+  bool isOpen = false;
+
+  OverlayEntry? _overlayEntry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      color: Colors.white,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Inspiring Seniors',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue[800],
+                ),
+              ),
+              IconButton(
+                icon: Icon(
+                  isOpen ? Icons.close : Icons.menu,
+                  color: Colors.blue[800],
+                  size: 28,
+                ),
+                onPressed: () {
+                  setState(() {
+                    isOpen=!isOpen;
+
+                  });
+                  if(isOpen) {
+                    _showOverlay(context);
+                  }else{
+                    _removeOverlay();
+                  }
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showOverlay(BuildContext context) {
+    _overlayEntry = _createOverlayEntry();
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+// Remove Overlay Menu
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+// Create Overlay Widget
+  OverlayEntry _createOverlayEntry() {
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        top: 50,
+        right: 0,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height*0.6,
+            color: Colors.white,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // IconButton(
+                //   icon: Icon(Icons.close, size: 32, color: Colors.blue[700]),
+                //   onPressed: _removeOverlay,
+                // ),
+                _menuItem("Home", Icons.home),
+                _menuItem("Programs", Icons.school),
+                _menuItem("Activities", Icons.event),
+                _menuItem("Resources", Icons.book),
+                _menuItem("Contact", Icons.contact_mail),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  child: ElevatedButton(
+                    onPressed: _removeOverlay,
+                    child: Text("Get Started"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[600],
+                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  Widget _menuItem(String title, IconData icon) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.blue[700]),
+      title: Text(
+        title,
+        style: TextStyle(fontSize: 20, color: Colors.grey[800]),
+      ),
+      onTap: _removeOverlay,
+    );
+  }
+}
+
+
+
+// Navigation Logic
+void navigateToSection( String section) {
+  // Example navigation logic (modify this to your app's routing system)
+  switch (section) {
+    case "home":
+      Get.toNamed( '/home');
+      break;
+    case "programs":
+      Get.toNamed( '/home');
+      break;
+    case "activities":
+      Get.toNamed( '/home');
+      break;
+    case "resources":
+      Get.toNamed( '/home');
+      break;
+    case "contact":
+      Get.toNamed( '/home');
+      break;
+    case "getStarted":
+      Get.toNamed( '/home');
+      break;
+    default:
+      Get.toNamed( '/home');
+  }
+}
+
+
 class NavItem extends StatelessWidget {
   final String label;
-  NavItem(this.label);
+  final VoidCallback onTap;
+
+  NavItem(this.label, this.onTap);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GestureDetector(
-        onTap: () {},
+        onTap: () {
+          onTap;
+        },
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Text(
@@ -109,55 +278,88 @@ class NavItem extends StatelessWidget {
 class HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
-      color: Colors.blue[50],
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            "Empowering Seniors to Live Their Best Lives",
-            style: TextStyle(
-              fontSize: 42,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 16),
-          Text(
-            "Join our vibrant community where seniors stay active, connected, and inspired.",
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.grey[700],
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 32),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 16,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
+          color: Colors.blue[50],
+          child: Row(
             children: [
-              ElevatedButton(
-                onPressed: () {},
-                child: Text("Explore Programs"),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  backgroundColor: Colors.blue[600],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Empowering Seniors to Live Their Best Lives",
+                      style: TextStyle(
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      "Join our vibrant community where seniors stay active, connected, and inspired.",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey[700],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 32),
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 16,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                            child: Text(
+                              "Explore More Programs",
+                              style: TextStyle(fontSize: 18,),
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[600],
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                        ),
+
+                        OutlinedButton(
+                          onPressed: () {},
+
+                          child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        child: Text(
+        "Learn More",
+
+        style: TextStyle(fontSize: 18,color: Colors.blue[600]),
+        ),
+        ),
+                          style: OutlinedButton.styleFrom(
+                            // backgroundColor: Colors.blue[600],
+                            side: BorderSide(width: 1,),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              OutlinedButton(
-                onPressed: () {},
-                child: Text("Learn More"),
-                style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                  side: BorderSide(color: Colors.blue[600]!),
-                ),
-              ),
+             constraints.maxWidth>800? Container(width: MediaQuery.of(context).size.width*0.5,
+              height: 300,
+              child: Image.asset("assets/images/primary_logo.png",fit: BoxFit.contain,)):Container()
             ],
           ),
-        ],
-      ),
+        );
+      }
     );
   }
 }
@@ -166,25 +368,68 @@ class HeroSection extends StatelessWidget {
 class TrustIndicators extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
-      child: GridView(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: MediaQuery.of(context).size.width > 800 ? 4 : 2,
-          childAspectRatio: 1,
-          crossAxisSpacing: 32,
-          mainAxisSpacing: 32,
-        ),
-        children: [
-          TrustCard("1000+", "Active Members"),
-          TrustCard("50+", "Weekly Activities"),
-          TrustCard("95%", "Satisfaction Rate"),
-          TrustCard("20+", "Years Experience"),
-        ],
-      ),
-    );
+    return
+      LayoutBuilder(
+        builder: (context, constraints)
+    {
+      if(constraints.maxWidth>800) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 32, horizontal: 32),
+          child:
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TrustCard("1000+", "Active Members"),
+              TrustCard("50+", "Weekly Activities"),
+              TrustCard("95%", "Satisfaction Rate"),
+              TrustCard("20+", "Years Experience"),
+            ],
+          ),
+
+          // GridView(
+          //
+          //   shrinkWrap: true,
+          //   physics: NeverScrollableScrollPhysics(),
+          //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //     crossAxisCount: MediaQuery.of(context).size.width > 800 ? 4 : 2,
+          //     childAspectRatio: 1,
+          //     crossAxisSpacing: 32,
+          //     mainAxisSpacing: 32,
+          //   ),
+          //   children: [
+          //     TrustCard("1000+", "Active Members"),
+          //     TrustCard("50+", "Weekly Activities"),
+          //     TrustCard("95%", "Satisfaction Rate"),
+          //     TrustCard("20+", "Years Experience"),
+          //   ],
+          // ),
+        );
+      }else{
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 32, horizontal: 32),
+child:GridView(
+
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount:  2,
+              childAspectRatio: 1,
+              crossAxisSpacing: 32,
+              mainAxisSpacing: 32,
+            ),
+            children: [
+              TrustCard("1000+", "Active Members"),
+              TrustCard("50+", "Weekly Activities"),
+              TrustCard("95%", "Satisfaction Rate"),
+              TrustCard("20+", "Years Experience"),
+            ],
+          ),
+        );
+      }
+    }
+
+  );
   }
 }
 
@@ -195,30 +440,26 @@ class TrustCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              number,
-              style: TextStyle(
-                fontSize: 36,
-                fontWeight: FontWeight.bold,
-                color: Colors.blue[700],
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            number,
+            style: TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue[700],
             ),
-            SizedBox(height: 8),
-            Text(
-              description,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18, color: Colors.grey[700]),
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+          ),
+        ],
       ),
     );
   }
@@ -449,25 +690,32 @@ class CommunityActivitiesSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Section Header
-          Text(
-            "Upcoming Community Activities",
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
-            textAlign: TextAlign.center,
+          Column(
+            children: [
+              Text(
+                "Upcoming Community Activities",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Text(
+                "Join our vibrant community events and create lasting memories together.",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey[700],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 48),
+            ],
           ),
-          SizedBox(height: 16),
-          Text(
-            "Join our vibrant community events and create lasting memories together.",
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.grey[700],
-            ),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 48),
+
+
+
 
           // Activities Grid
           LayoutBuilder(
@@ -482,7 +730,7 @@ class CommunityActivitiesSection extends StatelessWidget {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   ActivitiesColumn(),
-                  ActivityCategoriesCard(),
+                  // ActivityCategoriesCard(),
                 ],
               );
             },
@@ -501,25 +749,25 @@ class ActivitiesColumn extends StatelessWidget {
       children: [
         ActivityCard(
           date: "JAN 15",
-          title: "Garden Club Meeting",
+          title: "Wellness Chaupal",
           description:
           "Join us for our monthly garden club meeting where we'll discuss winter gardening tips and share experiences.",
           time: "10:00 AM",
-          location: "Community Garden",
+          location: "Virtual Link",
         ),
         SizedBox(height: 24),
         ActivityCard(
           date: "JAN 18",
-          title: "Art & Crafts Workshop",
+          title: "Gaata Rahe Mera Dil ",
           description:
           "Express your creativity in our beginner-friendly art workshop. All materials provided.",
           time: "2:00 PM",
-          location: "Activity Room",
+          location: "Virtual Room",
         ),
         SizedBox(height: 24),
         ActivityCard(
           date: "JAN 20",
-          title: "Movie Afternoon",
+          title: "Story Telling Session",
           description:
           "Join us for a classic movie screening followed by a group discussion.",
           time: "3:00 PM",
@@ -1126,6 +1374,247 @@ class AccessibilityFeatures extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
+      ),
+    );
+  }
+}
+
+
+
+class TestimonialsSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
+      color: Colors.blue[50],
+      child: Column(
+        children: [
+          // Section Header
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+
+              children: [
+                Text(
+                  "Inspiring Stories from Our Community",
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  "Hear from our members about how our programs have enriched their lives.",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey[700],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 48),
+
+                // Testimonials Grid
+                GridView.count(
+                  crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
+                  shrinkWrap: true,
+                  crossAxisSpacing: 32,
+                  mainAxisSpacing: 32,
+                  physics: NeverScrollableScrollPhysics(),
+                  childAspectRatio:7/5,
+
+                  children: [
+                    TestimonialCard(
+                      name: "Margaret Thompson",
+                      role: "Member for 3 years",
+                      feedback:
+                      "The activities and friendships I've found here have truly transformed my retirement years. I feel more active and connected than ever before.",
+                    ),
+                    TestimonialCard(
+                      name: "Robert Wilson",
+                      role: "Member for 2 years",
+                      feedback:
+                      "The wellness programs have helped me stay physically active and mentally sharp. The instructors are wonderful and truly care about our well-being.",
+                    ),
+                    TestimonialCard(
+                      name: "Patricia Moore",
+                      role: "Member for 1 year",
+                      feedback:
+                      "I was feeling isolated before joining, but now I have a wonderful community of friends and activities to look forward to every week.",
+                    ),
+                  ],
+                ),
+                SizedBox(height: 64),
+              ],
+            ),
+          ),
+
+          // Success Story Section
+          Container(
+            padding: EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: Colors.blue[100],
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    children: [
+                      Text(
+                        "Featured Success Story",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Container(
+                        width: MediaQuery.of(context).size.width*0.5,
+                        child: Text(
+                          "After retiring, I wasn't sure what to do with my time. Joining this community opened up a whole new chapter in my life. From yoga classes to book clubs, every day brings something new and exciting. I've made wonderful friends and feel healthier than ever!",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey[700],
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      SizedBox(height: 32),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundImage: AssetImage("assets/images/primary_logo.png"),
+                          ),
+                          SizedBox(width: 30),
+                          Column(
+                            children: [
+                              Text(
+                                "James Anderson",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                "Member since 2020",
+                                style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        child: Text(
+                          "Share Your Story",
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue[600],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Testimonial Card Widget
+class TestimonialCard extends StatelessWidget {
+  final String name;
+  final String role;
+  final String feedback;
+
+  TestimonialCard({
+    required this.name,
+    required this.role,
+    required this.feedback,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.blue[100]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 32,
+                backgroundImage: AssetImage("assets/images/primary_logo.png"),
+              ),
+              SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Text(
+                    role,
+                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Text(
+            feedback,
+            style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: List.generate(5, (index) {
+              return Icon(
+                FontAwesomeIcons.solidStar,
+                color: Colors.amber,
+                size: 20,
+              );
+            }),
+          ),
+        ],
       ),
     );
   }
