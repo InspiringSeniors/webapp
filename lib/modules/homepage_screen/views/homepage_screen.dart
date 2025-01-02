@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -15,15 +16,18 @@ class HomepageScreen extends StatelessWidget {
           children: [
             Navbar(),
             HeroSection(),
-            TestimonialsSection(),
-
             TrustIndicators(),
 
-            WellnessProgramsSection()
-,
+            TestimonialsSection(),
+
             CommunityActivitiesSection(),
-            ResourcesSupportSection(),
-            AccessibilityFeatures(),
+
+            WellnessProgramsSection(),
+            // ResourcesSupportSection(),
+            HealthTipsSection(),
+            FooterSection()
+            // AccessibilityFeatures(),
+
 
             // ContactSection(),
             // Footer(),/
@@ -66,13 +70,18 @@ class WebNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Inspiring Seniors',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue[800],
-            ),
+          Row(
+            children: [
+              Text(
+                'Inspiring Seniors',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: ColorUtils.BRAND_COLOR
+                ),
+              ),
+        Container(child: Image.asset("assets/images/primary_logo.png",width: 80,height:80,fit: BoxFit.contain,),)
+            ],
           ),
           Row(
             children: [
@@ -83,13 +92,22 @@ class WebNavBar extends StatelessWidget {
               NavItem("Contact", () => navigateToSection( "contact")),
               SizedBox(width: 16),
               ElevatedButton(
-                onPressed: () => navigateToSection( "getStarted"),
-                child: Text("Get Started"),
+                onPressed: () {},
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+                  child: Text(
+                    "Get Started",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue[600],
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
                 ),
               ),
+
             ],
           ),
         ],
@@ -680,11 +698,15 @@ class ProgramCard extends StatelessWidget {
 }
 
 
+
+
 class CommunityActivitiesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    bool isWideScreen = MediaQuery.of(context).size.width > 800;
+
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
+      padding: EdgeInsets.symmetric(vertical: 48, horizontal: 24),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -695,7 +717,7 @@ class CommunityActivitiesSection extends StatelessWidget {
               Text(
                 "Upcoming Community Activities",
                 style: TextStyle(
-                  fontSize: 40,
+                  fontSize: isWideScreen ? 40 : 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,
                 ),
@@ -705,34 +727,40 @@ class CommunityActivitiesSection extends StatelessWidget {
               Text(
                 "Join our vibrant community events and create lasting memories together.",
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: isWideScreen ? 20 : 16,
                   color: Colors.grey[700],
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 48),
+              SizedBox(height: 32),
             ],
           ),
 
-
-
-
-          // Activities Grid
+          // Activities Grid with Responsive Layout
           LayoutBuilder(
             builder: (context, constraints) {
-              return GridView.count(
-                crossAxisCount: constraints.maxWidth > 1000
-                    ? 2
-                    : 1,
-                shrinkWrap: true,
-                crossAxisSpacing: 32,
-                mainAxisSpacing: 32,
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  ActivitiesColumn(),
-                  // ActivityCategoriesCard(),
-                ],
-              );
+              if (constraints.maxWidth > 800) {
+                // Wide Screen (Desktop)
+                return IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(child: ActivitiesColumn()),
+                      SizedBox(width: 32),
+                      Expanded(child: ActivityCategoriesCard()),
+                    ],
+                  ),
+                );
+              } else {
+                // Mobile Layout (Stacked Vertically)
+                return Column(
+                  children: [
+                    ActivitiesColumn(),
+                    SizedBox(height: 32),
+                    // Expanded(child: ActivityCategoriesCard()),
+                  ],
+                );
+              }
             },
           ),
         ],
@@ -758,7 +786,7 @@ class ActivitiesColumn extends StatelessWidget {
         SizedBox(height: 24),
         ActivityCard(
           date: "JAN 18",
-          title: "Gaata Rahe Mera Dil ",
+          title: "Gaata Rahe Mera Dil",
           description:
           "Express your creativity in our beginner-friendly art workshop. All materials provided.",
           time: "2:00 PM",
@@ -841,7 +869,7 @@ class ActivityCard extends StatelessWidget {
                 Text(
                   title,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
@@ -857,19 +885,11 @@ class ActivityCard extends StatelessWidget {
                 SizedBox(height: 16),
                 Row(
                   children: [
-                    Icon(
-                      FontAwesomeIcons.clock,
-                      size: 16,
-                      color: Colors.grey[600],
-                    ),
+                    Icon(FontAwesomeIcons.clock, size: 16, color: Colors.grey[600]),
                     SizedBox(width: 8),
                     Text(time),
                     SizedBox(width: 24),
-                    Icon(
-                      FontAwesomeIcons.mapMarkerAlt,
-                      size: 16,
-                      color: Colors.grey[600],
-                    ),
+                    Icon(FontAwesomeIcons.mapMarkerAlt, size: 16, color: Colors.grey[600]),
                     SizedBox(width: 8),
                     Text(location),
                   ],
@@ -917,7 +937,7 @@ class ActivityCategoriesCard extends StatelessWidget {
           CategoryItem(FontAwesomeIcons.music, "Music Hour", "Every Friday"),
           SizedBox(height: 16),
           CategoryItem(FontAwesomeIcons.walking, "Walking Group", "Every Saturday"),
-          SizedBox(height: 48),
+          Spacer(),
           Center(
             child: ElevatedButton(
               onPressed: () {},
@@ -931,7 +951,8 @@ class ActivityCategoriesCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue[600],
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
+                  borderRadius: BorderRadius.circular(30),
+                ),
               ),
             ),
           ),
@@ -940,6 +961,7 @@ class ActivityCategoriesCard extends StatelessWidget {
     );
   }
 }
+
 
 // Category Item Widget
 class CategoryItem extends StatelessWidget {
@@ -972,6 +994,7 @@ class CategoryItem extends StatelessWidget {
     );
   }
 }
+
 
 
 
@@ -1384,70 +1407,76 @@ class AccessibilityFeatures extends StatelessWidget {
 class TestimonialsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final List<Widget> testimonials = [
+      TestimonialCard(
+        name: "Margaret Thompson",
+        role: "Member for 3 years",
+        feedback:
+        "The activities and friendships I've found here have truly transformed my retirement years. I feel more active and connected than ever before.",
+      ),
+      TestimonialCard(
+        name: "Robert Wilson",
+        role: "Member for 2 years",
+        feedback:
+        "The wellness programs have helped me stay physically active and mentally sharp. The instructors are wonderful and truly care about our well-being.",
+      ),
+      TestimonialCard(
+        name: "Patricia Moore",
+        role: "Member for 1 year",
+        feedback:
+        "I was feeling isolated before joining, but now I have a wonderful community of friends and activities to look forward to every week.",
+      ),
+    ];
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
       color: Colors.blue[50],
       child: Column(
         children: [
           // Section Header
-          Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-
-              children: [
-                Text(
-                  "Inspiring Stories from Our Community",
-                  style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                  textAlign: TextAlign.center,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Inspiring Stories from Our Community",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
                 ),
-                SizedBox(height: 16),
-                Text(
-                  "Hear from our members about how our programs have enriched their lives.",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.grey[700],
-                  ),
-                  textAlign: TextAlign.center,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Text(
+                "Hear from our members about how our programs have enriched their lives.",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey[700],
                 ),
-                SizedBox(height: 48),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 48),
 
-                // Testimonials Grid
-                GridView.count(
-                  crossAxisCount: MediaQuery.of(context).size.width > 800 ? 3 : 1,
-                  shrinkWrap: true,
-                  crossAxisSpacing: 32,
-                  mainAxisSpacing: 32,
-                  physics: NeverScrollableScrollPhysics(),
-                  childAspectRatio:7/5,
-
-                  children: [
-                    TestimonialCard(
-                      name: "Margaret Thompson",
-                      role: "Member for 3 years",
-                      feedback:
-                      "The activities and friendships I've found here have truly transformed my retirement years. I feel more active and connected than ever before.",
-                    ),
-                    TestimonialCard(
-                      name: "Robert Wilson",
-                      role: "Member for 2 years",
-                      feedback:
-                      "The wellness programs have helped me stay physically active and mentally sharp. The instructors are wonderful and truly care about our well-being.",
-                    ),
-                    TestimonialCard(
-                      name: "Patricia Moore",
-                      role: "Member for 1 year",
-                      feedback:
-                      "I was feeling isolated before joining, but now I have a wonderful community of friends and activities to look forward to every week.",
-                    ),
-                  ],
+              // Carousel Slider for Testimonials
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 300,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  aspectRatio: 16 / 14,
+                  viewportFraction: MediaQuery.of(context).size.width > 800 ? 0.4 : 0.8,
+                  enableInfiniteScroll: true,
+                  autoPlayInterval: Duration(seconds: 5),
                 ),
-                SizedBox(height: 64),
-              ],
-            ),
+                items: testimonials.map((testimonial) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(horizontal: 8),
+                    child: testimonial,
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 64),
+            ],
           ),
 
           // Success Story Section
@@ -1459,13 +1488,11 @@ class TestimonialsSection extends StatelessWidget {
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
+                  width: MediaQuery.of(context).size.width * 0.55,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
-
                     children: [
                       Text(
                         "Featured Success Story",
@@ -1476,16 +1503,13 @@ class TestimonialsSection extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 16),
-                      Container(
-                        width: MediaQuery.of(context).size.width*0.5,
-                        child: Text(
-                          "After retiring, I wasn't sure what to do with my time. Joining this community opened up a whole new chapter in my life. From yoga classes to book clubs, every day brings something new and exciting. I've made wonderful friends and feel healthier than ever!",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[700],
-                          ),
-                          textAlign: TextAlign.left,
+                      Text(
+                        "After retiring, I wasn't sure what to do with my time. Joining this community opened up a whole new chapter in my life. From yoga classes to book clubs, every day brings something new and exciting. I've made wonderful friends and feel healthier than ever!",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[700],
                         ),
+                        textAlign: TextAlign.left,
                       ),
                       SizedBox(height: 32),
                       Row(
@@ -1496,6 +1520,7 @@ class TestimonialsSection extends StatelessWidget {
                           ),
                           SizedBox(width: 30),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "James Anderson",
@@ -1513,12 +1538,10 @@ class TestimonialsSection extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 16),
                     ],
                   ),
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () {},
@@ -1562,8 +1585,7 @@ class TestimonialCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
-      
+
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -1622,4 +1644,528 @@ class TestimonialCard extends StatelessWidget {
 
 
 
+
+class HealthTipsSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
+      color: Colors.white,
+      child: Column(
+        children: [
+          // Section Header
+          Column(
+            children: [
+              Text(
+                "Health Tips & Wellness Advice",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Text(
+                "Expert guidance to help you maintain a healthy and active lifestyle",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey[700],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 48),
+            ],
+          ),
+
+          // Health Tips Grid
+          GridView.count(
+            crossAxisCount: MediaQuery.of(context).size.width > 1000 ? 3 : 1,
+            shrinkWrap: true,
+            crossAxisSpacing: 32,
+            mainAxisSpacing: 32,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              TipCard(
+                icon: FontAwesomeIcons.walking,
+                title: "Daily Exercise",
+                tips: [
+                  "Start with 10-minute walks",
+                  "Try chair exercises",
+                  "Stretch daily for flexibility",
+                ],
+              ),
+              TipCard(
+                icon: FontAwesomeIcons.appleAlt,
+                title: "Healthy Eating",
+                tips: [
+                  "Eat colorful vegetables",
+                  "Stay hydrated with water",
+                  "Choose lean proteins",
+                ],
+              ),
+              TipCard(
+                icon: FontAwesomeIcons.brain,
+                title: "Mental Wellness",
+                tips: [
+                  "Practice daily meditation",
+                  "Stay socially connected",
+                  "Try new hobbies",
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 64),
+
+          // Weekly Health Tips Section
+          Container(
+            padding: EdgeInsets.all(32),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: Colors.grey[200]!),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Weekly Health Tips Newsletter",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        "Subscribe to receive expert health advice, wellness tips, and activity recommendations tailored for seniors.",
+                        style: TextStyle(fontSize: 18, color: Colors.grey[700]),
+                      ),
+                      SizedBox(height: 32),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: "Enter your email",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          contentPadding: EdgeInsets.all(16),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Checkbox(value: true, onChanged: (val) {}),
+                          Text(
+                            "I agree to receive health and wellness updates",
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 16),
+                          child: Text(
+                            "Subscribe Now",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue[600],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (MediaQuery.of(context).size.width > 800)
+                  Container(
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 32),
+                      child: Image.network(
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlGH4WPCeRERaEHofbBOlxJblt1-8h1pREDw&s",
+                        fit: BoxFit.cover,
+
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: 64),
+
+          // Quick Tips Section
+          GridView.count(
+            crossAxisCount: MediaQuery.of(context).size.width > 1000 ? 4 : 2,
+            shrinkWrap: true,
+            crossAxisSpacing: 32,
+            mainAxisSpacing: 32,
+            childAspectRatio: 3/2,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              QuickTipCard(
+                icon: FontAwesomeIcons.moon,
+                title: "Sleep Well",
+                description:
+                "Aim for 7-8 hours of quality sleep each night for better health.",
+              ),
+              QuickTipCard(
+                icon: FontAwesomeIcons.heart,
+                title: "Heart Health",
+                description:
+                "Regular check-ups and moderate exercise keep your heart strong.",
+              ),
+              QuickTipCard(
+                icon: FontAwesomeIcons.smile,
+                title: "Stay Positive",
+                description:
+                "Maintain a positive outlook for better mental and physical health.",
+              ),
+              QuickTipCard(
+                icon: FontAwesomeIcons.users,
+                title: "Stay Social",
+                description:
+                "Regular social interaction boosts mood and cognitive function.",
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// Tip Card Widget
+class TipCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final List<String> tips;
+
+  TipCard({required this.icon, required this.title, required this.tips});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.blue[50],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.blue[100]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 48, color: Colors.blue[700]),
+          SizedBox(height: 24),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(height: 16),
+          for (var tip in tips)
+            ListTile(
+              leading: Icon(FontAwesomeIcons.checkCircle,
+                  color: Colors.green[500]),
+              title: Text(tip, style: TextStyle(color: Colors.grey[700])),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// Quick Tips Card Widget
+class QuickTipCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String description;
+
+  QuickTipCard({required this.icon, required this.title, required this.description});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      padding: EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, size: 48, color: Colors.blue[700]),
+          SizedBox(height: 16),
+          Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Text(description, textAlign: TextAlign.center),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+class FooterSection extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.blue[900],
+      // decoration: BoxDecoration(
+      //   gradient: LinearGradient(colors: [
+      //     Colors.blue[600]!, Colors.blue[900]!, Colors.white,
+      //   ],
+      //     begin: Alignment.bottomCenter,
+      //     end: Alignment.topCenter,),
+      // ),
+      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
+      child: Column(
+        children: [
+          // Footer Grid Section
+          GridView.count(
+            crossAxisCount: MediaQuery.of(context).size.width > 1000 ? 4 : 2,
+            shrinkWrap: true,
+            crossAxisSpacing: 32,
+            mainAxisSpacing: 32,
+            childAspectRatio: 3/2,
+            physics: NeverScrollableScrollPhysics(),
+            children: [
+              FooterItem(
+                title: "Inspiring Seniors",
+                description:
+                "Empowering seniors to live their best lives through community, activities, and support services.",
+                isLogo: true,
+              ),
+              FooterLinkItem(
+                title: "Quick Links",
+                links: [
+                  "About Us",
+                  "Our Programs",
+                  "Activities",
+                  "Resources",
+                  "Contact Us"
+                ],
+              ),
+              FooterContactItem(
+                title: "Contact Info",
+                contacts: [
+                  ["123 Senior Care Lane, Wellness City", FontAwesomeIcons.mapMarkerAlt],
+                  ["1-800-SENIORS", FontAwesomeIcons.phoneAlt],
+                  ["contact@inspiringseniors.org", FontAwesomeIcons.envelope],
+                  ["Mon-Fri: 8AM-6PM", FontAwesomeIcons.clock]
+                ],
+              ),
+              NewsletterForm(),
+            ],
+          ),
+          SizedBox(height: 48),
+
+          // Certificates & Accreditations
+
+
+          // Copyright Section
+          Divider(color: Colors.blue[700]),
+          SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "© 2024 InspiringSeniors. All rights reserved.",
+                style: TextStyle(color: Colors.grey[400], fontSize: 14),
+              ),
+              Row(
+                children: [
+                  FooterTextLink("Privacy Policy"),
+                  SizedBox(width: 16),
+                  FooterTextLink("Terms of Service"),
+                  SizedBox(width: 16),
+                  FooterTextLink("Accessibility"),
+                ],
+              ),
+            ],
+          ),
+
+        ],
+      ),
+    );
+  }
+}
+
+// Footer Item for General Section
+class FooterItem extends StatelessWidget {
+  final String title;
+  final String description;
+  final bool isLogo;
+
+  FooterItem({required this.title, required this.description, this.isLogo = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        isLogo
+            ? Text(
+          title,
+          style: TextStyle(
+              fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
+        )
+            : Text(
+          title,
+          style: TextStyle(
+              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        SizedBox(height: 16),
+        Text(description, style: TextStyle(color: Colors.grey[300], fontSize: 16)),
+      ],
+    );
+  }
+}
+
+// Footer Quick Links Section
+class FooterLinkItem extends StatelessWidget {
+  final String title;
+  final List<String> links;
+
+  FooterLinkItem({required this.title, required this.links});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style:
+          TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        SizedBox(height: 16),
+        for (var link in links)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              link,
+              style: TextStyle(color: Colors.grey[300], fontSize: 16),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+// Footer Contact Section
+class FooterContactItem extends StatelessWidget {
+  final String title;
+  final List<List<dynamic>> contacts;
+
+  FooterContactItem({required this.title, required this.contacts});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style:
+          TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        SizedBox(height: 16),
+        for (var contact in contacts)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Row(
+              children: [
+                Icon(contact[1], color: Colors.grey[300]),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    contact[0],
+                    style: TextStyle(color: Colors.grey[300], fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+// Newsletter Form Section
+class NewsletterForm extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Newsletter",
+          style:
+          TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        SizedBox(height: 16),
+        Text("Subscribe to receive updates and news.",
+            style: TextStyle(color: Colors.grey[300])),
+        SizedBox(height: 16),
+        TextField(
+          decoration: InputDecoration(
+            hintText: "Enter your email",
+            fillColor: Colors.blue[800],
+            filled: true,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        ),
+        SizedBox(height: 16),
+        ElevatedButton(
+          onPressed: () {},
+          child: Text("Subscribe"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.orange[600],
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// Certificate Card Section
+class CertificateCard extends StatelessWidget {
+  final String text;
+  final IconData icon;
+
+  CertificateCard(this.text, this.icon);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, color: Colors.orange[300], size: 48),
+        SizedBox(height: 8),
+        Text(text, style: TextStyle(color: Colors.grey[300], fontSize: 16)),
+      ],
+    );
+  }
+}
+
+// Footer Text Link
+Widget FooterTextLink(String text) {
+  return Text(text, style: TextStyle(color: Colors.grey[400], fontSize: 14));
+}
 
