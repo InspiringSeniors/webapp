@@ -19,8 +19,8 @@ ThemeData theme() {
 TextTheme textTheme() {
   if (Get.locale?.languageCode == "en_US") {
     return const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black, fontFamily: 'Inter'),
-      bodyMedium: TextStyle(color: Colors.black, fontFamily: 'Inter'),
+      bodyLarge: TextStyle(color: Colors.black, fontFamily: 'NotoSans'),
+      bodyMedium: TextStyle(color: Colors.black, fontFamily: 'NotoSans'),
     );
   } else {
     // return TextTheme(
@@ -28,8 +28,8 @@ TextTheme textTheme() {
     //   bodyText2: TextStyle(color: Colors.black, fontFamily: 'Roboto'),
     // );
     return const TextTheme(
-      bodyLarge: TextStyle(color: Colors.black, fontFamily: 'Inter'),
-      bodyMedium: TextStyle(color: Colors.black, fontFamily: 'Inter'),
+      bodyLarge: TextStyle(color: Colors.black, fontFamily: 'NotoSans'),
+      bodyMedium: TextStyle(color: Colors.black, fontFamily: 'NotoSans'),
     );
   }
 }
