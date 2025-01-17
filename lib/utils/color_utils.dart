@@ -24,7 +24,7 @@ class MaterialColorCustom {
 }
 
 class ColorUtils {
-  static const Color HEADER = Color(0xFFB1FFB6);
+  static const Color HEADER_GREEN = Color(0xFF22B573);
   static const Color BRAND_COLOR = Color(0xFF1B136C);
 
   static const Color WHITE_CREAM_COLOR = Color(0xFFEBEBDF);
@@ -34,7 +34,17 @@ class ColorUtils {
   static const Color BRAND_COLOR_LIGHT = Color(0xFFADD5F6);
   static const Color LIGHT_BLUE_SHADE = Color(0xFFEDF4F1);
 
-  static const Color ORANGE_COLOR = Color(0xFFFF7D24);
+  static const Color ORANGE_COLOR = Color(0xFFfe5d37);
+  static const Color ORANGE_COLOR_LIGHT = Color(0xFFffe9e4);
+
+  static const Color PURPLE_BRAND = Color(0xFF786acf);
+  static const Color PURPLE_BRAND_LIGHT = Color(0xFFedeaff);
+
+  static const Color YELLOW_BRAND = Color(0xFFfec624);
+
+  static const Color YELLOW_BRAND_LIGHT = Color(0xFFfff3d8);
+
+
   static const Color GREY_COLOR = Color(0xFF666666);
   static const Color TRACK_GREY = Color(0xFFD9D9D9);
   static const Color TRACK_GREY_LIGHT = Color(0xFFF8F8F8);
@@ -68,8 +78,9 @@ class TextStyleUtils {
   static TextStyle textStyleSubHeader1Brand = TextStyle(
     color: ColorUtils.BRAND_COLOR,
     fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight14,
+    fontSize: TextSizeDynamicUtils.dHeight38,
     letterSpacing: 0.5,
+    fontFamily: "Montserrat"
   );
   static TextStyle textStyleHeaderMain = TextStyle(
       fontWeight: FontWeight.w800,
