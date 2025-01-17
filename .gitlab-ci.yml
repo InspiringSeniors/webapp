@@ -23,7 +23,8 @@ build_web:
 
 deploy:
   stage: deploy
-  script: []
+  script:
+    - echo "Deploying to GitLab Pages"  # Placeholder command to avoid empty script error
   artifacts:
     paths:
       - public  # GitLab Pages requires a 'public' directory
