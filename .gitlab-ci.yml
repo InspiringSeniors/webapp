@@ -1,0 +1,31 @@
+image: cirrusci/flutter:3.24.5  # Use the latest Flutter image
+
+stages:
+  - build
+  - deploy
+
+cache:
+  key: flutter-web
+  paths:
+    - .pub-cache/
+
+before_script:
+  - flutter pub get
+
+build_web:
+  stage: build
+  script:
+    - flutter build web
+  artifacts:
+    paths:
+      - build/web
+
+deploy:
+  stage: deploy
+  script:
+    - mv build/web public  # GitLab Pages requires a 'public' directory
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
