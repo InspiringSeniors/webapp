@@ -6,7 +6,6 @@ import '../../../utils/color_utils.dart';
 import '../controllers/homepage_controller.dart';
 
 class Navbar extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -37,7 +36,6 @@ class WebNavBar extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
-
           // color: Colors.white,
 
               gradient: LinearGradient(colors: [
