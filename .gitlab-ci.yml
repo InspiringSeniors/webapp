@@ -15,7 +15,7 @@ before_script:
 build_web:
   stage: build
   script:
-    - flutter build web --release
+    - flutter build web --release --base-href="/inspiringseniorsWebapp/"
     - mv build/web public  # Move the built web app to 'public'
   artifacts:
     paths:
