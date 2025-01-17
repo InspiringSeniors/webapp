@@ -1,4 +1,4 @@
-image: cirrusci/flutter:3.24.5  # Use the latest Flutter image
+image: "ghcr.io/cirruslabs/flutter:latest"
 
 stages:
   - build
