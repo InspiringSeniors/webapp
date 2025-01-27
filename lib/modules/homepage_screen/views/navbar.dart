@@ -1,6 +1,9 @@
 // Navbar Section
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
+import 'package:inspiringseniorswebapp/utils/utility/utils.dart';
 
 import '../../../utils/color_utils.dart';
 import '../controllers/homepage_controller.dart';
@@ -81,38 +84,16 @@ class WebNavBar extends StatelessWidget {
               // NavItem("Resources", () => navigateToSection( "resources")),
               NavItem("Contact", () => navigateToSection( "contact")),
               SizedBox(width: 16),
-              Obx(()=> ElevatedButton(
-                  onHover: (v){
-                    if(v){
-                      isHoverGetStarted.value=true;
-                    }else{
-                      isHoverGetStarted.value=false;
 
-                    }
-                  },
-                  onPressed: () {},
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    child: Text(
-                      "Get Started",
-                      style: TextStyle(fontSize: 16,color: Colors.white,fontFamily: "Montserrat"),
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isHoverGetStarted.value?ColorUtils.HEADER_GREEN:ColorUtils.BRAND_COLOR,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-
-                      shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
-                      elevation: 10
-                  ),
-                ),
-              ),
+              CustomButton(onpressed: (){
+                Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+              },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Get Started"),
               SizedBox(width: 16),
 
               Obx(()=>ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Utils.openWhatsappForChatSupport();
+                },
                 onHover: (v){
                   if(v){
                       isHover.value = true;

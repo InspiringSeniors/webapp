@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
+import '../../../common_widgets/custom_carousel.dart';
+
 class HomepageController extends GetxController {
+
+
+  TextEditingController? searchController = TextEditingController();
+
 
   var currentIndex = 0.obs;
   var hovering = false.obs;  var isVisible = false.obs;
 
+  var isDropdownClicked=false.obs;
+  var isInnerDropDownClicked=false.obs;
 
   var animatedValues = <String, Animation<int>>{}.obs;
   late AnimationController _controller;
@@ -55,10 +63,26 @@ class HomepageController extends GetxController {
     });
   }
 
+
+  final List<Widget> onboardingList = <Widget>[
+    CarouselBuilderScreenV2.screen1(
+        Get.context!,
+        'assets/images/primary_logo.png',
+        ),
+    CarouselBuilderScreenV2.screen1(
+        Get.context!,
+        'assets/images/health_hub_icon.png',),
+    CarouselBuilderScreenV2.screen1(
+        Get.context!,
+        'assets/images/social_icon.png',
+        ),
+  ];
   @override
   void onInit() {
     super.onInit();
     startSwitcher();
+
+
   }
 
 

@@ -61,6 +61,7 @@ class TextStyleUtils {
     fontWeight: FontWeight.w600,
     fontSize: TextSizeDynamicUtils.dHeight16,
     letterSpacing: 0.5,
+
   );
   static TextStyle textStyleSubHeader1 = TextStyle(
     color: ColorUtils.GREY_COLOR_PLACEHOLDER,

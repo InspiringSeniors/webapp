@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/google_form_screen/views/google_form_screen.dart';
+import 'package:inspiringseniorswebapp/modules/pdf_viewer_screen/views/pdf_viewer_screen.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:inspiringseniorswebapp/utils/themes/theme_data.dart';
 import 'package:inspiringseniorswebapp/utils/translations/translations_locale.dart';
@@ -70,6 +72,17 @@ class _MyAppState extends State<MyApp> {
                       name: RoutingNames.HOME_PAGE_SCREEN,
                       page: () => HomepageScreen(),
                       binding: HomepageBindings()),
+
+                  GetPage(
+                      name: RoutingNames.GOOGLE_FORM_SCREEN,
+                      page: () => GoogleFormScreen(),
+                      binding: HomepageBindings()),
+
+
+                  GetPage(
+                      name: RoutingNames.PDF_VIEWER_SCREEN,
+                      page: () => PdfViewerScreen(),
+                      ),
                 ]));
   }
 }

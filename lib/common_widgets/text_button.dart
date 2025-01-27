@@ -1,29 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../utils/color_utils.dart';
 
-Widget TextButton(){
-  return               ElevatedButton(
-    onPressed: () {},
-    onHover: (v){
-      if(v){
-      }
-      else{
-      }
-    }
-    ,
-    child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Text(
-        "Donate",
-        style: TextStyle(fontSize: 16,color: Colors.white),
+Widget CustomButton({onpressed,text,isHoverGetStarted,hoveredColor,bgColor,fontSize,vpadding,hpadding,shadowColor}){
+
+
+
+
+  return                Obx(
+      ()=> ElevatedButton(
+      onHover: (v){
+        if(v){
+          isHoverGetStarted.value=true;
+        }else{
+          isHoverGetStarted.value=false;
+
+        }
+      },
+      onPressed: () {
+        onpressed();
+      },
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: hpadding, vertical: vpadding),
+        child: Text(
+          text,
+          style: TextStyle(fontSize: fontSize,color: Colors.white,fontFamily: "Montserrat"),
+        ),
       ),
-    ),
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.deepOrangeAccent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
+      style: ElevatedButton.styleFrom(
+          backgroundColor: isHoverGetStarted.value?hoveredColor:bgColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+
+          shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
+          elevation: 10
       ),
     ),
   );

@@ -14,6 +14,8 @@ class RoutingNames {
 
   static String FORCE_UPDATE = "/forceupdate";
   static String HOME_PAGE_SCREEN = "/homepageScreen";
+  static String GOOGLE_FORM_SCREEN = "/googleFormScreen";
+  static String PDF_VIEWER_SCREEN = "/pdfViewerScreen";
 
   //Profile routes
   static String MY_PROFILE = "/myprofile";

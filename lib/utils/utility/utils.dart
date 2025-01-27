@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 
 class GlobalKeyConsts {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -66,5 +67,25 @@ class Validators {
         r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$';
     final regexDOB = RegExp(dobPattern.toString());
     return regexDOB.hasMatch(value) ? true : false;
+  }
+
+
+}
+
+
+class Utils{
+
+  static openWhatsappForChatSupport() async {
+    String urle =
+        "https://wa.me/919315274243/?text=Hi!%20I'm%20interested%20to%20know%20more.";
+    var encodedShareURL =
+    Uri.encodeFull( urle);
+    // print("Whatsapp share URL: ${encodedShareURL}");
+    // if (await urlLauncher.canLaunch(encodedShareURL)) {
+    print('\n\nIF CALLED ==>> > > > > $encodedShareURL \n\n');
+    await urlLauncher.launch(encodedShareURL);
+    // }else {
+    //   showToastMessage("Cannot open app.", true);
+    // }
   }
 }
