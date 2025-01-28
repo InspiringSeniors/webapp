@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homepage_controller.dart';
 import 'package:inspiringseniorswebapp/modules/splash_screen/controller/splash-screen_repo_impl.dart';
 import 'package:inspiringseniorswebapp/modules/splash_screen/controller/splash_screen_repo.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -69,6 +70,7 @@ class SplashScreenController extends GetxController {
     }
 
 
+    Get.put(HomepageController());
     Get.toNamed(RoutingNames.HOME_PAGE_SCREEN);
     // if (firstTime == true) {
     //   Get.offAllNamed(RoutingNames.FIRST_TIME_LANGUAGE_SCREEN);

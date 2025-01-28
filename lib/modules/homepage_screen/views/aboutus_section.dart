@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
 import '../../../utils/color_utils.dart';
 
@@ -91,93 +92,98 @@ SectionDescription(){
 Widget DescriptionCard(String icon, String heading, String subheading, Color bgColor, Color textColor) {
   var isHovered=false.obs;
 
-      return MouseRegion(
-        onEnter: (_) =>
-          isHovered.value = true,
-        onExit: (_) =>
-          isHovered.value= false,
+      return GestureDetector(
+        onTap: (){
+          Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
+        },
+        child: MouseRegion(
+          onEnter: (_) =>
+            isHovered.value = true,
+          onExit: (_) =>
+            isHovered.value= false,
 
-        child: Obx(
-            ()=> AnimatedContainer(
+          child: Obx(
+              ()=> AnimatedContainer(
 
-            duration: Duration(milliseconds: 300),
-            height: 450,
+              duration: Duration(milliseconds: 300),
+              height: 450,
 
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
 
-              decoration: BoxDecoration(
-                  color: isHovered.value ? textColor : bgColor, // Darker color on hover
+                decoration: BoxDecoration(
+                    color: isHovered.value ? textColor : bgColor, // Darker color on hover
 
-                  boxShadow: [
-                    BoxShadow(
-                      color: ColorUtils.BRAND_COLOR_LIGHT,
-                      spreadRadius: 1,
-                      blurRadius: 8,
-                      offset: Offset(0, 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: ColorUtils.BRAND_COLOR_LIGHT,
+                        spreadRadius: 1,
+                        blurRadius: 8,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(20)
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Image.asset(
+                          icon,
+                          width: MediaQuery.of(Get.context!).size.width * 0.08,
+                          fit: BoxFit.contain,
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          width: MediaQuery.of(Get.context!).size.width * 0.13,
+                          child: Text(
+                            heading,
+                            style: TextStyle(
+                              color: isHovered.value ? Colors.white : textColor, // White text on hover
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600,
+                              // fontFamily: "Inter",
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          width: MediaQuery.of(Get.context!).size.width * 0.13,
+                          child: Text(
+                            subheading,
+                            style: TextStyle(
+                              color: isHovered.value? Colors.white : ColorUtils.SECONDARY_BLACK, // White text on hover
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 20),
+
+                      ],
                     ),
+                   isHovered.value? Row(
+                      children: [
+                        Text(
+                          "Know More",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Icon(
+                          FontAwesomeIcons.arrowRight,
+                          size: 18,
+                          color: Colors.white,
+                        )
+                      ],
+                    ):Container()
+
                   ],
-                  borderRadius: BorderRadius.circular(20)
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Image.asset(
-                        icon,
-                        width: MediaQuery.of(Get.context!).size.width * 0.08,
-                        fit: BoxFit.contain,
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        width: MediaQuery.of(Get.context!).size.width * 0.13,
-                        child: Text(
-                          heading,
-                          style: TextStyle(
-                            color: isHovered.value ? Colors.white : textColor, // White text on hover
-                            fontSize: 30,
-                            fontWeight: FontWeight.w600,
-                            // fontFamily: "Inter",
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Container(
-                        width: MediaQuery.of(Get.context!).size.width * 0.13,
-                        child: Text(
-                          subheading,
-                          style: TextStyle(
-                            color: isHovered.value? Colors.white : ColorUtils.SECONDARY_BLACK, // White text on hover
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-
-                    ],
-                  ),
-                 isHovered.value? Row(
-                    children: [
-                      Text(
-                        "Know More",
-                        style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Icon(
-                        FontAwesomeIcons.arrowRight,
-                        size: 18,
-                        color: Colors.white,
-                      )
-                    ],
-                  ):Container()
-
-                ],
-              ),
+                ),
+            ),
           ),
         ),
       );

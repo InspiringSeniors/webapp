@@ -59,14 +59,22 @@ class ColorUtils {
 class TextStyleUtils {
   static TextStyle textStyleHeader1 = TextStyle(
     fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight16,
+    fontSize: TextSizeDynamicUtils.dHeight18,
     letterSpacing: 0.5,
 
   );
   static TextStyle textStyleSubHeader1 = TextStyle(
-    color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-    fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight14,
+    // color: ColorUtils.SECONDARY_BLACK,
+    fontWeight: FontWeight.w200,
+    fontSize: TextSizeDynamicUtils.dHeight20,
+    letterSpacing: 0.5,
+  );
+
+
+  static TextStyle textStyleMainPara = TextStyle(
+    color: ColorUtils.SECONDARY_BLACK,
+    fontWeight: FontWeight.w200,
+    fontSize: TextSizeDynamicUtils.dHeight24,
     letterSpacing: 0.5,
   );
   static TextStyle textStyleSubHeader1Black = TextStyle(
@@ -81,13 +89,21 @@ class TextStyleUtils {
     fontWeight: FontWeight.w600,
     fontSize: TextSizeDynamicUtils.dHeight38,
     letterSpacing: 0.5,
-    fontFamily: "Montserrat"
   );
   static TextStyle textStyleHeaderMain = TextStyle(
-      fontWeight: FontWeight.w800,
-      fontSize: TextSizeDynamicUtils.dHeight24,
+      fontWeight: FontWeight.w400,
+      fontSize: TextSizeDynamicUtils.dHeight40,
       letterSpacing: 1.0,
-      fontFamily: "Poppins");
+
+  );
+
+
+  static TextStyle textStyleHeaderMainBold = TextStyle(
+      fontWeight: FontWeight.w800,
+      fontSize: TextSizeDynamicUtils.dHeight40,
+      letterSpacing: 1.0,
+
+  );
 
   static TextStyle simpleBlackTextStyle = TextStyle(
     color: Colors.black,

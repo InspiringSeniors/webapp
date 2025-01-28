@@ -42,7 +42,7 @@ class HomepageScreen extends StatelessWidget {
             Navbar(),
             HeroSection(),
 
-            CustomRazorpay(),
+            // CustomRazorpay(),
 
 
 
@@ -94,28 +94,28 @@ class HomepageScreen extends StatelessWidget {
 
             HealthTipsSection(),
 
-            CustomCarousel(homepageController,_currentPageNotifier),
-
-            YoutubePlayerWidget(videoId: "fkLrUlObSlc",),
-
-
-            Container(
-              width:MediaQuery.of(context).size.width*0.5,
-                child: CustomDropdown(isDropdownClicked: homepageController.isDropdownClicked,heading: "DropDown",dropdownElements: showListForDropDown(),)),
-
-            SizedBox(height: 10,),
-            DropdownMenu(dropdownMenuEntries: [
-              DropdownMenuEntry(label: "check 1",value: 1),
-              DropdownMenuEntry(label: "check 2",value: 1),
-
-              DropdownMenuEntry(label: "check 3",value: 1),
-              DropdownMenuEntry(label: "check 4",value: 1),
-              DropdownMenuEntry(label: "check 5",value: 1),
-              DropdownMenuEntry(label: "check 6",value: 1),
-              DropdownMenuEntry(label: "check 7",value: 1),
-              DropdownMenuEntry(label: "check 8",value: 1,),
-
-            ],width: MediaQuery.of(context).size.width*0.5,enableSearch: true,hintText: "Searh text",),
+            // CustomCarousel(homepageController,_currentPageNotifier),
+            //
+            // YoutubePlayerWidget(videoId: "fkLrUlObSlc",),
+            //
+            //
+            // Container(
+            //   width:MediaQuery.of(context).size.width*0.5,
+            //     child: CustomDropdown(isDropdownClicked: homepageController.isDropdownClicked,heading: "DropDown",dropdownElements: showListForDropDown(),)),
+            //
+            // SizedBox(height: 10,),
+            // DropdownMenu(dropdownMenuEntries: [
+            //   DropdownMenuEntry(label: "check 1",value: 1),
+            //   DropdownMenuEntry(label: "check 2",value: 1),
+            //
+            //   DropdownMenuEntry(label: "check 3",value: 1),
+            //   DropdownMenuEntry(label: "check 4",value: 1),
+            //   DropdownMenuEntry(label: "check 5",value: 1),
+            //   DropdownMenuEntry(label: "check 6",value: 1),
+            //   DropdownMenuEntry(label: "check 7",value: 1),
+            //   DropdownMenuEntry(label: "check 8",value: 1,),
+            //
+            // ],width: MediaQuery.of(context).size.width*0.5,enableSearch: true,hintText: "Searh text",),
 
 
 

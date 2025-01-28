@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../utils/color_utils.dart';
 
-Widget CustomButton({onpressed,text,isHoverGetStarted,hoveredColor,bgColor,fontSize,vpadding,hpadding,shadowColor}){
+Widget CustomButton({textColor,onpressed,text,isHoverGetStarted,hoveredColor,bgColor,fontSize,vpadding,hpadding,shadowColor,borderColor}){
 
 
 
@@ -26,13 +26,16 @@ Widget CustomButton({onpressed,text,isHoverGetStarted,hoveredColor,bgColor,fontS
         padding: EdgeInsets.symmetric(horizontal: hpadding, vertical: vpadding),
         child: Text(
           text,
-          style: TextStyle(fontSize: fontSize,color: Colors.white,fontFamily: "Montserrat"),
+          style: TextStyle(fontSize: fontSize,color: textColor==null?ColorUtils.WHITE_COLOR_BACKGROUND:textColor,fontFamily: "Montserrat"),
         ),
       ),
       style: ElevatedButton.styleFrom(
           backgroundColor: isHoverGetStarted.value?hoveredColor:bgColor,
+
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
+            side: BorderSide(color: borderColor==null?bgColor:borderColor)
+
           ),
 
           shadowColor: ColorUtils.BRAND_COLOR_LIGHT,

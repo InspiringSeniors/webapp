@@ -4,6 +4,6 @@ import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homep
 class HomepageBindings extends Bindings {
   @override
   void dependencies() {
-    Get.put(HomepageController());
+    Get.put(HomepageController(),permanent: true);
   }
 }
