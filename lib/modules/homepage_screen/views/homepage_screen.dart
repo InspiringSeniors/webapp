@@ -89,9 +89,6 @@ class HomepageScreen extends StatelessWidget {
 
             CommunityActivitiesSection(),
 
-
-
-
             HealthTipsSection(),
 
             // CustomCarousel(homepageController,_currentPageNotifier),
