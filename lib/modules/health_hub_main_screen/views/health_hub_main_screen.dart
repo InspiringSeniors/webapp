@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
@@ -92,7 +93,12 @@ class HealthHubMainScreen extends StatelessWidget {
                               Container(child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [initiativesDesc("Daily Dose of Health","A Live session led by ISF volunteers, featuring professionally curated content developed in collaboration with a renowned Yoga Master and a distinguished expert in Physical Medicine and Rehabilitation.",(){}),initiativesDesc("Wellness Chaupal","A program led by health experts and doctors aimed to promote health and wellbeing of senior citizens",(){})],),),
+                                children: [initiativesDesc("Daily Dose of Health","A Live session led by ISF volunteers, featuring professionally curated content developed in collaboration with a renowned Yoga Master and a distinguished expert in Physical Medicine and Rehabilitation.",(){
+                                  Get.toNamed(RoutingNames.DAILY_DOSE_OF_HEALTH);
+                                }),initiativesDesc("Wellness Chaupal","A program led by health experts and doctors aimed to promote health and wellbeing of senior citizens",(){
+                                  Get.toNamed(RoutingNames.WELLNESS_CHAUPAL);
+
+                                })],),),
 
                             ],
                           ),

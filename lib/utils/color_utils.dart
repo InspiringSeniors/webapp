@@ -59,7 +59,7 @@ class ColorUtils {
 class TextStyleUtils {
   static TextStyle textStyleHeader1 = TextStyle(
     fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight18,
+    fontSize: TextSizeDynamicUtils.dHeight20,
     letterSpacing: 0.5,
 
   );
@@ -94,6 +94,14 @@ class TextStyleUtils {
       fontWeight: FontWeight.w400,
       fontSize: TextSizeDynamicUtils.dHeight40,
       letterSpacing: 1.0,
+
+  );
+
+
+  static TextStyle textStyleSubHeaderMainBold = TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: TextSizeDynamicUtils.dHeight38,
+    letterSpacing: 1.0,
 
   );
 

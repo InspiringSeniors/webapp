@@ -275,7 +275,7 @@ class ActivityCategoriesCard extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                   child: Text(
-                    "Explore Our Programs",
+                    "Join Regular Sessions",
                     style: TextStyle(fontSize: 18,color: Colors.white),
                   ),
                 ),

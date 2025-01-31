@@ -36,7 +36,7 @@ class WebNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 32),
       margin: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
           // color: Colors.white,
@@ -63,64 +63,36 @@ class WebNavBar extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(child: Image.asset("assets/images/primary_logo.png",width: 80,fit: BoxFit.contain,),)
-              ,Text(
-                'Inspiring Seniors Foundation',
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: ColorUtils.BRAND_COLOR,
-                    fontFamily: "Montserrat"
+              GestureDetector(
+                  onTap: (){
+                    Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+                  },child: Container(child: Image.asset("assets/images/primary_logo.png",width: 100,fit: BoxFit.fitWidth,),))
+              ,
+              NavItem("About Us", () => navigateToSection( "home")),
+              NavItem("Programs", () => navigateToSection( "programs")),
+              NavItem("Media", () => navigateToSection( "activities")),
+              // NavItem("Resources", () => navigateToSection( "resources")),
+              NavItem("Join Us", () => navigateToSection( "joinus")),
+              NavItem("Contact Us", () => navigateToSection( "contact")),
 
-                ),
-              ),
+              SizedBox(width: 16),
             ],
           ),
           Row(
             children: [
-              NavItem("About Us", () => navigateToSection( "home")),
-              NavItem("Programs", () => navigateToSection( "programs")),
-              NavItem("Activities", () => navigateToSection( "activities")),
-              // NavItem("Resources", () => navigateToSection( "resources")),
-              NavItem("Contact", () => navigateToSection( "contact")),
-              SizedBox(width: 16),
+
 
               CustomButton(onpressed: (){
-                Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-              },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Get Started"),
+                // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+              },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Donate",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
               SizedBox(width: 16),
 
-              Obx(()=>ElevatedButton(
-                onPressed: () {
-                  Utils.openWhatsappForChatSupport();
-                },
-                onHover: (v){
-                  if(v){
-                      isHover.value = true;
 
-                  }else {
-                    isHover.value = false;
-                  }
-                }
-                ,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Text(
-                    "Donate",
-                    style: TextStyle(fontSize: 16,color: Colors.white,fontFamily: "Montserrat"),
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: isHover.value?ColorUtils.HEADER_GREEN:ColorUtils.ORANGE_COLOR,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+              CustomButton(onpressed: (){
+                // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+              },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHover,text: "Login"),
 
-                    shadowColor: ColorUtils.ORANGE_COLOR,
-                    elevation: 10
-                ),
-              ),
-              )
+
 
             ],
           ),
@@ -254,6 +226,7 @@ class _MobileNavBarState extends State<MobileNavBar> {
 
 // Navigation Logic
 void navigateToSection( String section) {
+  print("section is ${section}");
   // Example navigation logic (modify this to your app's routing system)
   switch (section) {
     case "home":
@@ -268,8 +241,8 @@ void navigateToSection( String section) {
     case "resources":
       Get.toNamed( '/home');
       break;
-    case "contact":
-      Get.toNamed( '/home');
+    case "joinus":
+      Get.toNamed(RoutingNames.GOOGLE_FORM_SCREEN);
       break;
     case "getStarted":
       Get.toNamed( '/home');
@@ -292,14 +265,12 @@ class NavItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: GestureDetector(
-        onTap: () {
-          onTap;
-        },
+        onTap: onTap,
         child: MouseRegion(
           cursor: SystemMouseCursors.click,
           child: Text(
             label,
-            style: TextStyle(fontSize: 18, color: ColorUtils.HEADER_GREEN,fontWeight: FontWeight.w600),
+            style: TextStyle(fontSize: 18, color: ColorUtils.HEADER_GREEN,fontWeight: FontWeight.w600,fontFamily: "Montserrat"),
           ),
         ),
       ),

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
 import '../../../utils/color_utils.dart';
 
@@ -73,7 +74,13 @@ class WellnessProgramsSection extends StatelessWidget {
 
                     ],
                       bgColor: ColorUtils.PURPLE_BRAND_LIGHT,
-                      textColor: ColorUtils.PURPLE_BRAND
+                      textColor: ColorUtils.PURPLE_BRAND,
+                    joinnowClick: (){
+                      Get.toNamed(RoutingNames.GOOGLE_FORM_SCREEN);
+                    },
+                    knowMoreClick: (){
+                      Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
+                    },
                   ),
                   ProgramCard(
                       icon:"assets/images/product_icon.png"
@@ -87,6 +94,13 @@ class WellnessProgramsSection extends StatelessWidget {
                       ],
                     bgColor: ColorUtils.ORANGE_COLOR_LIGHT,
                     textColor: ColorUtils.ORANGE_COLOR,
+
+                    joinnowClick: (){
+                      Get.toNamed(RoutingNames.GOOGLE_FORM_SCREEN);
+                    },
+                    knowMoreClick: (){
+                      Get.toNamed(RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN);
+                    },
                   ),
                   ProgramCard(
                     icon: "assets/images/social_icon.png",
@@ -99,7 +113,14 @@ class WellnessProgramsSection extends StatelessWidget {
                       "Art Fun"
                     ],
                       bgColor: ColorUtils.YELLOW_BRAND_LIGHT,
-                      textColor: ColorUtils.YELLOW_BRAND
+                      textColor: ColorUtils.YELLOW_BRAND,
+
+                    joinnowClick: (){
+                      Get.toNamed(RoutingNames.GOOGLE_FORM_SCREEN);
+                    },
+                    knowMoreClick: (){
+                      Get.toNamed(RoutingNames.SOCIAL_CIRCLE_SCREEN);
+                    },
 
                   ),
                 ],
@@ -119,7 +140,7 @@ class WellnessProgramsSection extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                 child: Text(
-                  "Explore Our Programs",
+                  "Join Our Programs",
                   style: TextStyle(fontSize: 18,color: Colors.white),
                 ),
               ),
@@ -156,6 +177,9 @@ class ProgramCard extends StatelessWidget {
   final List<String> features;
   final Color bgColor;
   final Color textColor;
+  var knowMoreClick;
+  var joinnowClick;
+
 
 
   ProgramCard({
@@ -164,7 +188,10 @@ class ProgramCard extends StatelessWidget {
     required this.description,
     required this.features,
     required this.bgColor,
-    required this.textColor
+    required this.textColor,
+    this.knowMoreClick,
+    this.joinnowClick
+
 
   });
 
@@ -262,7 +289,7 @@ class ProgramCard extends StatelessWidget {
             children: [
               ElevatedButton(
 
-                onPressed: () {},
+                onPressed: joinnowClick,
                 onHover: (v){
                   v?isJoinProgram.value=true:isJoinProgram.value=false;
                 },
@@ -287,7 +314,7 @@ class ProgramCard extends StatelessWidget {
 
               ElevatedButton(
 
-                onPressed: () {},
+                onPressed:knowMoreClick,
                 onHover: (v){
                   v?isExploreProgram.value=true:isExploreProgram.value=false;
                 },

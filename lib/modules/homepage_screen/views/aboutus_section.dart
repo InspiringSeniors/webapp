@@ -76,9 +76,15 @@ SectionDescription(){
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        DescriptionCard("assets/images/health_hub_icon.png","Health Hub","Specially designed programs andcurated content to foster ‘Active & Healthy’ community of SeniorsKey programs include Daily dose of health, and Wellness Choupal.",ColorUtils.YELLOW_BRAND_LIGHT,ColorUtils.YELLOW_BRAND),
-        DescriptionCard("assets/images/product_icon.png","Productive Engagement","Creating opportunity to share knowledge and wisdom through different programs Key programs offer a chance for Seniors to find purpose and fulfilment through give back program",ColorUtils.PURPLE_BRAND_LIGHT,ColorUtils.PURPLE_BRAND),
-        DescriptionCard("assets/images/social_icon.png","Social Circles","ISF members can stay connected and engaged through communities such as Melody Masters, Storytelling, Art Fun and other activities through our partners.",ColorUtils.ORANGE_COLOR_LIGHT,ColorUtils.ORANGE_COLOR),
+        DescriptionCard("assets/images/health_hub_icon.png","Health Hub","Specially designed programs andcurated content to foster ‘Active & Healthy’ community of SeniorsKey programs include Daily dose of health, and Wellness Choupal.",ColorUtils.YELLOW_BRAND_LIGHT,ColorUtils.YELLOW_BRAND,(){
+          Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
+        }),
+        DescriptionCard("assets/images/product_icon.png","Productive Engagement","Creating opportunity to share knowledge and wisdom through different programs Key programs offer a chance for Seniors to find purpose and fulfilment through give back program",ColorUtils.PURPLE_BRAND_LIGHT,ColorUtils.PURPLE_BRAND,(){
+          Get.toNamed(RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN);
+        }),
+        DescriptionCard("assets/images/social_icon.png","Social Circles","ISF members can stay connected and engaged through communities such as Melody Masters, Storytelling, Art Fun and other activities through our partners.",ColorUtils.ORANGE_COLOR_LIGHT,ColorUtils.ORANGE_COLOR,(){
+          Get.toNamed(RoutingNames.SOCIAL_CIRCLE_SCREEN);
+        }),
 
 
 
@@ -89,13 +95,11 @@ SectionDescription(){
 
 
 
-Widget DescriptionCard(String icon, String heading, String subheading, Color bgColor, Color textColor) {
+Widget DescriptionCard(String icon, String heading, String subheading, Color bgColor, Color textColor,onpressed) {
   var isHovered=false.obs;
 
       return GestureDetector(
-        onTap: (){
-          Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
-        },
+        onTap: onpressed,
         child: MouseRegion(
           onEnter: (_) =>
             isHovered.value = true,
