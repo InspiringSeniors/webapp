@@ -68,9 +68,9 @@ class WebNavBar extends StatelessWidget {
                     Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
                   },child: Container(child: Image.asset("assets/images/primary_logo.png",width: 100,fit: BoxFit.fitWidth,),))
               ,
-              NavItem("About Us", () => navigateToSection( "home")),
+              NavItem("About Us", () => navigateToSection( "aboutUs")),
               NavItem("Programs", () => navigateToSection( "programs")),
-              NavItem("Media", () => navigateToSection( "activities")),
+              NavItem("Media", () => navigateToSection( "media")),
               // NavItem("Resources", () => navigateToSection( "resources")),
               NavItem("Join Us", () => navigateToSection( "joinus")),
               NavItem("Contact Us", () => navigateToSection( "contact")),
@@ -229,26 +229,24 @@ void navigateToSection( String section) {
   print("section is ${section}");
   // Example navigation logic (modify this to your app's routing system)
   switch (section) {
-    case "home":
-      Get.toNamed( '/home');
+    case "aboutUs":
+      Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
       break;
     case "programs":
       Get.toNamed( '/home');
       break;
-    case "activities":
-      Get.toNamed( '/home');
+    case "media":
+      Get.toNamed( RoutingNames.MEDIA_PAGE);
       break;
-    case "resources":
-      Get.toNamed( '/home');
+    case "contact":
+      Get.toNamed( RoutingNames.CONTACT_US_SCREEN);
       break;
     case "joinus":
-      Get.toNamed(RoutingNames.GOOGLE_FORM_SCREEN);
+      Get.toNamed(RoutingNames.JOIN_US_SCREEN);
       break;
-    case "getStarted":
-      Get.toNamed( '/home');
-      break;
+
     default:
-      Get.toNamed( '/home');
+      Get.toNamed(RoutingNames.HOME_PAGE_SCREEN);
   }
 }
 

@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/about_us_screen/bindings/aboutus_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
+import 'package:inspiringseniorswebapp/modules/contact_us_screen/bindings/contact_us_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/contact_us_screen/controllers/contact_us_controller.dart';
+import 'package:inspiringseniorswebapp/modules/contact_us_screen/views/contact_us_screen.dart';
 import 'package:inspiringseniorswebapp/modules/custom_screens/pdf_viewer_screen/views/pdf_viewer_screen.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/bindings/ddh_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/views/ddh_screen.dart';
@@ -15,10 +20,14 @@ import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homep
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views/homepage_screen.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_tutors_screen/bindings/it_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_tutors_screen/views/it_screen.dart';
+import 'package:inspiringseniorswebapp/modules/join_us_screen/bindings/join_us_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/join_us_screen/views/join_us_screen.dart';
 import 'package:inspiringseniorswebapp/modules/knowledge_cafe_screens/bindings/kc_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/knowledge_cafe_screens/views/kc_screen.dart';
 import 'package:inspiringseniorswebapp/modules/lets_talk_english_screens/bindings/lte_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/lets_talk_english_screens/views/lte_screen.dart';
+import 'package:inspiringseniorswebapp/modules/media_page_screen/bindings/media_page_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/media_page_screen/views/media_page_screen.dart';
 import 'package:inspiringseniorswebapp/modules/melody_masters_screen/bindings/mm_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/melody_masters_screen/views/mm_screen.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/bindings/productive_engagement_bindings.dart';
@@ -159,6 +168,27 @@ class _MyAppState extends State<MyApp> {
                       name: RoutingNames.MELODY_MASTERS_SCREEN,
                       page: () =>  MelodyMastersScreen(),
                       binding: MelodyMastersBindings()),
+
+                  GetPage(
+                      name: RoutingNames.ABOUT_US_SCREEN,
+                      page: () =>  AboutUsScreen(),
+                      binding: AboutUsBindings()),
+
+                  GetPage(
+                      name: RoutingNames.JOIN_US_SCREEN,
+                      page: () =>  JoinUsScreen(),
+                      binding: JoinUsBindings()),
+
+                  GetPage(
+                      name: RoutingNames.MEDIA_PAGE,
+                      page: () =>  MediaPageScreen(),
+                      binding: MediaPageBindings()),
+
+                  GetPage(
+                      name: RoutingNames.CONTACT_US_SCREEN,
+                      page: () =>  ContactUsScreen(),
+                      binding: ContactUsBindings()),
+
 
                   GetPage(
                       name: RoutingNames.PDF_VIEWER_SCREEN,

@@ -23,6 +23,12 @@ class RoutingNames {
   static String STORY_TELLINGS_SCREEN="/storyTellingScreen";
   static String MELODY_MASTERS_SCREEN="/melodyMastersScreen";
   static String FUN_WITH_ART_SCREEN="/funWithArtScreen";
+  static String ABOUT_US_SCREEN="/aboutUsScreen";
+  static String JOIN_US_SCREEN="/joinUsScreen";
+  static String MEDIA_PAGE="/mediaPage";
+  static String CONTACT_US_SCREEN="/contactUsScreen";
+
+
 
 
   static String GOOGLE_FORM_SCREEN = "/googleFormScreen";

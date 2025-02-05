@@ -11,8 +11,10 @@ class CustomCarousel extends StatelessWidget{
 
   var carouselList;
   var currentPageNotifier;
-
-  CustomCarousel({this.carouselList,this.currentPageNotifier});
+  var height;
+  var viewportsection;
+  var autoplay;
+  CustomCarousel({this.carouselList,this.currentPageNotifier,this.height,this.viewportsection,this.autoplay});
 
 
 
@@ -20,7 +22,7 @@ class CustomCarousel extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-    var height = MediaQuery.of(context).size.height;
+    var heightHere = MediaQuery.of(context).size.height;
     // TODO: implement build
     return Column(
       children: [
@@ -31,9 +33,9 @@ class CustomCarousel extends StatelessWidget{
             options: CarouselOptions(
               // enlargeCenterPage: true,
               enableInfiniteScroll: true,
-              viewportFraction: 0.5,
-              height: height*0.4,
-              autoPlay: true,
+              viewportFraction:viewportsection==null? 0.5:viewportsection,
+              height:height==null? heightHere*0.4:height,
+              autoPlay: false,
               autoPlayInterval: const Duration(seconds: 3),
               onPageChanged: (index, _) {
                 currentPageNotifier.value = index;
@@ -70,7 +72,7 @@ class CustomCarousel extends StatelessWidget{
 
 class CarouselBuilderScreenV2 {
   static Widget screen1(BuildContext context, String videoId) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         showModalBottomSheet(
           context: context,
@@ -81,6 +83,10 @@ class CarouselBuilderScreenV2 {
             child: YoutubePlayerWidget(videoId: videoId),
           ),
         );
+
+      },
+      onHover: (v){
+        print("hovermssing");
       },
       child: YoutubePlayerWidget(videoId: videoId),
     );
@@ -112,8 +118,8 @@ class CustomCarouselForHosts extends StatelessWidget{
             options: CarouselOptions(
               enlargeCenterPage: true,
               enableInfiniteScroll: true,
-              viewportFraction: 0.7,
-              height: height*0.2,
+              viewportFraction: 0.5,
+              height: height*0.25,
               autoPlay: true,
               autoPlayInterval: const Duration(seconds: 3),
               onPageChanged: (index, _) {
@@ -156,7 +162,7 @@ class CarouselForHosts {
 
     return
       Container(
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -186,10 +192,9 @@ class CarouselForHosts {
               ),
             ),
           ),
-          SizedBox(width: 20,),
+          SizedBox(height: 20,),
           Container(
             // width: 200,
-            height: 100,
             child: Column(
 
               mainAxisAlignment: MainAxisAlignment.center,

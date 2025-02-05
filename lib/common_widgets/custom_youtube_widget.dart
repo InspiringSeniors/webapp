@@ -21,7 +21,6 @@ class _YoutubePlayerWidgetState extends State<YoutubePlayerWidget> {
 
     print("calling this");
     super.initState();
-
     _controller = YoutubePlayerController.fromVideoId(
       videoId: widget.videoId,
       params: const YoutubePlayerParams(
