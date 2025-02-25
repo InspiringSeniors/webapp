@@ -156,7 +156,7 @@ class HeroSection extends StatelessWidget {
                           ),
                           SizedBox(height: 30),
 
-                          // Custom Button
+                          // Custom Btton
                           CustomButton(
                             onpressed: () {
                               Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
