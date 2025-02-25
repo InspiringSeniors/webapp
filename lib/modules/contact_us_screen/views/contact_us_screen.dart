@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_carousel.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
@@ -8,14 +9,18 @@ import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller
 import 'package:inspiringseniorswebapp/modules/join_us_screen/controller/join_us_controller.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common_widgets/custom_floating_action.dart';
 import '../../../common_widgets/custom_google_form_page.dart';
+import '../../../common_widgets/custom_text_field.dart';
+import '../../../utils/routes/routes.dart';
+import '../../homepage_screen/controllers/homepage_controller.dart';
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
 
 class ContactUsScreen extends StatelessWidget {
-  // const HealthHubMainScreen({super.key});
 
   var isHoverGetStarted=false.obs;
   ContactUsController contactUsController=Get.find();
@@ -29,31 +34,323 @@ class ContactUsScreen extends StatelessWidget {
     var width=MediaQuery.of(context).size.width ;
 
     return Scaffold(
+      floatingActionButton:CustomFloatingButton(),
+
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
         child: Column(
 
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Navbar(),
+
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 40,vertical: 30),
-              child: Row(
+              height: height*1.1,
+
+              child: Stack(
                 children: [
-                  Column(
-                    children: [
-                      Text("Contact Us Form ",style: TextStyleUtils.textStyleHeaderMainBold,),
-                      SizedBox(height: 30,),
-                      SizedBox(height: 30,),
+                  Container(
+                    height: height*0.4 ,
+                      width: width,
+                      alignment: Alignment.center,
 
-                      CustomButton(onpressed: (){
-                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
 
-                    ],
+                          decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [ColorUtils.BRAND_COLOR_LIGHT_2, ColorUtils.HEADER_GREEN_LIGHTER],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+
+                    ),
+                    child: Center(
+                      child: Container(
+                        margin: EdgeInsets.only(top:                     height*0.16),
+
+                        child:
+                        Column(
+
+                          children: [
+                            Text("Dont be a stranger just say hello.",style: TextStyleUtils.heading3.copyWith(
+                              color: ColorUtils.WHITE_COLOR_BACKGROUND
+                            ),),
+                            SizedBox(height: 20,),
+                            Text("Thankyou for showing interest. Just fill out the form to get connected.",style: TextStyleUtils.subHeading3.copyWith(
+                                color: ColorUtils.WHITE_COLOR_BACKGROUND
+                            ),)
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
-                  Column()
 
+                  Positioned(
+                    top: height*0.27,
+                    child: Center(
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.symmetric(horizontal: width*0.2,vertical: 30),
+
+                        padding: EdgeInsets.symmetric(vertical: 40,horizontal:60),
+
+
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: ColorUtils.GREY_DOTTED,
+                                blurRadius: 1,
+                                offset: const Offset(1, 1),
+                                spreadRadius: 1,
+                              ),
+                            ],
+
+                            color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                            borderRadius: BorderRadius.circular(10)
+
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: 20),
+
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            shape:BoxShape.circle,
+                                            border: Border.all(
+                                              color: ColorUtils.HEADER_GREEN_LIGHTER,
+                                              width: 2
+                                            )
+
+                                          ),
+                                          child: Container(
+                                              child: Icon(Icons.location_pin,size: 30,color: ColorUtils.HEADER_GREEN_LIGHTER,))),
+                                      Container(
+                                          width: width*0.2,
+
+                                          child: Text("D-7/7032, VASANT KUNJ, New Delhi, New Delhi, New Delhi- 110070, Delhi ",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),
+
+                                    ],
+                                  ),
+                                  SizedBox(height: 30,),
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: 20),
+
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              shape:BoxShape.circle,
+                                              border: Border.all(
+                                                  color: ColorUtils.HEADER_GREEN_LIGHTER,
+                                                  width: 2
+                                              )
+
+                                          ),
+                                          child: Container(
+                                              child: Icon(Icons.call_rounded,size: 30,color: ColorUtils.HEADER_GREEN_LIGHTER,))),
+                                      Container(
+                                          width: width*0.2,
+
+                                          child: Text("+91 9315274243",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),      ],
+                                  ),
+                                  SizedBox(height: 30,),
+
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: 20),
+
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              shape:BoxShape.circle,
+                                              border: Border.all(
+                                                  color: ColorUtils.HEADER_GREEN_LIGHTER,
+                                                  width: 2
+                                              )
+
+                                          ),
+                                          child: Container(
+                                              child: Icon(Icons.mail,size: 30,color: ColorUtils.HEADER_GREEN_LIGHTER,))),
+                                      Container(
+                                          width: width*0.2,
+
+                                          child: Text("enquiry@inspiringseniors.org ",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+
+                            Container(
+                              color: ColorUtils.GREY_DOTTED,
+                              width: 2,
+                              height: height*0.5,
+                              margin: EdgeInsets.symmetric(horizontal: 20,vertical: 40),
+
+                            ),
+                            Column(
+                              children: [
+
+                                 Form(
+                                   key: contactUsController.loginFormKey,
+                                   child: Column(
+                                     children: [
+                                       Container(
+                                         // height: height*0.6,
+                                         width: width*0.25,
+
+                                         child: Container(
+                                           padding: EdgeInsets.symmetric(
+                                               vertical:
+                                               TextSizeDynamicUtils.dHeight28,
+                                               horizontal: 16),
+                                           child: Column(
+                                             mainAxisAlignment:
+                                             MainAxisAlignment.start,
+                                             crossAxisAlignment:
+                                             CrossAxisAlignment.start,
+                                             children: [
+
+
+                                               CustomTextFieldV2(
+
+                                                   contactUsController.nameStateHandler,
+                                                   contactUsController.labeluserName,
+                                                   'Your Name'.tr,
+                                                   contactUsController
+                                                       .userNameController,
+                                                   contactUsController.inactiveColor,
+                                                   contactUsController.validatename,
+                                                 icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+
+
+                                               ),
+
+
+
+                                               SizedBox(
+                                                 height:
+                                                 TextSizeDynamicUtils.dHeight16,
+                                               ),
+                                               getNumberField(
+                                                   contactUsController
+                                                       .isPhoneEnabled,
+
+
+                                                   context),
+
+
+                                               SizedBox(
+                                                 height:
+                                                 TextSizeDynamicUtils.dHeight16,
+                                               ),
+                                               CustomTextFieldV2(
+                                                   contactUsController.emailStateHandler,
+                                                   contactUsController.emailLabelName,
+                                                   'Your Email'.tr,
+                                                   icon: Icon(Icons.email,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                                                   contactUsController
+                                                       .emailController,
+                                                   contactUsController.inactiveColor,
+                                                   contactUsController.validateEmail),
+
+                                               SizedBox(
+                                                 height:
+                                                 TextSizeDynamicUtils.dHeight16,
+                                               ),
+
+                                               TextFormField(
+
+
+                                                 controller: contactUsController.messageController,
+                                                 maxLines: 5, // Allows long te// xt input
+                                                 cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                                 decoration: InputDecoration(
+
+                                               labelStyle: TextStyle(
+                                               color:  ColorUtils.GREY_COLOR_PLACEHOLDER),
+                                             focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+
+                                             alignLabelWithHint: true,
+                                             focusedBorder: OutlineInputBorder(
+                                                 borderRadius: BorderRadius.circular(8),
+                                                 borderSide: const BorderSide(
+                                                     width: 2, color: ColorUtils.GREY_DOTTED
+
+                                                 )
+                                                 )
+                                                     ,
+                                             enabledBorder: OutlineInputBorder(
+                                               borderSide: const BorderSide(
+                                                   width: 2, color: ColorUtils.GREY_DOTTED
+                                               ),
+                                               //<-- SEE HERE
+                                               borderRadius: BorderRadius.circular(8),
+                                             ),
+                                             errorBorder: OutlineInputBorder(
+                                               borderSide: const BorderSide(
+                                                   width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                                               borderRadius: BorderRadius.circular(8),
+                                             ),
+                                             focusedErrorBorder: OutlineInputBorder(
+                                               borderSide: const BorderSide(
+                                                   width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                                               borderRadius: BorderRadius.circular(8),
+                                             ),
+
+                                             isDense: false,
+                                             hintText: "Message",
+                                             hintStyle: TextStyleUtils.smallGreyTextStyle,
+                                             fillColor:Color(0xFFF6F4F4),
+
+                                             filled: true,
+
+                                             errorStyle: TextStyle(
+                                                 color: ColorUtils.ERROR_RED,
+                                                 fontSize: TextSizeDynamicUtils.dHeight12,
+                                                 fontWeight: FontWeight.w400)),
+
+                                       ),
+                                             ],
+                                           ),
+                                         ),
+                                       ),
+                                     ],
+                                   )
+                                ),
+
+                                SizedBox(
+                                  height:
+                                  TextSizeDynamicUtils.dHeight16,
+                                ),
+                               // contactUsController.formLoading.value?CustomButton(onpressed: (){
+                               //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                               // },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.BRAND_COLOR_INACTIVE,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Loading",borderColor: ColorUtils.BRAND_COLOR_INACTIVE,textColor: ColorUtils.BRAND_COLOR_INACTIVE)
+                               //            :
+                               CustomButton(onpressed: (){
+                                  contactUsController.submitForm();
+                                  // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR_LIGHT_2,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
+                              ],
+                            ),
+
+
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -67,4 +364,308 @@ class ContactUsScreen extends StatelessWidget {
   }
 
 
+  Widget getNumberField(stateHandler, context) {
+    var height = MediaQuery.of(context).size.height;
+
+    return Obx(() {
+      if (stateHandler.value == true) {
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          // height: 54,
+          child: TextFormField(
+              style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
+              cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+              decoration: InputDecoration(
+                  filled: true,
+                  fillColor:Color(0xFFF6F4F4),
+
+                  focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                  alignLabelWithHint: true,
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(
+                          width: 2, color: ColorUtils.GREY_DOTTED)),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        width: 2, color: ColorUtils.GREY_DOTTED),
+                    //<-- SEE HERE
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  floatingLabelStyle: TextStyle(
+                      color: contactUsController.labela.value == true
+                          ? ColorUtils.ERROR_RED
+                          : ColorUtils.GREY_COLOR_PLACEHOLDER),
+                  isDense: false,
+                  labelText: 'Your Mobile Number'.tr,
+                  prefixIcon: Icon(
+                    Icons.phone_iphone,
+                    color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                    size: TextSizeDynamicUtils.dHeight22,
+                  ),
+                  errorStyle: TextStyle(
+                      color: ColorUtils.ERROR_RED,
+                      fontSize: TextSizeDynamicUtils.dHeight12,
+                      fontWeight: FontWeight.w400)),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(
+                  RegExp(
+                    //r'^[-]{0,1}[0-9]*[,]?[0-9]*', //signed regex
+                    r'^[0-9]*',
+                  ),
+                ),
+                LengthLimitingTextInputFormatter(10),
+              ],
+              keyboardType: const TextInputType.numberWithOptions(
+                  signed: false, decimal: false),
+              controller: contactUsController.phoneNumberController,
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  stateHandler.value = true;
+                  if (value.length == 10) {
+                    contactUsController.inactiveColor.value =
+                        ColorUtils.BRAND_COLOR;
+                    // FocusScope.of(context).unfocus();
+                    // FocusScope.of(context).requestFocus(FocusNode());
+                  } else {
+                    contactUsController.inactiveColor.value =
+                        ColorUtils.BRAND_COLOR;
+                  }
+                } else {
+                  stateHandler.value = false;
+                }
+              },
+              validator: (value) {
+                return contactUsController.validatePhoneNumber();
+              }),
+        );
+      } else {
+        return Container(
+          // height: 54,
+          width: MediaQuery.of(context).size.width,
+          child: TextFormField(
+            style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
+            // Change text color to blue
+
+            cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+            decoration: InputDecoration(
+                filled: true,
+
+                focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                alignLabelWithHint: true,
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    borderSide: const BorderSide(
+                        width: 2, color: ColorUtils.GREY_DOTTED)),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      width: 2, color: ColorUtils.GREY_DOTTED),
+                  //<-- SEE HERE
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                      width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                isDense: false,
+                labelText: 'Your Mobile Number'.tr,
+                labelStyle: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
+                floatingLabelStyle: TextStyle(
+                    color: contactUsController.labela.value == true
+                        ? ColorUtils.ERROR_RED
+                        : ColorUtils.GREY_COLOR_PLACEHOLDER),
+                prefixIcon: Icon(
+                  Icons.phone_iphone,
+                  color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                  size: TextSizeDynamicUtils.dHeight22,
+                ),
+                errorStyle: const TextStyle(
+                    color: ColorUtils.ERROR_RED,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400)),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                RegExp(
+                  //r'^[-]{0,1}[0-9]*[,]?[0-9]*', //signed regex
+                  r'^[0-9]*',
+                ),
+              ),
+              LengthLimitingTextInputFormatter(10),
+            ],
+            keyboardType: const TextInputType.numberWithOptions(
+                signed: false, decimal: false),
+            controller: contactUsController.phoneNumberController,
+            onChanged: (value) {
+              if (value.isNotEmpty) {
+                stateHandler.value = true;
+                if (value.length == 10) {
+                  contactUsController.inactiveColor.value =
+                      ColorUtils.BRAND_COLOR;
+                } else {
+                  contactUsController.inactiveColor.value =
+                      ColorUtils.BRAND_COLOR;
+                }
+              } else {
+                stateHandler.value = false;
+              }
+            },
+            validator: (value) {
+              return contactUsController.validatePhoneNumber();
+            },
+          ),
+        );
+      }
+    });
+  }
+
+
+
+}
+
+
+class WebNavBar2 extends StatelessWidget {
+
+  var isHover =false.obs;
+  var isHoverGetStarted=false.obs;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+
+      decoration: BoxDecoration(
+        // color: Colors.white,
+
+
+          gradient: LinearGradient(colors: [
+            // Colors.white,
+            Colors.blue[50]!,
+            Colors.white
+
+          ],begin: Alignment.topCenter,end: Alignment.bottomCenter),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1), // Subtle shadow color
+              blurRadius: 2, // Softens the shadow
+              offset: Offset(0, 1), // Positions the shadow below the navbar
+              spreadRadius: 1, // Slight expansion
+            ),
+
+
+          ]
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                  onTap: (){
+                    Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+                  },child: Container(child: Image.asset("assets/images/primary_logo.png",width: 100,fit: BoxFit.fitWidth,),))
+              ,
+              NavItem2("About Us", () => navigateToSection( "aboutUs")),
+              NavItem2("Programs", () => navigateToSection( "programs")),
+              NavItem2("Media", () => navigateToSection( "media")),
+              // NavItem("Resources", () => navigateToSection( "resources")),
+              NavItem2("Join Us", () => navigateToSection( "joinus")),
+              NavItem2("Contact Us", () => navigateToSection( "contact")),
+
+              SizedBox(width: 16),
+            ],
+          ),
+          Row(
+            children: [
+
+
+              CustomButton(
+                  onpressed: () {
+                    launchUrlFor("https://rzp.io/l/u0o8yej");
+
+                  },
+
+                  shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Donate",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
+              SizedBox(width: 16),
+
+
+              CustomButton(onpressed: (){
+                // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+              },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHover,text: "Login"),
+
+
+
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void launchUrlFor(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+  void showAlertDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: Navigator.of(context).pop,
+              child: const Text('Continue'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+class NavItem2 extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  HomepageController homepageController =Get.find();
+  NavItem2(this.label, this.onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GestureDetector(
+        onTap: onTap,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Text(
+              label,
+              style: TextStyleUtils.heading5.copyWith(
+                  color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                  fontWeight: FontWeight.w800
+              )
+          ),
+        ),
+      ),
+    );
+  }
 }

@@ -4,7 +4,10 @@ import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:inspiringseniorswebapp/utils/utility/utils.dart';
+import 'package:razorpay_web/razorpay_web.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common_widgets/csutom_form.dart';
 import '../../../utils/color_utils.dart';
 import '../controllers/homepage_controller.dart';
 
@@ -37,9 +40,10 @@ class WebNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-      margin: EdgeInsets.only(bottom: 10),
+
       decoration: BoxDecoration(
           // color: Colors.white,
+
 
               gradient: LinearGradient(colors: [
                 // Colors.white,
@@ -82,13 +86,19 @@ class WebNavBar extends StatelessWidget {
             children: [
 
 
-              CustomButton(onpressed: (){
-                // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-              },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Donate",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
+              CustomButton(
+                onpressed: () {
+                  launchUrlFor("https://rzp.io/l/u0o8yej");
+
+                },
+
+              shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Donate",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
               SizedBox(width: 16),
 
 
               CustomButton(onpressed: (){
+                showFormDialog(context);
+
                 // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
               },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHover,text: "Login"),
 
@@ -98,6 +108,81 @@ class WebNavBar extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+  void showFormDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          content: FormDialogContent(),
+        );
+      },
+    );
+  }
+
+
+
+  void launchUrlFor(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
+    // PaymentFailureResponse contains three values:
+    // 1. Error Code
+    // 2. Error Description
+    // 3. Metadata
+    showAlertDialog(
+      Get.context!,
+      'Payment Failed',
+      'Code: ${response.code}\n'
+          'Description: ${response.message}\n'
+          'Metadata: ${response.toString()}',
+    );
+  }
+
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+    // PaymentSuccessResponse contains three values:
+    // 1. Order ID
+    // 2. Payment ID
+    // 3. Signature
+    showAlertDialog(
+      Get.context!,
+      'Payment Successful',
+      'Payment ID: ${response.paymentId}\n'
+          'Order ID: ${response.orderId}\n'
+          'Signature: ${response.signature}',
+    );
+  }
+
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
+    showAlertDialog(
+      Get.context!,
+      'External Wallet Selected',
+      '${response.walletName}',
+    );
+  }
+
+  void showAlertDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            ElevatedButton(
+              onPressed: Navigator.of(context).pop,
+              child: const Text('Continue'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -225,7 +310,7 @@ class _MobileNavBarState extends State<MobileNavBar> {
 
 
 // Navigation Logic
-void navigateToSection( String section) {
+void navigateToSection( String section) async{
   print("section is ${section}");
   // Example navigation logic (modify this to your app's routing system)
   switch (section) {
@@ -233,7 +318,20 @@ void navigateToSection( String section) {
       Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
       break;
     case "programs":
-      Get.toNamed( '/home');
+
+
+      Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
+      print("current rout ${Get.currentRoute}");
+      //
+      // if(Get.currentRoute==RoutingNames.HOME_PAGE_SCREEN) {
+      //   scrollToSection();
+      // }else{
+      //   await Get.toNamed(
+      //     RoutingNames.HOME_PAGE_SCREEN,
+      //     arguments: {'scrollToSection': true},
+      //   );
+      //
+      // }
       break;
     case "media":
       Get.toNamed( RoutingNames.MEDIA_PAGE);
@@ -249,6 +347,17 @@ void navigateToSection( String section) {
       Get.toNamed(RoutingNames.HOME_PAGE_SCREEN);
   }
 }
+
+// void scrollToSection() {
+//
+//   HomepageController homepageController=Get.find();
+//   Scrollable.ensureVisible(
+//     homepageController.sectionKey.currentContext!,
+//     duration: Duration(seconds: 1), // Smooth scrolling duration
+//     curve: Curves.easeInOut,        // Animation curve
+//   );
+// }
+
 
 
 class NavItem extends StatelessWidget {
@@ -268,7 +377,10 @@ class NavItem extends StatelessWidget {
           cursor: SystemMouseCursors.click,
           child: Text(
             label,
-            style: TextStyle(fontSize: 18, color: ColorUtils.HEADER_GREEN,fontWeight: FontWeight.w600,fontFamily: "Montserrat"),
+            style: TextStyleUtils.heading5.copyWith(
+              color: ColorUtils.HEADER_GREEN,
+              fontWeight: FontWeight.w800
+            )
           ),
         ),
       ),

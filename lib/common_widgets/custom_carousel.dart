@@ -91,6 +91,37 @@ class CarouselBuilderScreenV2 {
       child: YoutubePlayerWidget(videoId: videoId),
     );
   }
+
+
+  static Widget imageScreen(BuildContext context, String imageUrl) {
+    return InkWell(
+      onTap: () {
+        // showModalBottomSheet(
+        //   context: context,
+        //   isScrollControlled: true,
+        //   backgroundColor: Colors.black,
+        //   builder: (context) => Container(
+        //     height: MediaQuery.of(context).size.height * 0.8,
+        //     child: YoutubePlayerWidget(videoId: videoId),
+        //   ),
+        // );
+
+      },
+      onHover: (v){
+        print("hovermssing");
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20)
+        ),
+
+        clipBehavior: Clip.hardEdge,
+        width: MediaQuery.of(context).size.width*0.3,
+        height: MediaQuery.of(context).size.height*0.26,
+        child: Image.asset(imageUrl,fit: BoxFit.cover,),
+      ),
+    );
+  }
 }
 
 
@@ -118,7 +149,7 @@ class CustomCarouselForHosts extends StatelessWidget{
             options: CarouselOptions(
               enlargeCenterPage: true,
               enableInfiniteScroll: true,
-              viewportFraction: 0.5,
+              viewportFraction: 0.4,
               height: height*0.25,
               autoPlay: true,
               autoPlayInterval: const Duration(seconds: 3),
@@ -198,10 +229,10 @@ class CarouselForHosts {
             child: Column(
 
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(name,style: TextStyleUtils.textStyleSubHeader1,),
-                Text(desc,style: TextStyleUtils.textStyleSubHeader1,),
+                Text(name,style: TextStyleUtils.heading6,),
+                Text(desc,style: TextStyleUtils.paragraphMain,),
 
               ],
             ),
@@ -213,3 +244,7 @@ class CarouselForHosts {
 
   }
 }
+
+
+
+

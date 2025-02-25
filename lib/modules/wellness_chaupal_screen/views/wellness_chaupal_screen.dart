@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views/faq_section.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
 import '../../../common_widgets/custom_carousel.dart';
+import '../../../common_widgets/custom_floating_action.dart';
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
@@ -16,6 +18,7 @@ class WellnessChaupalScreen extends StatelessWidget {
   WellnessChaupalController wellnessChaupalController=Get.find();
   final _currentPageNotifier = ValueNotifier<int>(0);
 
+  final _currentPageNotifierForHosts = ValueNotifier<int>(0);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,8 @@ class WellnessChaupalScreen extends StatelessWidget {
     var width=MediaQuery.of(context).size.width ;
 
     return Scaffold(
+      floatingActionButton:CustomFloatingButton(),
+
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
         child: Column(
@@ -32,45 +37,46 @@ class WellnessChaupalScreen extends StatelessWidget {
             Navbar(),
 
             Container(
-
+              margin: EdgeInsets.symmetric(horizontal: 50),
+              padding: EdgeInsets.symmetric(vertical: 30),
               child: Column(
                 children: [
 
                   Container(
                     child:
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
+                          margin:EdgeInsets.only(right: 60),
 
-                          child: Image.asset("assets/images/primary_logo.png",fit: BoxFit.fitWidth,),
+                          child: Image.asset("assets/images/media/gallery1.jpeg",fit: BoxFit.fill,),
                           width: MediaQuery.of(context).size.width*0.45,
-                          height:MediaQuery.of(context).size.height*0.7 ,
+                          height:MediaQuery.of(context).size.height*0.55 ,
+                          clipBehavior: Clip.hardEdge,
 
                           decoration: BoxDecoration(
 
+                            borderRadius: BorderRadius.circular(20),
                             color: Colors.white,
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: ColorUtils.GREY_DOTTED,
-                            //     blurRadius: 1000,
-                            //     spreadRadius: 1
-                            //   )
-                            // ]
+
                           ),
                         ),
                         Container(
                           width: width*0.4,
-                          margin: EdgeInsets.only(left: 50),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Wellness Chaupal",style: TextStyleUtils.textStyleHeaderMainBold,),
+                              Text("Wellness Chaupal",style: TextStyleUtils.heading1,),
                               SizedBox(height: 20,),
-                              Text("A program led by health experts and doctors aimed to promote health and wellbeing of senior citizens."
-                                ,style: TextStyleUtils.textStyleMainPara,),
+                              Text("A Trusted Voice, A Fresh Perspective: Your Gateway to Health Wisdom"
+                                ,style: TextStyleUtils.heading3,),
+                              SizedBox(height: 10,),
+
+                              Text("Wellness Choupal is where tradition meets modern health expertise. In collaboration with Age-Friendly India and under the experienced guidance of Dr. G.S. Grewal, who has been leading impactful Friday sessions since 2019, we’ve reimagined this beloved talk show to bring a holistic wellness approach tailored for seniors."
+                                ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 30,),
                               CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: wellnessChaupalController.isHoverRegistered),
 
@@ -79,106 +85,11 @@ class WellnessChaupalScreen extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
 
                                   children: [
-                                    Text("Our Hosts",style: TextStyleUtils.textStyleSubHeaderMainBold,),
-
-                                    SizedBox(height: 10,),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-
-                                              Container(
-
-
-                                                width: 100,
-                                                height: 100,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 8,
-                                                      spreadRadius: 2,
-                                                      offset: Offset(4, 4),
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: ClipOval(
-                                                  child:
-                                                  Image.network("https://png.pngtree.com/background/20230403/original/pngtree-side-profile-of-old-man-vector-picture-image_2278848.jpg",
-                                                    fit: BoxFit.cover,
-                                                    width: 100,
-                                                    height: 100,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 20,),
-                                              Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Rahul Gupta ",style: TextStyleUtils.textStyleSubHeader1,),
-                                                  Text("Expert Doctor ",style: TextStyleUtils.textStyleSubHeader1,),
-
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(width: 30,),
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-
-                                              Container(
-
-
-                                                width: 100,
-                                                height: 100,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey.withOpacity(0.5),
-                                                      blurRadius: 8,
-                                                      spreadRadius: 2,
-                                                      offset: Offset(4, 4),
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: ClipOval(
-                                                  child:
-                                                  Image.network("https://www.shutterstock.com/shutterstock/photos/2222598239/display_1500/stock-photo--portrait-of-happy-indian-senior-woman-sitting-in-balcony-and-reading-book-2222598239.jpg",
-                                                    fit: BoxFit.cover,
-                                                    width: 100,
-                                                    height: 100,
-                                                  ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 20,),
-                                              Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text("Veena Gupta ",style: TextStyleUtils.textStyleSubHeader1,),
-                                                  Text("Yoga Expert ",style: TextStyleUtils.textStyleSubHeader1,),
-
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-
-                                      ],
-                                    )
+                                    // Text("Our Hosts",style: TextStyleUtils.heading2,),
+                                    //
+                                    // SizedBox(height: 10,),
+                                    // Container(
+                                    //     child: CustomCarouselForHosts(carouselList: wellnessChaupalController.hostList,currentPageNotifier:  _currentPageNotifierForHosts)),
                                   ],
                                 ),),
 
@@ -193,7 +104,6 @@ class WellnessChaupalScreen extends StatelessWidget {
                   SizedBox(height: TextSizeDynamicUtils.dHeight56,),
 
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 50),
                     child: Column(
                       children: [
                         Container(
@@ -201,7 +111,7 @@ class WellnessChaupalScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(child: Text("Resources",style: TextStyleUtils.textStyleHeaderMain,),),
+                              Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
                               SizedBox(height: TextSizeDynamicUtils.dHeight32,),
 
                               CustomCarousel(carouselList: wellnessChaupalController.onboardingList,currentPageNotifier:  _currentPageNotifier)
@@ -209,46 +119,8 @@ class WellnessChaupalScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                        Container(
-                          child: Column(
 
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("FAQ's",style: TextStyleUtils.textStyleHeaderMain,),
-                                ],
-                              ),
-                              SizedBox(height: 30,),
-
-                              Obx(
-                                    ()=> Container(
-                                  child: ListView.builder(
-
-                                    itemBuilder: (context,item)
-                                    {
-                                      return Container(
-                                        margin: EdgeInsets.only(bottom: 30),
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Q${item+1} : ${wellnessChaupalController.faqList.value[item]["Q"]}" ,style: TextStyleUtils.textStyleHeader1,),
-                                            SizedBox(height: 10,),
-                                            Container(
-                                                margin: EdgeInsets.symmetric(horizontal: 40),
-                                                child: Text("${wellnessChaupalController.faqList.value[item]["A"]}", style: TextStyleUtils.textStyleSubHeader1,))
-
-                                          ],
-                                        ),
-                                      )
-                                      ;
-                                    },shrinkWrap: true,physics: NeverScrollableScrollPhysics(),itemCount: wellnessChaupalController.faqList.value.length,),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        FAQSection(faqList: wellnessChaupalController.faqList.value)
 
                       ],
                     ),
@@ -266,23 +138,4 @@ class WellnessChaupalScreen extends StatelessWidget {
   }
 
 
-  Widget initiativesDesc(heading,subheading,onpressed){
-    return Container(
-      width: MediaQuery.of(Get.context!).size.width*0.4,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(heading,style: TextStyleUtils.textStyleHeader1,),
-          SizedBox(height: 30,),
-          Container(
-              height:100,child: Text(subheading,style: TextStyleUtils.textStyleSubHeader1,)),
-          SizedBox(height: 30,),
-
-          CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),
-
-        ],
-      ),
-    );
-
-  }
 }

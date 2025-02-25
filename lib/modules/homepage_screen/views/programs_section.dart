@@ -2,12 +2,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homepage_controller.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
 import '../../../utils/color_utils.dart';
 
 class WellnessProgramsSection extends StatelessWidget {
   var isExploreProgram=false.obs;
+
+  HomepageController homepageController=Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +73,7 @@ class WellnessProgramsSection extends StatelessWidget {
                     "Active & Healthy Community",
                     features: [
                       "Daily Dose of Health",
+                      "Step Count Challenge",
                       "Wellness Choupal",
 
                     ],
@@ -133,7 +137,9 @@ class WellnessProgramsSection extends StatelessWidget {
           Obx(
               ()=> ElevatedButton(
 
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed(RoutingNames.GOOGLE_FORM_SCREEN);
+              },
               onHover: (v){
                 v?isExploreProgram.value=true:isExploreProgram.value=false;
               },
@@ -217,11 +223,11 @@ class ProgramCard extends StatelessWidget {
               BoxShadow(
                 color: ColorUtils.BRAND_COLOR_LIGHT,
                 spreadRadius: 1,
-                blurRadius: 8,
-                offset: Offset(0, 3),
+                blurRadius: 10,
+                offset: Offset(0, 1),
               ),
             ],
-            borderRadius: BorderRadius.circular(20)
+            borderRadius: BorderRadius.circular(40)
         ),
 
     duration: Duration(milliseconds: 300),child:Padding(
@@ -246,15 +252,26 @@ class ProgramCard extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 12),
-              Text(
-                description,
-                style: TextStyle(
-                  fontSize: 18,
-                    color: isHovered.value ? Colors.white : textColor, // White text on hover
 
-                ),
+              Divider(
+                color: isHovered.value ? Colors.white : textColor, // White text on hover
+
               ),
+
+              SizedBox(height: 12),
+
+              // Text(
+              //   description,
+              //   style: TextStyle(
+              //     fontSize: 20,
+              //       color: isHovered.value ? Colors.white : textColor,
+              //     fontWeight: FontWeight.w600// White text on hover
+              //
+              //   ),
+              // ),
               SizedBox(height: 24),
+
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: features
@@ -272,7 +289,9 @@ class ProgramCard extends StatelessWidget {
                         SizedBox(width: 12),
                         Text(
                           feature,
-                          style: TextStyle(fontSize: 18,                            color: isHovered.value ? Colors.white : ColorUtils.SECONDARY_BLACK, // White text on hover
+                          style: TextStyle(
+                            fontSize: 18,color: isHovered.value ? Colors.white : ColorUtils.SECONDARY_BLACK,
+                            fontWeight: FontWeight.w600// White text on hover
                           ),
                         ),
                       ],

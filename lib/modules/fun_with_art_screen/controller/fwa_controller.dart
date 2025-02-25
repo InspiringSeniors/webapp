@@ -9,6 +9,28 @@ class FunWithArtController extends GetxController{
   var isHoverRegistered=false.obs;
 
   var faqList=[].obs;
+  final List<Widget> hostList = <Widget>[
+    CarouselForHosts.screen1(
+        context:  Get.context!,
+        name: "Rahul Gupta",
+        desc: "Expert Doctor",
+        imageurl: "https://png.pngtree.com/background/20230403/original/pngtree-side-profile-of-old-man-vector-picture-image_2278848.jpg"
+    ),
+    CarouselForHosts.screen1(
+      context:  Get.context!,
+      name: "Veena Kumari",
+      desc: "Yoga Instructor",
+      imageurl: "https://www.shutterstock.com/shutterstock/photos/2222598239/display_1500/stock-photo--portrait-of-happy-indian-senior-woman-sitting-in-balcony-and-reading-book-2222598239.jpg"
+      ,),
+
+    CarouselForHosts.screen1(
+      context:  Get.context!,
+      name: "Hema Ji Kumari",
+      desc: "Principal Instructor",
+      imageurl: "https://www.shutterstock.com/shutterstock/photos/2222598239/display_1500/stock-photo--portrait-of-happy-indian-senior-woman-sitting-in-balcony-and-reading-book-2222598239.jpg"
+      ,),
+
+  ];
 
 
   final List<Widget> onboardingList = <Widget>[

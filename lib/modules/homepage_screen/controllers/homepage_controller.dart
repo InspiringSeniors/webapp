@@ -5,11 +5,13 @@ import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
 import '../../../common_widgets/custom_carousel.dart';
+import '../../../common_widgets/custom_testimonials_section.dart';
 
 class HomepageController extends GetxController {
 
 
   TextEditingController? searchController = TextEditingController();
+  // late final GlobalKey sectionKey ;
 
 
   var currentIndex = 0.obs;
@@ -21,6 +23,53 @@ class HomepageController extends GetxController {
   var animatedValues = <String, Animation<int>>{}.obs;
   late AnimationController _controller;
 
+  final List<Testimonial> testimonials = [
+    Testimonial(
+      name: "Shiv Kumar Verma",
+      role: "Senior Member, Inspiring Seniors Foundation",
+      text: "Extremely useful session on how to inhale and exhale breaths, especially to release all the air inhaled inside. Shall try to practice.",
+      image: "assets/images/shivkumar.png",
+    ),
+    Testimonial(
+      name: "BR Bakshi",
+      role: "Our Happy Tutors",
+      text: "It is pleasure for me to interact with such young mind, understand and analyze their problem in learning math and help them as much as i can.",
+      image: "",
+    ),
+    Testimonial(
+      name: "Hardeep Vikhu",
+      role: "Volunteer, Inspiring Seniors Foundation",
+      text: "What a fantastic session! It was really informative. I'm excited for the upcoming Friday session. Many thanks to the Inspiring Seniors Foundation.",
+      image: "assets/images/hardeepkaur.png",
+    ),
+
+    Testimonial(
+      name: "BR Bakshi",
+      role: "Wellness Chaupal Member",
+      text: "Thank you for a very informative and useful session on effective breathing. ",
+      image: "assets/images/brbakshi.png",
+    ),
+
+    Testimonial(
+      name: "Robel (9th Class)",
+      role: "Our Happy Students",
+      text: "Maths , English aur sciece maam bhot accha padhati hain aur samaj me bhi aajata hai. Hindi ko English me translate karna bhi sikhaati hain.",
+      image: "",
+    ),
+    Testimonial(
+      name: "TR Dua",
+      role: "Senior Member, Inspiring Seniors Foundation",
+      text: "Very nice session for Seniors and Very new techniques. Thanks!.",
+      image: "assets/images/trdua_pp.png",
+    ),
+
+    Testimonial(
+      name: "Santosh",
+      role: "Senior Member, Inspiring Seniors Foundation",
+      text: "  Thank you! I was doing yoga for the first time and I liked it.",
+      image: "assets/images/santosh_ji.png",
+    ),
+  ];
 
   final List images = [
     {"imageUrl":    'https://png.pngtree.com/background/20230403/original/pngtree-side-profile-of-old-man-vector-picture-image_2278848.jpg',
@@ -81,6 +130,7 @@ class HomepageController extends GetxController {
   void onInit() {
     super.onInit();
     startSwitcher();
+    // sectionKey=GlobalKey();
 
 
   }
@@ -101,5 +151,32 @@ class HomepageController extends GetxController {
       animatedValues[key] = animation;
       _controller.forward();
     }
+  }
+
+  final ScrollController scrollController = ScrollController();
+
+  void scrollLeft() {
+    final double offset = scrollController.offset - 300; // Adjust scroll distance as needed
+    scrollController.animateTo(
+      offset < 0 ? 0 : offset,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+  }
+
+  void scrollRight() {
+    final double maxScroll = scrollController.position.maxScrollExtent;
+    final double offset = scrollController.offset + 300; // Adjust scroll distance as needed
+    scrollController.animateTo(
+      offset > maxScroll ? maxScroll : offset,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
+  }
+
+  @override
+  void onClose() {
+    scrollController.dispose();
+    super.onClose();
   }
 }

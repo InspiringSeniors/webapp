@@ -151,6 +151,9 @@ class QuickTipCard extends StatelessWidget {
           Icon(icon, size: 48, color: ColorUtils.BRAND_COLOR),
           SizedBox(height: 16),
           Text(title, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+          SizedBox(height: 16),
+
           Text(description, textAlign: TextAlign.center),
         ],
       ),

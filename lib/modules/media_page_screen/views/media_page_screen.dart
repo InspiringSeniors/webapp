@@ -8,6 +8,7 @@ import 'package:inspiringseniorswebapp/modules/media_page_screen/controller/medi
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
+import '../../../common_widgets/custom_floating_action.dart';
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
@@ -24,8 +25,12 @@ class MediaPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
+    final ScrollController scrollController = ScrollController();
+    final ScrollController newsscrollController = ScrollController();
 
     return Scaffold(
+      floatingActionButton:CustomFloatingButton(),
+
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
         child: Column(
@@ -42,53 +47,134 @@ class MediaPageScreen extends StatelessWidget {
                 children: [
 
                   Container(
-                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      margin: EdgeInsets.symmetric(horizontal: 50,vertical: 30),
 
                       child:Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Events",style: TextStyleUtils.textStyleHeaderMain,),
+                        Text("Events",style: TextStyleUtils.heading1,),
+                        SizedBox(height: 30,),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              child: Text("Event Details",style: TextStyleUtils.textStyleSubHeader1,),
+                            // Left Scroll Button
+                            IconButton(
+                              icon: Icon(Icons.arrow_back_ios),
+                              color: ColorUtils.BRAND_COLOR,
+                              iconSize: 45,
+                              onPressed: (){
+                                scrollController.animateTo(
+                                  scrollController.offset - 300,
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.easeOut,
+                                );
+                              }
                             ),
-                            Container(width:width*0.5,child: CustomCarousel(carouselList: mediaPageController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 1,))
+                            SizedBox(width: 30,),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                controller: scrollController,
+                                child: Row(
+                                  children: mediaPageController.eventList.value
+                                      .map((event) => MediaEventCard(
+                                    isActive: event["isActive"] as RxBool,
+                                    heading: event["heading"] as String,
+                                    day: event["day"] as String,
+                                    location: event["location"] as String,
+                                    time: event["time"] as String,
+                                    image: event["image"] as String,
+                                  ))
+                                      .toList(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 30,),
 
+                            IconButton(
+                              color: ColorUtils.BRAND_COLOR,
+                              iconSize: 45,
+                              icon: Icon(Icons.arrow_forward_ios),
+                              onPressed: (){
+                                scrollController.animateTo(
+                                  scrollController.offset + 300,
+                                  duration: Duration(milliseconds: 500),
+                                  curve: Curves.easeOut,
+                                );
+                              }
+                            ),
                           ],
-                        )
+                        ),
+
                       ],
                     )
                   ),
 
                   SizedBox(height: TextSizeDynamicUtils.dHeight56,),
                   Container(
-                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      margin: EdgeInsets.symmetric(horizontal: 50,vertical: 30),
 
                       child:Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("News",style: TextStyleUtils.textStyleHeaderMain,),
+                          Text("Newsletters",style: TextStyleUtils.heading1,),
+                          SizedBox(height: 30,),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                child: Text("News Details",style: TextStyleUtils.textStyleSubHeader1,),
+                              // Left Scroll Button
+                              IconButton(
+                                  icon: Icon(Icons.arrow_back_ios),
+                                  color: ColorUtils.BRAND_COLOR,
+                                  iconSize: 45,
+                                  onPressed: (){
+                                    newsscrollController.animateTo(
+                                      scrollController.offset - 300,
+                                      duration: Duration(milliseconds: 500),
+                                      curve: Curves.easeOut,
+                                    );
+                                  }
                               ),
-                              Container(width:width*0.5,child: CustomCarousel(carouselList: mediaPageController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 1,))
+                              SizedBox(width: 30,),
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  controller: newsscrollController,
+                                  child: Row(
+                                    children: mediaPageController.newsletterList.value
+                                        .map((event) => NewsLetterCard(
 
+                                      image: event["image"] as String,
+                                    ))
+                                        .toList(),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 30,),
+
+                              IconButton(
+                                  color: ColorUtils.BRAND_COLOR,
+                                  iconSize: 45,
+                                  icon: Icon(Icons.arrow_forward_ios),
+                                  onPressed: (){
+                                    newsscrollController.animateTo(
+                                      scrollController.offset + 300,
+                                      duration: Duration(milliseconds: 500),
+                                      curve: Curves.easeOut,
+                                    );
+                                  }
+                              ),
                             ],
-                          )
+                          ),
+
                         ],
                       )
                   ),
+
                   SizedBox(height: TextSizeDynamicUtils.dHeight56,),
 
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 50),
+                    margin: EdgeInsets.symmetric(horizontal: 50,vertical: 30),
                     child: Column(
                       children: [
                         Container(
@@ -96,10 +182,10 @@ class MediaPageScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(child: Text("Gallery",style: TextStyleUtils.textStyleHeaderMain,),),
+                              Container(child: Text("Gallery",style: TextStyleUtils.heading1,),),
                               SizedBox(height: TextSizeDynamicUtils.dHeight32,),
 
-                              CustomCarousel(carouselList: mediaPageController.onboardingList,currentPageNotifier:  _currentPageNotifier)
+                              CustomCarousel(carouselList: mediaPageController.galleryList,currentPageNotifier:  _currentPageNotifier,autoplay: true,viewportsection: 0.35,)
                             ],
                           ),
                         ),
@@ -119,24 +205,225 @@ class MediaPageScreen extends StatelessWidget {
     );
   }
 
+  Widget MediaEventCard({image,heading,location,day,time,isActive}){
 
-  Widget initiativesDesc(heading,subheading,onpressed){
-    return Container(
-      width: MediaQuery.of(Get.context!).size.width*0.4,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(heading,style: TextStyleUtils.textStyleHeader1,),
-          SizedBox(height: 30,),
-          Container(
-              height:100,child: Text(subheading,style: TextStyleUtils.textStyleSubHeader1,)),
-          SizedBox(height: 30,),
+    return Obx(()=>
+       Stack(
+         children: [
+           Container(
 
-          CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: ColorUtils.WHITE_COLOR_BACKGROUND,
+              border: Border.all(color: ColorUtils.BRAND_COLOR)
+            ),
+            margin: EdgeInsets.only(left: 20,bottom: 100,right: 20),
+            child: Container(
+              child: Column(
+                children: [
+                  SizedBox(height: 60,),
+                  InkWell(
+                    onTap: (){
+                      showModalBottomSheet(
+                        context: Get.context!,
+                        isScrollControlled: true,
+                        backgroundColor: ColorUtils.GREY_DOTTED,
+                        builder: (context) => Container(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Image.asset(image,fit: BoxFit.contain,),
 
-        ],
-      ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Image.network(
+                        image,
+                        width: 450,
+                        height: 250,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+
+                  Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20,vertical: 30),
+                      width: 450,
+
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(heading,style: TextStyleUtils.heading5,textAlign: TextAlign.start,),
+                          SizedBox(height: 30,),
+
+                          Row(
+                            children: [
+                              Icon(Icons.location_pin,size: 30,color: ColorUtils.PURPLE_BRAND,),
+                              SizedBox(width: 20,),
+                              Text(location,style: TextStyleUtils.subHeading3,),
+                            ],
+                          ),
+
+                        ],
+                      )),
+
+                  // Positioned(
+                  //   child: Container(
+                  //     padding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+                  //     decoration: BoxDecoration(
+                  //       color: isActive.value?ColorUtils.HEADER_GREEN:ColorUtils.GREY_DOTTED,
+                  //       borderRadius: BorderRadius.circular(20),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: ColorUtils.PURPLE_BRAND_LIGHT,
+                  //           offset: Offset(1, 1),
+                  //           spreadRadius: 1,
+                  //           blurRadius: 1
+                  //         )
+                  //       ]
+                  //     ),
+                  //     child: Column(
+                  //
+                  //       children: [
+                  //         Text(day,style: TextStyleUtils.heading5.copyWith(
+                  //           color: isActive.value?ColorUtils.WHITE_COLOR_BACKGROUND:ColorUtils.BRAND_COLOR
+                  //         ),),
+                  //         SizedBox(height: 10,),
+                  //         Text(time,style: TextStyleUtils.heading5.copyWith(
+                  //             color: isActive.value?ColorUtils.WHITE_COLOR_BACKGROUND:ColorUtils.BRAND_COLOR
+                  //         ),),
+                  //
+                  //       ],
+                  //     ),
+                  //   ),
+                  // )
+                ],
+              ),
+            ),
+                 ),
+           Positioned(
+             bottom: 10,
+               right: 10,
+               child: Container(
+                   child: Stack(
+                     children: [
+                       Icon(Icons.bookmark,color: isActive.value?ColorUtils.HEADER_GREEN:ColorUtils.PURPLE_BRAND_LIGHT,size: 140,),
+
+
+                   Positioned(
+                     top: 30,
+                     right: 30,
+
+                     child: Center(
+                       child: Column(
+                         mainAxisAlignment: MainAxisAlignment.center,
+                               crossAxisAlignment: CrossAxisAlignment.center,
+
+                               children: [
+                                 Text(day,style: TextStyleUtils.heading5.copyWith(
+                                   color: isActive.value?ColorUtils.WHITE_COLOR_BACKGROUND:ColorUtils.BRAND_COLOR
+                                 ),),
+                                 SizedBox(height: 10,),
+                                 Text(time,style: TextStyleUtils.heading5.copyWith(
+                                     color: isActive.value?ColorUtils.WHITE_COLOR_BACKGROUND:ColorUtils.BRAND_COLOR
+                                 ),),
+                       ]
+                                      ),
+                     ),
+                   )
+                     ],
+                   )))
+
+         ],
+       ),
     );
-
   }
+  Widget NewsLetterCard({image,heading,location,day,time,isActive}){
+
+    return
+        InkWell(
+          onTap: (){
+
+
+
+
+            showModalBottomSheet(
+              useSafeArea: true,
+
+              context: Get.context!,
+              isScrollControlled: true,
+              backgroundColor: ColorUtils.GREY_DOTTED,
+              builder: (context) => Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: Image.asset(image,fit: BoxFit.contain,),
+              ),
+            );
+            
+          },
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                border: Border.all(color: ColorUtils.BRAND_COLOR)
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      child: Image.network(
+                        image,
+                        width: 320,
+                        height: 450,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+          
+                    // Positioned(
+                    //   right: 20,
+                    //   top: 20,
+                    //   child: Container(
+                    //     padding: EdgeInsets.symmetric(vertical: 16,horizontal: 16),
+                    //     decoration: BoxDecoration(
+                    //         color: isActive.value?ColorUtils.HEADER_GREEN:ColorUtils.GREY_DOTTED,
+                    //         borderRadius: BorderRadius.circular(20),
+                    //         boxShadow: [
+                    //           BoxShadow(
+                    //               color: ColorUtils.PURPLE_BRAND_LIGHT,
+                    //               offset: Offset(1, 1),
+                    //               spreadRadius: 1,
+                    //               blurRadius: 1
+                    //           )
+                    //         ]
+                    //     ),
+                    //     child: Column(
+                    //
+                    //       children: [
+                    //         Text(day,style: TextStyleUtils.heading5.copyWith(
+                    //             color: isActive.value?ColorUtils.WHITE_COLOR_BACKGROUND:ColorUtils.BRAND_COLOR
+                    //         ),),
+                    //         SizedBox(height: 10,),
+                    //         Text(time,style: TextStyleUtils.heading5.copyWith(
+                    //             color: isActive.value?ColorUtils.WHITE_COLOR_BACKGROUND:ColorUtils.BRAND_COLOR
+                    //         ),),
+                    //
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
+                  ],
+                ),
+          
+          
+          
+          
+              ],
+            ),
+          
+              ),
+        );
+  }
+
 }

@@ -118,18 +118,14 @@ class _AnimatedTrustCardState extends State<AnimatedTrustCard> with SingleTicker
             builder: (context, child) {
               return Text(
                 "${_animation.value}${widget.suffix}",
-                style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: ColorUtils.BRAND_COLOR
-                ),
+                style:TextStyleUtils.heading3,
               );
             },
           ),
           SizedBox(height: 8),
           Text(
             widget.description,
-            style: TextStyle(fontSize: 16),
+            style: TextStyleUtils.heading5.copyWith(color: ColorUtils.BRAND_COLOR)
           ),
         ],
       ),

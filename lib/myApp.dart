@@ -32,8 +32,12 @@ import 'package:inspiringseniorswebapp/modules/melody_masters_screen/bindings/mm
 import 'package:inspiringseniorswebapp/modules/melody_masters_screen/views/mm_screen.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/bindings/productive_engagement_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/views/productive_engagement_screen.dart';
+import 'package:inspiringseniorswebapp/modules/program_all_screen/controller/program_all_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/program_all_screen/views/program_all_screen.dart';
 import 'package:inspiringseniorswebapp/modules/social_circle_screen/bindings/social_circle_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/social_circle_screen/views/social_circle_screen.dart';
+import 'package:inspiringseniorswebapp/modules/step_count_challenge_screen/controller/step_count_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/step_count_challenge_screen/views/step_count_challenge_screen.dart';
 import 'package:inspiringseniorswebapp/modules/story_telling_screen/bindings/story_telling_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/story_telling_screen/views/st_screen.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/bindings/wellness_chaupal_bindings.dart';
@@ -189,7 +193,15 @@ class _MyAppState extends State<MyApp> {
                       page: () =>  ContactUsScreen(),
                       binding: ContactUsBindings()),
 
+                  GetPage(
+                      name: RoutingNames.PROGRAMS_ALL_SCREEN,
+                      page: () =>  ProgramAllScreen(),
+                      binding: ProgramAllBindings()),
 
+                  GetPage(
+                      name: RoutingNames.STEP_COUNT_CHALLENGE,
+                      page: () =>  StepCountChallengeScreen(),
+                      binding: StepCountBindings()),
                   GetPage(
                       name: RoutingNames.PDF_VIEWER_SCREEN,
                       page: () =>  PdfViewerScreen(),

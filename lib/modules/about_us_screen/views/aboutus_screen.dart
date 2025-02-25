@@ -10,6 +10,7 @@ import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controlle
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common_widgets/custom_floating_action.dart';
 import '../../../utils/routes/routes.dart';
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
@@ -29,6 +30,8 @@ class AboutUsScreen extends StatelessWidget {
     var width=MediaQuery.of(context).size.width ;
 
     return Scaffold(
+      floatingActionButton:CustomFloatingButton(),
+
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
         child: Column(
@@ -58,10 +61,10 @@ class AboutUsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Our Vision ",style: TextStyleUtils.textStyleHeaderMainBold,),
+                              Text("Our Vision ",style: TextStyleUtils.heading2,),
                               SizedBox(height: 20,),
                               Text("Fostering a vibrant community of seniors where generations come together, sharing wisdom and experience to enrich health, well being and purposefulness."
-                                ,style: TextStyleUtils.textStyleSubHeader1,),
+                                ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 30,),
                               CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: aboutUsController.isHoverRegistered),
 
@@ -81,7 +84,7 @@ class AboutUsScreen extends StatelessWidget {
                   SectionContainer(
                     title: 'Who We Are',
                     description: 'Inspiring Seniors Foundation is a non profit organization established in January 2024. At ISF, we aim to tap into the energy, experience and enthusiasm of seniors in creating a vibrant community of seniors leading a healthy life and actively engaged in giving back to society.',
-                    imagePath: 'assets/images/who_we_are.jpg',
+                    imagePath: 'assets/images/who_we_are.jpeg',
                     isLeftAligned: true,
                     isVisible: true,
 
@@ -106,7 +109,7 @@ class AboutUsScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Our Advisory Board Members",style: TextStyleUtils.textStyleHeaderMainBold,),
+                                  Text("Our Advisory Board Members",style: TextStyleUtils.heading2,),
                                   SizedBox(height: 120,),
 
                                   Container(
@@ -171,7 +174,7 @@ class AboutUsScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Our Team",style: TextStyleUtils.textStyleHeaderMainBold,),
+                                  Text("Our Team",style: TextStyleUtils.heading2,),
                                   SizedBox(height: 120,),
 
                                   Container(
@@ -223,10 +226,10 @@ class AboutUsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(heading,style: TextStyleUtils.textStyleHeader1,),
+          Text(heading,style: TextStyleUtils.heading3,),
           SizedBox(height: 30,),
           Container(
-              height:100,child: Text(subheading,style: TextStyleUtils.textStyleSubHeader1,)),
+              height:100,child: Text(subheading,style: TextStyleUtils.paragraphMain,)),
           SizedBox(height: 30,),
 
           CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),
@@ -514,7 +517,7 @@ class SectionText extends StatelessWidget {
             children: [
               Text(
                   "Our Vision",
-                  style: TextStyleUtils.textStyleSubHeader1Brand
+                  style: TextStyleUtils.heading2
               ),
               SizedBox(height: 20),
               Text(
@@ -535,7 +538,7 @@ class SectionText extends StatelessWidget {
             children: [
               Text(
                   title,
-                  style: TextStyleUtils.textStyleSubHeader1Brand
+                  style: TextStyleUtils.heading4
               ),
               SizedBox(height: 20),
               Text(
@@ -570,12 +573,12 @@ class SectionTextForWhoweAre extends StatelessWidget {
         children: [
           Text(
               title,
-              style: TextStyleUtils.textStyleSubHeader1Brand
+              style: TextStyleUtils.heading2
           ),
           SizedBox(height: 20),
           Text(
             description,
-              style: TextStyleUtils.textStyleSubHeader1
+              style: TextStyleUtils.paragraphMain
 
           ),
           SizedBox(height: 40),
@@ -638,13 +641,12 @@ class SectionImage extends StatelessWidget {
 
 
 class ImageContainerForTeam {
-  static Widget screen1({context, imageurl,name,desc,onTap}) {
+  static Widget screen1({context, imageurl,name,desc,onTap,controller}) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
     var isHovered=false.obs;
 
-    AboutUsController aboutUsController=Get.find();
     return
 
       Obx(
@@ -695,9 +697,9 @@ class ImageContainerForTeam {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(name,style: TextStyleUtils.textStyleHeader1,),
+                        Text(name,style: TextStyleUtils.heading6,),
                         SizedBox(height: 10,),
-                        Text(desc,style: TextStyleUtils.textStyleSubHeader1,),
+                        Text(desc,style: TextStyleUtils.paragraphMain,),
 
                       ],
                     ),
@@ -770,7 +772,7 @@ class FounderCard extends StatelessWidget {
           SizedBox(height: 20),
           Text(
             name,
-            style: TextStyleUtils.textStyleHeader1
+            style: TextStyleUtils.heading4
           ),
           SizedBox(height: 10),
           Text(

@@ -27,6 +27,8 @@ class RoutingNames {
   static String JOIN_US_SCREEN="/joinUsScreen";
   static String MEDIA_PAGE="/mediaPage";
   static String CONTACT_US_SCREEN="/contactUsScreen";
+  static String PROGRAMS_ALL_SCREEN="/programAllScreen";
+  static String STEP_COUNT_CHALLENGE="/stepCountChallenge";
 
 
 

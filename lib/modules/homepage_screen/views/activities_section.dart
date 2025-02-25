@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
 import '../../../utils/color_utils.dart';
 
@@ -108,7 +109,7 @@ class ActivitiesColumn extends StatelessWidget {
           description:
           "Express your creativity in our beginner-friendly art workshop. All materials provided.",
           time: "2:00 PM",
-          location: "Virtual Room",
+          location: "Zoom Link",
         ),
         SizedBox(height: 24),
         ActivityCard(
@@ -117,7 +118,7 @@ class ActivitiesColumn extends StatelessWidget {
           description:
           "Join us for a classic movie screening followed by a group discussion.",
           time: "3:00 PM",
-          location: "Community Hall",
+          location: "Zoom Link",
         ),
       ],
     );
@@ -145,13 +146,21 @@ class ActivityCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: ColorUtils.BRAND_COLOR_LIGHT,
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: Offset(0, 3),
+          ),
+        ],
     gradient: LinearGradient(
-    colors: [Colors.white,ColorUtils.PURPLE_BRAND_LIGHT, Colors.white,],
+    colors: [ColorUtils.PURPLE_BRAND_LIGHT, Colors.white,],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.blue[100]!),
+        // border: Border.all(color: ColorUtils.BRAND_COLOR,width: 2),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,13 +243,21 @@ class ActivityCategoriesCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(32),
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: ColorUtils.BRAND_COLOR_LIGHT,
+            spreadRadius: 1,
+            blurRadius: 8,
+            offset: Offset(0, 3),
+          ),
+        ],
         gradient: LinearGradient(
-          colors: [Colors.white,Colors.white,ColorUtils.YELLOW_BRAND_LIGHT, Colors.white,Colors.white],
+          colors: [ColorUtils.YELLOW_BRAND_LIGHT, Colors.white,Colors.white],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.blue[100]!),
+        // border: Border.all(color: ColorUtils.BRAND_COLOR,width: 2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +267,7 @@ class ActivityCategoriesCard extends StatelessWidget {
             style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: ColorUtils.BRAND_COLOR,
+                color: ColorUtils.HEADER_GREEN,
                 fontFamily: "Montserrat"
             ),
           ),
@@ -268,7 +285,9 @@ class ActivityCategoriesCard extends StatelessWidget {
 
               child: ElevatedButton(
 
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed(RoutingNames.GOOGLE_FORM_SCREEN);
+                },
                 onHover: (v){
                   v?isExploreProgram.value=true:isExploreProgram.value=false;
                 },

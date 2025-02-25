@@ -4,9 +4,11 @@ import 'package:inspiringseniorswebapp/common_widgets/custom_carousel.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/controller/ddh_controller.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views/faq_section.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
+import '../../../common_widgets/custom_floating_action.dart';
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 import '../controller/fwa_controller.dart';
@@ -17,6 +19,9 @@ class FunWithArtScreen extends StatelessWidget {
 
   FunWithArtController ddhController=Get.find();
 
+  final _currentPageNotifierForHosts = ValueNotifier<int>(0);
+
+
   final _currentPageNotifier = ValueNotifier<int>(0);
 
 
@@ -26,6 +31,8 @@ class FunWithArtScreen extends StatelessWidget {
     var width=MediaQuery.of(context).size.width ;
 
     return Scaffold(
+      floatingActionButton:CustomFloatingButton(),
+
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
         child: Column(
@@ -36,13 +43,16 @@ class FunWithArtScreen extends StatelessWidget {
 
             Container(
 
+              margin: EdgeInsets.symmetric(horizontal: 50),
+              padding: EdgeInsets.symmetric(vertical: 30),
+
               child: Column(
                 children: [
 
                   Container(
                     child:
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
@@ -65,15 +75,14 @@ class FunWithArtScreen extends StatelessWidget {
                         ),
                         Container(
                           width: width*0.4,
-                          margin: EdgeInsets.only(left: 50),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(" Fun therapy with Art ",style: TextStyleUtils.textStyleHeaderMainBold,),
+                              Text(" Fun therapy with Art ",style: TextStyleUtils.heading2,),
                               SizedBox(height: 20,),
-                              Text("Unleash creativity, embrace lifelong learning and rediscover the joy of self expression."
-                                ,style: TextStyleUtils.textStyleMainPara,),
+                              Text("Fun Therapy with Art is a joyful space within ISF's Learning Studio, designed for seniors to unleash their creativity, embrace lifelong learning, and rediscover the beauty of self-expression. Here, art becomes more than just a hobby—it’s a therapeutic journey where your hands, heart, and imagination come together to create pieces that stimulate both the mind and emotions. Whether you're exploring new techniques or simply enjoying the process, you’ll find that every emotion has a color, and every color tells a unique story. Join us to relax, express, and find fulfillment in every brushstroke on this fun and inspiring artistic adventure!"
+                                ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 30,),
                               CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Join - Every Alternate Wednesday 4-5 PM ",isHoverGetStarted: ddhController.isHoverRegistered),
 
@@ -82,106 +91,12 @@ class FunWithArtScreen extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
 
                                 children: [
-                                  Text("Our Hosts",style: TextStyleUtils.textStyleSubHeaderMainBold,),
+                                  // Text("Our Hosts",style: TextStyleUtils.heading2,),
+                                  //
+                                  // SizedBox(height: 10,),
+                                  // Container(
+                                  //     child: CustomCarouselForHosts(carouselList: ddhController.hostList,currentPageNotifier:  _currentPageNotifierForHosts)),
 
-                                  SizedBox(height: 10,),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-
-                                            Container(
-
-
-                                              width: 100,
-                                              height: 100,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.5),
-                                                    blurRadius: 8,
-                                                    spreadRadius: 2,
-                                                    offset: Offset(4, 4),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: ClipOval(
-                                                child:
-                                                Image.network("https://png.pngtree.com/background/20230403/original/pngtree-side-profile-of-old-man-vector-picture-image_2278848.jpg",
-                                                fit: BoxFit.cover,
-                                                  width: 100,
-                                                  height: 100,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 20,),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Rahul Gupta ",style: TextStyleUtils.textStyleSubHeader1,),
-                                                Text("Expert Doctor ",style: TextStyleUtils.textStyleSubHeader1,),
-
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(width: 30,),
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-
-                                            Container(
-
-
-                                              width: 100,
-                                              height: 100,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: Colors.grey.withOpacity(0.5),
-                                                    blurRadius: 8,
-                                                    spreadRadius: 2,
-                                                    offset: Offset(4, 4),
-                                                  ),
-                                                ],
-                                              ),
-                                              child: ClipOval(
-                                                child:
-                                                Image.network("https://www.shutterstock.com/shutterstock/photos/2222598239/display_1500/stock-photo--portrait-of-happy-indian-senior-woman-sitting-in-balcony-and-reading-book-2222598239.jpg",
-                                                  fit: BoxFit.cover,
-                                                  width: 100,
-                                                  height: 100,
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(width: 20,),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text("Veena Gupta ",style: TextStyleUtils.textStyleSubHeader1,),
-                                                Text("Yoga Expert ",style: TextStyleUtils.textStyleSubHeader1,),
-
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                    ],
-                                  )
                                 ],
                               ),),
 
@@ -196,7 +111,6 @@ class FunWithArtScreen extends StatelessWidget {
                   SizedBox(height: TextSizeDynamicUtils.dHeight56,),
 
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 50),
                     child: Column(
                       children: [
                         Container(
@@ -204,7 +118,7 @@ class FunWithArtScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(child: Text("Resources",style: TextStyleUtils.textStyleHeaderMain,),),
+                              Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
                               SizedBox(height: TextSizeDynamicUtils.dHeight32,),
 
                               CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier)
@@ -212,47 +126,8 @@ class FunWithArtScreen extends StatelessWidget {
                           ),
                         ),
                         SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                        Container(
-                          child: Column(
 
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("FAQ's",style: TextStyleUtils.textStyleHeaderMain,),
-                                ],
-                              ),
-                              SizedBox(height: 30,),
-
-                              Obx(
-                                  ()=> Container(
-                                  child: ListView.builder(
-
-                                      itemBuilder: (context,item)
-                                  {
-                                    return Container(
-                                      margin: EdgeInsets.only(bottom: 30),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Q${item+1} : ${ddhController.faqList.value[item]["Q"]}" ,style: TextStyleUtils.textStyleHeader1,),
-                                          SizedBox(height: 10,),
-                                          Container(
-                                            margin: EdgeInsets.symmetric(horizontal: 40),
-                                              child: Text("${ddhController.faqList.value[item]["A"]}", style: TextStyleUtils.textStyleSubHeader1,))
-
-                                        ],
-                                      ),
-                                    )
-                                    ;
-                                  },shrinkWrap: true,physics: NeverScrollableScrollPhysics(),itemCount: ddhController.faqList.value.length,),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-
+                        FAQSection(faqList: ddhController.faqList.value)
                       ],
                     ),
                   ),
@@ -275,10 +150,10 @@ class FunWithArtScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(heading,style: TextStyleUtils.textStyleHeader1,),
+          Text(heading,style: TextStyleUtils.heading2,),
           SizedBox(height: 30,),
           Container(
-              height:100,child: Text(subheading,style: TextStyleUtils.textStyleSubHeader1,)),
+              height:100,child: Text(subheading,style: TextStyleUtils.paragraphMain,)),
           SizedBox(height: 30,),
 
           CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),

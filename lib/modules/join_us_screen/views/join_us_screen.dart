@@ -8,6 +8,7 @@ import 'package:inspiringseniorswebapp/modules/join_us_screen/controller/join_us
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
+import '../../../common_widgets/custom_floating_action.dart';
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
@@ -26,6 +27,8 @@ class JoinUsScreen extends StatelessWidget {
     var width=MediaQuery.of(context).size.width ;
 
     return Scaffold(
+      floatingActionButton:CustomFloatingButton(),
+
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
         child: Column(
@@ -37,23 +40,30 @@ class JoinUsScreen extends StatelessWidget {
             Container(
 
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
 
                   Container(
                     child:
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+
                       children: [
                         Container(
+                          margin: EdgeInsets.only(left: 45,top: 30,right: 30),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image.asset("assets/images/volunteer_img.png",fit: BoxFit.cover,),
+                          width: MediaQuery.of(context).size.width*0.4,
+                          height: MediaQuery.of(context).size.width*0.3,
 
-                          child: Image.asset("assets/images/primary_logo.png",fit: BoxFit.fitWidth,),
-                          width: MediaQuery.of(context).size.width*0.45,
-                          height:MediaQuery.of(context).size.height*0.7 ,
 
                           decoration: BoxDecoration(
 
                             color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+
                             // boxShadow: [
                             //   BoxShadow(
                             //     color: ColorUtils.GREY_DOTTED,
@@ -65,17 +75,17 @@ class JoinUsScreen extends StatelessWidget {
                         ),
                         Container(
                           width: width*0.4,
-                          margin: EdgeInsets.only(left: 50),
+                          margin: EdgeInsets.only(left: 60),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Become a Volunteer ",style: TextStyleUtils.textStyleHeaderMainBold,),
+                              Text("Become a Volunteer ",style: TextStyleUtils.heading1,),
                               SizedBox(height: 20,),
-                              Text("Whats a Volunteer"
-                                ,style: TextStyleUtils.textStyleMainPara,),
+                              Text("Becoming a volunteer for the elderly starts with finding local organizations or community centers that support senior care. Volunteers play a crucial role in providing companionship, assisting with daily tasks, and offering emotional support to improve the well-being of older adults. Their presence helps reduce loneliness, promote social engagement, and ensure seniors feel valued and connected to the community."
+                                ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 30,),
-                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
+                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
 
 
 
@@ -91,7 +101,7 @@ class JoinUsScreen extends StatelessWidget {
                     child:
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      // mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                           width: width*0.4,
@@ -100,12 +110,12 @@ class JoinUsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Become a Member ",style: TextStyleUtils.textStyleHeaderMainBold,),
+                              Text("Become a Member ",style: TextStyleUtils.heading1,),
                               SizedBox(height: 20,),
-                              Text("Whats a Member"
-                                ,style: TextStyleUtils.textStyleMainPara,),
+                              Text("A member in an elderly support program benefits from the services and companionship offered by volunteers and the community. Members engage in social activities, receive assistance with daily needs, and participate in programs designed to enhance their well-being. They play an active role in fostering connections, sharing experiences, and contributing to a supportive and caring environment."
+                                ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 30,),
-                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
+                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
 
 
 
@@ -114,14 +124,18 @@ class JoinUsScreen extends StatelessWidget {
                         ),
 
                         Container(
+                          margin: EdgeInsets.only(left: 60),
+                          clipBehavior: Clip.hardEdge,
+                          child: Image.asset("assets/images/member_image.png",fit: BoxFit.cover,),
+                          width: MediaQuery.of(context).size.width*0.4,
+                          height: MediaQuery.of(context).size.width*0.3,
 
-                          child: Image.asset("assets/images/primary_logo.png",fit: BoxFit.fitWidth,),
-                          width: MediaQuery.of(context).size.width*0.45,
-                          height:MediaQuery.of(context).size.height*0.7 ,
 
                           decoration: BoxDecoration(
 
                             color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+
                             // boxShadow: [
                             //   BoxShadow(
                             //     color: ColorUtils.GREY_DOTTED,
@@ -148,23 +162,4 @@ class JoinUsScreen extends StatelessWidget {
   }
 
 
-  Widget initiativesDesc(heading,subheading,onpressed){
-    return Container(
-      width: MediaQuery.of(Get.context!).size.width*0.4,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(heading,style: TextStyleUtils.textStyleHeader1,),
-          SizedBox(height: 30,),
-          Container(
-              height:100,child: Text(subheading,style: TextStyleUtils.textStyleSubHeader1,)),
-          SizedBox(height: 30,),
-
-          CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),
-
-        ],
-      ),
-    );
-
-  }
 }

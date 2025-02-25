@@ -25,116 +25,286 @@ class MaterialColorCustom {
 
 class ColorUtils {
   static const Color HEADER_GREEN = Color(0xFF22B573);
+  static const Color HEADER_GREEN_DARKER = Color(0xFF198C5A);
+  static const Color HEADER_GREEN_LIGHTER = Color(0xFF44D191);
+  static const Color HEADER_GREEN_TRANSPARENT_50 = Color(0x8022B573);
+
   static const Color BRAND_COLOR = Color(0xFF1B136C);
+  static const Color BRAND_COLOR_LIGHT= Color(0xFF78B5DF);
 
   static const Color WHITE_CREAM_COLOR = Color(0xFFEBEBDF);
+  static Color BRAND_COLOR_INACTIVE = Color(0xFF7D7AA1); // Less vibrant version
+  static Color BRAND_COLOR_LIGHT_2 = Color(0xFF4E458F); // Slightly brighter version
+  static Color BRAND_COLOR_DISABLED = Color(0xFFAAA6C2); // Muted, greyish version
 
-  static const Color BRAND_COLOR_INACTIVE = Color(0xFF7D7AA1);
 
-  static const Color BRAND_COLOR_LIGHT = Color(0xFFADD5F6);
   static const Color LIGHT_BLUE_SHADE = Color(0xFFEDF4F1);
 
   static const Color ORANGE_COLOR = Color(0xFFfe5d37);
   static const Color ORANGE_COLOR_LIGHT = Color(0xFFffe9e4);
+  static const Color ORANGE_COLOR_DARK = Color(0xFFCC4A2B);
+  static const Color ORANGE_COLOR_LIGHT_2 = Color(0xFFFF987A);
+  static const Color ORANGE_COLOR_DISABLED = Color(0xFFD9A195);
+  static const Color ORANGE_COLOR_TRANSPARENT = Color(0x80FE5D37);
+
 
   static const Color PURPLE_BRAND = Color(0xFF786acf);
   static const Color PURPLE_BRAND_LIGHT = Color(0xFFedeaff);
 
+
   static const Color YELLOW_BRAND = Color(0xFFfec624);
 
   static const Color YELLOW_BRAND_LIGHT = Color(0xFFfff3d8);
+  static const Color PURPLE_BRAND_DARK = Color(0xFF5E52A6);
+  static const Color PURPLE_BRAND_LIGHT_2 = Color(0xFF9C91E5);
+  static const Color PURPLE_BRAND_DISABLED = Color(0xFFB5B0D9);
+  static const Color PURPLE_BRAND_TRANSPARENT = Color(0x80786ACF);
 
+
+  static const Color YELLOW_BRAND_DARK = Color(0xFFE0AE1F);
+  static const Color YELLOW_BRAND_LIGHT_2 = Color(0xFFFFE380);
+  static const Color YELLOW_BRAND_DISABLED = Color(0xFFD1B469);
+  static const Color YELLOW_BRAND_TRANSPARENT = Color(0x80FEC624);
 
   static const Color GREY_COLOR = Color(0xFF666666);
   static const Color TRACK_GREY = Color(0xFFD9D9D9);
   static const Color TRACK_GREY_LIGHT = Color(0xFFF8F8F8);
 
   static const Color GREY_COLOR_PLACEHOLDER = Color(0xFF878787);
-  static const Color GREY_DOTTED = Color(0xFFC5C5C5);
+  static const Color GREY_DOTTED = Color(0xFFEAE8E8);
   static const Color ERROR_RED = Color(0xFFDE4841);
   static const Color SECONDARY_BLACK = Color(0xFF2C2E35);
   static const WHITE_COLOR_BACKGROUND = Color(0xFFFFFFFF);
 }
 
 class TextStyleUtils {
-  static TextStyle textStyleHeader1 = TextStyle(
-    fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight20,
-    letterSpacing: 0.5,
 
-  );
-  static TextStyle textStyleSubHeader1 = TextStyle(
-    // color: ColorUtils.SECONDARY_BLACK,
-    fontWeight: FontWeight.w200,
-    fontSize: TextSizeDynamicUtils.dHeight20,
-    letterSpacing: 0.5,
+  static TextStyle heading1 = TextStyle(
+  color: ColorUtils.BRAND_COLOR, // ✅ Keep Deep Purple for Strongest Impact
+  fontSize: TextSizeDynamicUtils.dHeight38,
+  fontWeight: FontWeight.w800,
+  fontFamily: "Inter",
+  letterSpacing: 1.2,
   );
 
+  static TextStyle heading2 = TextStyle(
+  color: ColorUtils.BRAND_COLOR, // ✅ Consistent with Heading 1
+  fontSize: TextSizeDynamicUtils.dHeight36,
+  fontWeight: FontWeight.w600,
+    fontFamily: "Inter",
 
-  static TextStyle textStyleMainPara = TextStyle(
-    color: ColorUtils.SECONDARY_BLACK,
-    fontWeight: FontWeight.w200,
-    fontSize: TextSizeDynamicUtils.dHeight24,
-    letterSpacing: 0.5,
-  );
-  static TextStyle textStyleSubHeader1Black = TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight14,
-    letterSpacing: 0.5,
-  );
-
-  static TextStyle textStyleSubHeader1Brand = TextStyle(
-    color: ColorUtils.BRAND_COLOR,
-    fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight38,
-    letterSpacing: 0.5,
-  );
-  static TextStyle textStyleHeaderMain = TextStyle(
-      fontWeight: FontWeight.w400,
-      fontSize: TextSizeDynamicUtils.dHeight40,
-      letterSpacing: 1.0,
-
-  );
-
-
-  static TextStyle textStyleSubHeaderMainBold = TextStyle(
-    fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight38,
     letterSpacing: 1.0,
-
   );
 
+  static TextStyle heading3 = TextStyle(
+  color: ColorUtils.HEADER_GREEN, // 🔄 Change to Green for Contrast
+  fontSize: TextSizeDynamicUtils.dHeight30,
+  fontWeight: FontWeight.w600,
+    fontFamily: "Inter",
 
-  static TextStyle textStyleHeaderMainBold = TextStyle(
-      fontWeight: FontWeight.w800,
-      fontSize: TextSizeDynamicUtils.dHeight40,
-      letterSpacing: 1.0,
-
+    letterSpacing: 0.8,
   );
 
-  static TextStyle simpleBlackTextStyle = TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.w400,
-    fontSize: TextSizeDynamicUtils.dHeight14,
-    // letterSpacing: 0.5,
-  );
-  static TextStyle simpleBlackTextStyle12 = TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.w400,
-    fontSize: TextSizeDynamicUtils.dHeight12,
+  static TextStyle heading4 = TextStyle(
+  color: ColorUtils.PURPLE_BRAND_DARK, // 🔄 Slightly Dark Purple for a Softer Look
+  fontSize: TextSizeDynamicUtils.dHeight28,
+  fontWeight: FontWeight.w500,
+    fontFamily: "Inter",
+
     letterSpacing: 0.5,
   );
-  static TextStyle simpleBlackTextStyleHighlighted = TextStyle(
-    color: Colors.black,
+
+  static TextStyle buttonText =
+  TextStyle(
+    color: ColorUtils.WHITE_COLOR_BACKGROUND, // 🔄 Slightly Dark Purple for a Softer Look
+    fontSize: TextSizeDynamicUtils.dHeight16,
+    fontWeight: FontWeight.w500,
+    fontFamily: "Inter",
+
+  );
+
+  static TextStyle paragraphMain = TextStyle(
+  color: ColorUtils.SECONDARY_BLACK, // ✅ Keep Black for Readability
+  fontSize: TextSizeDynamicUtils.dHeight20,
+  fontWeight: FontWeight.w300,
+  letterSpacing: 0.5,
+  );
+
+  static TextStyle subHeading1 = TextStyle(
+  color: ColorUtils.BRAND_COLOR_LIGHT_2, // 🔄 Slightly Vibrant for Subtle Highlights
+  fontSize: TextSizeDynamicUtils.dHeight28,
+  fontWeight: FontWeight.w500,
+  letterSpacing: 0.8,
+  );
+
+  static TextStyle paragraphSmall = TextStyle(
+  color: ColorUtils.GREY_COLOR, // ✅ Keep Grey for Soft Reading Sections
+  fontSize: TextSizeDynamicUtils.dHeight16,
+  fontWeight: FontWeight.w300,
+  letterSpacing: 0.4,
+  );
+
+  static TextStyle footerText = TextStyle(
+  color: ColorUtils.GREY_COLOR_PLACEHOLDER, // ✅ Light Grey for Footer Readability
+  fontSize: TextSizeDynamicUtils.dHeight16,
+  fontWeight: FontWeight.w400,
+  );
+
+
+
+  static TextStyle heading5 = TextStyle(
+  color: ColorUtils.SECONDARY_BLACK,
+  fontSize: TextSizeDynamicUtils.dHeight18,
+  fontWeight: FontWeight.w600,
+  letterSpacing: 0.5,
+    fontFamily: "Inter",
+
+  );
+
+  static TextStyle heading6 = TextStyle(
+    color: ColorUtils.SECONDARY_BLACK,
+    fontSize: TextSizeDynamicUtils.dHeight16,
     fontWeight: FontWeight.w600,
-    fontSize: TextSizeDynamicUtils.dHeight12,
     letterSpacing: 0.5,
+    fontFamily: "Inter",
+
   );
+
+  // **Subheadings**
+
+
+  static TextStyle subHeading2 = TextStyle(
+  color: ColorUtils.PURPLE_BRAND,
+  fontSize: TextSizeDynamicUtils.dHeight24,
+  fontWeight: FontWeight.w400,
+  letterSpacing: 0.7,
+  );
+
+  static TextStyle subHeading3 = TextStyle(
+  color: ColorUtils.BRAND_COLOR_LIGHT_2,
+  fontSize: TextSizeDynamicUtils.dHeight20,
+  fontWeight: FontWeight.w400,
+  letterSpacing: 0.7,
+  );
+
+
+
+  static TextStyle greyPlaceholder = TextStyle(
+  color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+  fontSize: TextSizeDynamicUtils.dHeight16,
+  fontWeight: FontWeight.w400,
+  );
+
+  // **Buttons & CTA**
+  static TextStyle ctaButton = TextStyle(
+  color: ColorUtils.WHITE_COLOR_BACKGROUND,
+  fontSize: TextSizeDynamicUtils.dHeight18,
+  fontWeight: FontWeight.w600,
+  letterSpacing: 0.6,
+  );
+
+  static TextStyle disabledButton = TextStyle(
+  color: ColorUtils.BRAND_COLOR_DISABLED,
+  fontSize: TextSizeDynamicUtils.dHeight18,
+  fontWeight: FontWeight.w400,
+  letterSpacing: 0.6,
+  );
+
+  static TextStyle smallHighlighted = TextStyle(
+  color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+  fontSize: TextSizeDynamicUtils.dHeight12,
+  fontWeight: FontWeight.w600,
+  letterSpacing: 0.5,
+  );
+
+
+
+  // static TextStyle textStyleHeader1 = TextStyleUtils(
+  //   fontWeight: FontWeight.w600,
+  //   fontSize: TextSizeDynamicUtils.dHeight20,
+  //
+  //   letterSpacing: 0.5,
+  //
+  // );
+  // static TextStyle textStyleSubHeader1 = TextStyle(
+  //   color: ColorUtils.SECONDARY_BLACK,
+  //   fontWeight: FontWeight.w200,
+  //   fontSize: TextSizeDynamicUtils.dHeight20,
+  //   letterSpacing: 0.5,
+  // );
+
+
+  static TextStyle footerHeaderText =TextStyle(
+  fontWeight: FontWeight.w700, // Bolder for emphasis
+  fontSize: TextSizeDynamicUtils.dHeight20,
+  color: Colors.white,
+    fontFamily: "Inter",
+
+  );
+
+
+  static TextStyle textStyleh16 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: TextSizeDynamicUtils.dHeight16,
+    color: Colors.white.withOpacity(0.9), // Slightly faded for contrast
+
+  );
+
+  static TextStyle textStyleh16GREEN = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: TextSizeDynamicUtils.dHeight16,
+    color: ColorUtils.HEADER_GREEN, // Slightly faded for contrast
+
+  );
+
+  static TextStyle textStyleh16BRAND= TextStyle(
+    fontWeight: FontWeight.w600,
+    fontSize: TextSizeDynamicUtils.dHeight16,
+    color: ColorUtils.BRAND_COLOR, // Slightly faded for contrast
+
+  );
+
+  // static TextStyle textStyleHeaderMaininPara = TextStyle(
+  //   color: ColorUtils.SECONDARY_BLACK,
+  //   fontWeight: FontWeight.w200,
+  //   fontSize: TextSizeDynamicUtils.dHeight18,
+  //   letterSpacing: 0.5,
+  // );
+
+  // static TextStyle TextStyletextStyleSubHeader1Brand = TextStyle(
+  //   color: ColorUtils.BRAND_COLOR,
+  //   fontWeight: FontWeight.w600,
+  //   fontSize: TextSizeDynamicUtils.dHeight38,
+  //   letterSpacing: 0.5,
+  // );
+  // static TextStyle textStyleHeaderMain = TextStyle(
+  //     fontWeight: FontWeight.w400,
+  //     fontSize: TextSizeDynamicUtils.dHeight40,
+  //     letterSpacing: 1.0,
+  //
+  // );
+
+
+  // static TextStyle textStyleSubHeaderMainBold = TextStyle(
+  //   fontWeight: FontWeight.w600,
+  //   fontSize: TextSizeDynamicUtils.dHeight38,
+  //   letterSpacing: 1.0,
+  //
+  // );
+
+
+  // static TextStyle textStyleHeaderMainBold = TextStyle(
+  //     fontWeight: FontWeight.w800,
+  //     fontSize: TextSizeDynamicUtils.dHeight40,
+  //     letterSpacing: 1.0,
+  //   color: ColorUtils.BRAND_COLOR
+  //
+  // );
+
   static TextStyle smallGreyTextStyle = TextStyle(
     color: ColorUtils.GREY_COLOR_PLACEHOLDER,
     fontWeight: FontWeight.w400,
-    fontSize: TextSizeDynamicUtils.dHeight12,
+    fontSize: TextSizeDynamicUtils.dHeight16,
     // letterSpacing: 0.5,
   );
 
@@ -145,88 +315,18 @@ class TextStyleUtils {
     letterSpacing: 0.5,
   );
 
-  static TextStyle textHeadingSimpleBlack_24_700 = TextStyle(
-      color: ColorUtils.SECONDARY_BLACK,
-      fontSize: 24,
-      fontWeight: FontWeight.w700,
-      letterSpacing: 0.015,
-      fontFamily: "Poppins-medium");
 
-  static TextStyle textHeadingBoldBlack_18_700 = TextStyle(
-      color: ColorUtils.SECONDARY_BLACK,
-      fontSize: 18,
-      fontWeight: FontWeight.w700,
-      letterSpacing: 0.5,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textHeaderBlack_18_500 = TextStyle(
-      color: ColorUtils.SECONDARY_BLACK,
-      fontSize: 18,
-      fontWeight: FontWeight.w500,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textSubHeadingBlack_16_600 = TextStyle(
-      color: ColorUtils.SECONDARY_BLACK,
-      fontSize: 16,
-      fontWeight: FontWeight.w600,
-      fontFamily: "Poppins-medium");
-  static TextStyle textSimpleBlack_16_400 = TextStyle(
-      color: ColorUtils.SECONDARY_BLACK,
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textSimpleGrey_14_400 = TextStyle(
-      color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-      fontFamily: "Poppins-medium");
-  static TextStyle textSimpleHaldBoldBlack_16_500 = TextStyle(
-      color: ColorUtils.SECONDARY_BLACK,
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textBlackTabs_14_500 = TextStyle(
-      color: ColorUtils.SECONDARY_BLACK,
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textTabsBrandGreen_14_500 = TextStyle(
-      color: ColorUtils.BRAND_COLOR,
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textTabsErrorReded_14_500 = TextStyle(
-      color: ColorUtils.ERROR_RED,
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textNavigtaionButtonWhite_14_500 = TextStyle(
-      color: ColorUtils.WHITE_COLOR_BACKGROUND,
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: "Poppins-medium");
-
-  static TextStyle textBlackSmall_12_500 = TextStyle(
-      color: ColorUtils.BRAND_COLOR,
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      fontFamily: "Poppins-medium");
 }
 
 class TextSizeDynamicUtils {
   static var height = MediaQuery.of(Get.context!).size.height;
 
   static get dHeight30 {
-    return math.min(height * 0.032, 30.0);
+    return math.min(height * 0.04, 30.0);
   }
 
   static get dHeight28 {
-    return math.min(height * 0.04, 28.0);
+    return math.min(height * 0.038, 28.0);
   }
 
   static get dHeight22 {
@@ -239,6 +339,10 @@ class TextSizeDynamicUtils {
 
   static get dHeight38 {
     return math.min(height * 0.056, 38.0);
+  }
+
+  static get dHeight36 {
+    return math.min(height * 0.048, 36.0);
   }
 
   static get dHeight24 {

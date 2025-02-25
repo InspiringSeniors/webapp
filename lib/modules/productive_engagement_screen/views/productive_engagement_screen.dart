@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views/faq_section.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/controller/productive_enegagment_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
+import '../../../common_widgets/custom_floating_action.dart';
+import '../../../common_widgets/custom_testimonials_section.dart';
 import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
@@ -21,6 +24,8 @@ class ProductiveEngagementScreen extends StatelessWidget {
     var width=MediaQuery.of(context).size.width ;
 
     return Scaffold(
+      floatingActionButton:CustomFloatingButton(),
+
       body: SingleChildScrollView(
         physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
         child: Column(
@@ -31,44 +36,42 @@ class ProductiveEngagementScreen extends StatelessWidget {
 
             Container(
 
+              margin: EdgeInsets.symmetric(horizontal: 50),
+              padding: EdgeInsets.symmetric(vertical: 30),
               child: Column(
                 children: [
 
                   Container(
                     child:
                     Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
+                          margin:EdgeInsets.only(right: 60),
 
-                          child: Image.asset("assets/images/primary_logo.png",fit: BoxFit.fitWidth,),
+                          child: Image.asset("assets/images/prod_eng_poster.jpg",fit: BoxFit.fill,),
                           width: MediaQuery.of(context).size.width*0.45,
-                          height:MediaQuery.of(context).size.height*0.7 ,
+                          height:MediaQuery.of(context).size.height*0.55 ,
+                          clipBehavior: Clip.hardEdge,
 
                           decoration: BoxDecoration(
 
+                            borderRadius: BorderRadius.circular(20),
                             color: Colors.white,
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: ColorUtils.GREY_DOTTED,
-                            //     blurRadius: 1000,
-                            //     spreadRadius: 1
-                            //   )
-                            // ]
+
                           ),
                         ),
                         Container(
                           width: width*0.4,
-                          margin: EdgeInsets.only(left: 50),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Productive Engagement",style: TextStyleUtils.textStyleHeaderMainBold,),
+                              Text("Productive Engagement",style: TextStyleUtils.heading1,),
                               SizedBox(height: 20,),
-                              Text("Dedicated to leveraging the knowledge, skills and experience of seniors for meaningful and purposeful engangements."
-                                ,style: TextStyleUtils.textStyleMainPara,),
+                              Text("We invite seniors to turn their skills, knowledge, and experience into meaningful contributions. Whether it's teaching or mentoring underprivileged students & youth, leading community projects, or participating in social events, our programs foster intergenerational bonds and create lasting impact. Aligned with the United Nations Sustainable Development Goals—Quality Education (SDG 4), Reduced Inequalities (SDG 10), and Good Health and Well-Being (SDG 3)—we strive to build inclusive, vibrant communities. Join us to make your golden years active, purposeful, and inspiring."
+                                ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 30,),
                               CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: healHubController.isHoverRegistered),
                             ],
@@ -81,22 +84,25 @@ class ProductiveEngagementScreen extends StatelessWidget {
                   SizedBox(height: TextSizeDynamicUtils.dHeight56,),
 
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 50),
-                    child: Column(
+                    margin: EdgeInsets.only(
+                        left: 20
+                    ),                    child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(child: Text("Initiatives",style: TextStyleUtils.textStyleHeaderMain,),),
+                              Container(child: Text("Initiatives",style: TextStyleUtils.heading2,),),
                               SizedBox(height: TextSizeDynamicUtils.dHeight32,),
                               Container(child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [initiativesDesc("Inspiring Tutors Program","Connecting passionate seniors with children from underserved communities, helping to bridge the educational gap. As a tutor, you will play a vital role in coaching middle school students to improve their academic performance, foster a love for learning, and develop essential life skills.",(){
+                                children: [initiativesDesc("Inspiring Tutors Program","Connecting passionate seniors with underserved children to bridge the educational gap. As a tutor, you'll help middle school students boost academic performance, spark a love for learning, and build essential life skills.",(){
                                   Get.toNamed(RoutingNames.INSPIRING_TUTORS_SCREEN);
-                                }),initiativesDesc("Inspiring Mentors Program","A program designed to provide mentorship to underprivilaged students by our experienced seniors , helping them to grow and fulfill their dreams.",(){
+                                }),initiativesDesc("Inspiring Mentors Program","Connecting experienced seniors with underserved students to guide them in achieving their dreams. As a mentor, you'll empower young minds, boost their confidence, and help them reach new heights in their careers..",(){
                                   Get.toNamed(RoutingNames.INSPIRING_TUTORS_SCREEN);
 
                                 })],),
@@ -109,9 +115,9 @@ class ProductiveEngagementScreen extends StatelessWidget {
                               Container(child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [initiativesDesc("Lets Talk English","English Conversational Course specially crafted for students in 5th-8th grade at government schools. Many of these students face significant challenges in effective communication, which hampers their ability to clearly express their thoughts and ideas.",(){
+                                children: [initiativesDesc("Lets Talk English","Our English Conversation Course is designed for 5th-8th grade government school students struggling with communication focusing on building confidence, improving speaking skills, and helping students to clearly express and articulate their thoughts and ideas.",(){
                                   Get.toNamed(RoutingNames.LETS_TALK_ENGLISH_SCREEN);
-                                }),initiativesDesc("Knowledge Cafe","A unique platform where seniors share life stories ,experiences and insights on diverse themes such as health, business, finance, science, technology and art .",(){
+                                }),initiativesDesc("Knowledge Cafe","A unique platform where seniors share life stories, experiences and insights on diverse themes such as health, business, finance, science, technology and art . Join a vibrant community of seniors, learning together and sharing wisdom",(){
                                   Get.toNamed(RoutingNames.KNOWLEDGE_CAFE_SCREEN);
 
                                 })],),
@@ -121,47 +127,14 @@ class ProductiveEngagementScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+
                         SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                        Container(
-                          child: Column(
 
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("FAQ's",style: TextStyleUtils.textStyleHeaderMain,),
-                                ],
-                              ),
-                              SizedBox(height: 30,),
+                        TestimonialSection(healHubController.testimonials),
+                        //
+                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
 
-                              Obx(
-                                  ()=> Container(
-                                  child: ListView.builder(
-
-                                      itemBuilder: (context,item)
-                                  {
-                                    return Container(
-                                      margin: EdgeInsets.only(bottom: 30),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text("Q${item+1} : ${healHubController.faqList.value[item]["Q"]}" ,style: TextStyleUtils.textStyleHeader1,),
-                                          SizedBox(height: 10,),
-                                          Container(
-                                            margin: EdgeInsets.symmetric(horizontal: 40),
-                                              child: Text("${healHubController.faqList.value[item]["A"]}", style: TextStyleUtils.textStyleSubHeader1,))
-
-                                        ],
-                                      ),
-                                    )
-                                    ;
-                                  },shrinkWrap: true,physics: NeverScrollableScrollPhysics(),itemCount: healHubController.faqList.value.length,),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        FAQSection(faqList: healHubController.faqList.value)
 
                       ],
                     ),
@@ -185,10 +158,10 @@ class ProductiveEngagementScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(heading,style: TextStyleUtils.textStyleHeader1,),
+          Text(heading,style: TextStyleUtils.heading3,),
           SizedBox(height: 30,),
           Container(
-              height:100,child: Text(subheading,style: TextStyleUtils.textStyleSubHeader1,overflow: TextOverflow.visible,)),
+              height:100,child: Text(subheading,style: TextStyleUtils.paragraphMain,overflow: TextOverflow.visible,)),
           SizedBox(height: 30,),
 
           CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -21,11 +22,8 @@ class SplashScreen extends StatelessWidget {
 
             Container(
               padding: EdgeInsets.only(bottom: 50),
-              child: Text("Holistic Platform for Seniors",style: TextStyle(
-                color: Color(0xFF27186E),
-                fontSize: 16,
-                fontFamily:"Inter"
-              ),),
+              child: Text("Holistic Platform for Seniors",style:TextStyleUtils.heading2
+                ,),
             )
           ],
         ),

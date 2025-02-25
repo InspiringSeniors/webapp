@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
+import 'package:url_launcher/url_launcher.dart';
 
 class GlobalKeyConsts {
   static final GlobalKey<NavigatorState> navigatorKey =
@@ -87,5 +88,15 @@ class Utils{
     // }else {
     //   showToastMessage("Cannot open app.", true);
     // }
+  }
+
+
+
+  static void launchUrlFor(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

@@ -25,8 +25,14 @@ Widget CustomButton({textColor,onpressed,text,isHoverGetStarted,hoveredColor,bgC
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: hpadding, vertical: vpadding),
         child: Text(
+
           text,
-          style: TextStyle(fontSize: fontSize,color: textColor==null?ColorUtils.WHITE_COLOR_BACKGROUND:textColor,fontFamily: "Montserrat"),
+
+          style: TextStyle(
+              fontSize: fontSize,color: textColor==null?ColorUtils.WHITE_COLOR_BACKGROUND:textColor,
+              letterSpacing: 0.5,
+            fontFamily: "Inter"
+              ),
         ),
       ),
       style: ElevatedButton.styleFrom(
@@ -34,12 +40,11 @@ Widget CustomButton({textColor,onpressed,text,isHoverGetStarted,hoveredColor,bgC
 
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
-            side: BorderSide(color: borderColor==null?bgColor:borderColor)
 
           ),
 
           shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
-          elevation: 10
+          elevation: 2
       ),
     ),
   );

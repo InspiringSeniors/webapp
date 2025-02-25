@@ -1,253 +1,655 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../common_widgets/text_button.dart';
 import '../../../utils/color_utils.dart';
+import '../controllers/homepage_controller.dart';
 
 class FooterSection extends StatelessWidget {
+
+  var isHover =false.obs;
+  var isHoverGetStarted=false.obs;
   @override
   Widget build(BuildContext context) {
+
+    var width= MediaQuery.of(context).size.width;
+    var height= MediaQuery.of(context).size.height;
+
     return Container(
+
+      width: MediaQuery.of(context).size.width,
       // color: ColorUtils.BRAND_COLOR,
       decoration: BoxDecoration(
-        gradient: LinearGradient(colors: [
-          ColorUtils.BRAND_COLOR,Colors.white,
-        ],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,),
-      ),
-      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
-      child: Column(
-        children: [
-          // Footer Grid Section
-          GridView.count(
-            crossAxisCount: MediaQuery.of(context).size.width > 1000 ? 4 : 2,
-            shrinkWrap: true,
-            crossAxisSpacing: 32,
-            mainAxisSpacing: 32,
-            childAspectRatio: 3/2,
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              FooterItem(
-                title: "Inspiring Seniors",
-                description:
-                "Empowering seniors to live their best lives through community, activities, and support services.",
-                isLogo: true,
-              ),
-              FooterLinkItem(
-                title: "Quick Links",
-                links: [
-                  "About Us",
-                  "Our Programs",
-                  "Activities",
-                  "Resources",
-                  "Contact Us"
-                ],
-              ),
-              FooterContactItem(
-                title: "Contact Info",
-                contacts: [
-                  ["123 Senior Care Lane, Wellness City", FontAwesomeIcons.mapMarkerAlt],
-                  ["1-800-SENIORS", FontAwesomeIcons.phoneAlt],
-                  ["contact@inspiringseniors.org", FontAwesomeIcons.envelope],
-                  ["Mon-Fri: 8AM-6PM", FontAwesomeIcons.clock]
-                ],
-              ),
-              NewsletterForm(),
-            ],
-          ),
-          SizedBox(height: 48),
+        // color: Colors.white,
 
-          // Certificates & Accreditations
+          gradient: LinearGradient(colors: [
+            // Colors.white,
+            // Colors.blue[100]!,
 
+            Colors.blue[50]!,
+            Colors.white
 
-          // Copyright Section
-          Divider(color: Colors.blue[700]),
-          SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "© 2024 InspiringSeniors. All rights reserved.",
-                style: TextStyle(color: Colors.grey[400], fontSize: 14),
-              ),
-              Row(
-                children: [
-                  FooterTextLink("Privacy Policy"),
-                  SizedBox(width: 16),
-                  FooterTextLink("Terms of Service"),
-                  SizedBox(width: 16),
-                  FooterTextLink("Accessibility"),
-                ],
-              ),
-            ],
-          ),
-
-        ],
-      ),
-    );
-  }
-}
-
-// Footer Item for General Section
-class FooterItem extends StatelessWidget {
-  final String title;
-  final String description;
-  final bool isLogo;
-
-  FooterItem({required this.title, required this.description, this.isLogo = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        isLogo
-            ? Text(
-          title,
-          style: TextStyle(
-              fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),
-        )
-            : Text(
-          title,
-          style: TextStyle(
-              fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        SizedBox(height: 16),
-        Text(description, style: TextStyle(color: Colors.grey[300], fontSize: 16)),
-      ],
-    );
-  }
-}
-
-// Footer Quick Links Section
-class FooterLinkItem extends StatelessWidget {
-  final String title;
-  final List<String> links;
-
-  FooterLinkItem({required this.title, required this.links});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style:
-          TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        SizedBox(height: 16),
-        for (var link in links)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              link,
-              style: TextStyle(color: Colors.grey[300], fontSize: 16),
+          ],begin: Alignment.bottomCenter,end: Alignment.topCenter),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1), // Subtle shadow color
+              blurRadius: 5, // Softens the shadow
+              offset: Offset(0, -1), // Positions the shadow below the navbar
+              spreadRadius: 1, // Slight expansion
             ),
-          ),
-      ],
-    );
-  }
-}
 
-// Footer Contact Section
-class FooterContactItem extends StatelessWidget {
-  final String title;
-  final List<List<dynamic>> contacts;
 
-  FooterContactItem({required this.title, required this.contacts});
+          ]
+      ),
+      margin: EdgeInsets.only(top: 50, ),
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style:
-          TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        SizedBox(height: 16),
-        for (var contact in contacts)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: Row(
+
+      padding: EdgeInsets.symmetric(vertical: 50, horizontal: 32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Container(
+            child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(contact[1], color: Colors.grey[300]),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    contact[0],
-                    style: TextStyle(color: Colors.grey[300], fontSize: 16),
+                GestureDetector(
+                  onTap: (){
+                    Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+                  },
+                  child: Container(
+                    child: Image.asset("assets/images/primary_logo_horizontal.png",height: height*0.15,fit: BoxFit.contain,),
                   ),
                 ),
+                Container(
+                  width: width*0.6,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                            },
+                              child: Text("About Us",style: TextStyle( fontWeight: FontWeight.w600,
+                                fontSize: TextSizeDynamicUtils.dHeight20,
+                                color: ColorUtils.BRAND_COLOR,
+
+                                fontFamily: "Montserrat", ),)),
+                          SizedBox(height: 25,),
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                            },
+                              child: Text("Our Vision",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                            },child:Text("Who we are",style: TextStyleUtils.textStyleh16GREEN,),),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                            },child:Text("Our Team",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+                          //
+                          // Text("Join Us",style: TextStyleUtils.textStyleh16,),
+                          // SizedBox(height: 10,),
+                          //
+                          // Text("Contact Us",style: TextStyleUtils.textStyleh16,),
+
+                        ],
+                      ),
+                      SizedBox(width: 40,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                            onTap: ()async{
+
+                              Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
+                            },
+                              child: Text("Programs",style: TextStyle( fontWeight: FontWeight.w600,
+                                fontSize: TextSizeDynamicUtils.dHeight20,
+                                color: ColorUtils.BRAND_COLOR,
+
+                                fontFamily: "Montserrat",
+                                ),)),
+                          SizedBox(height: 25,),
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
+                            },child:Text("Health Hub",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN);
+                            },child:Text("Productive Eng.",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.SOCIAL_CIRCLE_SCREEN);
+                            },child:Text("Social Circle",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+                          //
+                          // Text("Melody Masters Us",style: TextStyleUtils.textStyleh16,),
+                          // SizedBox(height: 10,),
+                          //
+                          // Text("Art Fun",style: TextStyleUtils.textStyleh16,),
+
+                        ],
+                      ),
+                      SizedBox(width: 40,),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.MEDIA_PAGE);
+                            },
+
+                              child: Text("Media",style: TextStyle( fontWeight: FontWeight.w600,
+                                fontSize: TextSizeDynamicUtils.dHeight20,
+
+                                color: ColorUtils.BRAND_COLOR,
+                                fontFamily: "Montserrat",
+                                ),)),
+                          SizedBox(height: 25,),
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.MEDIA_PAGE);
+                            },child:Text("Events",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.MEDIA_PAGE);
+                            },child:Text("News",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.MEDIA_PAGE);
+                            },child:Text("Gallery",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+                          //
+                          // Text("Lets Talk English",style: TextStyleUtils.textStyleh16,),
+                          // SizedBox(height: 10,),
+
+
+                        ],
+                      ),
+
+                      SizedBox(width: 40,),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+                            },
+                              child: Text("Join Us",style: TextStyle( fontWeight: FontWeight.w600,
+                                fontSize: TextSizeDynamicUtils.dHeight20,
+                                color: ColorUtils.BRAND_COLOR,
+
+                                fontFamily: "Montserrat",
+                              )
+                              )),
+                          SizedBox(height: 25,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+                            },child:Text("Member",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+                            },child:Text("Volunteer",style: TextStyleUtils.textStyleh16GREEN,)),
+                          SizedBox(height: 10,),
+                        ],
+                      ),
+                      SizedBox(width: 40,),
+
+                      Column(
+                        children: [
+                          CustomButton(onpressed: (){
+                            launchUrlFor("https://api.whatsapp.com/send?phone=919315274243");
+                            // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Register",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
+
+                          SizedBox(height: 20,),
+                          CustomButton(onpressed: (){
+                            launchUrlFor("https://rzp.io/l/u0o8yej");
+                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 22,vpadding: 10,isHoverGetStarted: isHover,text: "Donate"),
+
+                        ],
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
-      ],
+
+          SizedBox(height: 45,),
+
+          Divider(color: ColorUtils.BRAND_COLOR,),
+
+          SizedBox(height: 30,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+
+              Text("© Copyright 2024 Inspiring Seniors Foundation. All Rights Reserved Profuture Technologies.",style: TextStyleUtils.textStyleh16BRAND,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("Follow Us : ",style: TextStyleUtils.textStyleh16BRAND,),
+                  SizedBox(width: 20,),
+
+                  GestureDetector(
+                    onTap: (){
+                      launchUrlFor("https://www.instagram.com/inspiringseniors/");
+
+                    },
+                      child: Icon(FontAwesomeIcons.instagram,size: 30,color: ColorUtils.BRAND_COLOR,)),
+                  SizedBox(width: 20,),
+                  GestureDetector(
+                    onTap: (){
+                      launchUrlFor("https://www.linkedin.com/uas/login?session_redirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Finspiring-seniors%2Fabout%2F");
+                    },
+                      child: Icon(FontAwesomeIcons.linkedin,size: 30,color: ColorUtils.BRAND_COLOR)),
+                  SizedBox(width: 20,),
+
+                  GestureDetector(
+                      onTap:(){
+                        launchUrlFor("https://www.facebook.com/InspiringSeniorsFoundation");
+                      },child: Icon(FontAwesomeIcons.facebook,size: 30,color: ColorUtils.BRAND_COLOR)),
+                  SizedBox(width: 20,),
+
+                  GestureDetector(
+                      onTap:(){
+                        launchUrlFor("https://www.youtube.com/@InspiringSeniorsFoundation");
+                      },child: Icon(FontAwesomeIcons.youtube,size: 30,color: ColorUtils.BRAND_COLOR)),
+                  // SizedBox(width: 20,),
+
+
+                  // GestureDetector(
+                  //     onTap:(){
+                  //       launchUrlFor("https://x.com/ISF2024");
+                  //     },child: Icon(FontAwesomeIcons.x,size: 30,color: ColorUtils.BRAND_COLOR)),
+
+                ],
+              )
+            ],
+          )
+
+
+
+        ],
+      ),
     );
   }
+
+
+  void launchUrlFor(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+    // void scrollToSection() {
+    //
+    // HomepageController homepageController=Get.find();
+    // Scrollable.ensureVisible(
+    // homepageController.sectionKey.currentContext!,
+    // duration: Duration(seconds: 1), // Smooth scrolling duration
+    // curve: Curves.easeInOut,        // Animation curve
+    // );
+    // }
 }
 
-// Newsletter Form Section
-class NewsletterForm extends StatelessWidget {
+class FooterSection1 extends StatelessWidget {
+
+  var isHover =false.obs;
+  var isHoverGetStarted=false.obs;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Newsletter",
-          style:
-          TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        SizedBox(height: 16),
-        Text("Subscribe to receive updates and news.",
-            style: TextStyle(color: Colors.grey[300])),
-        SizedBox(height: 16),
-        TextField(
-          decoration: InputDecoration(
-            hintText: "Enter your email",
-            fillColor: Colors.blue[800],
-            filled: true,
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+
+    var width= MediaQuery.of(context).size.width;
+    var height= MediaQuery.of(context).size.height;
+
+    return Container(
+
+      width: MediaQuery.of(context).size.width,
+      // color: ColorUtils.BRAND_COLOR,
+      decoration: BoxDecoration(
+        // color: ColorUtils.BRAND_COLOR,
+
+          gradient: LinearGradient(colors: [
+                ColorUtils.BRAND_COLOR, // Deep Purple
+                ColorUtils.HEADER_GREEN,
+            // Slightly lighter purple
+
+
+          ],
+
+              begin: Alignment.bottomCenter,end: Alignment.topCenter),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1), // Subtle shadow color
+              blurRadius: 5, // Softens the shadow
+              offset: Offset(0, -1), // Positions the shadow below the navbar
+              spreadRadius: 1, // Slight expansion
+            ),
+
+
+          ]
+      ),
+      margin: EdgeInsets.only(top: 50, ),
+
+
+      padding: EdgeInsets.symmetric(vertical: 50, horizontal: 32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Container(
+            child:
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: (){
+                    Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+                  },
+                  child: Container(
+                    child: Image.asset("assets/images/primary_logo_horizontal.png",height: height*0.15,fit: BoxFit.contain,),
+                  ),
+                ),
+                Container(
+                  width: width*0.6,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                              },
+                              child: Text("About Us",style: TextStyleUtils.footerHeaderText)),
+                          SizedBox(height: 25,),
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                              },
+                              child: Text("Our Vision",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                            onTap: (){
+                              Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                            },child:Text("Who we are",style: TextStyleUtils.textStyleh16,),),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                              },child:Text("Our Team",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+                          //
+                          // Text("Join Us",style: TextStyleUtils.textStyleh16,),
+                          // SizedBox(height: 10,),
+                          //
+                          // Text("Contact Us",style: TextStyleUtils.textStyleh16,),
+
+                        ],
+                      ),
+                      SizedBox(width: 40,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                              onTap: ()async{
+
+                                Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
+                              },
+                              child: Text("Programs",style:TextStyleUtils.footerHeaderText,)),
+                          SizedBox(height: 25,),
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
+                              },child:Text("Health Hub",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN);
+                              },child:Text("Productive Eng.",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.SOCIAL_CIRCLE_SCREEN);
+                              },child:Text("Social Circle",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+                          //
+                          // Text("Melody Masters Us",style: TextStyleUtils.textStyleh16,),
+                          // SizedBox(height: 10,),
+                          //
+                          // Text("Art Fun",style: TextStyleUtils.textStyleh16,),
+
+                        ],
+                      ),
+                      SizedBox(width: 40,),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.MEDIA_PAGE);
+                              },
+
+                              child: Text("Media",style: TextStyleUtils.footerHeaderText)),
+                          SizedBox(height: 25,),
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.MEDIA_PAGE);
+                              },child:Text("Events",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.MEDIA_PAGE);
+                              },child:Text("News",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.MEDIA_PAGE);
+                              },child:Text("Gallery",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+                          //
+                          // Text("Lets Talk English",style: TextStyleUtils.textStyleh16,),
+                          // SizedBox(height: 10,),
+
+
+                        ],
+                      ),
+
+                      SizedBox(width: 40,),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+
+                        children: [
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+                              },
+                              child: Text("Join Us",style: TextStyleUtils.footerHeaderText
+                              )),
+                          SizedBox(height: 25,),
+
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+                              },child:Text("Member",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+
+                          GestureDetector(
+                              onTap: (){
+                                Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+                              },child:Text("Volunteer",style: TextStyleUtils.textStyleh16,)),
+                          SizedBox(height: 10,),
+                        ],
+                      ),
+                      SizedBox(width: 40,),
+
+                      Column(
+                        children: [
+                          CustomButton(onpressed: (){
+                            launchUrlFor("https://api.whatsapp.com/send?phone=919315274243");
+                            // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Register",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
+                          SizedBox(height: 20,),
+                          CustomButton(onpressed: (){
+                            launchUrlFor("https://rzp.io/l/u0o8yej");
+                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 22,vpadding: 10,isHoverGetStarted: isHover,text: "Donate"),
+
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-        ),
-        SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {},
-          child: Text("Subscribe"),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.orange[600],
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          ),
-        ),
-      ],
+
+          SizedBox(height: 45,),
+
+          Divider(color: ColorUtils.GREY_DOTTED,),
+
+          SizedBox(height: 30,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+
+              Text("© Copyright 2024 Inspiring Seniors Foundation. All Rights Reserved Profuture Technologies.",style: TextStyleUtils.textStyleh16,),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text("Follow Us : ",style: TextStyleUtils.textStyleh16,),
+                  SizedBox(width: 20,),
+
+                  GestureDetector(
+                      onTap: (){
+                        launchUrlFor("https://www.instagram.com/inspiringseniors/");
+
+                      },
+                      child: Icon(FontAwesomeIcons.instagram,size: 30,color: ColorUtils.WHITE_COLOR_BACKGROUND,)),
+                  SizedBox(width: 20,),
+                  GestureDetector(
+                      onTap: (){
+                        launchUrlFor("https://www.linkedin.com/uas/login?session_redirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Finspiring-seniors%2Fabout%2F");
+                      },
+                      child: Icon(FontAwesomeIcons.linkedin,size: 30,color: ColorUtils.WHITE_COLOR_BACKGROUND)),
+                  SizedBox(width: 20,),
+
+                  GestureDetector(
+                      onTap:(){
+                        launchUrlFor("https://www.facebook.com/InspiringSeniorsFoundation");
+                      },child: Icon(FontAwesomeIcons.facebook,size: 30,color: ColorUtils.WHITE_COLOR_BACKGROUND)),
+                  SizedBox(width: 20,),
+
+                  GestureDetector(
+                      onTap:(){
+                        launchUrlFor("https://www.youtube.com/@InspiringSeniorsFoundation");
+                      },child: Icon(FontAwesomeIcons.youtube,size: 30,color: ColorUtils.WHITE_COLOR_BACKGROUND)),
+                  // SizedBox(width: 20,),
+
+
+                  // GestureDetector(
+                  //     onTap:(){
+                  //       launchUrlFor("https://x.com/ISF2024");
+                  //     },child: Icon(FontAwesomeIcons.x,size: 30,color: ColorUtils.BRAND_COLOR)),
+
+                ],
+              )
+            ],
+          )
+
+
+
+        ],
+      ),
     );
   }
-}
 
-// Certificate Card Section
-class CertificateCard extends StatelessWidget {
-  final String text;
-  final IconData icon;
 
-  CertificateCard(this.text, this.icon);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Icon(icon, color: Colors.orange[300], size: 48),
-        SizedBox(height: 8),
-        Text(text, style: TextStyle(color: Colors.grey[300], fontSize: 16)),
-      ],
-    );
+  void launchUrlFor(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
+
+
+// void scrollToSection() {
+//
+// HomepageController homepageController=Get.find();
+// Scrollable.ensureVisible(
+// homepageController.sectionKey.currentContext!,
+// duration: Duration(seconds: 1), // Smooth scrolling duration
+// curve: Curves.easeInOut,        // Animation curve
+// );
+// }
 }
 
-// Footer Text Link
-Widget FooterTextLink(String text) {
-  return Text(text, style: TextStyle(color: Colors.grey[400], fontSize: 14));
-}
+

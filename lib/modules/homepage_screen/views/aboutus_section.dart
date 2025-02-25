@@ -3,7 +3,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
+import '../../../common_widgets/text_button.dart';
 import '../../../utils/color_utils.dart';
+import '../../../utils/utility/utils.dart';
 
 class SectionContainer extends StatelessWidget {
   final String title;
@@ -30,19 +32,19 @@ class SectionContainer extends StatelessWidget {
         child: AnimatedContainer(
           duration: Duration(milliseconds: 800),
           curve: Curves.easeOut,
-          decoration: isLeftAligned?BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Colors.white,
-                Colors.blue[50]!,
-
-              ],begin: Alignment.topCenter,end: Alignment.bottomCenter)
-          ):BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Colors.white,
-                Colors.blue[50]!,
-
-              ],begin: Alignment.bottomCenter,end: Alignment.topCenter)
-          ),
+          // decoration: isLeftAligned?BoxDecoration(
+          //     gradient: LinearGradient(colors: [
+          //       Colors.white,
+          //       Colors.blue[50]!,
+          //
+          //     ],begin: Alignment.topCenter,end: Alignment.bottomCenter)
+          // ):BoxDecoration(
+          //     gradient: LinearGradient(colors: [
+          //       Colors.white,
+          //       Colors.blue[50]!,
+          //
+          //     ],begin: Alignment.bottomCenter,end: Alignment.topCenter)
+          // ),
           // color: isLeftAligned?Colors.white:Colors.blue[50],
           padding: EdgeInsets.symmetric(vertical: 60, horizontal: 40),
           child: Row(
@@ -55,11 +57,12 @@ class SectionContainer extends StatelessWidget {
                 Expanded(child: SectionTextForWhoweAre(title: title, description: description)),
 
               ] else ...[
-                Expanded(child: SectionText(title: title, description: description)),
+                Expanded(child: SectionTextForWhoweAre(title: title, description: description)),
+                SizedBox(width: 40,),
 
+                SectionImage(imagePath: imagePath),
                 // Expanded(child: SectionText(title: title, description: description)),
 
-                SectionDescription(),
               ]
             ],
           ),
@@ -72,17 +75,20 @@ class SectionContainer extends StatelessWidget {
 
 SectionDescription(){
   return Container(
-    width: MediaQuery.of(Get.context!).size.width*0.5,
+    width: MediaQuery.of(Get.context!).size.width,
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        DescriptionCard("assets/images/health_hub_icon.png","Health Hub","Specially designed programs andcurated content to foster ‘Active & Healthy’ community of SeniorsKey programs include Daily dose of health, and Wellness Choupal.",ColorUtils.YELLOW_BRAND_LIGHT,ColorUtils.YELLOW_BRAND,(){
+        DescriptionCard("assets/images/health_hub_icon.png","Daily Dose Of Health","The Daily Dose of Health isn’t just another fitness routine; it’s a holistic health experience crafted specifically for seniors. Our unique blend of gentle exercises, yoga, pranayama, meditation, and affirmations doesn’t just boost physical health—it nurtures the mind and soul.",ColorUtils.YELLOW_BRAND_LIGHT,ColorUtils.YELLOW_BRAND,(){
           Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
         }),
-        DescriptionCard("assets/images/product_icon.png","Productive Engagement","Creating opportunity to share knowledge and wisdom through different programs Key programs offer a chance for Seniors to find purpose and fulfilment through give back program",ColorUtils.PURPLE_BRAND_LIGHT,ColorUtils.PURPLE_BRAND,(){
+        SizedBox(     width: MediaQuery.of(Get.context!).size.width*0.07,),
+        DescriptionCard("assets/images/product_icon.png","Inspiring Tutors Program","Inspiring Tutors Program is your chance to share your wisdom and experience with children from underserved communities, helping bridge the educational gap. As a tutor, you'll guide middle school students to improve academically, spark a love for learning, and build essential life skills",ColorUtils.PURPLE_BRAND_LIGHT,ColorUtils.PURPLE_BRAND,(){
           Get.toNamed(RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN);
         }),
-        DescriptionCard("assets/images/social_icon.png","Social Circles","ISF members can stay connected and engaged through communities such as Melody Masters, Storytelling, Art Fun and other activities through our partners.",ColorUtils.ORANGE_COLOR_LIGHT,ColorUtils.ORANGE_COLOR,(){
+        SizedBox(     width: MediaQuery.of(Get.context!).size.width*0.07,),
+
+        DescriptionCard("assets/images/social_icon.png","Social Connects","ISF members can stay connected and engaged through communities such as Melody Masters, Storytelling, Art Fun and other activities through our partners.",ColorUtils.ORANGE_COLOR_LIGHT,ColorUtils.ORANGE_COLOR,(){
           Get.toNamed(RoutingNames.SOCIAL_CIRCLE_SCREEN);
         }),
 
@@ -110,7 +116,8 @@ Widget DescriptionCard(String icon, String heading, String subheading, Color bgC
               ()=> AnimatedContainer(
 
               duration: Duration(milliseconds: 300),
-              height: 450,
+                height: 500,
+                width: MediaQuery.of(Get.context!).size.width*0.23,
 
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
 
@@ -119,10 +126,10 @@ Widget DescriptionCard(String icon, String heading, String subheading, Color bgC
 
                     boxShadow: [
                       BoxShadow(
-                        color: ColorUtils.BRAND_COLOR_LIGHT,
+                        color: ColorUtils.GREY_DOTTED,
                         spreadRadius: 1,
-                        blurRadius: 8,
-                        offset: Offset(0, 3),
+                        blurRadius: 10,
+                        offset: Offset(0, 1),
                       ),
                     ],
                     borderRadius: BorderRadius.circular(20)
@@ -137,27 +144,25 @@ Widget DescriptionCard(String icon, String heading, String subheading, Color bgC
                           width: MediaQuery.of(Get.context!).size.width * 0.08,
                           fit: BoxFit.contain,
                         ),
-                        SizedBox(height: 20),
+                        SizedBox(height: 30),
                         Container(
-                          width: MediaQuery.of(Get.context!).size.width * 0.13,
                           child: Text(
                             heading,
-                            style: TextStyle(
+                            style: TextStyleUtils.heading3.copyWith(
                               color: isHovered.value ? Colors.white : textColor, // White text on hover
-                              fontSize: 30,
-                              fontWeight: FontWeight.w600,
-                              // fontFamily: "Inter",
+
                             ),
                             textAlign: TextAlign.center,
                           ),
                         ),
                         SizedBox(height: 20),
                         Container(
-                          width: MediaQuery.of(Get.context!).size.width * 0.13,
+                          margin: EdgeInsets.symmetric(horizontal: 20),
                           child: Text(
                             subheading,
-                            style: TextStyle(
-                              color: isHovered.value? Colors.white : ColorUtils.SECONDARY_BLACK, // White text on hover
+                            style: TextStyleUtils.paragraphSmall.copyWith(
+                              color: isHovered.value ? Colors.white : ColorUtils.SECONDARY_BLACK, // White text on hover
+
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -166,24 +171,24 @@ Widget DescriptionCard(String icon, String heading, String subheading, Color bgC
 
                       ],
                     ),
-                   isHovered.value? Row(
-                      children: [
-                        Text(
-                          "Know More",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600
+                   isHovered.value? InkWell(
+                     onTap: onpressed
+,                     child: Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Know More",
+                            style: TextStyleUtils.heading5.copyWith(color: ColorUtils.WHITE_COLOR_BACKGROUND)
                           ),
-                        ),
-                        SizedBox(width: 8),
-                        Icon(
-                          FontAwesomeIcons.arrowRight,
-                          size: 18,
-                          color: Colors.white,
-                        )
-                      ],
-                    ):Container()
+                          SizedBox(width: 8),
+                          Icon(
+                            FontAwesomeIcons.arrowRight,
+                            size: 18,
+                            color: Colors.white,
+                          )
+                        ],
+                      ),
+                   ):Container()
 
                   ],
                 ),
@@ -197,46 +202,6 @@ Widget DescriptionCard(String icon, String heading, String subheading, Color bgC
 
 
 
-// DescriptionCardn(icon,heading , subheading,bgColor,textColor){
-//   return         Container(
-//     height: 450,
-//
-//
-//     child: Card(
-//       elevation: 2,
-//       color: bgColor,
-//
-//       child: Container(
-//         padding: EdgeInsets.symmetric(vertical: 20,horizontal: 20),
-//         child: Column(
-//           children: [
-//             Image.asset(icon,              width: MediaQuery.of(Get.context!).size.width*0.08,
-//               fit: BoxFit.contain,
-//             ),
-//             SizedBox(height: 20,),
-//             Container(
-//               width: MediaQuery.of(Get.context!).size.width*0.13,
-//               child: Text(heading,style: TextStyle(
-//                 color: textColor,
-//                 fontSize: 30,
-//                 fontWeight: FontWeight.w600,
-//                 fontFamily: "Inter"
-//
-//               ),textAlign:TextAlign.center,),
-//             ),
-//             SizedBox(height: 20,),
-//             Container(
-//               // height: 200,
-//                 width: MediaQuery.of(Get.context!).size.width*0.13,
-//                 child: Text(subheading,textAlign: TextAlign.center,))
-//           ],
-//         ),
-//       ),
-//
-//     ),
-//   );
-//
-// }
 
 class SectionText extends StatelessWidget {
   final String title;
@@ -259,17 +224,12 @@ class SectionText extends StatelessWidget {
             children: [
               Text(
                   "Our Vision",
-                  style: TextStyleUtils.textStyleSubHeader1Brand
+                  style: TextStyleUtils.heading2
               ),
               SizedBox(height: 20),
               Text(
                 'Fostering a vibrant community of seniors where generations come together, sharing wisdom and experience to enrich health, well being and purposefulness. ',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey[700],
-                  // fontStyle: FontStyle.italic,
-                ),
-              ),
+                style: TextStyleUtils.paragraphMain)
             ],
           ),
           SizedBox(height: 40),
@@ -280,16 +240,12 @@ class SectionText extends StatelessWidget {
             children: [
               Text(
                   title,
-                  style: TextStyleUtils.textStyleSubHeader1Brand
+                  style: TextStyleUtils.heading3
               ),
               SizedBox(height: 20),
               Text(
                 description,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey[700],
-                  // fontStyle: FontStyle.italic
-                ),
+                style: TextStyleUtils.paragraphSmall
               ),
             ],
           ),
@@ -315,61 +271,27 @@ class SectionTextForWhoweAre extends StatelessWidget {
         children: [
           Text(
               title,
-              style: TextStyleUtils.textStyleSubHeader1Brand
+              style: TextStyleUtils.heading1
           ),
           SizedBox(height: 20),
           Text(
             description,
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey[700],
-            ),
-          ),
+            style: TextStyleUtils.paragraphMain),
           SizedBox(height: 40),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Obx(()=>ElevatedButton(
-                onPressed: () {},
-                onHover: (v){
-                  if(v){
-                    isHover.value = true;
-
-                  }else {
-                    isHover.value = false;
-                  }
-                }
-                ,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        "Know More",
-                        style: TextStyle(fontSize: 16,color: Colors.white,fontFamily: "Montserrat"),
-                      ),
-                      SizedBox(width: 8),
-                      Icon(
-                        FontAwesomeIcons.arrowRight,
-                        size: 18,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: isHover.value?ColorUtils.HEADER_GREEN:ColorUtils.BRAND_COLOR,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-
-                    shadowColor: ColorUtils.BRAND_COLOR,
-                    elevation: 15
-                ),
-              ),
-              )],
-          )
+          CustomButton(
+            onpressed: () {
+              Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
+            },
+            shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
+            fontSize: 16,
+            bgColor: ColorUtils.BRAND_COLOR,
+            hoveredColor: ColorUtils.HEADER_GREEN,
+            hpadding: 22,
+            vpadding: 10,
+            isHoverGetStarted: false.obs,
+            text: "Know More",
+          ),
         ],
       ),
     );

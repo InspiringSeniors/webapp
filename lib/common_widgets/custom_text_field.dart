@@ -23,14 +23,14 @@ class CustomTextFieldV2 extends StatelessWidget {
   CustomTextFieldV2(this.stateHandler, this.labela, this.label, this.controller,
       this.inactiveColor, this.validator,
       {Key? key,
-      this.keyBoardtype = TextInputType.text,
-      this.readOnly = false,
-      this.obscureText = false,
-      this.onSaved,
-      this.onChanged,
-      this.icon,
-      this.onTap,
-      this.formatInput = false})
+        this.keyBoardtype = TextInputType.text,
+        this.readOnly = false,
+        this.obscureText = false,
+        this.onSaved,
+        this.onChanged,
+        this.icon,
+        this.onTap,
+        this.formatInput = false})
       : super(key: key);
 
   @override
@@ -41,65 +41,60 @@ class CustomTextFieldV2 extends StatelessWidget {
           formatInput = true;
         }
         return TextFormField(
-            style: TextStyle(color: ColorUtils.WHITE_COLOR_BACKGROUND),
+            style: TextStyle(color: ColorUtils.BRAND_COLOR),
             onTap: () {
               onTap;
             },
             obscureText: obscureText,
             readOnly: readOnly,
-            cursorColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+            cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
             decoration: InputDecoration(
+                hoverColor: Color(0xFFF6F4F4),
                 labelStyle: TextStyle(
                     color: labela.value == false
                         ? ColorUtils.ERROR_RED
-                        : ColorUtils.WHITE_COLOR_BACKGROUND),
-                focusColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+                        : ColorUtils.GREY_COLOR_PLACEHOLDER),
+                focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
                 alignLabelWithHint: true,
+                filled: true,
+                fillColor: Color(0xFFF6F4F4), // Added Background Color
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: const BorderSide(
-                        width: 2, color: ColorUtils.WHITE_COLOR_BACKGROUND)),
+                        width: 2, color: ColorUtils.GREY_DOTTED)),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                      width: 2, color: ColorUtils.WHITE_COLOR_BACKGROUND),
-                  //<-- SEE HERE
+                      width: 2, color: ColorUtils.GREY_DOTTED),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 errorBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                      width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                      width: 2, color: ColorUtils.ERROR_RED),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
                   borderSide: const BorderSide(
-                      width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                      width: 2, color: ColorUtils.ERROR_RED),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 floatingLabelStyle: TextStyle(
                     color: labela.value == true
-                        ? ColorUtils.WHITE_COLOR_BACKGROUND
+                        ? ColorUtils.GREY_COLOR_PLACEHOLDER
                         : ColorUtils.ERROR_RED),
                 isDense: false,
                 labelText: label,
-                suffixIcon: icon,
-                // prefixIcon: Icon(
-                //   Icons.phone_iphone,
-                //   color: ColorUtilsV2.GREY_DOTTED,
-                //   size: TextSizeDynamicUtils.dHeight24,
-                // ),
+                prefixIcon: icon,
                 errorStyle: TextStyle(
                     color: ColorUtils.ERROR_RED,
                     fontSize: TextSizeDynamicUtils.dHeight12,
                     fontWeight: FontWeight.w400)),
             inputFormatters: formatInput == true
                 ? <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(6),
-                  ]
+              FilteringTextInputFormatter.digitsOnly,
+              LengthLimitingTextInputFormatter(6),
+            ]
                 : <TextInputFormatter>[],
             keyboardType: keyBoardtype,
-            // const TextInputType.numberWithOptions(
-            //     signed: false, decimal: false),
             controller: controller,
             onChanged: (value) {
               if (label == 'PINCODE'.tr) {
@@ -109,8 +104,6 @@ class CustomTextFieldV2 extends StatelessWidget {
                 stateHandler.value = true;
                 if (value.length == 10) {
                   inactiveColor!.value = ColorUtils.BRAND_COLOR;
-                  // FocusScope.of(context).unfocus();
-                  // FocusScope.of(context).requestFocus(FocusNode());
                 } else {
                   inactiveColor!.value = ColorUtils.BRAND_COLOR_INACTIVE;
                 }
@@ -121,39 +114,40 @@ class CustomTextFieldV2 extends StatelessWidget {
             validator: validator);
       } else {
         return TextFormField(
-          style: TextStyle(color: ColorUtils.WHITE_COLOR_BACKGROUND),
-
+          style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
           onTap: () {
             onTap == null ? () {} : onTap();
           },
           obscureText: obscureText,
           readOnly: readOnly,
-          cursorColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+          cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
           decoration: InputDecoration(
+              hoverColor: Color(0xFFF6F4F4),
               labelStyle: TextStyle(
                   color: labela.value == false
                       ? ColorUtils.ERROR_RED
-                      : ColorUtils.WHITE_COLOR_BACKGROUND),
-              focusColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+                      : ColorUtils.GREY_COLOR_PLACEHOLDER),
+              focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
               alignLabelWithHint: true,
+              filled: true,
+              fillColor: Color(0xFFF6F4F4), // Added Background Color
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: const BorderSide(
-                      width: 2, color: ColorUtils.WHITE_COLOR_BACKGROUND)),
+                      width: 2, color: ColorUtils.GREY_DOTTED)),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                    width: 2, color: ColorUtils.WHITE_COLOR_BACKGROUND),
-                //<-- SEE HERE
+                    width: 2, color: ColorUtils.GREY_DOTTED),
                 borderRadius: BorderRadius.circular(8),
               ),
               errorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                    width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                    width: 2, color: ColorUtils.ERROR_RED),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                    width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                    width: 2, color: ColorUtils.ERROR_RED),
                 borderRadius: BorderRadius.circular(8),
               ),
               isDense: false,
@@ -161,36 +155,23 @@ class CustomTextFieldV2 extends StatelessWidget {
               floatingLabelStyle: TextStyle(
                   color: labela.value == false
                       ? ColorUtils.ERROR_RED
-                      : ColorUtils.WHITE_COLOR_BACKGROUND),
-              suffixIcon: icon,
-              // prefixIcon: Icon(
-              //   Icons.phone_iphone,
-              //   color: ColorUtilsV2.GREY_DOTTED,
-              //   size: TextSizeDynamicUtils.dHeight24,
-              // ),
-              errorStyle: const TextStyle(
+                      : ColorUtils.GREY_COLOR_PLACEHOLDER),
+              prefixIcon: icon,
+              errorStyle: TextStyle(
                   color: ColorUtils.ERROR_RED,
                   fontSize: 12,
                   fontWeight: FontWeight.w400)),
           inputFormatters: label == 'PINCODE'.tr
               ? <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(6),
-                ]
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(6),
+          ]
               : <TextInputFormatter>[],
-
           keyboardType: keyBoardtype,
-          // keyboardType:
-          // const TextInputType.numberWithOptions(signed: false, decimal: false),
           controller: controller,
           onChanged: (value) {
             if (value.isNotEmpty) {
               stateHandler.value = true;
-              if (value.length == 10) {
-                inactiveColor!.value = ColorUtils.BRAND_COLOR;
-              } else {
-                inactiveColor!.value = ColorUtils.BRAND_COLOR_INACTIVE;
-              }
             } else {
               stateHandler.value = false;
             }
