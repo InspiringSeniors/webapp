@@ -5,7 +5,8 @@ import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/controller/ddh_controller.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views/faq_section.dart';
-import 'package:inspiringseniorswebapp/modules/step_count_challenge_screen/controller/step_count_challenge_controller.dart';
+import 'package:inspiringseniorswebapp/modules/inspiring_mentors_program/controller/ins_men_controller.dart';
+import 'package:inspiringseniorswebapp/modules/inspiring_tutors_screen/controller/it_controller.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
@@ -14,23 +15,21 @@ import '../../homepage_screen/views/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
 
-class StepCountChallengeScreen extends StatelessWidget {
+class InspiringMentorsScreen extends StatelessWidget {
   // const HealthHubMainScreen({super.key});
-  final _currentPageNotifierForHosts = ValueNotifier<int>(0);
 
-  StepCountChallengeController stepCountController=Get.find();
+  InspiringMentorsController ddhController=Get.find();
 
   final _currentPageNotifier = ValueNotifier<int>(0);
+  final _currentPageNotifierForHosts = ValueNotifier<int>(0);
 
 
   @override
   Widget build(BuildContext context) {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
-
-
-
     var isMobile=width<800?true:false;
+
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
 
@@ -52,11 +51,11 @@ class StepCountChallengeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
-                  Text("Step Count Challenge ",style: TextStyleUtils.heading2,),
+                  Text("Inspiring Mentors Program ",style: TextStyleUtils.heading2,),
                   SizedBox(height: TextSizeDynamicUtils.dHeight28,),
                   Container(
 
-                    child: Image.asset("assets/images/media/gallery7.jpeg",fit: BoxFit.cover,),
+                    child: Image.asset("assets/images/i_tutors_poster.jpg",fit: BoxFit.cover,),
                     width: MediaQuery.of(context).size.width,
                     height:MediaQuery.of(context).size.height*0.33 ,
                     clipBehavior: Clip.hardEdge,
@@ -69,22 +68,15 @@ class StepCountChallengeScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: TextSizeDynamicUtils.dHeight18,),
-                  Text("Every Step Counts—Towards Health, Happiness, and Connection"
-                    ,style: TextStyleUtils.mobileheading3,),
-                  SizedBox(height: 10,),
-                  Text("The Step Count Challenge is more than just a fitness activity; it’s a celebration of movement, community, and personal growth. Whether you’re strolling through your garden or pacing in your living room, this challenge turns every step into a victory for your health and well-being."
+
+                  // Text("Ready to inspire young minds and make a difference?"
+                  //     ,style: TextStyleUtils.heading3),
+                  // SizedBox(height: 10,),
+                  Text("Inspiring Mentors are ‘Gurus’ who leverage their knowledge of corporate world and life-experience to help create a path for success for the youth. The program connects youth and young professionals with experienced seniors who in their roles as coach and mentor, guide the youth to acquire practical skills and unlock their full potential. Whether it's sharpening skills, exploring career paths, or building confidence, seniors play a pivotal role in guiding them at every step."
                     ,style: TextStyleUtils.phoneparagraphSmall,),
                   SizedBox(height: 10,),
-                  Text(" - Friendly Competition, Real Rewards"
-                    ,style: TextStyleUtils.phoneparagraphSmall,),
-                  SizedBox(height: 5,),
-                  Text(" - Tech Made Easy"
-                    ,style: TextStyleUtils.phoneparagraphSmall,),
-                  SizedBox(height: 5,),
-                  Text(" - Celebrate Every Milestone"
-                    ,style: TextStyleUtils.phoneparagraphSmall,),
-                  SizedBox(height: 5,),
-                  Text(" - Stay Active, Stay Connected"
+
+                  Text("The program is aligned with the United Nations Sustainable Development Goals, as it promotes Decent Work and Economic Growth (SDG 8), and Reduced Inequalities (SDG 10)."
                     ,style: TextStyleUtils.phoneparagraphSmall,),
                   SizedBox(height: TextSizeDynamicUtils.dHeight28,),
                   CustomButton(onpressed: (){
@@ -106,9 +98,9 @@ class StepCountChallengeScreen extends StatelessWidget {
                         Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
                         SizedBox(height: TextSizeDynamicUtils.dHeight32,),
 
-                        CustomCarousel(carouselList: stepCountController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 0.8,height: height*0.5,),
+                        CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 0.8,height: height*0.5,),
                         SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                        FAQSection(faqList: stepCountController.faqList.value)
+                        FAQSection(faqList: ddhController.faqList.value)
 
                       ],
                     ),
@@ -118,7 +110,6 @@ class StepCountChallengeScreen extends StatelessWidget {
               ),
             ):
             Container(
-
               margin: EdgeInsets.symmetric(horizontal: 50),
               padding: EdgeInsets.symmetric(vertical: 30),
 
@@ -129,11 +120,12 @@ class StepCountChallengeScreen extends StatelessWidget {
                     child:
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                           margin:EdgeInsets.only(right: 60),
 
-                          child: Image.asset("assets/images/media/gallery7.jpeg",fit: BoxFit.fill,),
+                          child: Image.asset("assets/images/i_tutors_poster.jpg",fit: BoxFit.fill,),
                           width: MediaQuery.of(context).size.width*0.45,
                           height:MediaQuery.of(context).size.height*0.55 ,
                           clipBehavior: Clip.hardEdge,
@@ -145,48 +137,41 @@ class StepCountChallengeScreen extends StatelessWidget {
 
                           ),
                         ),
+
                         Container(
                           width: width*0.4,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Step Count Challenge ",style: TextStyleUtils.heading1,),
+                              Text("Inspiring Tutors Program ",style: TextStyleUtils.heading1,),
                               SizedBox(height: 20,),
-                              Text("Every Step Counts—Towards Health, Happiness, and Connection"
-                                ,style: TextStyleUtils.heading3,),
+                              Text("Ready to inspire young minds and make a difference?"
+                                ,style: TextStyleUtils.heading3),
+
                               SizedBox(height: 10,),
-                              Text("The Step Count Challenge is more than just a fitness activity; it’s a celebration of movement, community, and personal growth. Whether you’re strolling through your garden or pacing in your living room, this challenge turns every step into a victory for your health and well-being."
-                                ,style: TextStyleUtils.paragraphMain,),
+                              Text("Inspiring Mentors are ‘Gurus’ who leverage their knowledge of corporate world and life-experience to help create a path for success for the youth. The program connects youth and young professionals with experienced seniors who in their roles as coach and mentor, guide the youth to acquire practical skills and unlock their full potential. Whether it's sharpening skills, exploring career paths, or building confidence, seniors play a pivotal role in guiding them at every step."
+                              ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 10,),
-                              Text(" - Friendly Competition, Real Rewards"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 5,),
-                              Text(" - Tech Made Easy"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 5,),
-                              Text(" - Celebrate Every Milestone"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 5,),
-                              Text(" - Stay Active, Stay Connected"
+
+                              Text("The program is aligned with the United Nations Sustainable Development Goals, as it promotes Decent Work and Economic Growth (SDG 8), and Reduced Inequalities (SDG 10)"
                                 ,style: TextStyleUtils.paragraphMain,),
                               SizedBox(height: 30,),
-                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Join Now",isHoverGetStarted: stepCountController.isHoverRegistered),
+                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Become a Mentor",isHoverGetStarted: ddhController.isHoverRegistered),
 
                               Container(margin: EdgeInsets.symmetric(vertical: 40),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
 
-                                  children: [
-                                    // Text("Our Fit Challengers",style: TextStyleUtils.heading2,),
-                                    //
-                                    // SizedBox(height: 30,),
-                                    // Container(
-                                    //     child: CustomCarouselForHosts(carouselList: stepCountController.hostList,currentPageNotifier:  _currentPageNotifierForHosts)),
+                                children: [
+                                  // Text("Our Tutors and Mentors",style: TextStyleUtils.heading2,),
+                                  //
+                                  // SizedBox(height: 10,),
+                                  // Container(
+                                  //     child: CustomCarouselForHosts(carouselList: ddhController.hostList,currentPageNotifier:  _currentPageNotifierForHosts)),
 
-
-                                  ],
-                                ),),
+                                ],
+                              ),),
 
 
                             ],
@@ -199,6 +184,7 @@ class StepCountChallengeScreen extends StatelessWidget {
                   SizedBox(height: TextSizeDynamicUtils.dHeight56,),
 
                   Container(
+                    margin: EdgeInsets.symmetric(horizontal: 50),
                     child: Column(
                       children: [
                         Container(
@@ -206,16 +192,15 @@ class StepCountChallengeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
+                              Container(child: Text("Our Happy Mentors and Children",style: TextStyleUtils.heading2,),),
                               SizedBox(height: TextSizeDynamicUtils.dHeight32,),
 
-                              CustomCarousel(carouselList: stepCountController.onboardingList,currentPageNotifier:  _currentPageNotifier)
+                              CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier)
                             ],
                           ),
                         ),
                         SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-
-                        FAQSection(faqList: stepCountController.faqList.value)
+                        FAQSection(faqList: ddhController.faqList.value)
 
                       ],
                     ),
@@ -233,4 +218,23 @@ class StepCountChallengeScreen extends StatelessWidget {
   }
 
 
+  Widget initiativesDesc(heading,subheading,onpressed){
+    return Container(
+      width: MediaQuery.of(Get.context!).size.width*0.4,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(heading,style: TextStyleUtils.heading2,),
+          SizedBox(height: 30,),
+          Container(
+              height:100,child: Text(subheading,style: TextStyleUtils.paragraphMain,)),
+          SizedBox(height: 30,),
+
+          CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),
+
+        ],
+      ),
+    );
+
+  }
 }

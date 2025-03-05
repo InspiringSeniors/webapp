@@ -26,6 +26,7 @@ class JoinUsScreen extends StatelessWidget {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
 
+    var isMobile=width<800?true:false;
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
 
@@ -37,124 +38,220 @@ class JoinUsScreen extends StatelessWidget {
           children: [
             Navbar(),
 
-            Container(
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-
-                  Container(
-                    child:
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 45,top: 30,right: 30),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image.asset("assets/images/volunteer_img.png",fit: BoxFit.cover,),
-                          width: MediaQuery.of(context).size.width*0.4,
-                          height: MediaQuery.of(context).size.width*0.3,
 
 
-                          decoration: BoxDecoration(
+            isMobile?     Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
 
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Become a Volunteer ",style: TextStyleUtils.heading2,),
+                      SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                      Text("Becoming a volunteer for the elderly starts with finding local organizations or community centers that support senior care. Volunteers play a crucial role in providing companionship, assisting with daily tasks, and offering emotional support to improve the well-being of older adults. Their presence helps reduce loneliness, promote social engagement, and ensure seniors feel valued and connected to the community."
+                        ,style: TextStyleUtils.phoneparagraphSmall,),
+                      SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                      CustomButton(onpressed: (){
 
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: ColorUtils.GREY_DOTTED,
-                            //     blurRadius: 1000,
-                            //     spreadRadius: 1
-                            //   )
-                            // ]
-                          ),
-                        ),
-                        Container(
-                          width: width*0.4,
-                          margin: EdgeInsets.only(left: 60),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Become a Volunteer ",style: TextStyleUtils.heading1,),
-                              SizedBox(height: 20,),
-                              Text("Becoming a volunteer for the elderly starts with finding local organizations or community centers that support senior care. Volunteers play a crucial role in providing companionship, assisting with daily tasks, and offering emotional support to improve the well-being of older adults. Their presence helps reduce loneliness, promote social engagement, and ensure seniors feel valued and connected to the community."
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 30,),
-                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
+                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 8,vpadding: 12,isHoverGetStarted: false.obs,text: "Become a Volunteer"),
 
 
 
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
+                ),
 
-                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                  Container(
-                    child:
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: width*0.4,
-                          margin: EdgeInsets.only(left: 50),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Become a Member ",style: TextStyleUtils.heading1,),
-                              SizedBox(height: 20,),
-                              Text("A member in an elderly support program benefits from the services and companionship offered by volunteers and the community. Members engage in social activities, receive assistance with daily needs, and participate in programs designed to enhance their well-being. They play an active role in fostering connections, sharing experiences, and contributing to a supportive and caring environment."
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 30,),
-                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
+                Container(
+                  clipBehavior: Clip.hardEdge,
+                  child: Image.asset("assets/images/volunteer_img.png",fit: BoxFit.cover,),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height*0.3,
 
 
+                  decoration: BoxDecoration(
 
-                            ],
-                          ),
-                        ),
+                    color: Colors.white,
 
-                        Container(
-                          margin: EdgeInsets.only(left: 60),
-                          clipBehavior: Clip.hardEdge,
-                          child: Image.asset("assets/images/member_image.png",fit: BoxFit.cover,),
-                          width: MediaQuery.of(context).size.width*0.4,
-                          height: MediaQuery.of(context).size.width*0.3,
-
-
-                          decoration: BoxDecoration(
-
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-
-                            // boxShadow: [
-                            //   BoxShadow(
-                            //     color: ColorUtils.GREY_DOTTED,
-                            //     blurRadius: 1000,
-                            //     spreadRadius: 1
-                            //   )
-                            // ]
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
+                ),
+
+                SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: width,
+                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Become a Member ",style: TextStyleUtils.heading2,),
+                          SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                          Text("A member in an elderly support program benefits from the services and companionship offered by volunteers and the community. Members engage in social activities, receive assistance with daily needs, and participate in programs designed to enhance their well-being. They play an active role in fostering connections, sharing experiences, and contributing to a supportive and caring environment."
+                            ,style: TextStyleUtils.phoneparagraphSmall,),
+                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                          CustomButton(onpressed: (){
+
+                            // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 8,vpadding: 12,isHoverGetStarted: false.obs,text: "Become a Member"),
 
 
-                ],
-              ),
+
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      child: Image.asset("assets/images/member_image.png",fit: BoxFit.cover,),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.3,
+
+
+                      decoration: BoxDecoration(
+
+                        color: Colors.white,
+
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: ColorUtils.GREY_DOTTED,
+                        //     blurRadius: 1000,
+                        //     spreadRadius: 1
+                        //   )
+                        // ]
+                      ),
+                    ),
+
+                    SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  ],
+                ),
+
+
+              ],
+            ):
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Container(
+                  child:
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 45,top: 30,right: 30),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.asset("assets/images/volunteer_img.png",fit: BoxFit.cover,),
+                        width: MediaQuery.of(context).size.width*0.4,
+                        height: MediaQuery.of(context).size.width*0.3,
+
+
+                        decoration: BoxDecoration(
+
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: ColorUtils.GREY_DOTTED,
+                          //     blurRadius: 1000,
+                          //     spreadRadius: 1
+                          //   )
+                          // ]
+                        ),
+                      ),
+                      Container(
+                        width: width*0.4,
+                        margin: EdgeInsets.only(left: 60),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Become a Volunteer ",style: TextStyleUtils.heading1,),
+                            SizedBox(height: 20,),
+                            Text("Becoming a volunteer for the elderly starts with finding local organizations or community centers that support senior care. Volunteers play a crucial role in providing companionship, assisting with daily tasks, and offering emotional support to improve the well-being of older adults. Their presence helps reduce loneliness, promote social engagement, and ensure seniors feel valued and connected to the community."
+                              ,style: TextStyleUtils.paragraphMain,),
+                            SizedBox(height: 30,),
+                            CustomButton(fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
+
+
+
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                Container(
+                  child:
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: width*0.4,
+                        margin: EdgeInsets.only(left: 50),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Become a Member ",style: TextStyleUtils.heading1,),
+                            SizedBox(height: 20,),
+                            Text("A member in an elderly support program benefits from the services and companionship offered by volunteers and the community. Members engage in social activities, receive assistance with daily needs, and participate in programs designed to enhance their well-being. They play an active role in fostering connections, sharing experiences, and contributing to a supportive and caring environment."
+                              ,style: TextStyleUtils.paragraphMain,),
+                            SizedBox(height: 30,),
+                            CustomButton(fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
+
+
+
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        margin: EdgeInsets.only(left: 60),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.asset("assets/images/member_image.png",fit: BoxFit.cover,),
+                        width: MediaQuery.of(context).size.width*0.4,
+                        height: MediaQuery.of(context).size.width*0.3,
+
+
+                        decoration: BoxDecoration(
+
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: ColorUtils.GREY_DOTTED,
+                          //     blurRadius: 1000,
+                          //     spreadRadius: 1
+                          //   )
+                          // ]
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+
+              ],
             ),
 
-            FooterSection(),
+            FooterSection1(),
           ],
         ),
       ),

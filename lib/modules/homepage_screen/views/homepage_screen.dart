@@ -1,31 +1,17 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:inspiringseniorswebapp/common_widgets/custom_carousel.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_dropdown.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_floating_action.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_testimonials_section.dart';
-import 'package:inspiringseniorswebapp/common_widgets/custom_text_field.dart';
-import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homepage_controller.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views/our_partners_section.dart';
-import 'package:inspiringseniorswebapp/modules/homepage_screen/views/programs_section.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views/program_description.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views/trust_indicators_section.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
-import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:visibility_detector/visibility_detector.dart';
-import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
-import '../../../common_widgets/custom_google_form_page.dart';
-import '../../../common_widgets/custom_razorpay.dart';
-import '../../../common_widgets/custom_search_field.dart';
-import '../../../common_widgets/custom_youtube_widget.dart';
-import '../../../utils/utility/utils.dart';
 import 'aboutus_section.dart';
-import 'activities_section.dart';
 import 'footer_section.dart';
-import 'health_tip_section.dart';
 import 'hero_section.dart';
 import 'home_page_ticker.dart';
 import 'navbar.dart';
@@ -97,57 +83,19 @@ class HomepageScreen extends StatelessWidget {
                 isVisible: homepageController.isVisible.value,
               )),
             ),
-            Container(
-              width: width,
-              margin: EdgeInsets.symmetric(vertical: 60,horizontal: 45),
-              child: Column(
 
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Our Initiatives",style: TextStyleUtils.heading1,),
-                    // CustomButton(
-                    //   onpressed: () {
-                    //     Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
-                    //   },
-                    //   shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
-                    //   fontSize: 16,
-                    //   bgColor: ColorUtils.BRAND_COLOR,
-                    //   hoveredColor: ColorUtils.HEADER_GREEN,
-                    //   hpadding: 22,
-                    //   vpadding: 10,
-                    //   isHoverGetStarted: false.obs,
-                    //   text: "View More",
-                    // ),
-                  ],
-                ),
-
-                SizedBox(height: 45,),
-                SectionDescription()
-              ],
-            ),),
+            MainProgramsHomePage(),
 
 
 
             AnimatedTrustIndicators(),
             
 
-            Container(
-              width: width,
-              margin: EdgeInsets.symmetric(vertical: 30,horizontal: 45),
-              child: TestimonialSection(homepageController.testimonials),),
+             TestimonialSection(homepageController.testimonials),
 
-            // WellnessProgramsSection(),
-
-            // CommunityActivitiesSection(),
             PartnersSection(),
 
-            // HealthTipsSection(),
-            FooterSection()
+            FooterSection1()
 
           ],
         ),
@@ -156,11 +104,6 @@ class HomepageScreen extends StatelessWidget {
   }
 
   Widget showListForDropDown() {
-    // return ListView.builder(
-    //     itemCount: 3,
-    //     itemBuilder: (context, index) {
-    //       return policiesListDropDown[index];
-    //     });
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),

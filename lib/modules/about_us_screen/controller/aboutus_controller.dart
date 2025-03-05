@@ -31,11 +31,10 @@ class AboutUsController extends GetxController{
         "bio":"Malti Jaswal has extensive experience in the corporate world of insurance as well as the development sector. She has been a Senior Consultant with the World Bank Group and an Advisor with the National Health Authority since 2018.  Her dream is to empower every senior with a personal strategy for leading a healthy and active life, engaged in giving back to society. She wants to create an Inspiring Seniors Movement whereby Seniors thrive through meaningful inter-generational connections, and positive transformations to lead active and healthy lives."
       ,"linkedInUrl":"https://www.linkedin.com/in/malti-jaswal-2482b012/"
       },
-
       {
         "name":"Bhuvana Natarajan",
         "desc":"Co-Founder",
-        "imageUrl": "assets/images/msbhuvana.jpeg" ,
+        "imageUrl": "assets/images/B.jpeg" ,
         "bio":"Bhuvana Natarajan comes with a collage of experience of managing businesses, consulting, operations, leveraging technology to drive business outcomes. She transitioned from the world of technology consulting in IBM to the development sector over the last year and has passionately applied herself to the design and deployment of productive engagement programs for Seniors.  She is on a mission to help every Senior find purpose and meaning and make a difference to the under privileged sections. She hopes to leverage her vast corporate experience across financial and technology services to grow ISF as a successful social enterprise."
         ,"linkedInUrl":"https://www.linkedin.com/in/bhuvananatarajan/"
 

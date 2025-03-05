@@ -201,25 +201,39 @@ class _MobileNavBarState extends State<MobileNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      color: Colors.white,
+      padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight14, horizontal: 16),
+
+        decoration: BoxDecoration(
+            boxShadow: [
+        BoxShadow(
+        color: Colors.black.withOpacity(0.1), // Subtle shadow color
+      blurRadius: 2, // Softens the shadow
+      offset: Offset(0, 1), // Positions the shadow below the navbar
+      spreadRadius: 1, // Slight expansion
+    ),],
+
+          gradient: LinearGradient(colors: [
+            // Colors.white,
+            ColorUtils.PURPLE_BRAND_LIGHT,
+
+            Colors.white
+
+          ],begin: Alignment.topCenter,end: Alignment.bottomCenter),
+    ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Inspiring Seniors',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue[800],
-                ),
-              ),
+              GestureDetector(
+                  onTap: (){
+                    Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+                  },child: Container(child: Image.asset("assets/images/primary_logo_horizontal.png",width: MediaQuery.of(context).size.width*0.4,fit: BoxFit.fitWidth,),))
+              ,
               IconButton(
                 icon: Icon(
                   isOpen ? Icons.close : Icons.menu,
-                  color: Colors.blue[800],
+                  color: ColorUtils.BRAND_COLOR,
                   size: 28,
                 ),
                 onPressed: () {
@@ -255,15 +269,27 @@ class _MobileNavBarState extends State<MobileNavBar> {
 // Create Overlay Widget
   OverlayEntry _createOverlayEntry() {
     return OverlayEntry(
+
       builder: (context) => Positioned(
-        top: 50,
+        top: 100,
         right: 0,
         child: Material(
           color: Colors.transparent,
           child: Container(
-            width: MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width*0.8,
             height: MediaQuery.of(context).size.height*0.6,
-            color: Colors.white,
+            padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight18),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: ColorUtils.GREY_DOTTED,
+                  offset: Offset(1, 1),
+                  spreadRadius: 2,
+                  blurRadius: 2
+                )
+              ]
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -272,22 +298,63 @@ class _MobileNavBarState extends State<MobileNavBar> {
                 //   icon: Icon(Icons.close, size: 32, color: Colors.blue[700]),
                 //   onPressed: _removeOverlay,
                 // ),
-                _menuItem("Home", Icons.home),
-                _menuItem("Programs", Icons.school),
-                _menuItem("Activities", Icons.event),
-                _menuItem("Resources", Icons.book),
-                _menuItem("Contact", Icons.contact_mail),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  child: ElevatedButton(
-                    onPressed: _removeOverlay,
-                    child: Text("Get Started"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[600],
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                    ),
+
+                _menuItem("About Us", Icons.person_2,onpressed: (){
+                  _removeOverlay();
+
+                  Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+                }),
+                _menuItem("Programs", Icons.school,onpressed: (){
+                  _removeOverlay();
+
+                  Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
+          }),
+                _menuItem("Media", Icons.event,onpressed: (){                  _removeOverlay();
+
+
+                Get.toNamed(RoutingNames.MEDIA_PAGE);
+                }),
+
+                _menuItem("Join Us", Icons.book,onpressed: (){
+                  _removeOverlay();
+
+                  Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+                }),
+                _menuItem("Contact Us", Icons.contact_mail,onpressed: (){
+                  _removeOverlay();
+
+                  Get.toNamed(RoutingNames.CONTACT_US_SCREEN);
+                }),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: TextSizeDynamicUtils.dHeight18),
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+
+
+                      CustomButton(
+                          onpressed: () {
+                            Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
+
+                          },
+
+                          shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 8,vpadding: 8,isHoverGetStarted: false.obs,text: "Donate",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
+                      SizedBox(width: 16),
+
+
+                      CustomButton(onpressed: (){
+                        // showFormDialog(context);
+
+                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 8,vpadding: 8,isHoverGetStarted: false.obs,text: "Login"),
+
+
+
+                    ],
                   ),
                 ),
+
               ],
             ),
           ),
@@ -295,14 +362,17 @@ class _MobileNavBarState extends State<MobileNavBar> {
       ),
     );
   }
-  Widget _menuItem(String title, IconData icon) {
+  Widget _menuItem(String title, IconData icon,{onpressed}) {
     return ListTile(
-      leading: Icon(icon, color: Colors.blue[700]),
+
+      leading: Icon(icon, color: ColorUtils.BRAND_COLOR,size: 20,),
       title: Text(
         title,
-        style: TextStyle(fontSize: 20, color: Colors.grey[800]),
+        style: TextStyleUtils.heading6.copyWith(
+          color: ColorUtils.HEADER_GREEN
+        ),
       ),
-      onTap: _removeOverlay,
+      onTap: onpressed,
     );
   }
 }

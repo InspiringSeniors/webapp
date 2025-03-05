@@ -29,6 +29,7 @@ class FunWithArtScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
+    var isMobile=width<800?true:false;
 
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
@@ -41,6 +42,66 @@ class FunWithArtScreen extends StatelessWidget {
           children: [
             Navbar(),
 
+            isMobile?
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight28),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Text("Fun Therapy with Art ",style: TextStyleUtils.heading2,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  Container(
+
+                    child: Image.asset("assets/images/primary_logo.png",fit: BoxFit.cover,),
+                    width: MediaQuery.of(context).size.width,
+                    height:MediaQuery.of(context).size.height*0.33 ,
+                    clipBehavior: Clip.hardEdge,
+
+                    decoration: BoxDecoration(
+
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+
+                    ),
+                  ),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                  Text("Fun Therapy with Art is a joyful space within ISF's Learning Studio, designed for seniors to unleash their creativity, embrace lifelong learning, and rediscover the beauty of self-expression. Here, art becomes more than just a hobby—it’s a therapeutic journey where your hands, heart, and imagination come together to create pieces that stimulate both the mind and emotions. Whether you're exploring new techniques or simply enjoying the process, you’ll find that every emotion has a color, and every color tells a unique story. Join us to relax, express, and find fulfillment in every brushstroke on this fun and inspiring artistic adventure!"
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  CustomButton(onpressed: (){
+
+                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 10,vpadding: 10,isHoverGetStarted: false.obs,text: "Register"),
+
+
+
+
+
+
+
+                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight32,),
+
+                        CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                        FAQSection(faqList: ddhController.faqList.value)
+
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ):
             Container(
 
               margin: EdgeInsets.symmetric(horizontal: 50),
@@ -121,7 +182,7 @@ class FunWithArtScreen extends StatelessWidget {
                               Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
                               SizedBox(height: TextSizeDynamicUtils.dHeight32,),
 
-                              CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier)
+                              CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 0.8,height: height*0.5,),
                             ],
                           ),
                         ),
@@ -136,7 +197,7 @@ class FunWithArtScreen extends StatelessWidget {
               ),
             ),
 
-            FooterSection(),
+            FooterSection1(),
           ],
         ),
       ),

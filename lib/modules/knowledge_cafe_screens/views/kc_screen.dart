@@ -27,6 +27,7 @@ class KnowledgeCafeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
+    var isMobile=width<800?true:false;
 
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
@@ -38,6 +39,77 @@ class KnowledgeCafeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Navbar(),
+            isMobile?
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight28),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Text("Knowledge Cafe ",style: TextStyleUtils.heading2,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  Container(
+
+                    child: Image.asset("assets/images/i_tutors_poster.jpg",fit: BoxFit.cover,),
+                    width: MediaQuery.of(context).size.width,
+                    height:MediaQuery.of(context).size.height*0.33 ,
+                    clipBehavior: Clip.hardEdge,
+
+                    decoration: BoxDecoration(
+
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+
+                    ),
+                  ),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+
+                  Text("The Inspiring Seniors Foundation introduces Knowledge Cafe, a platform designed to bring senior citizens together to share their unique experiences, life lessons, and insights across a variety of topics. From health and technology to art and life skills, this initiative fosters a community of learning, connection, and mutual inspiration."
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: 10,),
+                  Text("Engaging Conversations: Listen to meaningful stories and gain valuable perspectives from experienced individuals."
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: 10,),
+
+                  Text("Diverse Themes: Explore relevant topics like healthy living, financial awareness, and creative pursuits tailored to senior citizens' interests.."
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: 10,),
+                  Text("Interactive Format: Participate in one-hour live discussions, designed to be both thought-provoking and inclusive."
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  CustomButton(onpressed: (){
+
+                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 10,vpadding: 10,isHoverGetStarted: false.obs,text: "Register"),
+
+
+
+
+
+
+
+                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight32,),
+
+                        CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 0.8,height: height*0.5,),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                        FAQSection(faqList: ddhController.faqList.value)
+
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ):
 
             Container(
               margin: EdgeInsets.symmetric(horizontal: 50),
@@ -143,7 +215,7 @@ class KnowledgeCafeScreen extends StatelessWidget {
               ),
             ),
 
-            FooterSection(),
+            FooterSection1(),
           ],
         ),
       ),

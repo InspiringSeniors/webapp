@@ -87,6 +87,8 @@ class TextStyleUtils {
   letterSpacing: 1.2,
   );
 
+
+
   static TextStyle heading2 = TextStyle(
   color: ColorUtils.BRAND_COLOR, // ✅ Consistent with Heading 1
   fontSize: TextSizeDynamicUtils.dHeight36,
@@ -105,6 +107,14 @@ class TextStyleUtils {
     letterSpacing: 0.8,
   );
 
+  static TextStyle mobileheading3 = TextStyle(
+    color: ColorUtils.HEADER_GREEN, // 🔄 Change to Green for Contrast
+    fontSize: TextSizeDynamicUtils.dHeight24,
+    fontWeight: FontWeight.w600,
+    fontFamily: "Inter",
+
+  );
+
   static TextStyle heading4 = TextStyle(
   color: ColorUtils.PURPLE_BRAND_DARK, // 🔄 Slightly Dark Purple for a Softer Look
   fontSize: TextSizeDynamicUtils.dHeight28,
@@ -112,6 +122,14 @@ class TextStyleUtils {
     fontFamily: "Inter",
 
     letterSpacing: 0.5,
+  );
+
+  static TextStyle mobileheading4 = TextStyle(
+    color: ColorUtils.PURPLE_BRAND_DARK, // 🔄 Slightly Dark Purple for a Softer Look
+    fontSize: TextSizeDynamicUtils.dHeight20,
+    fontWeight: FontWeight.w500,
+    fontFamily: "Inter",
+
   );
 
   static TextStyle buttonText =
@@ -144,6 +162,13 @@ class TextStyleUtils {
   letterSpacing: 0.4,
   );
 
+  static TextStyle phoneparagraphSmall = TextStyle(
+    color: ColorUtils.GREY_COLOR, // ✅ Keep Grey for Soft Reading Sections
+    fontSize: TextSizeDynamicUtils.dHeight14,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.4,
+  );
+
   static TextStyle footerText = TextStyle(
   color: ColorUtils.GREY_COLOR_PLACEHOLDER, // ✅ Light Grey for Footer Readability
   fontSize: TextSizeDynamicUtils.dHeight16,
@@ -161,6 +186,15 @@ class TextStyleUtils {
 
   );
 
+  static TextStyle mobileheading5 = TextStyle(
+    color: ColorUtils.SECONDARY_BLACK,
+    fontSize: TextSizeDynamicUtils.dHeight16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+    fontFamily: "Inter",
+
+  );
+
   static TextStyle heading6 = TextStyle(
     color: ColorUtils.SECONDARY_BLACK,
     fontSize: TextSizeDynamicUtils.dHeight16,
@@ -170,6 +204,13 @@ class TextStyleUtils {
 
   );
 
+  static TextStyle mobileheading6 = TextStyle(
+    color: ColorUtils.SECONDARY_BLACK,
+    fontSize: TextSizeDynamicUtils.dHeight14,
+    fontWeight: FontWeight.w600,
+    fontFamily: "Inter",
+
+  );
   // **Subheadings**
 
 
@@ -185,6 +226,13 @@ class TextStyleUtils {
   fontSize: TextSizeDynamicUtils.dHeight20,
   fontWeight: FontWeight.w400,
   letterSpacing: 0.7,
+  );
+
+  static TextStyle mobilesubHeading3 = TextStyle(
+    color: ColorUtils.BRAND_COLOR_LIGHT_2,
+    fontSize: TextSizeDynamicUtils.dHeight16,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.7,
   );
 
 
@@ -249,6 +297,12 @@ class TextStyleUtils {
     color: Colors.white.withOpacity(0.9), // Slightly faded for contrast
 
   );
+  static TextStyle textStyleh14 = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: TextSizeDynamicUtils.dHeight14,
+    color: Colors.white.withOpacity(0.9), // Slightly faded for contrast
+
+  );
 
   static TextStyle textStyleh16GREEN = TextStyle(
     fontWeight: FontWeight.w500,
@@ -309,7 +363,7 @@ class TextStyleUtils {
   );
 
   static TextStyle smallGreyTextStyleHighlighted = TextStyle(
-    color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+    color: ColorUtils.WHITE_COLOR_BACKGROUND,
     fontWeight: FontWeight.w600,
     fontSize: TextSizeDynamicUtils.dHeight12,
     letterSpacing: 0.5,

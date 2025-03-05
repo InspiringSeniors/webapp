@@ -24,6 +24,7 @@ class WellnessChaupalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
+    var isMobile=width<800?true:false;
 
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
@@ -35,6 +36,74 @@ class WellnessChaupalScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Navbar(),
+
+            isMobile?            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight28),
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Text("Wellness Chaupal ",style: TextStyleUtils.heading2,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  Container(
+
+                    child: Image.asset("assets/images/media/gallery1.jpeg",fit: BoxFit.cover,),
+                    width: MediaQuery.of(context).size.width,
+                    height:MediaQuery.of(context).size.height*0.33 ,
+                    clipBehavior: Clip.hardEdge,
+
+                    decoration: BoxDecoration(
+
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+
+                    ),
+                  ),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+
+
+
+
+                  Text("A Trusted Voice, A Fresh Perspective: Your Gateway to Health Wisdom"
+                    ,style: TextStyleUtils.mobileheading3,),
+                  SizedBox(height: 10,),
+
+                  Text("Wellness Choupal is where tradition meets modern health expertise. In collaboration with Age-Friendly India and under the experienced guidance of Dr. G.S. Grewal, who has been leading impactful Friday sessions since 2019, we’ve reimagined this beloved talk show to bring a holistic wellness approach tailored for seniors."
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  CustomButton(onpressed: (){
+
+                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 10,vpadding: 10,isHoverGetStarted: false.obs,text: "Register"),
+
+
+
+
+
+
+
+                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight32,),
+
+                        CustomCarousel(carouselList: wellnessChaupalController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 0.8,height: height*0.5,),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                        FAQSection(faqList: wellnessChaupalController.faqList.value)
+
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ):
 
             Container(
               margin: EdgeInsets.symmetric(horizontal: 50),
@@ -130,7 +199,7 @@ class WellnessChaupalScreen extends StatelessWidget {
               ),
             ),
 
-            FooterSection(),
+            FooterSection1(),
           ],
         ),
       ),

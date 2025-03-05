@@ -37,9 +37,29 @@ class _YoutubePlayerWidgetState extends State<YoutubePlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    var height=MediaQuery.of(context).size.height ;
+    var width=MediaQuery.of(context).size.width ;
+
+
+
+    var isMobile=width<800?true:false;
     return Column(
       children: [
-        Container(
+        isMobile?Container(
+          margin: EdgeInsets.only(right: 10),
+          clipBehavior: Clip.hardEdge,
+          height: 250,
+          width: width*0.8,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(20))
+          ),
+          // Adjust as needed
+          child: YoutubePlayer(
+            controller: _controller,
+            aspectRatio: 3 / 4,
+            keepAlive: true,
+          ),
+        ):Container(
           clipBehavior: Clip.hardEdge,
           height: 300, 
           decoration: BoxDecoration(
@@ -52,20 +72,7 @@ class _YoutubePlayerWidgetState extends State<YoutubePlayerWidget> {
             keepAlive: true,
           ),
         ),
-        // SizedBox(height: 10),1
-        // CustomButton(
-        //   text: "Watch On Youtube",
-        //   isHoverGetStarted: false.obs,
-        //   vpadding: 10,
-        //   hpadding: 16,
-        //   hoveredColor: ColorUtils.HEADER_GREEN,
-        //   bgColor: ColorUtils.BRAND_COLOR,
-        //   fontSize: 16,
-        //   shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
-        //   onpressed: (){
-        //     _openYoutube();
-        //   }
-        // ),
+
       ],
     );
   }

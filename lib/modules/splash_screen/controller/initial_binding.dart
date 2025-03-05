@@ -4,6 +4,7 @@ import 'package:inspiringseniorswebapp/modules/splash_screen/controller/splashsc
 class InitialBinding implements Bindings {
   @override
   void dependencies() {
-    Get.put(SplashScreenController());
+
+    final splashScreenController = Get.put(SplashScreenController());
   }
 }

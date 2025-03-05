@@ -27,6 +27,7 @@ class LetsTalkEnglishScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
+    var isMobile=width<800?true:false;
 
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
@@ -38,7 +39,70 @@ class LetsTalkEnglishScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Navbar(),
+            isMobile?
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight28),
 
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Text("Lets Talk English ",style: TextStyleUtils.heading2,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  Container(
+
+                    child: Image.asset("assets/images/prod_eng_poster.jpg",fit: BoxFit.cover,),
+                    width: MediaQuery.of(context).size.width,
+                    height:MediaQuery.of(context).size.height*0.33 ,
+                    clipBehavior: Clip.hardEdge,
+
+                    decoration: BoxDecoration(
+
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+
+                    ),
+                  ),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+
+                  Text("Unlock the power of words with our English Conversation Course, designed for 5th-8th grade students in government schools. Many of these bright young minds struggle to express themselves confidently due to limited exposure with conversation in English and reading habits, leading to hesitation, low self-esteem, and missed opportunities. The course breaks these barriers through interactive, engaging activities that build confidence, improve fluency, and enhance communication skills."
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: 10,),
+                  Text("As a Conversation Coach, you’ll be the guiding light that helps students find their voice, share their ideas, and dream big. You’ll witness their transformation as they gain the skills to participate actively in class, express themselves clearly, and approach life with newfound confidence. All you need is 2-3 hours a week, a passion for making a difference, and your life experience. Flexible online sessions, easy-to-follow lesson plans, and comprehensive resources make it simple to inspire from the comfort of your home."
+                    ,style: TextStyleUtils.phoneparagraphSmall,),
+                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  CustomButton(onpressed: (){
+
+                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 10,vpadding: 10,isHoverGetStarted: false.obs,text: "Register"),
+
+
+
+
+
+
+
+                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                  Container(
+                    child: Column(
+                      children: [
+                        Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight32,),
+
+                        CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 0.8,height: height*0.5,),
+                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                        FAQSection(faqList: ddhController.faqList.value)
+
+                      ],
+                    ),
+                  ),
+
+                ],
+              ),
+            ):
             Container(
               margin: EdgeInsets.symmetric(horizontal: 50),
               padding: EdgeInsets.symmetric(vertical: 30),
@@ -136,7 +200,7 @@ class LetsTalkEnglishScreen extends StatelessWidget {
               ),
             ),
 
-            FooterSection(),
+            FooterSection1(),
           ],
         ),
       ),

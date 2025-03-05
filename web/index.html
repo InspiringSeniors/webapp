@@ -31,6 +31,30 @@
 
   <title>inspiringseniorswebapp</title>
   <link rel="manifest" href="manifest.json">
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyTnVnovPifgT11FE3oC2GeeYT2bd4Dng",
+      authDomain: "inspiringseniorswebapp.firebaseapp.com",
+      projectId: "inspiringseniorswebapp",
+      storageBucket: "inspiringseniorswebapp.firebasestorage.app",
+      messagingSenderId: "457143288541",
+      appId: "1:457143288541:web:f3979818d0688a59bcd134",
+      measurementId: "G-S64FEM786G"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

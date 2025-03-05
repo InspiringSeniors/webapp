@@ -21,8 +21,11 @@ class CustomCarousel extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    var width=MediaQuery.of(context).size.width ;
 
     var heightHere = MediaQuery.of(context).size.height;
+    var isMobile=width<800?true:false;
+
     // TODO: implement build
     return Column(
       children: [
@@ -46,7 +49,7 @@ class CustomCarousel extends StatelessWidget{
 
         Container(
           margin: EdgeInsets.only(
-              bottom: TextSizeDynamicUtils.dHeight30,top:TextSizeDynamicUtils.dHeight30 ),
+              bottom: isMobile?TextSizeDynamicUtils.dHeight18:TextSizeDynamicUtils.dHeight30,top:TextSizeDynamicUtils.dHeight30 ),
           child: _buildCircleIndicator(),
         ),
       ],
@@ -71,8 +74,34 @@ class CustomCarousel extends StatelessWidget{
 
 
 class CarouselBuilderScreenV2 {
+
   static Widget screen1(BuildContext context, String videoId) {
-    return InkWell(
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
+
+    return isMobile?InkWell(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: Colors.black,
+          builder: (context) => Container(
+            height: MediaQuery.of(context).size.height * 0.9,
+            child: YoutubePlayerWidget(videoId: videoId),
+          ),
+        );
+
+      },
+      onHover: (v){
+        print("hovermssing");
+      },
+      child: Container(
+        width: width*0.8,
+        child:
+        YoutubePlayerWidget(videoId: videoId),)
+    ):
+    InkWell(
       onTap: () {
         showModalBottomSheet(
           context: context,
@@ -94,6 +123,11 @@ class CarouselBuilderScreenV2 {
 
 
   static Widget imageScreen(BuildContext context, String imageUrl) {
+
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
+
     return InkWell(
       onTap: () {
         // showModalBottomSheet(
@@ -116,8 +150,8 @@ class CarouselBuilderScreenV2 {
         ),
 
         clipBehavior: Clip.hardEdge,
-        width: MediaQuery.of(context).size.width*0.3,
-        height: MediaQuery.of(context).size.height*0.26,
+        width: isMobile? MediaQuery.of(context).size.width*0.8:MediaQuery.of(context).size.width*0.3,
+        height:isMobile?MediaQuery.of(context).size.height*0.16: MediaQuery.of(context).size.height*0.26,
         child: Image.asset(imageUrl,fit: BoxFit.cover,),
       ),
     );

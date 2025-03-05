@@ -33,6 +33,7 @@ class ContactUsScreen extends StatelessWidget {
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
 
+    var isMobile=width<800?true:false;
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
 
@@ -44,6 +45,336 @@ class ContactUsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Navbar(),
+
+            isMobile?            Container(
+              height: height*1.8,
+
+              child: Stack(
+                children: [
+                  Container(
+                    height: height*0.3,
+                    width: width,
+
+
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [ColorUtils.BRAND_COLOR_LIGHT_2, ColorUtils.HEADER_GREEN_LIGHTER],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+
+                    ),
+                    child: Center(
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            top:                     height*0.05),
+
+                        child:
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+
+                          children: [
+                            Text("Dont be a stranger just say hello.",style: TextStyleUtils.mobileheading3.copyWith(
+                                color: ColorUtils.WHITE_COLOR_BACKGROUND
+                            ),textAlign: TextAlign.center),
+                            SizedBox(height: TextSizeDynamicUtils.dHeight10,),
+                            Text("Thankyou for showing interest. Just fill out the form to get connected.",style: TextStyleUtils.mobilesubHeading3.copyWith(
+                                color: ColorUtils.WHITE_COLOR_BACKGROUND
+                            ),textAlign: TextAlign.center,)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Positioned(
+                    top: height*0.19,
+                    child: Center(
+                      child: Container(
+                        width: width*0.9,
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+
+
+
+                        decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: ColorUtils.GREY_DOTTED,
+                                blurRadius: 1,
+                                offset: const Offset(1, 1),
+                                spreadRadius: 1,
+                              ),
+                            ],
+
+                            color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                            borderRadius: BorderRadius.circular(10)
+
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight38,horizontal:16),
+
+                              child: Column(
+                                children: [
+
+                                  Form(
+                                      key: contactUsController.loginFormKey,
+                                      child: Column(
+                                        children: [
+
+                                          Image.asset("assets/images/primary_logo_horizontal.png",fit: BoxFit.cover,height: 100,),
+                                          SizedBox(height: 30,),
+                                          Container(
+                                            // height: height*0.6,
+                                            width: isMobile?width:width*0.25,
+
+                                            child: Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical:
+                                                  TextSizeDynamicUtils.dHeight28,
+                                                  horizontal: 16),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+
+
+                                                  CustomTextFieldV2(
+
+                                                    contactUsController.nameStateHandler,
+                                                    contactUsController.labeluserName,
+                                                    'Your Name'.tr,
+                                                    contactUsController
+                                                        .userNameController,
+                                                    contactUsController.inactiveColor,
+                                                    contactUsController.validatename,
+                                                    icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+
+
+                                                  ),
+
+
+
+                                                  SizedBox(
+                                                    height:
+                                                    TextSizeDynamicUtils.dHeight16,
+                                                  ),
+                                                  getNumberField(
+                                                      contactUsController
+                                                          .isPhoneEnabled,
+
+
+                                                      context),
+
+
+                                                  SizedBox(
+                                                    height:
+                                                    TextSizeDynamicUtils.dHeight16,
+                                                  ),
+                                                  CustomTextFieldV2(
+                                                      contactUsController.emailStateHandler,
+                                                      contactUsController.emailLabelName,
+                                                      'Your Email'.tr,
+                                                      icon: Icon(Icons.email,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                                                      contactUsController
+                                                          .emailController,
+                                                      contactUsController.inactiveColor,
+                                                      contactUsController.validateEmail),
+
+                                                  SizedBox(
+                                                    height:
+                                                    TextSizeDynamicUtils.dHeight16,
+                                                  ),
+
+                                                  TextFormField(
+
+
+                                                    controller: contactUsController.messageController,
+                                                    maxLines: 5, // Allows long te// xt input
+                                                    cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                                    decoration: InputDecoration(
+
+                                                        labelStyle: TextStyle(
+                                                            color:  ColorUtils.GREY_COLOR_PLACEHOLDER),
+                                                        focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+
+                                                        alignLabelWithHint: true,
+                                                        focusedBorder: OutlineInputBorder(
+                                                            borderRadius: BorderRadius.circular(8),
+                                                            borderSide: const BorderSide(
+                                                                width: 2, color: ColorUtils.GREY_DOTTED
+
+                                                            )
+                                                        )
+                                                        ,
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                              width: 2, color: ColorUtils.GREY_DOTTED
+                                                          ),
+                                                          //<-- SEE HERE
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        errorBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                              width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+                                                        focusedErrorBorder: OutlineInputBorder(
+                                                          borderSide: const BorderSide(
+                                                              width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                                                          borderRadius: BorderRadius.circular(8),
+                                                        ),
+
+                                                        isDense: false,
+                                                        hintText: "Message",
+                                                        hintStyle: TextStyleUtils.smallGreyTextStyle,
+                                                        fillColor:Color(0xFFF6F4F4),
+
+                                                        filled: true,
+
+                                                        errorStyle: TextStyle(
+                                                            color: ColorUtils.ERROR_RED,
+                                                            fontSize: TextSizeDynamicUtils.dHeight12,
+                                                            fontWeight: FontWeight.w400)),
+
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                  ),
+
+                                  SizedBox(
+                                    height:
+                                    TextSizeDynamicUtils.dHeight16,
+                                  ),
+                                  // contactUsController.formLoading.value?CustomButton(onpressed: (){
+                                  //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                  // },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.BRAND_COLOR_INACTIVE,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Loading",borderColor: ColorUtils.BRAND_COLOR_INACTIVE,textColor: ColorUtils.BRAND_COLOR_INACTIVE)
+                                  //            :
+                                  CustomButton(onpressed: (){
+                                    contactUsController.submitForm();
+                                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR_LIGHT_2,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
+                                ],
+                              ),
+                            ),
+                            Container(
+                              color: ColorUtils.GREY_DOTTED,
+                              width: width,
+                              height: 2,
+                              margin: EdgeInsets.symmetric(horizontal: 20,vertical: TextSizeDynamicUtils.dHeight28),
+
+                            ),
+
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight28,horizontal:16),
+
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+
+                                  // Image.asset("assets/images/primary_logo_horizontal.png",fit: BoxFit.cover,height: 100,),
+                                  // SizedBox(height: 30,),
+
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: 10),
+
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              shape:BoxShape.circle,
+                                              border: Border.all(
+                                                  color: ColorUtils.HEADER_GREEN_LIGHTER,
+                                                  width: 2
+                                              )
+
+                                          ),
+                                          child: Container(
+                                              child: Icon(Icons.location_pin,size: 30,color: ColorUtils.HEADER_GREEN_LIGHTER,))),
+                                      Container(
+                                          width: width*0.6,
+
+                                          child: Text("Vasant Kunj, New Delhi- 110070, Delhi ",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),
+
+                                    ],
+                                  ),
+                                  SizedBox(height: 30,),
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: 10),
+
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              shape:BoxShape.circle,
+                                              border: Border.all(
+                                                  color: ColorUtils.HEADER_GREEN_LIGHTER,
+                                                  width: 2
+                                              )
+
+                                          ),
+                                          child: Container(
+                                              child: Icon(Icons.call_rounded,size: 30,color: ColorUtils.HEADER_GREEN_LIGHTER,))),
+                                      Container(
+                                          width: width*0.6,
+
+                                          child: Text("+91 9315274243",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),      ],
+                                  ),
+                                  SizedBox(height: 30,),
+
+                                  Row(
+                                    children: [
+                                      Container(
+                                          margin: EdgeInsets.only(right: 10),
+
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                              shape:BoxShape.circle,
+                                              border: Border.all(
+                                                  color: ColorUtils.HEADER_GREEN_LIGHTER,
+                                                  width: 2
+                                              )
+
+                                          ),
+                                          child: Container(
+                                              child: Icon(Icons.mail,size: 30,color: ColorUtils.HEADER_GREEN_LIGHTER,))),
+                                      Container(
+                                          width: width*0.6,
+
+                                          child: Text("enquiry@inspiringseniors.org ",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),
+
+
+                                    ],
+                                  ),
+
+                                  SizedBox(height: 30,),
+
+                                ],
+                              ),
+                            ),
+
+
+
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ):
 
             Container(
               height: height*1.1,
@@ -92,7 +423,6 @@ class ContactUsScreen extends StatelessWidget {
                         alignment: Alignment.center,
                         margin: EdgeInsets.symmetric(horizontal: width*0.2,vertical: 30),
 
-                        padding: EdgeInsets.symmetric(vertical: 40,horizontal:60),
 
 
                         decoration: BoxDecoration(
@@ -110,14 +440,20 @@ class ContactUsScreen extends StatelessWidget {
 
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
+                              padding: EdgeInsets.symmetric(vertical: 40,horizontal:60),
+
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+
+                                  Image.asset("assets/images/primary_logo_horizontal.png",fit: BoxFit.cover,height: 100,),
+                                  SizedBox(height: 30,),
+
                                   Row(
                                     children: [
                                       Container(
@@ -137,7 +473,7 @@ class ContactUsScreen extends StatelessWidget {
                                       Container(
                                           width: width*0.2,
 
-                                          child: Text("D-7/7032, VASANT KUNJ, New Delhi, New Delhi, New Delhi- 110070, Delhi ",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),
+                                          child: Text("Vasant Kunj, New Delhi- 110070, Delhi ",style: TextStyleUtils.heading6,maxLines: 3,overflow: TextOverflow.visible,)),
 
                                     ],
                                   ),
@@ -198,151 +534,155 @@ class ContactUsScreen extends StatelessWidget {
                               margin: EdgeInsets.symmetric(horizontal: 20,vertical: 40),
 
                             ),
-                            Column(
-                              children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(vertical: 40,horizontal:60),
 
-                                 Form(
-                                   key: contactUsController.loginFormKey,
-                                   child: Column(
-                                     children: [
-                                       Container(
-                                         // height: height*0.6,
-                                         width: width*0.25,
+                              child: Column(
+                                children: [
 
-                                         child: Container(
-                                           padding: EdgeInsets.symmetric(
-                                               vertical:
-                                               TextSizeDynamicUtils.dHeight28,
-                                               horizontal: 16),
-                                           child: Column(
-                                             mainAxisAlignment:
-                                             MainAxisAlignment.start,
-                                             crossAxisAlignment:
-                                             CrossAxisAlignment.start,
-                                             children: [
+                                   Form(
+                                     key: contactUsController.loginFormKey,
+                                     child: Column(
+                                       children: [
+                                         Container(
+                                           // height: height*0.6,
+                                           width: width*0.25,
 
-
-                                               CustomTextFieldV2(
-
-                                                   contactUsController.nameStateHandler,
-                                                   contactUsController.labeluserName,
-                                                   'Your Name'.tr,
-                                                   contactUsController
-                                                       .userNameController,
-                                                   contactUsController.inactiveColor,
-                                                   contactUsController.validatename,
-                                                 icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                                           child: Container(
+                                             padding: EdgeInsets.symmetric(
+                                                 vertical:
+                                                 TextSizeDynamicUtils.dHeight28,
+                                                 horizontal: 16),
+                                             child: Column(
+                                               mainAxisAlignment:
+                                               MainAxisAlignment.start,
+                                               crossAxisAlignment:
+                                               CrossAxisAlignment.start,
+                                               children: [
 
 
-                                               ),
+                                                 CustomTextFieldV2(
+
+                                                     contactUsController.nameStateHandler,
+                                                     contactUsController.labeluserName,
+                                                     'Your Name'.tr,
+                                                     contactUsController
+                                                         .userNameController,
+                                                     contactUsController.inactiveColor,
+                                                     contactUsController.validatename,
+                                                   icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+
+
+                                                 ),
 
 
 
-                                               SizedBox(
-                                                 height:
-                                                 TextSizeDynamicUtils.dHeight16,
-                                               ),
-                                               getNumberField(
-                                                   contactUsController
-                                                       .isPhoneEnabled,
+                                                 SizedBox(
+                                                   height:
+                                                   TextSizeDynamicUtils.dHeight16,
+                                                 ),
+                                                 getNumberField(
+                                                     contactUsController
+                                                         .isPhoneEnabled,
 
 
-                                                   context),
+                                                     context),
 
 
-                                               SizedBox(
-                                                 height:
-                                                 TextSizeDynamicUtils.dHeight16,
-                                               ),
-                                               CustomTextFieldV2(
-                                                   contactUsController.emailStateHandler,
-                                                   contactUsController.emailLabelName,
-                                                   'Your Email'.tr,
-                                                   icon: Icon(Icons.email,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
-                                                   contactUsController
-                                                       .emailController,
-                                                   contactUsController.inactiveColor,
-                                                   contactUsController.validateEmail),
+                                                 SizedBox(
+                                                   height:
+                                                   TextSizeDynamicUtils.dHeight16,
+                                                 ),
+                                                 CustomTextFieldV2(
+                                                     contactUsController.emailStateHandler,
+                                                     contactUsController.emailLabelName,
+                                                     'Your Email'.tr,
+                                                     icon: Icon(Icons.email,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                                                     contactUsController
+                                                         .emailController,
+                                                     contactUsController.inactiveColor,
+                                                     contactUsController.validateEmail),
 
-                                               SizedBox(
-                                                 height:
-                                                 TextSizeDynamicUtils.dHeight16,
-                                               ),
+                                                 SizedBox(
+                                                   height:
+                                                   TextSizeDynamicUtils.dHeight16,
+                                                 ),
 
-                                               TextFormField(
+                                                 TextFormField(
 
 
-                                                 controller: contactUsController.messageController,
-                                                 maxLines: 5, // Allows long te// xt input
-                                                 cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                                 decoration: InputDecoration(
+                                                   controller: contactUsController.messageController,
+                                                   maxLines: 5, // Allows long te// xt input
+                                                   cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                                   decoration: InputDecoration(
 
-                                               labelStyle: TextStyle(
-                                               color:  ColorUtils.GREY_COLOR_PLACEHOLDER),
-                                             focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                                 labelStyle: TextStyle(
+                                                 color:  ColorUtils.GREY_COLOR_PLACEHOLDER),
+                                               focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
 
-                                             alignLabelWithHint: true,
-                                             focusedBorder: OutlineInputBorder(
-                                                 borderRadius: BorderRadius.circular(8),
+                                               alignLabelWithHint: true,
+                                               focusedBorder: OutlineInputBorder(
+                                                   borderRadius: BorderRadius.circular(8),
+                                                   borderSide: const BorderSide(
+                                                       width: 2, color: ColorUtils.GREY_DOTTED
+
+                                                   )
+                                                   )
+                                                       ,
+                                               enabledBorder: OutlineInputBorder(
                                                  borderSide: const BorderSide(
                                                      width: 2, color: ColorUtils.GREY_DOTTED
-
-                                                 )
-                                                 )
-                                                     ,
-                                             enabledBorder: OutlineInputBorder(
-                                               borderSide: const BorderSide(
-                                                   width: 2, color: ColorUtils.GREY_DOTTED
+                                                 ),
+                                                 //<-- SEE HERE
+                                                 borderRadius: BorderRadius.circular(8),
                                                ),
-                                               //<-- SEE HERE
-                                               borderRadius: BorderRadius.circular(8),
+                                               errorBorder: OutlineInputBorder(
+                                                 borderSide: const BorderSide(
+                                                     width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                                                 borderRadius: BorderRadius.circular(8),
+                                               ),
+                                               focusedErrorBorder: OutlineInputBorder(
+                                                 borderSide: const BorderSide(
+                                                     width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                                                 borderRadius: BorderRadius.circular(8),
+                                               ),
+
+                                               isDense: false,
+                                               hintText: "Message",
+                                               hintStyle: TextStyleUtils.smallGreyTextStyle,
+                                               fillColor:Color(0xFFF6F4F4),
+
+                                               filled: true,
+
+                                               errorStyle: TextStyle(
+                                                   color: ColorUtils.ERROR_RED,
+                                                   fontSize: TextSizeDynamicUtils.dHeight12,
+                                                   fontWeight: FontWeight.w400)),
+
+                                         ),
+                                               ],
                                              ),
-                                             errorBorder: OutlineInputBorder(
-                                               borderSide: const BorderSide(
-                                                   width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
-                                               borderRadius: BorderRadius.circular(8),
-                                             ),
-                                             focusedErrorBorder: OutlineInputBorder(
-                                               borderSide: const BorderSide(
-                                                   width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
-                                               borderRadius: BorderRadius.circular(8),
-                                             ),
-
-                                             isDense: false,
-                                             hintText: "Message",
-                                             hintStyle: TextStyleUtils.smallGreyTextStyle,
-                                             fillColor:Color(0xFFF6F4F4),
-
-                                             filled: true,
-
-                                             errorStyle: TextStyle(
-                                                 color: ColorUtils.ERROR_RED,
-                                                 fontSize: TextSizeDynamicUtils.dHeight12,
-                                                 fontWeight: FontWeight.w400)),
-
-                                       ),
-                                             ],
                                            ),
                                          ),
-                                       ),
-                                     ],
-                                   )
-                                ),
+                                       ],
+                                     )
+                                  ),
 
-                                SizedBox(
-                                  height:
-                                  TextSizeDynamicUtils.dHeight16,
-                                ),
-                               // contactUsController.formLoading.value?CustomButton(onpressed: (){
-                               //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                               // },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.BRAND_COLOR_INACTIVE,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Loading",borderColor: ColorUtils.BRAND_COLOR_INACTIVE,textColor: ColorUtils.BRAND_COLOR_INACTIVE)
-                               //            :
-                               CustomButton(onpressed: (){
-                                  contactUsController.submitForm();
-                                  // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                                },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR_LIGHT_2,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                                  SizedBox(
+                                    height:
+                                    TextSizeDynamicUtils.dHeight16,
+                                  ),
+                                 // contactUsController.formLoading.value?CustomButton(onpressed: (){
+                                 //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                 // },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.BRAND_COLOR_INACTIVE,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Loading",borderColor: ColorUtils.BRAND_COLOR_INACTIVE,textColor: ColorUtils.BRAND_COLOR_INACTIVE)
+                                 //            :
+                                 CustomButton(onpressed: (){
+                                    contactUsController.submitForm();
+                                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR_LIGHT_2,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
 
-                              ],
+                                ],
+                              ),
                             ),
 
 
@@ -356,7 +696,7 @@ class ContactUsScreen extends StatelessWidget {
             ),
 
 
-            FooterSection(),
+            FooterSection1(),
           ],
         ),
       ),

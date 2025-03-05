@@ -66,8 +66,59 @@ class _AutoScrollTickerState extends State<AutoScrollTicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
+
+    var width =MediaQuery.of(context).size.width;
+    var height =MediaQuery.of(context).size.height;
+
+    var isMobile = width<500?true:false;
+    return isMobile?    Container(
+      height: TextSizeDynamicUtils.dHeight42,
+      alignment: Alignment.center,
+
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [ColorUtils.BRAND_COLOR, ColorUtils.HEADER_GREEN],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+      ),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        controller: _scrollController,
+        itemCount: tickerMessages.length * 100, // Loop messages infinitely
+        itemBuilder: (context, index) {
+          return Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 30),
+            child: Row(
+              children: [
+                Text(
+                  tickerMessages[index % tickerMessages.length]["icon"]!,
+                  style: TextStyleUtils.heading6.copyWith(
+                    color: ColorUtils.WHITE_CREAM_COLOR, // Ensure high contrast
+                  ),
+                ),
+                SizedBox(width: 10,),
+                Text(
+                  tickerMessages[index % tickerMessages.length]["text"]!,
+                  style: TextStyle(
+                    color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                    fontSize: TextSizeDynamicUtils.dHeight14,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
+                    fontFamily: "Inter",
+
+                  )
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    )
+    :
+    Container(
+      height: TextSizeDynamicUtils.dHeight48,
       alignment: Alignment.center,
 
       decoration: BoxDecoration(

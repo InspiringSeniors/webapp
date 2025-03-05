@@ -20,18 +20,21 @@ class TestimonialSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(margin: EdgeInsets.symmetric(vertical: 30),
+    var isMobile=MediaQuery.of(Get.context!).size.width<800?true:false;
+
+    return Container(margin: EdgeInsets.symmetric(vertical:isMobile?0: 30,horizontal:isMobile?20: 40),
       width: MediaQuery.of(context).size.width,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               "What Our Members Say",
-              style: TextStyleUtils.heading2
+              style: TextStyleUtils.heading2,
+              textAlign: TextAlign.center,
             ),
-            SizedBox(height: 60),
+            SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight32:60),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -46,9 +49,82 @@ class TestimonialSection extends StatelessWidget {
   }
 
   Widget _buildTestimonialCard(Testimonial testimonial) {
-    return Container(
-      width: MediaQuery.of(Get.context!).size.width * 0.35,
-      margin: EdgeInsets.symmetric(horizontal: 20),
+    var isMobile=MediaQuery.of(Get.context!).size.width<800?true:false;
+    return isMobile?Container(
+      width: isMobile?MediaQuery.of(Get.context!).size.width*0.8:MediaQuery.of(Get.context!).size.width * 0.35,
+      margin: EdgeInsets.symmetric(horizontal: isMobile?10:20),
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 20.0,vertical:  TextSizeDynamicUtils.dHeight32),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              testimonial.image==""?
+              Container(
+                height: TextSizeDynamicUtils.dHeight100,
+
+                child: Image.asset(testimonial.image==""?"assets/images/primary_logo_horizontal.png":testimonial.image,fit: BoxFit.cover,),
+              )
+                  :Container(
+                height: TextSizeDynamicUtils.dHeight100,
+                width: 100,
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle
+
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: Image.asset(testimonial.image==""?"assets/images/primary_logo_horizontal.png":testimonial.image,fit: BoxFit.cover,),
+              ),
+              SizedBox(height: TextSizeDynamicUtils.dHeight28),
+              Text(
+                '"${testimonial.text}"',
+                textAlign: TextAlign.center,
+                style: TextStyleUtils.heading6.copyWith(
+                  fontStyle: FontStyle.italic,
+                  fontSize: TextSizeDynamicUtils.dHeight14
+                  // color: Colors.grey[800],
+                ),
+              ),
+              SizedBox(height: 24),
+              Text(
+                testimonial.name,
+                style: TextStyleUtils.heading4.copyWith(
+                    color: ColorUtils.HEADER_GREEN,
+                  fontSize: TextSizeDynamicUtils.dHeight24,
+                ),
+              ),
+              SizedBox(height: 24),
+              Text(
+                testimonial.role,
+                style: TextStyleUtils.heading5.copyWith(
+                    color: ColorUtils.BRAND_COLOR,
+                  fontSize: TextSizeDynamicUtils.dHeight16,
+
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  5,
+                      (index) => Icon(
+                    Icons.star,
+                    color: ColorUtils.YELLOW_BRAND,
+                    size: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    )
+        : Container(
+      width: isMobile?MediaQuery.of(Get.context!).size.width:MediaQuery.of(Get.context!).size.width * 0.35,
+      margin: EdgeInsets.symmetric(horizontal: isMobile?10:20),
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

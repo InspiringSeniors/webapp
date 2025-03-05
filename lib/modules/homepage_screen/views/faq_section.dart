@@ -20,18 +20,24 @@ class _FAQSectionState extends State<FAQSection> {
 
   @override
   Widget build(BuildContext context) {
+    var height=MediaQuery.of(Get.context!).size.height ;
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+
+    var isMobile=width<800?true:false;
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Section Title
           Text(
             "Frequently Asked Questions",
-            style: TextStyleUtils.heading2
+            style: TextStyleUtils.heading2,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 40),
+           SizedBox(height: TextSizeDynamicUtils.dHeight28),
 
           // FAQ List
           Column(
@@ -41,38 +47,8 @@ class _FAQSectionState extends State<FAQSection> {
             }),
           ),
 
-          const SizedBox(height: 40),
+          SizedBox(height: TextSizeDynamicUtils.dHeight28),
 
-          // Contact Support Button
-          // Container(
-          //   width: MediaQuery.of(context).size.width,
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.end,
-          //     mainAxisAlignment: MainAxisAlignment.start,
-          //     children: [
-          //       // Container(
-          //       //     child: Text("Still have questions?", style: TextStyleUtils.heading6)),
-          //       // const SizedBox(height: 10),
-          //       Row(
-          //         mainAxisAlignment: MainAxisAlignment.end,
-          //         crossAxisAlignment: CrossAxisAlignment.center,
-          //
-          //         children: [
-          //           Icon(FontAwesomeIcons.whatsapp,color: ColorUtils.HEADER_GREEN_LIGHTER,size: 40,),
-          //           SizedBox(width: 10,),
-          //           Text("Chat with us",style: TextStyleUtils.heading5,)
-          //         ],
-          //       )
-          //       // CustomButton(fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Contact Support",isHoverGetStarted: false.obs,
-          //       // onpressed: (){
-          //       //   Utils.launchUrlFor("https://api.whatsapp.com/send?phone=919315274243");
-          //       //
-          //       // }),
-          //
-          //
-          //     ],
-          //   ),
-          // ),
         ],
       ),
     );
@@ -80,7 +56,35 @@ class _FAQSectionState extends State<FAQSection> {
 
   // FAQ Item Widget
   Widget _buildFAQItem(int index, String question, String answer) {
-    return Card(
+    var height=MediaQuery.of(Get.context!).size.height ;
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+
+    var isMobile=width<800?true:false;
+    return
+      isMobile?      Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: ExpansionTile(
+          iconColor: ColorUtils.SECONDARY_BLACK,
+          textColor: ColorUtils.SECONDARY_BLACK,
+          key: Key("faq_$index"),  // Unique Key for each item
+          tilePadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          title: Text(question, style: TextStyleUtils.mobileheading5),
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              child: Text(answer, style: TextStyleUtils.phoneparagraphSmall),
+            ),
+          ],
+          onExpansionChanged: (isOpen) {
+            setState(() {
+              _selectedIndex = isOpen ? index : -1;
+            });
+          },
+        ),
+      ):
+    Card(
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ExpansionTile(

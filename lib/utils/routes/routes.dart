@@ -29,6 +29,7 @@ class RoutingNames {
   static String CONTACT_US_SCREEN="/contactUsScreen";
   static String PROGRAMS_ALL_SCREEN="/programAllScreen";
   static String STEP_COUNT_CHALLENGE="/stepCountChallenge";
+  static String INSPIRING_MENTORS_SCREEN="/inspiringMentorsScreen";
 
 
 

@@ -18,6 +18,8 @@ import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/bindings/h
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/views/health_hub_main_screen.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homepage_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views/homepage_screen.dart';
+import 'package:inspiringseniorswebapp/modules/inspiring_mentors_program/bindings/isnpiring_mentors_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/inspiring_mentors_program/views/inspiring_mentors_screen.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_tutors_screen/bindings/it_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_tutors_screen/views/it_screen.dart';
 import 'package:inspiringseniorswebapp/modules/join_us_screen/bindings/join_us_bindings.dart';
@@ -52,9 +54,8 @@ import 'utils/translations/translations_locale.dart';
 import 'utils/utility/utils.dart';
 
 class MyApp extends StatefulWidget {
-  final String initialRoute;
 
-  MyApp({required this.initialRoute});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -69,149 +70,150 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    GlobalKeyConsts.buildContextPayload = context;
 
-    return ScreenUtilInit(
-        // designSize: const Size(360, 690),
-        builder: (BuildContext context, child) =>
-            GetMaterialApp(
-                unknownRoute: GetPage(
-                    name: RoutingNames.SPLASH_SCREEN,
-                    page: () => SplashScreen(),
-                    binding: SplashScreenBinding()),
-                debugShowCheckedModeBanner: false,
-                builder: EasyLoading.init(),
-                theme: theme(),
-                navigatorKey: GlobalKeyConsts.navigatorKey,
-                onGenerateRoute: (settings) {
-                  if (kDebugMode) {
-                    print('asdkskandas--onGenerateRoute--${settings.name}');
-                  }
-                  return null;
-                },
-                routingCallback: (routing) {
-                  if (kDebugMode) {
-                    print('asdkskandas--routingCallback--${routing?.current}');
-                  }
-                },
-                initialBinding: InitialBinding(),
-                initialRoute: RoutingNames.SPLASH_SCREEN,
-                translationsKeys: AppTranslation.translationsKeys,
-                locale: Get.locale,
-                fallbackLocale: Locale('en'),
+    return GetMaterialApp(
+        unknownRoute: GetPage(
+            name: RoutingNames.SPLASH_SCREEN,
+            page: () => SplashScreen(),
+            binding: SplashScreenBinding()),
+        debugShowCheckedModeBanner: false,
+        builder: EasyLoading.init(),
+        theme: theme(),
+        navigatorKey: GlobalKeyConsts.navigatorKey,
+        onGenerateRoute: (settings) {
+          if (kDebugMode) {
+            print('asdkskandas--onGenerateRoute--${settings.name}');
+          }
+          return null;
+        },
+        routingCallback: (routing) {
+          if (kDebugMode) {
+            print('asdkskandas--routingCallback--${routing?.current}');
+          }
+        },
+        initialBinding: InitialBinding(),
+        initialRoute: RoutingNames.SPLASH_SCREEN,
+        translationsKeys: AppTranslation.translationsKeys,
+        locale: Get.locale,
+        fallbackLocale: Locale('en'),
 
-                getPages: [
-                  GetPage(
-                      name: RoutingNames.SPLASH_SCREEN,
-                      page: () => const SplashScreen(),
-                      binding: SplashScreenBinding()),
+        getPages: [
+          GetPage(
+              name: RoutingNames.SPLASH_SCREEN,
+              page: () => const SplashScreen(),
+              binding: SplashScreenBinding()),
 
-                  GetPage(
-                      name: RoutingNames.HOME_PAGE_SCREEN,
-                      page: () =>  HomepageScreen(),
-                      binding: HomepageBindings()),
+          GetPage(
+              name: RoutingNames.HOME_PAGE_SCREEN,
+              page: () =>  HomepageScreen(),
+              binding: HomepageBindings()),
 
-                  GetPage(
-                      name: RoutingNames.HEALTH_HUB_MAIN_SCREEN,
-                      page: () =>  HealthHubMainScreen(),
-                      binding: HealthHubBindings()),
+          GetPage(
+              name: RoutingNames.HEALTH_HUB_MAIN_SCREEN,
+              page: () =>  HealthHubMainScreen(),
+              binding: HealthHubBindings()),
 
 
-                  GetPage(
-                      name: RoutingNames.WELLNESS_CHAUPAL,
-                      page: () =>  WellnessChaupalScreen(),
-                      binding: WellnessChaupalBindings()),
+          GetPage(
+              name: RoutingNames.WELLNESS_CHAUPAL,
+              page: () =>  WellnessChaupalScreen(),
+              binding: WellnessChaupalBindings()),
 
 
 
-                  GetPage(
-                      name: RoutingNames.DAILY_DOSE_OF_HEALTH,
-                      page: () =>  DailyDoseOfHealthScreen(),
-                      binding: DDHBindings()),
+          GetPage(
+              name: RoutingNames.DAILY_DOSE_OF_HEALTH,
+              page: () =>  DailyDoseOfHealthScreen(),
+              binding: DDHBindings()),
 
 
-                  GetPage(
-                      name: RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN,
-                      page: () =>  ProductiveEngagementScreen(),
-                      binding: ProductiveEngagementBindings()),
+          GetPage(
+              name: RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN,
+              page: () =>  ProductiveEngagementScreen(),
+              binding: ProductiveEngagementBindings()),
 
-                  GetPage(
-                      name: RoutingNames.SOCIAL_CIRCLE_SCREEN,
-                      page: () =>  SocialCircleScreen(),
-                      binding: SocialCircleBindings()),
+          GetPage(
+              name: RoutingNames.SOCIAL_CIRCLE_SCREEN,
+              page: () =>  SocialCircleScreen(),
+              binding: SocialCircleBindings()),
 
 
 
 
-                  GetPage(
-                      name: RoutingNames.INSPIRING_TUTORS_SCREEN,
-                      page: () =>  InspiringTutorsScreen(),
-                      binding: InspiringTutorsBindings()),
+          GetPage(
+              name: RoutingNames.INSPIRING_TUTORS_SCREEN,
+              page: () =>  InspiringTutorsScreen(),
+              binding: InspiringTutorsBindings()),
 
-                  GetPage(
-                      name: RoutingNames.KNOWLEDGE_CAFE_SCREEN,
-                      page: () =>  KnowledgeCafeScreen(),
-                      binding: KCBindings()),
+          GetPage(
+              name: RoutingNames.KNOWLEDGE_CAFE_SCREEN,
+              page: () =>  KnowledgeCafeScreen(),
+              binding: KCBindings()),
 
-                  GetPage(
-                      name: RoutingNames.LETS_TALK_ENGLISH_SCREEN,
-                      page: () =>  LetsTalkEnglishScreen(),
-                      binding: LetsTalkBindings()),
+          GetPage(
+              name: RoutingNames.LETS_TALK_ENGLISH_SCREEN,
+              page: () =>  LetsTalkEnglishScreen(),
+              binding: LetsTalkBindings()),
 
-                  GetPage(
-                      name: RoutingNames.STORY_TELLINGS_SCREEN,
-                      page: () =>  StoryTellingScreen(),
-                      binding: StoryTellingBindings()),
+          GetPage(
+              name: RoutingNames.STORY_TELLINGS_SCREEN,
+              page: () =>  StoryTellingScreen(),
+              binding: StoryTellingBindings()),
 
-                  GetPage(
-                      name: RoutingNames.FUN_WITH_ART_SCREEN,
-                      page: () =>  FunWithArtScreen(),
-                      binding: FunWithArtBindings()),
+          GetPage(
+              name: RoutingNames.FUN_WITH_ART_SCREEN,
+              page: () =>  FunWithArtScreen(),
+              binding: FunWithArtBindings()),
 
-                  GetPage(
-                      name: RoutingNames.MELODY_MASTERS_SCREEN,
-                      page: () =>  MelodyMastersScreen(),
-                      binding: MelodyMastersBindings()),
+          GetPage(
+              name: RoutingNames.MELODY_MASTERS_SCREEN,
+              page: () =>  MelodyMastersScreen(),
+              binding: MelodyMastersBindings()),
 
-                  GetPage(
-                      name: RoutingNames.ABOUT_US_SCREEN,
-                      page: () =>  AboutUsScreen(),
-                      binding: AboutUsBindings()),
+          GetPage(
+              name: RoutingNames.ABOUT_US_SCREEN,
+              page: () =>  AboutUsScreen(),
+              binding: AboutUsBindings()),
 
-                  GetPage(
-                      name: RoutingNames.JOIN_US_SCREEN,
-                      page: () =>  JoinUsScreen(),
-                      binding: JoinUsBindings()),
+          GetPage(
+              name: RoutingNames.JOIN_US_SCREEN,
+              page: () =>  JoinUsScreen(),
+              binding: JoinUsBindings()),
 
-                  GetPage(
-                      name: RoutingNames.MEDIA_PAGE,
-                      page: () =>  MediaPageScreen(),
-                      binding: MediaPageBindings()),
+          GetPage(
+              name: RoutingNames.MEDIA_PAGE,
+              page: () =>  MediaPageScreen(),
+              binding: MediaPageBindings()),
 
-                  GetPage(
-                      name: RoutingNames.CONTACT_US_SCREEN,
-                      page: () =>  ContactUsScreen(),
-                      binding: ContactUsBindings()),
+          GetPage(
+              name: RoutingNames.CONTACT_US_SCREEN,
+              page: () =>  ContactUsScreen(),
+              binding: ContactUsBindings()),
 
-                  GetPage(
-                      name: RoutingNames.PROGRAMS_ALL_SCREEN,
-                      page: () =>  ProgramAllScreen(),
-                      binding: ProgramAllBindings()),
+          GetPage(
+              name: RoutingNames.PROGRAMS_ALL_SCREEN,
+              page: () =>  ProgramAllScreen(),
+              binding: ProgramAllBindings()),
 
-                  GetPage(
-                      name: RoutingNames.STEP_COUNT_CHALLENGE,
-                      page: () =>  StepCountChallengeScreen(),
-                      binding: StepCountBindings()),
-                  GetPage(
-                      name: RoutingNames.PDF_VIEWER_SCREEN,
-                      page: () =>  PdfViewerScreen(),
-                      ),
+          GetPage(
+              name: RoutingNames.STEP_COUNT_CHALLENGE,
+              page: () =>  StepCountChallengeScreen(),
+              binding: StepCountBindings()),
 
-                  GetPage(
-                    name: RoutingNames.GOOGLE_FORM_SCREEN,
-                    page: () =>  GoogleFormScreen(),
-                  ),
+          GetPage(
+              name: RoutingNames.INSPIRING_MENTORS_SCREEN,
+              page: () =>  InspiringMentorsScreen(),
+              binding: InspiringMentorsBindings()),
+          GetPage(
+              name: RoutingNames.PDF_VIEWER_SCREEN,
+              page: () =>  PdfViewerScreen(),
+              ),
 
-                ]));
+          GetPage(
+            name: RoutingNames.GOOGLE_FORM_SCREEN,
+            page: () =>  GoogleFormScreen(),
+          ),
+
+        ]);
   }
 }

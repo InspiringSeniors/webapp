@@ -28,6 +28,8 @@ class MediaPageScreen extends StatelessWidget {
     final ScrollController scrollController = ScrollController();
     final ScrollController newsscrollController = ScrollController();
 
+    var isMobile=width<800?true:false;
+
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
 
@@ -39,7 +41,112 @@ class MediaPageScreen extends StatelessWidget {
           children: [
             Navbar(),
 
-            Container(
+
+         isMobile?         Container(
+
+           child: Column(
+             mainAxisAlignment: MainAxisAlignment.start,
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+
+               Container(
+                   margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+
+                   child:Column(
+                     mainAxisAlignment: MainAxisAlignment.start,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Text("Events",style: TextStyleUtils.heading2,),
+                       SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                       Row(
+                         children: [
+                           // Left Scroll Button
+                           Expanded(
+                             child: SingleChildScrollView(
+                               scrollDirection: Axis.horizontal,
+                               controller: scrollController,
+                               child: Row(
+                                 children: mediaPageController.eventList.value
+                                     .map((event) => MediaEventCard(
+                                   isActive: event["isActive"] as RxBool,
+                                   heading: event["heading"] as String,
+                                   day: event["day"] as String,
+                                   location: event["location"] as String,
+                                   time: event["time"] as String,
+                                   image: event["image"] as String,
+                                 ))
+                                     .toList(),
+                               ),
+                             ),
+                           ),
+
+                         ],
+                       ),
+
+                     ],
+                   )
+               ),
+
+               Container(
+                   margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+
+                   child:Column(
+                     mainAxisAlignment: MainAxisAlignment.start,
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Text("Newsletters",style: TextStyleUtils.heading2,),
+                       SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                       Row(
+                         children: [
+                           // Left Scroll Button
+                           Expanded(
+                             child: SingleChildScrollView(
+                               scrollDirection: Axis.horizontal,
+                               controller: newsscrollController,
+                               child: Row(
+                                 children: mediaPageController.newsletterList.value
+                                     .map((event) => NewsLetterCard(
+
+                                   image: event["image"] as String,
+                                 ))
+                                     .toList(),
+                               ),
+                             ),
+                           ),
+
+                         ],
+                       ),
+
+                     ],
+                   )
+               ),
+
+
+               Container(
+                 margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                 child: Column(
+                   children: [
+                     Container(
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         mainAxisAlignment: MainAxisAlignment.center,
+                         children: [
+                           Container(child: Text("Gallery",style: TextStyleUtils.heading1,),),
+                           SizedBox(height: TextSizeDynamicUtils.dHeight32,),
+
+                           CustomCarousel(carouselList: mediaPageController.galleryList,currentPageNotifier:  _currentPageNotifier,autoplay: true,viewportsection:isMobile?1: 0.35,)
+                         ],
+                       ),
+                     ),
+
+                   ],
+                 ),
+               ),
+
+             ],
+           ),
+         ):
+         Container(
 
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -198,7 +305,7 @@ class MediaPageScreen extends StatelessWidget {
               ),
             ),
 
-            FooterSection(),
+            FooterSection1(),
           ],
         ),
       ),
@@ -206,9 +313,79 @@ class MediaPageScreen extends StatelessWidget {
   }
 
   Widget MediaEventCard({image,heading,location,day,time,isActive}){
+    var width=MediaQuery.of(Get.context!).size.width ;
+    var height=MediaQuery.of(Get.context!).size.height ;
 
-    return Obx(()=>
-       Stack(
+    var isMobile=width<800?true:false;
+
+    return
+       isMobile?       Stack(
+         children: [
+           Container(
+
+             clipBehavior: Clip.hardEdge,
+             decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular(20),
+                 color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                 border: Border.all(color: ColorUtils.BRAND_COLOR)
+             ),
+             margin: EdgeInsets.only(left: 0,bottom: TextSizeDynamicUtils.dHeight28,right: 8),
+             child: Container(
+               child: Column(
+                 children: [
+                   InkWell(
+                     onTap: (){
+                       showModalBottomSheet(
+                         context: Get.context!,
+                         isScrollControlled: true,
+                         backgroundColor: ColorUtils.GREY_DOTTED,
+                         builder: (context) => Container(
+                           height: MediaQuery.of(context).size.height * 0.8,
+                           child: Image.asset(image,fit: BoxFit.contain,),
+
+                         ),
+                       );
+                     },
+                     child: Container(
+                       child: Image.network(
+                         image,
+                         width: width*0.7,
+                         height: height*0.25,
+                         fit: BoxFit.cover,
+                       ),
+                     ),
+                   ),
+
+                   Container(
+                       padding: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                       width: width*0.7,
+
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                         children: [
+                           Text(heading,style: TextStyleUtils.mobileheading5,textAlign: TextAlign.start,),
+                           SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+
+                           Row(
+                             children: [
+                               Icon(Icons.location_pin,size: 16,color: ColorUtils.PURPLE_BRAND,),
+                               SizedBox(width: 16,),
+                               Text(location,style: TextStyleUtils.mobilesubHeading3,),
+                             ],
+                           ),
+
+                         ],
+                       )),
+
+                 ],
+               ),
+             ),
+           ),
+
+
+         ],
+       ):
+       Obx(()=>Stack(
          children: [
            Container(
 
@@ -339,9 +516,63 @@ class MediaPageScreen extends StatelessWidget {
     );
   }
   Widget NewsLetterCard({image,heading,location,day,time,isActive}){
+    var width=MediaQuery.of(Get.context!).size.width ;
+    var height=MediaQuery.of(Get.context!).size.height ;
 
+    var isMobile=width<800?true:false;
     return
-        InkWell(
+        isMobile?        InkWell(
+          onTap: (){
+
+
+
+
+            showModalBottomSheet(
+              useSafeArea: true,
+
+              context: Get.context!,
+              isScrollControlled: true,
+              backgroundColor: ColorUtils.GREY_DOTTED,
+              builder: (context) => Container(
+                height: MediaQuery.of(context).size.height * 0.8,
+                child: Image.asset(image,fit: BoxFit.contain,),
+              ),
+            );
+
+          },
+          child: Container(
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                border: Border.all(color: ColorUtils.BRAND_COLOR)
+            ),
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      child: Image.network(
+                        image,
+                        width: width*0.8,
+                        height: height*0.7,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+
+                  ],
+                ),
+
+
+
+
+              ],
+            ),
+
+          ),
+        ):
+    InkWell(
           onTap: (){
 
 

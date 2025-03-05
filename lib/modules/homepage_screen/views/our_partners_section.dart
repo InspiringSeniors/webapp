@@ -9,8 +9,11 @@ class PartnersSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var width = MediaQuery.of(Get.context!).size.width;
+    var isMobile = width < 800; // Check if it's a mobile screen
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 64, horizontal: 32),
+      padding: EdgeInsets.symmetric(vertical: isMobile?20:64, horizontal: isMobile?0:32),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.white, Colors.white, Colors.blue[50]!, Colors.white],
@@ -24,21 +27,21 @@ class PartnersSection extends StatelessWidget {
           // Section Header
           Text(
             "Our Partners",
-            style: TextStyleUtils.heading1
+            style:isMobile?TextStyleUtils.heading2: TextStyleUtils.heading1
           ),
-          SizedBox(height: 48),
+          SizedBox(height: TextSizeDynamicUtils.dHeight48),
 
           // Scrollable Row with Navigation Buttons
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // Left Scroll Button
               IconButton(
                 icon: Icon(Icons.arrow_back_ios),
                 color: ColorUtils.HEADER_GREEN,
-                iconSize: 45,
+                iconSize: isMobile?25:45,
                 onPressed: controller.scrollLeft,
               ),
-              SizedBox(width: 30,),
               Expanded(
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -54,11 +57,10 @@ class PartnersSection extends StatelessWidget {
                 ),
               ),
               // Right Scroll Button
-              SizedBox(width: 30,),
 
               IconButton(
                 color: ColorUtils.HEADER_GREEN,
-                iconSize: 45,
+                iconSize: isMobile?25:45,
                 icon: Icon(Icons.arrow_forward_ios),
                 onPressed: controller.scrollRight,
               ),
@@ -78,7 +80,22 @@ class PartnersCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    var width = MediaQuery.of(Get.context!).size.width;
+    var isMobile = width < 800;
+    return isMobile?    Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      margin: EdgeInsets.symmetric(horizontal: 10),
+      child: Image.network(
+        image,
+        width: MediaQuery.of(Get.context!).size.width*0.72,
+        height: MediaQuery.of(Get.context!).size.height*0.25,
+        fit: BoxFit.cover,
+      ),
+    ):
+    Container(
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),

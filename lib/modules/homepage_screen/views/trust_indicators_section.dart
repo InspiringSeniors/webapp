@@ -14,7 +14,7 @@ class AnimatedTrustIndicators extends StatelessWidget {
           {
             if(constraints.maxWidth>800) {
               return Container(
-                padding: EdgeInsets.symmetric(vertical: 32, horizontal: 32),
+                padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight32, horizontal: 32),
                 child:
                 Row(
                   mainAxisSize: MainAxisSize.max,
@@ -27,23 +27,6 @@ class AnimatedTrustIndicators extends StatelessWidget {
                   ],
                 ),
 
-                // GridView(
-                //
-                //   shrinkWrap: true,
-                //   physics: NeverScrollableScrollPhysics(),
-                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //     crossAxisCount: MediaQuery.of(context).size.width > 800 ? 4 : 2,
-                //     childAspectRatio: 1,
-                //     crossAxisSpacing: 32,
-                //     mainAxisSpacing: 32,
-                //   ),
-                //   children: [
-                //     TrustCard("1000+", "Active Members"),
-                //     TrustCard("50+", "Weekly Activities"),
-                //     TrustCard("95%", "Satisfaction Rate"),
-                //     TrustCard("20+", "Years Experience"),
-                //   ],
-                // ),
               );
             }else{
               return Container(
@@ -125,6 +108,7 @@ class _AnimatedTrustCardState extends State<AnimatedTrustCard> with SingleTicker
           SizedBox(height: 8),
           Text(
             widget.description,
+            textAlign: TextAlign.center,
             style: TextStyleUtils.heading5.copyWith(color: ColorUtils.BRAND_COLOR)
           ),
         ],
