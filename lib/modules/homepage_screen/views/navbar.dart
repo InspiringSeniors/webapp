@@ -1,14 +1,32 @@
 // Navbar Section
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
+import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
+import 'package:inspiringseniorswebapp/modules/blog_screen/controller/blog_controller.dart';
+import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_screen.dart';
+import 'package:inspiringseniorswebapp/modules/contact_us_screen/controllers/contact_us_controller.dart';
+import 'package:inspiringseniorswebapp/modules/contact_us_screen/views/contact_us_screen.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views/homepage_screen.dart';
+import 'package:inspiringseniorswebapp/modules/join_us_screen/controller/join_us_controller.dart';
+import 'package:inspiringseniorswebapp/modules/join_us_screen/views/join_us_screen.dart';
+import 'package:inspiringseniorswebapp/modules/media_page_screen/controller/media_page_controller.dart';
+import 'package:inspiringseniorswebapp/modules/media_page_screen/views/media_page_screen.dart';
+import 'package:inspiringseniorswebapp/modules/program_all_screen/controller/program_all_controller.dart';
+import 'package:inspiringseniorswebapp/modules/program_all_screen/views/program_all_screen.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:inspiringseniorswebapp/utils/utility/utils.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../common_widgets/custom_login_registration_form.dart';
+import '../../../common_widgets/custom_text_field.dart';
 
 import '../../../common_widgets/csutom_form.dart';
+import '../../../common_widgets/custom_text_field.dart';
 import '../../../utils/color_utils.dart';
+import '../../about_us_screen/controller/aboutus_controller.dart';
 import '../controllers/homepage_controller.dart';
 
 class Navbar extends StatelessWidget {
@@ -36,6 +54,9 @@ class WebNavBar extends StatelessWidget {
 
   var isHover =false.obs;
   var isHoverGetStarted=false.obs;
+
+  HomepageController homepageController=Get.find();
+  OtpController otpController=Get.find();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -45,12 +66,13 @@ class WebNavBar extends StatelessWidget {
           // color: Colors.white,
 
 
-              gradient: LinearGradient(colors: [
-                // Colors.white,
-                Colors.blue[50]!,
-                Colors.white
+        gradient:   LinearGradient(colors: [
+            // Colors.white,
+            ColorUtils.PURPLE_BRAND_LIGHT,
 
-              ],begin: Alignment.topCenter,end: Alignment.bottomCenter),
+            Colors.white
+
+          ],begin: Alignment.topCenter,end: Alignment.bottomCenter),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1), // Subtle shadow color
@@ -72,12 +94,15 @@ class WebNavBar extends StatelessWidget {
                     Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
                   },child: Container(child: Image.asset("assets/images/primary_logo.png",width: 100,fit: BoxFit.fitWidth,),))
               ,
+              NavItem("Home", () => navigateToSection( "home")),
+
               NavItem("About Us", () => navigateToSection( "aboutUs")),
               NavItem("Programs", () => navigateToSection( "programs")),
-              NavItem("Media", () => navigateToSection( "media")),
+              // NavItem("Media", () => navigateToSection( "media")),
               // NavItem("Resources", () => navigateToSection( "resources")),
               NavItem("Join Us", () => navigateToSection( "joinus")),
-              NavItem("Contact Us", () => navigateToSection( "contact")),
+              NavItem("Let's Connect", () => navigateToSection( "contact")),
+              NavItem("Resources", () => navigateToSection( "blog")),
 
               SizedBox(width: 16),
             ],
@@ -88,7 +113,7 @@ class WebNavBar extends StatelessWidget {
 
               CustomButton(
                 onpressed: () {
-                  launchUrlFor("https://rzp.io/l/u0o8yej");
+                  Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
 
                 },
 
@@ -97,8 +122,9 @@ class WebNavBar extends StatelessWidget {
 
 
               CustomButton(onpressed: (){
-                showFormDialog(context);
 
+                // FormClass().showOtpVerification();
+                FormClass().showFormDialog(context);
                 // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
               },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHover,text: "Login"),
 
@@ -110,82 +136,12 @@ class WebNavBar extends StatelessWidget {
       ),
     );
   }
-  void showFormDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          content: FormDialogContent(),
-        );
-      },
-    );
-  }
 
 
 
-  void launchUrlFor(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  void handlePaymentErrorResponse(PaymentFailureResponse response) {
-    // PaymentFailureResponse contains three values:
-    // 1. Error Code
-    // 2. Error Description
-    // 3. Metadata
-    showAlertDialog(
-      Get.context!,
-      'Payment Failed',
-      'Code: ${response.code}\n'
-          'Description: ${response.message}\n'
-          'Metadata: ${response.toString()}',
-    );
-  }
-
-  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
-    // PaymentSuccessResponse contains three values:
-    // 1. Order ID
-    // 2. Payment ID
-    // 3. Signature
-    showAlertDialog(
-      Get.context!,
-      'Payment Successful',
-      'Payment ID: ${response.paymentId}\n'
-          'Order ID: ${response.orderId}\n'
-          'Signature: ${response.signature}',
-    );
-  }
-
-  void handleExternalWalletSelected(ExternalWalletResponse response) {
-    showAlertDialog(
-      Get.context!,
-      'External Wallet Selected',
-      '${response.walletName}',
-    );
-  }
-
-  void showAlertDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            ElevatedButton(
-              onPressed: Navigator.of(context).pop,
-              child: const Text('Continue'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
+
+
 
 // Mobile Navigation Bar with Hamburger Menu
 class MobileNavBar extends StatefulWidget {
@@ -298,6 +254,11 @@ class _MobileNavBarState extends State<MobileNavBar> {
                 //   icon: Icon(Icons.close, size: 32, color: Colors.blue[700]),
                 //   onPressed: _removeOverlay,
                 // ),
+                _menuItem("Home", Icons.home,onpressed: (){
+                  _removeOverlay();
+
+                  Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+                }),
 
                 _menuItem("About Us", Icons.person_2,onpressed: (){
                   _removeOverlay();
@@ -309,21 +270,27 @@ class _MobileNavBarState extends State<MobileNavBar> {
 
                   Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
           }),
-                _menuItem("Media", Icons.event,onpressed: (){                  _removeOverlay();
-
-
-                Get.toNamed(RoutingNames.MEDIA_PAGE);
-                }),
+                // _menuItem("Media", Icons.event,onpressed: (){                  _removeOverlay();
+                //
+                //
+                // Get.toNamed(RoutingNames.MEDIA_PAGE);
+                // }),
 
                 _menuItem("Join Us", Icons.book,onpressed: (){
                   _removeOverlay();
 
                   Get.toNamed(RoutingNames.JOIN_US_SCREEN);
                 }),
-                _menuItem("Contact Us", Icons.contact_mail,onpressed: (){
+                _menuItem("Let's Connect", Icons.contact_mail,onpressed: (){
                   _removeOverlay();
 
                   Get.toNamed(RoutingNames.CONTACT_US_SCREEN);
+                }),
+
+                _menuItem("Resources", Icons.store_mall_directory,onpressed: (){
+                  _removeOverlay();
+
+                  Get.toNamed(RoutingNames.BLOG_SCREEN);
                 }),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: TextSizeDynamicUtils.dHeight18),
@@ -344,7 +311,11 @@ class _MobileNavBarState extends State<MobileNavBar> {
 
 
                       CustomButton(onpressed: (){
-                        // showFormDialog(context);
+
+                        // FormClass()._showThankYouDialog(context);
+
+                        FormClass().showFormDialog(context);
+                        _removeOverlay();
 
                         // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
                       },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 8,vpadding: 8,isHoverGetStarted: false.obs,text: "Login"),
@@ -384,33 +355,70 @@ void navigateToSection( String section) async{
   print("section is ${section}");
   // Example navigation logic (modify this to your app's routing system)
   switch (section) {
+
+    case "home":
+      Get.off(() => HomepageScreen(),
+          transition: Transition.fadeIn,
+
+          routeName:   RoutingNames.HOME_PAGE_SCREEN);
+      break;
     case "aboutUs":
-      Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
+// Ensure the controller is initialized before navigating
+      Get.put(AboutUsController()); // Manually initialize controller
+
+      Get.to(() => AboutUsScreen(),
+        transition: Transition.fadeIn,
+        routeName: RoutingNames.ABOUT_US_SCREEN,
+      );
+      // Get.toNamed(RoutingNames.ABOUT_US_SCREEN);
       break;
     case "programs":
 
+      Get.put(ProgramAllController()); // Manually initialize controller
 
-      Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
+      Get.to(() => ProgramAllScreen(),
+        transition: Transition.fadeIn,
+        routeName: RoutingNames.PROGRAMS_ALL_SCREEN,
+      );
+      // Get.toNamed(RoutingNames.PROGRAMS_ALL_SCREEN);
       print("current rout ${Get.currentRoute}");
-      //
-      // if(Get.currentRoute==RoutingNames.HOME_PAGE_SCREEN) {
-      //   scrollToSection();
-      // }else{
-      //   await Get.toNamed(
-      //     RoutingNames.HOME_PAGE_SCREEN,
-      //     arguments: {'scrollToSection': true},
-      //   );
-      //
-      // }
+
       break;
     case "media":
-      Get.toNamed( RoutingNames.MEDIA_PAGE);
+      Get.put(MediaPageController()); // Manually initialize controller
+
+      Get.to(() => MediaPageScreen(),
+        transition: Transition.fadeIn,
+        routeName: RoutingNames.MEDIA_PAGE,
+      );
+      // Get.toNamed( RoutingNames.MEDIA_PAGE);
       break;
     case "contact":
-      Get.toNamed( RoutingNames.CONTACT_US_SCREEN);
+      Get.put(ContactUsController()); // Manually initialize controller
+
+      Get.to(() => ContactUsScreen(),
+        transition: Transition.fadeIn,
+        routeName: RoutingNames.CONTACT_US_SCREEN,
+      );
+      // Get.toNamed( RoutingNames.CONTACT_US_SCREEN);
       break;
     case "joinus":
-      Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+      Get.put(JoinUsController()); // Manually initialize controller
+
+      Get.to(() => JoinUsScreen(),
+        transition: Transition.fadeIn,
+        routeName: RoutingNames.JOIN_US_SCREEN,
+      );
+      // Get.toNamed(RoutingNames.JOIN_US_SCREEN);
+      break;
+    case "blog":
+      Get.put(BlogController()); // Manually initialize controller
+
+      Get.to(() => BlogScreen(),
+        transition: Transition.fadeIn,
+        routeName: RoutingNames.BLOG_SCREEN,
+      );
+      // Get.toNamed(RoutingNames.BLOG_SCREEN);
       break;
 
     default:

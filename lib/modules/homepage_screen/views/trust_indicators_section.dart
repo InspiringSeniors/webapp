@@ -14,6 +14,8 @@ class AnimatedTrustIndicators extends StatelessWidget {
           {
             if(constraints.maxWidth>800) {
               return Container(
+                color: Colors.white,
+
                 padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight32, horizontal: 32),
                 child:
                 Row(

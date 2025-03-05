@@ -1,12 +1,17 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common_widgets/custom_google_form_page.dart';
+import '../../../common_widgets/custom_login_registration_form.dart';
+import '../../../common_widgets/custom_text_field.dart';
 import '../../../common_widgets/text_button.dart';
 import '../../../utils/color_utils.dart';
 import '../../../utils/utility/utils.dart';
@@ -16,6 +21,8 @@ class HeroSection extends StatelessWidget {
 
 
   HomepageController homepageController =Get.find();
+
+  OtpController otpController =Get.find();
   var isExploreProgram=false.obs;
   @override
   Widget build(BuildContext context) {
@@ -44,17 +51,20 @@ class HeroSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: width*0.7,
-                    alignment: Alignment.centerLeft,
-                    child: Text("Empowering Seniors to live their best lives",style: TextStyleUtils.heading4.copyWith(
-                        color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                        fontFamily: "Montserrat",
-                      fontWeight: FontWeight.w600
-                    ),),
-                  ),
+                  // Container(
+                  //   width: width*0.7,
+                  //   alignment: Alignment.centerLeft,
+                  //   child: Text("Empowering Seniors to live their best lives",style: TextStyleUtils.heading4.copyWith(
+                  //       color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                  //       fontFamily: "Montserrat",
+                  //     fontWeight: FontWeight.w600
+                  //   ),),
+                  // ),
                   SizedBox(height: TextSizeDynamicUtils.dHeight28,),
                   CustomButton(onpressed: (){
+
+                    FormClass().showRegisterFormDialog(context);
+
 
                     // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
                   },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 8,vpadding: 8,isHoverGetStarted: false.obs,text: "Register"),
@@ -90,14 +100,14 @@ class HeroSection extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        width: width*0.4,
-                        alignment: Alignment.centerLeft,
-                        child: Text("Empowering Seniors to live their best lives",style: TextStyleUtils.heading2.copyWith(
-                          color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                          fontFamily: "Montserrat"
-                        ),),
-                      ),
+                      // Container(
+                      //   width: width*0.4,
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Text("Empowering Seniors to live their best lives",style: TextStyleUtils.heading2.copyWith(
+                      //     color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                      //     fontFamily: "Montserrat"
+                      //   ),),
+                      // ),
                       // SizedBox(height: 30,),
                       // CustomButton(onpressed: (){
                       //
@@ -300,7 +310,7 @@ class HeroSection extends StatelessWidget {
           SizedBox(height: 0,),
           CustomButton(onpressed: (){
 
-            Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+            FormClass().showRegisterFormDialog(Get.context!);
           },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Register"),
 
         ],
@@ -457,4 +467,7 @@ class HeroSection extends StatelessWidget {
 
 
   }
+
+
+
 

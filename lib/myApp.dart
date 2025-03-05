@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/bindings/aboutus_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
+import 'package:inspiringseniorswebapp/modules/blog_screen/bindings/blog_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_screen.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/bindings/contact_us_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/controllers/contact_us_controller.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/views/contact_us_screen.dart';
@@ -204,6 +206,12 @@ class _MyAppState extends State<MyApp> {
               name: RoutingNames.INSPIRING_MENTORS_SCREEN,
               page: () =>  InspiringMentorsScreen(),
               binding: InspiringMentorsBindings()),
+
+
+          GetPage(
+              name: RoutingNames.BLOG_SCREEN,
+              page: () =>  BlogScreen(),
+              binding: BlogBindings()),
           GetPage(
               name: RoutingNames.PDF_VIEWER_SCREEN,
               page: () =>  PdfViewerScreen(),

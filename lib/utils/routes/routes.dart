@@ -31,6 +31,7 @@ class RoutingNames {
   static String STEP_COUNT_CHALLENGE="/stepCountChallenge";
   static String INSPIRING_MENTORS_SCREEN="/inspiringMentorsScreen";
 
+  static String BLOG_SCREEN="/blogScreen";
 
 
 

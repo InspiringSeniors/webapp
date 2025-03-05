@@ -10,7 +10,7 @@ class CustomTextFieldV2 extends StatelessWidget {
   String? label;
   TextEditingController? controller;
   Rx<Color>? inactiveColor;
-  final String? Function(String?) validator;
+  var validator;
   var keyBoardtype;
   bool readOnly;
   bool obscureText;
@@ -20,9 +20,9 @@ class CustomTextFieldV2 extends StatelessWidget {
   var onTap;
   bool? formatInput;
 
-  CustomTextFieldV2(this.stateHandler, this.labela, this.label, this.controller,
-      this.inactiveColor, this.validator,
-      {Key? key,
+  CustomTextFieldV2({required this.stateHandler, required this.labela, this.label, this.controller,
+      this.inactiveColor,  this.validator,
+      Key? key,
         this.keyBoardtype = TextInputType.text,
         this.readOnly = false,
         this.obscureText = false,
@@ -35,6 +35,10 @@ class CustomTextFieldV2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
     return Obx(() {
       if (stateHandler.value == true) {
         if (label == 'PINCODE'.tr) {
@@ -50,10 +54,8 @@ class CustomTextFieldV2 extends StatelessWidget {
             cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
             decoration: InputDecoration(
                 hoverColor: Color(0xFFF6F4F4),
-                labelStyle: TextStyle(
-                    color: labela.value == false
-                        ? ColorUtils.ERROR_RED
-                        : ColorUtils.GREY_COLOR_PLACEHOLDER),
+                labelStyle: TextStyleUtils.smallGreyTextStyle,
+
                 focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
                 alignLabelWithHint: true,
                 filled: true,
@@ -114,7 +116,7 @@ class CustomTextFieldV2 extends StatelessWidget {
             validator: validator);
       } else {
         return TextFormField(
-          style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
+          style: TextStyle(color: ColorUtils.BRAND_COLOR),
           onTap: () {
             onTap == null ? () {} : onTap();
           },
@@ -123,10 +125,8 @@ class CustomTextFieldV2 extends StatelessWidget {
           cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
           decoration: InputDecoration(
               hoverColor: Color(0xFFF6F4F4),
-              labelStyle: TextStyle(
-                  color: labela.value == false
-                      ? ColorUtils.ERROR_RED
-                      : ColorUtils.GREY_COLOR_PLACEHOLDER),
+              labelStyle: TextStyleUtils.smallGreyTextStyle,
+
               focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
               alignLabelWithHint: true,
               filled: true,
@@ -152,6 +152,7 @@ class CustomTextFieldV2 extends StatelessWidget {
               ),
               isDense: false,
               labelText: label,
+
               floatingLabelStyle: TextStyle(
                   color: labela.value == false
                       ? ColorUtils.ERROR_RED

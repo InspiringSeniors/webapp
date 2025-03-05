@@ -50,11 +50,20 @@ class Validators {
   }
 
   static bool validateName(String value) {
+
     if (value == null) return false;
-    return value.isNotEmpty ? true : false;
-    // Pattern namePattern = r"^[a-zA-Z_]+( [a-zA-Z_]+)*$";
-    // final regexName = RegExp(namePattern.toString());
-    // return regexName.hasMatch(value) ? true : false;
+    Pattern emailPattern =r'[A-Za-z]+$';
+    final regexEmail = RegExp(emailPattern.toString());
+    return regexEmail.hasMatch(value) ? true : false;
+  }
+
+
+  static bool validateLastName(String value) {
+    if (value == null||value=="") return true;
+
+    Pattern emailPattern =r'[A-Za-z]+$';
+    final regexEmail = RegExp(emailPattern.toString());
+    return regexEmail.hasMatch(value) ? true : false;
   }
 
   static bool validateComments(String value) {

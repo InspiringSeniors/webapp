@@ -22,7 +22,10 @@ class TestimonialSection extends StatelessWidget {
   Widget build(BuildContext context) {
     var isMobile=MediaQuery.of(Get.context!).size.width<800?true:false;
 
-    return Container(margin: EdgeInsets.symmetric(vertical:isMobile?0: 30,horizontal:isMobile?20: 40),
+    return Container(
+      color: Colors.white,
+
+      padding: EdgeInsets.symmetric(vertical:isMobile?0: 30,horizontal:isMobile?20: 40),
       width: MediaQuery.of(context).size.width,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 30.0),
@@ -179,7 +182,7 @@ class TestimonialSection extends StatelessWidget {
                   5,
                       (index) => Icon(
                     Icons.star,
-                    color: ColorUtils.BRAND_COLOR_LIGHT_2,
+                    color: ColorUtils.YELLOW_BRAND,
                     size: 20,
                   ),
                 ),

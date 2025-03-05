@@ -14,7 +14,8 @@ void main() async {
     options: FirebaseOptions(
 
 
-        apiKey: "AIzaSyAyTnVnovPifgT11FE3oC2GeeYT2bd4Dng",
+
+      apiKey: "AIzaSyAyTnVnovPifgT11FE3oC2GeeYT2bd4Dng",
         projectId: "inspiringseniorswebapp",
         messagingSenderId: "457143288541",
         appId: "1:457143288541:web:f3979818d0688a59bcd134",

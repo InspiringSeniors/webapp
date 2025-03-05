@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/media_page_screen/controller/media_page_controller.dart';
 
 class ProgramAllController extends GetxController{
 
@@ -8,6 +9,8 @@ class ProgramAllController extends GetxController{
   var faqList=[].obs;
   @override
   void onInit() {
+
+    Get.put(MediaPageController());
     // TODO: implement onInit
     super.onInit();
 

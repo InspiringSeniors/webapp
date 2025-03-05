@@ -41,7 +41,7 @@ class _FormDialogContentState extends State<FormDialogContent> {
         return Container(
           child: AlertDialog(
 
-
+            icon: Icon(Icons.close,color: ColorUtils.BRAND_COLOR,size: TextSizeDynamicUtils.dHeight28,),
             contentPadding: EdgeInsets.symmetric(horizontal: 30,vertical: 60),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             title: Column(
@@ -90,27 +90,49 @@ class _FormDialogContentState extends State<FormDialogContent> {
     return SingleChildScrollView(
       child: Container(
         width: MediaQuery.of(context).size.width * 0.4,
-        padding: EdgeInsets.symmetric(horizontal: 60,vertical: 40),
+        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 0),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
 
-              Text("Registration Form",style: TextStyleUtils.heading2,textAlign: TextAlign.center,),
-              SizedBox(height: 20,),
-              _buildTextField(nameController, "Full Name", Icons.person),
-              _buildTextField(emailController, "Email", Icons.email, keyboardType: TextInputType.emailAddress),
-              _buildTextField(phoneController, "Phone Number", Icons.phone, keyboardType: TextInputType.phone),
-              _buildTextField(descController, "Description", Icons.description, maxLines: 3),
 
-              SizedBox(height: 20),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: (){
+                      Get.back();
+                    },
+                      child: Icon(Icons.close,color: ColorUtils.BRAND_COLOR,size: TextSizeDynamicUtils.dHeight32,))
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 30,vertical: TextSizeDynamicUtils.dHeight28),
 
-              // Submit Button
-              CustomButton(onpressed:
-                _submitForm
-                // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-              ,shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit"),
+                child: Column(
+                  children: [
+                    Text("Registration Form",style: TextStyleUtils.heading2,textAlign: TextAlign.center,),
+                    SizedBox(height: 20,),
+                    _buildTextField(nameController, "Full Name", Icons.person),
+                    _buildTextField(emailController, "Email", Icons.email, keyboardType: TextInputType.emailAddress),
+                    _buildTextField(phoneController, "Phone Number", Icons.phone, keyboardType: TextInputType.phone),
+                    _buildTextField(descController, "Description", Icons.description, maxLines: 3),
+
+                    SizedBox(height: 20),
+
+                    // Submit Button
+                    CustomButton(onpressed:
+                    _submitForm
+                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                        ,shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit"),
+
+
+                  ],
+                ),
+              ),
 
 
             ],
@@ -180,6 +202,7 @@ class _FormDialogContentState extends State<FormDialogContent> {
 void showMoreDetailsForm(BuildContext context) {
   showDialog(
     context: context,
+    barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

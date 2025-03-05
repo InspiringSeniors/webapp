@@ -146,14 +146,16 @@ class ContactUsScreen extends StatelessWidget {
 
 
                                                   CustomTextFieldV2(
+                                                    stateHandler:
 
                                                     contactUsController.nameStateHandler,
+                                                    labela:
                                                     contactUsController.labeluserName,
-                                                    'Your Name'.tr,
-                                                    contactUsController
+                                                    label:'Your Name'.tr,
+                                                    controller:contactUsController
                                                         .userNameController,
-                                                    contactUsController.inactiveColor,
-                                                    contactUsController.validatename,
+                                                    inactiveColor:contactUsController.inactiveColor,
+                                                    validator:contactUsController.validatename,
                                                     icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
 
 
@@ -178,14 +180,14 @@ class ContactUsScreen extends StatelessWidget {
                                                     TextSizeDynamicUtils.dHeight16,
                                                   ),
                                                   CustomTextFieldV2(
-                                                      contactUsController.emailStateHandler,
-                                                      contactUsController.emailLabelName,
-                                                      'Your Email'.tr,
+                                                     stateHandler:  contactUsController.emailStateHandler,
+                                                      labela:contactUsController.emailLabelName,
+                                                      label:'Phone Number'.tr,
                                                       icon: Icon(Icons.email,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
-                                                      contactUsController
+                                                      controller:contactUsController
                                                           .emailController,
-                                                      contactUsController.inactiveColor,
-                                                      contactUsController.validateEmail),
+                                                     inactiveColor: contactUsController.inactiveColor,
+                                                      validator:contactUsController.validateEmail),
 
                                                   SizedBox(
                                                     height:
@@ -562,14 +564,16 @@ class ContactUsScreen extends StatelessWidget {
 
 
                                                  CustomTextFieldV2(
+                                                   stateHandler:
 
-                                                     contactUsController.nameStateHandler,
-                                                     contactUsController.labeluserName,
-                                                     'Your Name'.tr,
-                                                     contactUsController
-                                                         .userNameController,
-                                                     contactUsController.inactiveColor,
-                                                     contactUsController.validatename,
+                                                   contactUsController.nameStateHandler,
+                                                   labela:
+                                                   contactUsController.labeluserName,
+                                                   label:'Your Name'.tr,
+                                                   controller:contactUsController
+                                                       .userNameController,
+                                                   inactiveColor:contactUsController.inactiveColor,
+                                                   validator:contactUsController.validatename,
                                                    icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
 
 
@@ -594,14 +598,14 @@ class ContactUsScreen extends StatelessWidget {
                                                    TextSizeDynamicUtils.dHeight16,
                                                  ),
                                                  CustomTextFieldV2(
-                                                     contactUsController.emailStateHandler,
-                                                     contactUsController.emailLabelName,
-                                                     'Your Email'.tr,
+                                                     stateHandler:  contactUsController.emailStateHandler,
+                                                     labela:contactUsController.emailLabelName,
+                                                     label:'Your Email'.tr,
                                                      icon: Icon(Icons.email,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
-                                                     contactUsController
+                                                     controller:contactUsController
                                                          .emailController,
-                                                     contactUsController.inactiveColor,
-                                                     contactUsController.validateEmail),
+                                                     inactiveColor: contactUsController.inactiveColor,
+                                                     validator:contactUsController.validateEmail),
 
                                                  SizedBox(
                                                    height:
@@ -877,135 +881,3 @@ class ContactUsScreen extends StatelessWidget {
 
 }
 
-
-class WebNavBar2 extends StatelessWidget {
-
-  var isHover =false.obs;
-  var isHoverGetStarted=false.obs;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-
-      decoration: BoxDecoration(
-        // color: Colors.white,
-
-
-          gradient: LinearGradient(colors: [
-            // Colors.white,
-            Colors.blue[50]!,
-            Colors.white
-
-          ],begin: Alignment.topCenter,end: Alignment.bottomCenter),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1), // Subtle shadow color
-              blurRadius: 2, // Softens the shadow
-              offset: Offset(0, 1), // Positions the shadow below the navbar
-              spreadRadius: 1, // Slight expansion
-            ),
-
-
-          ]
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              GestureDetector(
-                  onTap: (){
-                    Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
-                  },child: Container(child: Image.asset("assets/images/primary_logo.png",width: 100,fit: BoxFit.fitWidth,),))
-              ,
-              NavItem2("About Us", () => navigateToSection( "aboutUs")),
-              NavItem2("Programs", () => navigateToSection( "programs")),
-              NavItem2("Media", () => navigateToSection( "media")),
-              // NavItem("Resources", () => navigateToSection( "resources")),
-              NavItem2("Join Us", () => navigateToSection( "joinus")),
-              NavItem2("Contact Us", () => navigateToSection( "contact")),
-
-              SizedBox(width: 16),
-            ],
-          ),
-          Row(
-            children: [
-
-
-              CustomButton(
-                  onpressed: () {
-                    launchUrlFor("https://rzp.io/l/u0o8yej");
-
-                  },
-
-                  shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHoverGetStarted,text: "Donate",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
-              SizedBox(width: 16),
-
-
-              CustomButton(onpressed: (){
-                // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-              },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: isHover,text: "Login"),
-
-
-
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  void launchUrlFor(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-
-  void showAlertDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            ElevatedButton(
-              onPressed: Navigator.of(context).pop,
-              child: const Text('Continue'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-class NavItem2 extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  HomepageController homepageController =Get.find();
-  NavItem2(this.label, this.onTap);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: GestureDetector(
-        onTap: onTap,
-        child: MouseRegion(
-          cursor: SystemMouseCursors.click,
-          child: Text(
-              label,
-              style: TextStyleUtils.heading5.copyWith(
-                  color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                  fontWeight: FontWeight.w800
-              )
-          ),
-        ),
-      ),
-    );
-  }
-}

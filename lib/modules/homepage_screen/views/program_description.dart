@@ -12,7 +12,9 @@ MainProgramsHomePage() {
 
   return Container(
     width: width,
-    margin: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight48, horizontal: 45),
+    color: Colors.white,
+
+    padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight48, horizontal: 45),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

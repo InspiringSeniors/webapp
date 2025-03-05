@@ -1,11 +1,23 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
+import 'package:otp_autofill/otp_autofill.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:whatsapp/whatsapp.dart';
 
 import '../../../common_widgets/custom_carousel.dart';
+import '../../../common_widgets/custom_login_registration_form.dart';
 import '../../../common_widgets/custom_testimonials_section.dart';
+import '../../../utils/utility/utils.dart';
+import '../views/navbar.dart';
+import 'package:http/http.dart' as http;
+
 
 class HomepageController extends GetxController {
 
@@ -15,13 +27,18 @@ class HomepageController extends GetxController {
 
 
   var currentIndex = 0.obs;
-  var hovering = false.obs;  var isVisible = false.obs;
+  var hovering = false.obs;
+  var isVisible = true.obs;
 
   var isDropdownClicked=false.obs;
   var isInnerDropDownClicked=false.obs;
 
   var animatedValues = <String, Animation<int>>{}.obs;
   late AnimationController _controller;
+
+  
+  WhatsApp whatsApp=WhatsApp('EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD', '614697528393435');
+
 
   final List<Testimonial> testimonials = [
     Testimonial(
@@ -128,6 +145,8 @@ class HomepageController extends GetxController {
   ];
   @override
   void onInit() {
+
+    Get.put(OtpController(),permanent: true);
     super.onInit();
     startSwitcher();
     // sectionKey=GlobalKey();
@@ -178,5 +197,567 @@ class HomepageController extends GetxController {
   void onClose() {
     scrollController.dispose();
     super.onClose();
+  }
+
+
+
+
+  void sendWhatsAppMessage(String phoneNumber, String message) async {
+    final String accessToken = "EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD"; // Get from Meta Developer Account
+    final String phoneId = "614697528393435"; // Get from Meta Developer Account
+    final String apiUrl = "https://graph.facebook.com/v22.0/$phoneId/messages";
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $accessToken",
+      },
+      body: jsonEncode({
+        "messaging_product": "whatsapp",
+        "to": phoneNumber,
+        "type": "text",
+        "text": {"body": message},
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Message sent successfully!");
+    } else {
+      print("Failed to send message: ${response.body}");
+    }
+  }
+
+
+  void sendWhatsAppMessage1() async {
+    final String accessToken = "EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD"; // Get from Meta Developer Account
+    final String phoneId = "614697528393435"; // WhatsApp Business Phone Number ID
+    final String apiUrl = "https://graph.facebook.com/v22.0/614697528393435/messages";
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        "Authorization": "Bearer $accessToken",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "messaging_product": "whatsapp",
+        "to": "919650373038", // Replace with recipient's phone number
+        "type": "template",
+        "template": {
+          "name": "hello_world",
+          "language": {"code": "en_US"}
+        }
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Message sent successfully!");
+    } else {
+      print("Failed to send message: ${response.body}");
+    }
+  }
+
+  void sendRegistrationGreeting(String recipientPhone) async {
+    final String accessToken = "EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD"; // Get from Meta Developer Account
+    final String phoneId = "614697528393435"; // WhatsApp Business Phone Number ID
+    final String apiUrl = "https://graph.facebook.com/v22.0/$phoneId/messages";
+
+    // Define the template name (Replace with your actual template name)
+    final String templateName = "registration_greeting";
+
+    // Define language code
+    final String languageCode = "en_US";
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        "Authorization": "Bearer $accessToken",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode({
+        "messaging_product": "whatsapp",
+        "to": recipientPhone,
+        "type": "template",
+        "template": {
+          "name": templateName,
+          "language": {"code": languageCode},
+          "components": [
+            {
+              "type": "body",
+              "parameters": [
+                {"type": "text", "text": "John Doe"},  // Replace with dynamic user name
+                {"type": "text", "text": "Inspiring Seniors Foundation"} // Organization name
+              ]
+            }
+          ]
+        }
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Registration greeting sent successfully!");
+    } else {
+      print("Failed to send message: ${response.body}");
+    }
+  }
+
+
+
+}
+
+
+
+
+class OtpController extends GetxController {
+  Rx<int>? currentTime = 45.obs;
+
+  var isResendVisible = false.obs;
+  late OTPTextEditController controller;
+  var OTPColor = false.obs;
+  String? mobileNumber;
+  var isOTPValid = false.obs;
+  var finalOTP = '';
+
+  var isOtpVerified=false.obs;
+
+  var isVerifying = false.obs;
+
+  Rx<Color> inactiveColor = ColorUtils.BRAND_COLOR.obs;
+
+
+
+  // forms
+  TextEditingController? phoneNumberController=TextEditingController();
+  RxBool nameStateHandler = false.obs;
+  TextEditingController? userNameController = TextEditingController();
+  var labeluserName = true.obs;
+
+  RxBool lastNameStateHandler = false.obs;
+  TextEditingController? lastNameController = TextEditingController();
+  var labellastName = true.obs;
+  Rx<bool> isPhoneEnabled = true.obs;
+
+  var labelphoneNumber=false.obs;
+  TextEditingController? messageController = TextEditingController();
+  var formLoading=false.obs;
+
+
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  var verificationId = "".obs;
+
+
+
+  GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> loginformKey = GlobalKey<FormState>();
+
+  // checkboxes
+  var activeHealthy = <Map<String, dynamic>>[
+    {"initiative": "Daily Dose Of Health", "value": false.obs},
+    {"initiative": "Wellness Chaupal", "value": false.obs},
+    {"initiative": "Step Count Challenge", "value": false.obs},
+  ].obs;
+  var volunteerCommunity=<Map<String, dynamic>>[
+
+    {
+      "initiative":"Tutor",
+      "value":false.obs
+    },
+    {
+      "initiative":"Mentor",
+      "value":false.obs
+    },{
+      "initiative":"Lets Talk English",
+      "value":false.obs
+    },
+  ].obs;
+  var socialCircle=<Map<String, dynamic>>[
+
+    {
+      "initiative":"Melody Masters",
+      "value":false.obs
+    },
+    {
+      "initiative":"Story Telling",
+      "value":false.obs
+    },{
+      "initiative":"Fun Therapy with Art",
+      "value":false.obs
+    },
+  ]
+      .obs;
+
+  var otpVerificationCounter=0.obs;
+  var otpResendCounter=0.obs;
+
+  var isCheckNewUser=false.obs;
+
+  ConfirmationResult? confirmationResult;
+  @override
+  void onInit() {
+    // TODO: implement onInit
+
+      // _otpListener();
+      controller = OTPTextEditController(
+        codeLength: 6,
+        onCodeReceive: (code) => print('Your Application receive code - $code'),
+      );
+
+
+    super.onInit();
+  }
+
+  //resend code
+  resendOTP() {
+
+    print("clicking to resend");
+    otpResendCounter.value+=1;
+
+    if(otpResendCounter.value<=1) {
+      HomepageController homepageController = Get.find();
+      isResendVisible.value = false;
+      startTime();
+      controller.clear();
+      controller.text = "";
+      proceedToSendOtp(phoneNumberController!.text!);
+    }
+  }
+
+  //timer for 30 seconds
+  startTime() async {
+    print('Timer Started');
+    Timer? timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (currentTime!.value != 0) {
+        currentTime!.value = currentTime!.value - 1;
+      } else {
+        currentTime!.value = 45;
+        timer.cancel();
+      }
+    });
+    var _duration = const Duration(seconds: 45);
+    return new Timer(_duration, () {
+      print('Timer Ended');
+      isResendVisible.value = true;
+    });
+  }
+
+  onOTPCompletion(String otp,String type) {
+    isOTPValid.value = true;
+    finalOTP = otp;
+    if(type=="Login"){
+      verifyOTPforLogin();
+    }else{
+      verifyOTP();
+
+    }
+    return false;
+  }
+
+  onChangeEvent(String otp) {
+    finalOTP = '';
+  }
+
+  verifyOTP() async {
+    HomepageController homepageController = Get.find();
+
+    isVerifying.value = true;
+    var isUser = await verifyOtp(finalOTP);
+    print("user data ${isUser}");
+   await isUser == true ? OTPColor.value = false : OTPColor.value = true;
+    await isUser == true? isOtpVerified.value=true:isOtpVerified.value=false;
+    print("valling till ere");
+    print("object${isOtpVerified.value}");
+    isOtpVerified.value?
+      FormClass().showThankYouDialog(Get.context!)
+
+    :false;
+
+
+    isOtpVerified.value?
+    continueForSignup()
+        :false;
+
+
+    isVerifying.value = false;
+  }
+
+  verifyOTPforLogin() async {
+    HomepageController homepageController = Get.find();
+
+
+
+    isVerifying.value = true;
+    var isUser = await verifyOtp(finalOTP);
+    print("user data ${isUser}");
+    await isUser == true ? OTPColor.value = false : OTPColor.value = true;
+    await isUser == true? isOtpVerified.value=true:isOtpVerified.value=false;
+    print("valling till ere");
+    print("object${isOtpVerified.value}");
+
+    if(isOtpVerified.value==true&&isCheckNewUser.value==true){
+
+      FormClass().showRegisterFirst(Get.context!) ;
+
+
+    }else if(isOtpVerified.value==true){
+      FormClass().showThankYouDialog(Get.context!) ;
+    }
+
+
+
+    isVerifying.value = false;
+  }
+
+  //for automatic listening to otp
+  _otpListener() {
+    OTPInteractor()
+        .getAppSignature()
+        .then((value) => print('signature - $value'));
+    controller = OTPTextEditController(
+      codeLength: 6,
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+    )..startListenUserConsent(
+          (code) {
+        final exp = RegExp(r'(\d{6})');
+        return exp.stringMatch(code ?? '') ?? '';
+      },
+    );
+  }
+
+
+  submitForm() async{
+    bool isValid = registerFormKey.currentState!.validate();
+
+    formLoading.value=true;
+    if(isValid) {
+
+
+      String tempName = userNameController!.text;
+      String email = lastNameController!.text;
+      String userPhoneNumber = phoneNumberController!.text;
+      String message=messageController!.text==null||messageController!.text==""?"":messageController!.text;
+
+
+      print("name ${tempName} , email ${email} , number ${userPhoneNumber} , message ${message}");
+      String queryString = "?name=$tempName&email=$email&userPhoneNumber=$userPhoneNumber&message=$message";
+
+
+
+      proceedToSendOtp(phoneNumberController!.text);
+
+      // await continueForSignup();
+
+
+
+
+
+
+      formLoading.value=false;
+    }
+
+  }
+  submitFormforLogin() async{
+    bool isValid = loginformKey.currentState!.validate();
+
+    formLoading.value=true;
+    if(isValid) {
+      String userPhoneNumber = phoneNumberController!.text;
+      proceedToSendOtp(phoneNumberController!.text);
+
+      formLoading.value=false;
+    }
+
+  }
+
+  Future<void> proceedToSendOtp(String phoneNumber) async {
+    OtpController otpController=Get.find();
+    otpController.startTime();
+
+    print("sending otp");
+    if (phoneNumberController!.text != '9087654321') {}
+    FirebaseAuth auth = FirebaseAuth.instance;
+
+    confirmationResult = await auth.signInWithPhoneNumber("+91${phoneNumber}",);
+
+    print("erroor otp");
+
+  }
+
+
+
+  Future<bool> verifyOtp(String smsCode) async {
+    print("messag called for verify otp");
+
+
+    otpVerificationCounter.value+=1;
+    try {
+
+
+      if(otpVerificationCounter.value<=3) {
+        UserCredential userCredential = await confirmationResult!.confirm(
+            smsCode);
+
+        // Check if the user is new or existing
+        bool isNewUser = userCredential.additionalUserInfo?.isNewUser ?? false;
+
+        await checkForUserRegistration();
+        return userCredential.user != null ? true : false;
+      }
+      else
+      {
+        print("checking that it reached jere");
+        isResendVisible.value=false;
+        return false;
+      }
+    } catch (e) {
+      Get.snackbar("Something went wrong", e.toString());
+      return false;
+    }
+  }
+
+  checkForUserRegistration() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setBool("IsUserLoggedIn", true);
+
+    print("current user ${user}");
+    if (user != null) {
+      // Reference to your Firestore database
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (userDoc.exists) {
+        print("user already exists for firestore ");
+
+        isCheckNewUser.value=false;
+        // Get.toNamed(RoutingNames.HOME_PAGE_SCREEN);
+        // User already exists, redirect to Home Screen
+      } else {
+        isCheckNewUser.value=true;
+
+        // Get.toNamed(RoutingNames.SIGNUP_SCREEN);
+        print("user does not exists");
+
+        // User is new, redirect to Sign-Up Screen
+      }
+    }
+  }
+
+  continueForSignup() async {
+
+
+    var phone=phoneNumberController!.text;
+    var lastname =lastNameController!.text;
+    var firstName= userNameController!.text;
+    var message =messageController!.text;
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+    var userId= user!.uid;
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+
+    sharedPreferences.setString("userId", userId);
+
+    try {
+
+
+      await users.doc(userId).set({
+        'phoneNumber': phone,
+        'firstName': firstName,
+        'lastName': lastname,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      lastNameController!.text="";
+      userNameController!.text="";
+      messageController!.text="";
+
+
+      print("user created successfully");
+      print(users);
+    } catch (e) {
+      ScaffoldMessenger.of(Get.context!)
+          .showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+    }
+  }
+
+
+  submitPreferences() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user = auth.currentUser;
+
+    var userId=user!.uid;
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    List<String> getSelectedInitiatives(RxList<Map<String, dynamic>> list) {
+      return list.where((item) => item["value"].value == true).map((item) => item["initiative"] as String).toList();
+    }
+
+    // Get all selected initiatives
+    List<String> selectedActiveHealthy = getSelectedInitiatives(activeHealthy);
+    List<String> selectedVolunteerCommunity = getSelectedInitiatives(volunteerCommunity);
+    List<String> selectedSocialCircle = getSelectedInitiatives(socialCircle);
+
+    try {
+      await users.doc(userId).update({
+        'selectedActiveHealthy': selectedActiveHealthy,
+        'selectedVolunteerCommunity': selectedVolunteerCommunity,
+        'selectedSocialCircle': selectedSocialCircle,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      print("Preferences updated successfully!");
+
+      // Show success message
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        SnackBar(content: Text("Preferences saved successfully!")),
+      );
+      phoneNumberController!.text=""; // Get user phone number
+
+    } catch (e) {
+
+      print("e ");
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        SnackBar(content: Text("Error: ${e.toString()}")),
+      );
+    }
+  }
+
+
+
+
+  String? validatename(String? text) {
+    if(text==""){
+      return 'Please enter name'.tr;
+
+    }else if (Validators.validateName(userNameController!.text) == false) {
+      return 'Spaces and symbols are not allowed'.tr;
+    } else {
+      return null;
+    }
+  }
+  String? validateLastName(String? text) {
+    if (Validators.validateLastName(lastNameController!.text) == false) {
+      return 'Please enter name'.tr;
+    } else {
+      return null;
+    }
+  }
+
+  String? validatePhoneNumber() {
+    if (Validators.validateMobileNumber(phoneNumberController!.text) == false) {
+      labelphoneNumber.value = true;
+      return 'Enter valid phone number'.tr;
+    } else {
+      labelphoneNumber.value = false;
+    }
+    return null;
   }
 }

@@ -28,11 +28,13 @@ class SectionContainer extends StatelessWidget {
     bool isMobile = MediaQuery.of(context).size.width < 768; // Mobile breakpoint
 
     return AnimatedOpacity(
-      duration: Duration(milliseconds: 800),
-      opacity: isVisible ? 1.0 : 0.1,
+      duration: Duration(milliseconds: 400),
+      opacity: isVisible ? 1.0 : 0.01,
       child: Transform.translate(
+
         offset: Offset(0, 0),
         child: AnimatedContainer(
+          color: Colors.white,
           duration: Duration(milliseconds: 800),
           curve: Curves.easeOut,
           padding: EdgeInsets.symmetric(
