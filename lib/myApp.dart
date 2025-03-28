@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/bindings/aboutus_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/bindings/admin_dashboard_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/admin_dashboard_screen.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/bindings/blog_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_screen.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/bindings/contact_us_bindings.dart';
@@ -222,6 +224,13 @@ class _MyAppState extends State<MyApp> {
             page: () =>  GoogleFormScreen(),
           ),
 
+
+
+          GetPage(
+            name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
+            page: () =>  AdminDashboardScreen(),
+            binding: AdminDashboardBindings()
+          ),
         ]);
   }
 }

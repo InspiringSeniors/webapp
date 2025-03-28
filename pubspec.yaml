@@ -64,6 +64,11 @@ dependencies:
   country_code_picker: ^3.2.0
 
   whatsapp: ^3.0.0
+  dotted_border: ^2.1.0
+  firebase_storage: ^12.4.4
+  image_picker: ^1.1.2
+  cached_network_image: ^3.4.1
+  csv: ^6.0.0
 
 dev_dependencies:
   flutter_test:

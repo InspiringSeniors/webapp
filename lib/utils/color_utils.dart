@@ -363,7 +363,7 @@ class TextStyleUtils {
   );
 
   static TextStyle smallGreyTextStyleHighlighted = TextStyle(
-    color: ColorUtils.WHITE_COLOR_BACKGROUND,
+    color: ColorUtils.GREY_COLOR_PLACEHOLDER,
     fontWeight: FontWeight.w600,
     fontSize: TextSizeDynamicUtils.dHeight12,
     letterSpacing: 0.5,

@@ -57,7 +57,8 @@ class HomepageScreen extends StatelessWidget {
               },
               child: Obx(() => SectionContainer(
                 title: 'Who we are',
-                description:'Inspiring Seniors Foundation is a non profit organization established in January 2024. At ISF, we aim to tap into the energy, experience and enthusiasm of seniors in creating a vibrant community of seniors leading a healthy life and actively engaged in giving back to society.',
+                description:
+                    'We are a non-profit start-up focussed on active and healthy ageing of senior citizens. We envision that longevity should be a gift, not a challenge. A space where seniors thrive, inspire and contribute beyond retirement. We believe that with the right awareness, opportunities, and interventions, India’s silver population can be turned into a golden asset.',
 
                 imagePath: 'assets/images/who_we_are.jpeg',
                 isLeftAligned: true,
@@ -77,7 +78,8 @@ class HomepageScreen extends StatelessWidget {
               },
               child: Obx(() => SectionContainer(
                 title: 'What we do',
-                description: "We promote healthy and active aging among our member Seniors through a variety of programs ranging from making health a habit to opportunities for volunteering and participating in social and cultural recreational programs",
+                description:
+                    'We create awareness and opportunities for senior citizens to live their best lives. Our programs add health span to life span, ensuring that long years are lived in good health, with purpose, and active participation in society. We focus on holistic well-being—physical, mental, and cognitive—while fostering social engagement, productive ageing, and intergenerational bonds in line with social prescriptions. By unlocking the potential of India’s retired population, we are shaping a future of super-agers and creating our own blue zones—where seniors thrive, contribute, and lead healthier, more fulfilling lives.',
                 imagePath: 'assets/images/who_we_are.jpg',
                 isLeftAligned: false,
                 isVisible: homepageController.isVisible.value,

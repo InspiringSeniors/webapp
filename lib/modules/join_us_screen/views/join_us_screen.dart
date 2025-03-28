@@ -322,7 +322,7 @@ class JoinUsScreen extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(left: 45,top: 30,right: 30),
                         clipBehavior: Clip.hardEdge,
-                        child: Image.asset("assets/images/volunteer_img.png",fit: BoxFit.cover,),
+                        child: Image.asset("assets/images/partner_with_us_ai.png",fit: BoxFit.cover,),
                         width: MediaQuery.of(context).size.width*0.4,
                         height: MediaQuery.of(context).size.width*0.3,
 

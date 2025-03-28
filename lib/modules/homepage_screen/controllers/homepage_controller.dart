@@ -340,6 +340,8 @@ class OtpController extends GetxController {
 
   var labelphoneNumber=false.obs;
   TextEditingController? messageController = TextEditingController();
+
+
   var formLoading=false.obs;
 
 

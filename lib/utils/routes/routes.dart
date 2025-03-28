@@ -38,4 +38,7 @@ class RoutingNames {
   static String GOOGLE_FORM_SCREEN = "/googleFormScreen";
   static String PDF_VIEWER_SCREEN = "/pdfViewerScreen";
 
+
+  static String ADMIN_DASHBOARD_SCREEN = "/adminDashboardScreen";
+
 }
