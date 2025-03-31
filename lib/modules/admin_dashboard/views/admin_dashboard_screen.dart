@@ -375,123 +375,118 @@ class AdminDashboardScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment
                         .spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Obx(
-                                () =>
-                                GestureDetector(
-                                  onTap: () =>
-                                      adminDashboardController
-                                          .toggleDropdownForRoles(
-                                          Get.context!),
-
-                                  child: Container(
-                                    padding: EdgeInsets
-                                        .symmetric(
-                                        vertical: 9,
-                                        horizontal: 12),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius
-                                            .circular(8),
-                                        border: Border.all(
-                                            color: ColorUtils
-                                                .GREY_DOTTED)
-                                    ),
-                                    child: Row(
-
-                                      children: [
-                                        Text(
-                                          adminDashboardController
-                                              .selectedRoleFilter
-                                              .isEmpty
-                                              ? "All Roles"
-                                              : adminDashboardController
-                                              .selectedRoleFilter
-                                              .value,
-                                          style: TextStyleUtils
-                                              .mobileheading6
-                                              .copyWith(
-                                              fontWeight: FontWeight
-                                                  .w500),
-                                        ), SizedBox(
-                                          width: 4,),
-                                        Icon(Icons
-                                            .arrow_drop_down_outlined)
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                          ),
-                          SizedBox(width: 26,),
-                          // Container(
-                          //   padding: EdgeInsets.symmetric(
-                          //       vertical: 9, horizontal: 12),
-                          //   decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius
-                          //           .circular(8),
-                          //       border: Border.all(
-                          //           color: ColorUtils
-                          //               .GREY_DOTTED)
-                          //   ),
-                          //   child: Row(
-                          //
-                          //     children: [
-                          //       Text("All Status",
-                          //         style: TextStyleUtils
-                          //             .mobileheading6
-                          //             .copyWith(
-                          //             fontWeight: FontWeight
-                          //                 .w500),),
-                          //       SizedBox(width: 4,),
-                          //       Icon(Icons
-                          //           .arrow_drop_down_outlined)
-                          //     ],
-                          //   ),
-                          // ),
-                          Obx(() {
-                            return GestureDetector(
+                      Obx(
+                            () =>
+                            GestureDetector(
                               onTap: () =>
                                   adminDashboardController
-                                      .toggleDropdown(
+                                      .toggleDropdownForRoles(
                                       Get.context!),
+
                               child: Container(
-                                padding: const EdgeInsets
-                                    .symmetric(vertical: 9,
+                                padding: EdgeInsets
+                                    .symmetric(
+                                    vertical: 9,
                                     horizontal: 12),
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius
-                                      .circular(8),
-                                  border: Border.all(
-                                      color: ColorUtils
-                                          .GREY_DOTTED),
+                                    borderRadius: BorderRadius
+                                        .circular(8),
+                                    border: Border.all(
+                                        color: ColorUtils
+                                            .GREY_DOTTED)
                                 ),
                                 child: Row(
-                                  mainAxisSize: MainAxisSize
-                                      .min,
+
                                   children: [
                                     Text(
                                       adminDashboardController
-                                          .selectedSort
+                                          .selectedRoleFilter
                                           .isEmpty
-                                          ? "Sort By"
+                                          ? "All Roles"
                                           : adminDashboardController
-                                          .selectedSort.value,
+                                          .selectedRoleFilter
+                                          .value,
                                       style: TextStyleUtils
                                           .mobileheading6
                                           .copyWith(
                                           fontWeight: FontWeight
                                               .w500),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    const Icon(Icons
-                                        .arrow_drop_down),
+                                    ), SizedBox(
+                                      width: 4,),
+                                    Icon(Icons
+                                        .arrow_drop_down_outlined)
                                   ],
                                 ),
                               ),
-                            );
-                          }),
-                        ],
+                            ),
                       ),
+                      // Container(
+                      //   padding: EdgeInsets.symmetric(
+                      //       vertical: 9, horizontal: 12),
+                      //   decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius
+                      //           .circular(8),
+                      //       border: Border.all(
+                      //           color: ColorUtils
+                      //               .GREY_DOTTED)
+                      //   ),
+                      //   child: Row(
+                      //
+                      //     children: [
+                      //       Text("All Status",
+                      //         style: TextStyleUtils
+                      //             .mobileheading6
+                      //             .copyWith(
+                      //             fontWeight: FontWeight
+                      //                 .w500),),
+                      //       SizedBox(width: 4,),
+                      //       Icon(Icons
+                      //           .arrow_drop_down_outlined)
+                      //     ],
+                      //   ),
+                      // ),
+                      Obx(() {
+                        return GestureDetector(
+                          onTap: () =>
+                              adminDashboardController
+                                  .toggleDropdown(
+                                  Get.context!),
+                          child: Container(
+                            padding: const EdgeInsets
+                                .symmetric(vertical: 9,
+                                horizontal: 12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius
+                                  .circular(8),
+                              border: Border.all(
+                                  color: ColorUtils
+                                      .GREY_DOTTED),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize
+                                  .min,
+                              children: [
+                                Text(
+                                  adminDashboardController
+                                      .selectedSort
+                                      .isEmpty
+                                      ? "Sort By"
+                                      : adminDashboardController
+                                      .selectedSort.value,
+                                  style: TextStyleUtils
+                                      .mobileheading6
+                                      .copyWith(
+                                      fontWeight: FontWeight
+                                          .w500),
+                                ),
+                                const SizedBox(width: 4),
+                                const Icon(Icons
+                                    .arrow_drop_down),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
 
                       GestureDetector(
                         onTap:(){
@@ -523,7 +518,39 @@ class AdminDashboardScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+                      ),
+                      GestureDetector(
+                        onTap:(){
+                          showDeleteUserDialog(Get.context!, "Multi");
+                          // adminDashboardController.selectedModule.value="Add User";
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 9, horizontal: 12),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius
+                                  .circular(8),
+                              border: Border.all(
+                                  color: ColorUtils
+                                      .GREY_DOTTED),
+                              color: ColorUtils.ORANGE_COLOR_LIGHT_2
+                          ),
+                          child: Row(
+
+                            children: [
+                              Text("Delete ",
+                                style: TextStyleUtils
+                                    .mobileheading6
+                                    .copyWith(
+                                    fontWeight: FontWeight
+                                        .w500),),
+                              SizedBox(width: 4,),
+                              Icon(Icons.delete)
+                            ],
+                          ),
+                        ),
                       )
+
 
 
                     ],
@@ -609,275 +636,379 @@ class AdminDashboardScreen extends StatelessWidget {
                 margin: EdgeInsets.symmetric(
                     vertical: 5, horizontal: 32),
 
-                child: Obx(() {
-                  if (adminDashboardController.isLoading
-                      .value) {
-                    return Center(
-                        child: CircularProgressIndicator());
-                  }
+                child:
+                    Obx(() {
+                      if (adminDashboardController.isLoading
+                                              .value) {
+                                            return Center(
+                                                child: CircularProgressIndicator());
+                      }
 
-                  if (adminDashboardController.users
-                      .isEmpty) {
-                    return Center(
-                        child: Text('No users found.'));
-                  }
+                      if (adminDashboardController.users
+                                              .isEmpty) {
+                                            return Center(
+                                                child: Text('No users found.'));
+                      }
+                      print("users #${adminDashboardController
+                          .filteredUsers.length}");
 
-                  return ListView.builder(
-                    itemCount: adminDashboardController
-                        .filteredUsers.length,
-                    itemBuilder: (context, index) {
-                      User user = adminDashboardController
-                          .filteredUsers.value[index];
-                      return Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 24),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius
-                                .all(Radius.circular(8)),
-                            border: Border.all(
-                              color: ColorUtils
-                                  .GREY_DOTTED,
-                              width: 1,)),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center,
-                          mainAxisAlignment: MainAxisAlignment
-                              .start,
-                          children: [
-                            Container(
-                              width: width * 0.08,
-                              child: Text(
-                                user.id == "" ? "" : user
-                                    .id!,
-                                style: TextStyleUtils
-                                    .mobileheading6
-                                    .copyWith(
-                                    fontWeight: FontWeight
-                                        .w500,
-                                    color: ColorUtils
-                                        .GREY_COLOR_PLACEHOLDER),),
-                            ),
-                            Container(
-                              width: width * 0.15,
-                              child: Row(
-                                children: [
-                                 user.profilePic==""||user.profilePic==null?
-                                 Container(
-                                    clipBehavior: Clip
-                                        .hardEdge,
-                                    decoration: BoxDecoration(
+                      return ListView.builder(
+                                            itemCount: adminDashboardController
+                                                .filteredUsers.length,
+                                            itemBuilder: (context, index) {
+                                              User user = adminDashboardController
+                                                  .filteredUsers.value[index];
+                                              return Obx(() {
+                                                final isSelected = adminDashboardController.selectedUserIds.contains(user.id);
 
-                                        shape: BoxShape
-                                            .circle
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    adminDashboardController.toggleUserSelection(
+                                                        adminDashboardController
+                                                            .filteredUsers.value[index].id!);
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 8, horizontal: 24),
+                                                    decoration: BoxDecoration(
+                                                        color: isSelected ? ColorUtils.ORANGE_COLOR_LIGHT : Colors.white,
+                                                        borderRadius: BorderRadius
+                                                            .all(Radius.circular(8)),
+                                                        border: Border.all(
+                                                          color: ColorUtils
+                                                              .GREY_DOTTED,
+                                                          width: 1,)),
+                                                    child: Row(
+                                                      crossAxisAlignment: CrossAxisAlignment
+                                                          .center,
+                                                      mainAxisAlignment: MainAxisAlignment
+                                                          .start,
+                                                      children: [
+                                                        Container(
+                                                          width: width * 0.08,
+                                                          child: Text(
+                                                            user.id == "" ? "" : user
+                    .id!,
+                                                            style: TextStyleUtils
+                    .mobileheading6
+                    .copyWith(
+                    fontWeight: FontWeight
+                        .w500,
+                    color: ColorUtils
+                        .GREY_COLOR_PLACEHOLDER),),
+                                                        ),
+                                                        Container(
+                                                          width: width * 0.15,
+                                                          child: Row(
+                                                            children: [
+                                                              user.profilePic == "" ||
+                      user.profilePic == null ?
+                                                              Container(
+                    clipBehavior: Clip
+                        .hardEdge,
+                    decoration: BoxDecoration(
 
-                                    ),
-                                    child: Image.asset(
-                                      "${user
-                                          .profilePic ==
-                                          "" || user
-                                          .profilePic ==
-                                          null
-                                          ? "assets/images/primary_logo.png"
-                                          : user
-                                          .profilePic}",
-                                      fit: BoxFit.contain,
-                                      height: 40,),
-                                  ):Container(
-                                   clipBehavior: Clip
-                                       .hardEdge,
-                                   decoration: BoxDecoration(
+                        shape: BoxShape
+                            .circle
 
-                                       shape: BoxShape
-                                           .circle
+                    ),
+                    child: Image.asset(
+                      "${user
+                          .profilePic ==
+                          "" || user
+                          .profilePic ==
+                          null
+                          ? "assets/images/primary_logo.png"
+                          : user
+                          .profilePic}",
+                      fit: BoxFit.contain,
+                      height: 40,),
+                                                              ) : Container(
+                    clipBehavior: Clip
+                        .hardEdge,
+                    decoration: BoxDecoration(
 
-                                   ),
-                                   child: Image.network(
-                                         user.profilePic!,
-                                     fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                      return Icon(Icons.error,size: 30,);                },
-                                     height: 40,),
-                                 ),
-                                  SizedBox(width: 12,),
-                                  Text(
-                                    "${user.firstName ==
-                                        "" ? "" : user
-                                        .firstName! }" +
-                                        "${ user
-                                            .lastName ==
-                                            "" || user
-                                            .lastName ==
-                                            null
-                                            ? ""
-                                            : user
-                                            .lastName! }",
-                                    style: TextStyleUtils
-                                        .mobileheading6
-                                        .copyWith(
-                                        fontWeight: FontWeight
-                                            .w500,
-                                        color: ColorUtils
-                                            .GREY_COLOR_PLACEHOLDER),),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: width * 0.11,
-                              child: Text(
-                                user.phoneNumber == ""
-                                    ? ""
-                                    : user.phoneNumber!,
-                                style: TextStyleUtils
-                                    .mobileheading6
-                                    .copyWith(
-                                    fontWeight: FontWeight
-                                        .w500,
-                                    color: ColorUtils
-                                        .GREY_COLOR_PLACEHOLDER),),
-                            ),
-                            Container(
-                                width: width * 0.07,
+                        shape: BoxShape
+                            .circle
 
-                                child: Text(
-                                  user.role == "" ||
-                                      user.role == null
-                                      ? "_"
-                                      : user.role!,
-                                  style: TextStyleUtils
-                                      .mobileheading6
-                                      .copyWith(
-                                      fontWeight: FontWeight
-                                          .w500,
-                                      color: ColorUtils
-                                          .GREY_COLOR_PLACEHOLDER),)),
-                            Container(
-                                alignment: Alignment
-                                    .center,
-                                width: width * 0.07,
-                                child: Container(
-                                  padding: EdgeInsets.all(
-                                      6),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius
-                                          .circular(20),
-                                      color: adminDashboardController
-                                          .getStatusColor(
-                                          user.status)
-                                  ),
-                                  child: Text(
-                                    user.status == "" ||
-                                        user.status ==
-                                            null
-                                        ? "_"
-                                        : user.status!,
-                                    style: TextStyleUtils
-                                        .mobileheading6
-                                        .copyWith(
-                                        fontWeight: FontWeight
-                                            .w500,
-                                        color: ColorUtils
-                                            .SECONDARY_BLACK,
-                                        fontSize: 11),),
-                                )),
-                            Container(
-                              alignment: Alignment.center,
-                              width: width * 0.08,
-                              child: Text(
-                                user.lastLogin == "" ||
-                                    user.lastLogin ==
-                                        null
-                                    ? "No data logged"
-                                    : adminDashboardController.formatDate(user.lastLogin)
-                                    ,
-                                style: TextStyleUtils
-                                    .mobileheading6
-                                    .copyWith(
-                                    fontWeight: FontWeight
-                                        .w500,
-                                    color: ColorUtils
-                                        .GREY_COLOR_PLACEHOLDER),),
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              width: width * 0.08,
-                              child: Text(
-                                user.registerDate == "" ||
-                                    user.registerDate ==
-                                        null ? "_" :
-                                   adminDashboardController.formatDate(user.registerDate),
+                    ),
+                    child: Image.network(
+                      user.profilePic!,
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error,
+                          stackTrace) {
+                        return Icon(Icons.error, size: 30,);
+                      },
+                      height: 40,),
+                                                              ),
+                                                              SizedBox(width: 12,),
+                                                              Text(
+                    "${user.firstName ==
+                        "" ? "" : user
+                        .firstName! }" +
+                        "${ user
+                            .lastName ==
+                            "" || user
+                            .lastName ==
+                            null
+                            ? ""
+                            : user
+                            .lastName! }",
+                    style: TextStyleUtils
+                        .mobileheading6
+                        .copyWith(
+                        fontWeight: FontWeight
+                            .w500,
+                        color: ColorUtils
+                            .GREY_COLOR_PLACEHOLDER),),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width: width * 0.11,
+                                                          child: Text(
+                                                            user.phoneNumber == ""
+                    ? ""
+                    : user.phoneNumber!,
+                                                            style: TextStyleUtils
+                    .mobileheading6
+                    .copyWith(
+                    fontWeight: FontWeight
+                        .w500,
+                    color: ColorUtils
+                        .GREY_COLOR_PLACEHOLDER),),
+                                                        ),
+                                                        Container(
+                                                            width: width * 0.07,
 
-                                style: TextStyleUtils
-                                    .mobileheading6
-                                    .copyWith(
-                                    fontWeight: FontWeight
-                                        .w500,
-                                    color: ColorUtils
-                                        .GREY_COLOR_PLACEHOLDER),),
-                            ),
-                            Container(
-                                alignment: Alignment
-                                    .center,
+                                                            child: Text(
+                                                              user.role == "" ||
+                      user.role == null
+                      ? "_"
+                      : user.role!,
+                                                              style: TextStyleUtils
+                      .mobileheading6
+                      .copyWith(
+                      fontWeight: FontWeight
+                          .w500,
+                      color: ColorUtils
+                          .GREY_COLOR_PLACEHOLDER),)),
+                                                        Container(
+                                                            alignment: Alignment
+                    .center,
+                                                            width: width * 0.07,
+                                                            child: Container(
+                                                              padding: EdgeInsets.all(
+                      6),
+                                                              decoration: BoxDecoration(
+                      borderRadius: BorderRadius
+                          .circular(20),
+                      color: adminDashboardController
+                          .getStatusColor(
+                          user.status)
+                                                              ),
+                                                              child: Text(
+                    user.status == "" ||
+                        user.status ==
+                            null
+                        ? "_"
+                        : user.status!,
+                    style: TextStyleUtils
+                        .mobileheading6
+                        .copyWith(
+                        fontWeight: FontWeight
+                            .w500,
+                        color: ColorUtils
+                            .SECONDARY_BLACK,
+                        fontSize: 11),),
+                                                            )),
+                                                        Container(
+                                                          alignment: Alignment.center,
+                                                          width: width * 0.08,
+                                                          child: Text(
+                                                            user.lastLogin == "" ||
+                    user.lastLogin ==
+                        null
+                    ? "No data logged"
+                    : adminDashboardController.formatDate(
+                    user.lastLogin)
+                                                            ,
+                                                            style: TextStyleUtils
+                    .mobileheading6
+                    .copyWith(
+                    fontWeight: FontWeight
+                        .w500,
+                    color: ColorUtils
+                        .GREY_COLOR_PLACEHOLDER),),
+                                                        ),
+                                                        Container(
+                                                          alignment: Alignment.center,
+                                                          width: width * 0.08,
+                                                          child: Text(
+                                                            user.registerDate == "" ||
+                    user.registerDate ==
+                        null ? "_" :
+                                                            adminDashboardController.formatDate(
+                    user.registerDate),
 
-                                width: width * 0.08,
-                                child: Row
+                                                            style: TextStyleUtils
+                    .mobileheading6
+                    .copyWith(
+                    fontWeight: FontWeight
+                        .w500,
+                    color: ColorUtils
+                        .GREY_COLOR_PLACEHOLDER),),
+                                                        ),
+                                                        Container(
+                                                            alignment: Alignment
+                    .center,
 
-                                  (
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .spaceEvenly,
-                                  crossAxisAlignment: CrossAxisAlignment
-                                      .center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap:()async{
-                                        adminDashboardController.selectedModule.value="View User";
+                                                            width: width * 0.08,
+                                                            child: Row
 
-                                        adminDashboardController.currentSelectedUser.value=(await adminDashboardController.getUserById(user.id!))!;
+                                                              (
+                                                              mainAxisAlignment: MainAxisAlignment
+                      .spaceEvenly,
+                                                              crossAxisAlignment: CrossAxisAlignment
+                      .center,
+                                                              children: [
+                    GestureDetector(
+                      onTap: () async {
+                        adminDashboardController
+                            .selectedModule.value =
+                        "View User";
+
+                        adminDashboardController
+                            .currentSelectedUser.value =
+                        (await adminDashboardController
+                            .getUserById(user.id!))!;
+                      },
+                      child: Icon(Icons
+                          .remove_red_eye_outlined,
+                        color: ColorUtils
+                            .HEADER_GREEN,
+                        size: 20,),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        adminDashboardController
+                            .selectedModule.value =
+                        "Edit User";
+
+                        adminDashboardController
+                            .currentSelectedUser.value =
+                        (await adminDashboardController
+                            .getUserById(user.id!))!;
+                      },
+                      child: Icon(Icons.edit,
+                        color: ColorUtils
+                            .HEADER_GREEN,
+                        size: 20,),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        showDeleteUserDialog(
+                            context, user.id!);
+                      },
+                      child: Icon(Icons.delete,
+                        color: ColorUtils
+                            .ORANGE_COLOR_DARK,
+                        size: 20,),
+                    )
 
 
-                                      },
-                                      child: Icon(Icons
-                                          .remove_red_eye_outlined,
-                                        color: ColorUtils
-                                            .HEADER_GREEN,
-                                        size: 20,),
-                                    ),
-                          GestureDetector(
-                            onTap:()async{
-                              adminDashboardController.selectedModule.value="Edit User";
+                                                              ],
+                                                            )
+                                                        ),
 
-                              adminDashboardController.currentSelectedUser.value=(await adminDashboardController.getUserById(user.id!))!;
-
-
-                            },
-                                 child:   Icon(Icons.edit,
-                                      color: ColorUtils
-                                          .HEADER_GREEN,
-                                      size: 20,),
-                          ),
-                                    GestureDetector(
-                                      onTap: (){
-                                        showDeleteUserDialog(context, user.id!);
-                                      },
-                                      child: Icon(Icons.delete,
-                                        color: ColorUtils
-                                            .ORANGE_COLOR_DARK,
-                                        size: 20,),
-                                    )
-
-
-                                  ],
-                                )
-                            ),
-
-                          ],
-                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              );
+                                            },
                       );
-                    },
-                  );
-                }),
+                    })
               ),
             ),
+
+              Container(
+              height: height * 0.07,
+
+              margin: EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                  onTap: (){
+              adminDashboardController.previousPage();
+
+              },child: Container(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 9, horizontal: 12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius
+                            .circular(8),
+                        border: Border.all(
+                            color: ColorUtils
+                                .GREY_DOTTED),
+                        color: ColorUtils.PURPLE_BRAND_LIGHT_2
+                    ),
+                    child: Row(
+
+                      children: [
+                        // GestureDetector(
+                        //    onTap: (){
+                        //
+                        //      adminDashboardController.nextPage();
+                        //    },
+                        //     child: Icon(Icons.navigate_before,size: 20,)),
+
+      GestureDetector(
+        onTap: (){
+          adminDashboardController.previousPage();
+
+        },
+        child:   Icon(Icons.navigate_before,size: 20,))
+
+                      ],
+                    ),
+                  ),),
+      GestureDetector(
+        onTap: (){
+          adminDashboardController.nextPage();
+
+        },child: Container(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 9, horizontal: 12),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius
+                            .circular(8),
+                        border: Border.all(
+                            color: ColorUtils
+                                .GREY_DOTTED),
+                        color: ColorUtils.PURPLE_BRAND_LIGHT_2
+                    ),
+                    child: Row(
+
+                      children: [
+
+
+
+                               Icon(Icons.navigate_next,size: 20,)
+
+
+                      ],
+                    ),
+                  ))
+
+
+                ],
+              ),
+            )
+
 
 
           ],
@@ -2809,11 +2940,19 @@ class AdminDashboardScreen extends StatelessWidget {
             SizedBox(width: 12,),
             GestureDetector(
               onTap: (){
-                Get.back();
 
-                adminDashboardController.deleteUser(userId);
-                adminDashboardController.selectedModule.value="User";
+                if(userId=="Multi"){
+                  Get.back();
 
+                  adminDashboardController.deleteSelectedUsers();
+
+                }
+                else {
+                  Get.back();
+
+                  adminDashboardController.deleteUser(userId);
+                  adminDashboardController.selectedModule.value = "User";
+                }
               },
               child: Container(
                 padding: EdgeInsets.symmetric(

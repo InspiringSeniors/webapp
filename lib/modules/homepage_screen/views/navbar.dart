@@ -91,7 +91,7 @@ class WebNavBar extends StatelessWidget {
             children: [
               GestureDetector(
                   onTap: (){
-                    Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+                    Get.offAllNamed(RoutingNames.ADMIN_DASHBOARD_SCREEN);
                   },child: Container(child: Image.asset("assets/images/primary_logo.png",width: 100,fit: BoxFit.fitWidth,),))
               ,
               NavItem("Home", () => navigateToSection( "home")),

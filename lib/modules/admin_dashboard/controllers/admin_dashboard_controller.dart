@@ -31,6 +31,7 @@ class AdminDashboardController extends GetxController
   var isLoading = false.obs;
 
   RxList<User> filteredUsers = <User>[].obs;
+  RxList<User> paginatedUsers = <User>[].obs;
 
   RxString searchText = ''.obs;
 
@@ -112,7 +113,10 @@ class AdminDashboardController extends GetxController
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
-   await fetchUsers();
+
+    await fetchUsersWithPagination(0);
+     fetchUsers();
+
     // updateUserStatusCounts();
   }
 
@@ -125,7 +129,7 @@ class AdminDashboardController extends GetxController
         return User.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
 
-      filteredUsers.value=users;
+      // filteredUsers.value=users;
       print("users are here ${users.value}");
     } catch (e) {
       print("Error fetching users: $e");
@@ -137,44 +141,62 @@ class AdminDashboardController extends GetxController
   }
 
 
-  Future<void> fetchUsersWithPagination({bool isInitial = false}) async {
+  var currentPage = 0.obs;
+  final List<QueryDocumentSnapshot> pageStartDocs = []; // Keep track of page starts
+
+
+  Future<void> fetchUsersWithPagination(int page) async {
     try {
       isLoading.value = true;
-      Query query = _firestore.collection('users').orderBy('registerDate', descending: true).limit(pageSize);
+      Query query = _firestore
+          .collection('users')
+          .orderBy('registerDate', descending: true)
+          .limit(10);
 
-      if (lastDocument != null && !isInitial) {
-        query = query.startAfterDocument(lastDocument!);
+      // Add startAfter logic for pages > 0
+      if (page > 0 && pageStartDocs.length >= page) {
+        query = query.startAfterDocument(pageStartDocs[page - 1]);
       }
 
       QuerySnapshot snapshot = await query.get();
 
-      if (snapshot.docs.isNotEmpty) {
-        lastDocument = snapshot.docs.last;
-        final fetchedUsers = snapshot.docs.map((doc) => User.fromMap(doc.id, doc.data() as Map<String, dynamic>)).toList();
 
-        if (isInitial) {
-          users.value = fetchedUsers;
-        } else {
-          users.addAll(fetchedUsers);
+      if (snapshot.docs.isNotEmpty) {
+        final newUsers = snapshot.docs
+            .map((doc) => User.fromMap(doc.id, doc.data() as Map<String, dynamic>))
+            .toList();
+
+        if (pageStartDocs.length <= page) {
+          pageStartDocs.add(snapshot.docs.last);
         }
 
-        filteredUsers.value = users;
-        hasMore.value = fetchedUsers.length == pageSize;
+        print("check ");
+        filteredUsers.value=newUsers;
+
+        currentPage.value = page;
+        hasMore.value = newUsers.length == pageSize;
       } else {
         hasMore.value = false;
       }
     } catch (e) {
-      print("Error fetching users: $e");
+      print("Pagination Error: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
-  void refreshList() {
-    lastDocument = null;
-    hasMore.value = true;
-    fetchUsersWithPagination(isInitial: true);
+  void nextPage() {
+    if (hasMore.value) {
+      fetchUsersWithPagination(currentPage.value + 1);
+    }
   }
+
+  void previousPage() {
+    if (currentPage.value > 0) {
+      fetchUsersWithPagination(currentPage.value - 1);
+    }
+  }
+
 
 
 
@@ -1033,5 +1055,41 @@ class AdminDashboardController extends GetxController
     final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     final last4Digits = timestamp.substring(timestamp.length - 4);
     return "uix$last4Digits";
+  }
+
+  RxSet<String> selectedUserIds = <String>{}.obs;
+
+  void toggleUserSelection(String userId) {
+    if (selectedUserIds.contains(userId)) {
+      selectedUserIds.remove(userId);
+    } else {
+      selectedUserIds.add(userId);
+    }
+  }
+
+  void clearSelectedUsers() {
+    selectedUserIds.clear();
+  }
+
+  Future<void> deleteSelectedUsers() async {
+
+
+    try {
+
+      if(selectedUserIds.isEmpty){
+        Get.snackbar("Error", "Please select users to delete",snackPosition: SnackPosition.BOTTOM);
+
+        return;
+      }
+      for (String id in selectedUserIds) {
+        await FirebaseFirestore.instance.collection('users').doc(id).delete();
+        fetchUsers();
+      }
+      clearSelectedUsers();
+      Get.snackbar("Success", "Selected users deleted successfully",snackPosition: SnackPosition.BOTTOM);
+      await fetchUsers();
+    } catch (e) {
+      Get.snackbar("Error", "Failed to delete users: $e",snackPosition: SnackPosition.BOTTOM);
+    }
   }
 }

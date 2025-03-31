@@ -40,5 +40,6 @@ class RoutingNames {
 
 
   static String ADMIN_DASHBOARD_SCREEN = "/adminDashboardScreen";
+  static String ADMIN_LOGIN_SCREEN = "/adminLoginScreen";
 
 }

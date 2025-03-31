@@ -8,6 +8,8 @@ import 'package:inspiringseniorswebapp/modules/about_us_screen/bindings/aboutus_
 import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/bindings/admin_dashboard_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/admin_dashboard_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_login_screen/bindings/admin_login_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/admin_login_screen/views/admin_login_screen.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/bindings/blog_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_screen.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/bindings/contact_us_bindings.dart';
@@ -230,6 +232,12 @@ class _MyAppState extends State<MyApp> {
             name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
             page: () =>  AdminDashboardScreen(),
             binding: AdminDashboardBindings()
+          ),
+
+          GetPage(
+              name: RoutingNames.ADMIN_LOGIN_SCREEN,
+              page: () =>  AdminLoginScreen(),
+              binding: AdminLoginBindings()
           ),
         ]);
   }
