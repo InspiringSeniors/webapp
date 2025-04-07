@@ -29,7 +29,7 @@ Widget CustomSearchFieldV2(
           focusColor: ColorUtils.BRAND_COLOR,
           alignLabelWithHint: true,
           // isDense: true,
-          hintText: 'Search by name , number '.tr,
+          hintText: hintText,
           prefixIcon: GestureDetector(
             onTap: () {},
             child: Container(

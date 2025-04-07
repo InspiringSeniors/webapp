@@ -7,13 +7,17 @@ import 'package:inspiringseniorswebapp/common_widgets/custom_search_field.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_text_field.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/admin_dashboard_controller.dart';
+import 'package:inspiringseniorswebapp/utils/middlewares/auth_middle_ware.dart';
 
 import '../../../utils/color_utils.dart';
+import '../../../utils/routes/routes.dart';
 import '../models/user_model.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   AdminDashboardController adminDashboardController=Get.find();
 
+  GlobalKey<FormState> addUserFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> editUserFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
 
@@ -70,17 +74,24 @@ class AdminDashboardScreen extends StatelessWidget {
                     ),
                   ),
 
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 40,horizontal: 20),
-                    child:
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(Icons.logout,color: ColorUtils.ORANGE_COLOR_DARK,size: 20,),
-                        SizedBox(width: 16,),
-                        Text("Logout",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),)
-                      ],
+
+                  GestureDetector(
+                    onTap: ()async{
+                      await AuthService.to.logout();
+                      Get.offAllNamed(RoutingNames.ADMIN_LOGIN_SCREEN);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 40,horizontal: 20),
+                      child:
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.logout,color: ColorUtils.ORANGE_COLOR_DARK,size: 20,),
+                          SizedBox(width: 16,),
+                          Text("Logout",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),)
+                        ],
+                      ),
                     ),
                   )
 
@@ -116,10 +127,10 @@ class AdminDashboardScreen extends StatelessWidget {
                               shape: BoxShape.circle
 
                             ),
-                            child: Image.asset("assets/images/B.jpeg",fit: BoxFit.contain,height: 100,),
+                            child: Image.network("${adminDashboardController.currentLoggedInUser.value.profilePic==""||adminDashboardController.currentLoggedInUser.value.profilePic==null?"https://png.pngtree.com/png-clipart/20191120/original/pngtree-outline-user-icon-png-image_5045523.jpg":adminDashboardController.currentLoggedInUser.value.profilePic}",fit: BoxFit.contain,height: 100,),
                           ),
                           SizedBox(width: 16,),
-                          Text("Bhuvana Nataran ",style: TextStyleUtils.mobileheading6,)
+                          Text("${adminDashboardController.currentLoggedInUser.value.firstName==""||adminDashboardController.currentLoggedInUser.value.firstName==null?"":adminDashboardController.currentLoggedInUser.value.firstName} "+"${adminDashboardController.currentLoggedInUser.value.lastName==""||adminDashboardController.currentLoggedInUser.value.lastName==null?"":adminDashboardController.currentLoggedInUser.value.lastName} ",style: TextStyleUtils.mobileheading6,)
                         ],
                       ),
                     ),
@@ -358,6 +369,7 @@ class AdminDashboardScreen extends StatelessWidget {
                       margin: EdgeInsets.only(right: 16),
                       width: width * 0.36,
                       child: CustomSearchFieldV2(
+                        hintText: 'Search by name , number ',
                           height: 45,
                           onchanged: (val) {
                             adminDashboardController
@@ -663,6 +675,7 @@ class AdminDashboardScreen extends StatelessWidget {
 
                                                 return GestureDetector(
                                                   onTap: () {
+
                                                     adminDashboardController.toggleUserSelection(
                                                         adminDashboardController
                                                             .filteredUsers.value[index].id!);
@@ -1138,7 +1151,7 @@ class AdminDashboardScreen extends StatelessWidget {
                             if(adminDashboardController.selectedAddUserType.value=="Manual"){
                               return
                                 Form(
-                                  key: adminDashboardController.selectedModule.value=="Edit User"?adminDashboardController.editUserFormKey:adminDashboardController.addUserFormKey,
+                                  key: adminDashboardController.selectedModule.value=="Edit User"?editUserFormKey:addUserFormKey,
                                   child: Container(
                                   margin: EdgeInsets.symmetric(horizontal: 28,vertical: 26),
                                   child: Column(
@@ -1678,11 +1691,11 @@ class AdminDashboardScreen extends StatelessWidget {
                                                     lastName: adminDashboardController.lastNameController!.text,
                                                     phoneNumber: adminDashboardController.phoneNumberController!.text,
                                                     profilePic: adminDashboardController.currentSelectedUser.value.profilePic,
-                                                    notes: adminDashboardController.messageController!.text
+                                                    notes: adminDashboardController.messageController!.text,
+                                                  key: editUserFormKey
                                                 );
                                               }
 
-                                              adminDashboardController.selectedModule.value="User";
 
 
 
@@ -1731,10 +1744,9 @@ class AdminDashboardScreen extends StatelessWidget {
                                                     phoneNumber: adminDashboardController.phoneNumberController!.text,
                                                     profilePic: adminDashboardController.newuserProfilePic.value,
                                                     notes: adminDashboardController.messageController!.text
-                                                )
+                                                ),addUserFormKey
                                                 );
 
-                                                adminDashboardController.selectedModule.value="User";
                                               }
                                             },
                                             child: Container(

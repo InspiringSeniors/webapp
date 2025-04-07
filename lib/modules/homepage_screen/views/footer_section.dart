@@ -379,7 +379,6 @@ class FooterSection1 extends StatelessWidget {
 
             ]
         ),
-        margin: EdgeInsets.only(top: TextSizeDynamicUtils.dHeight48, ),
 
 
         padding: EdgeInsets.symmetric(vertical: isMobile?TextSizeDynamicUtils.dHeight16:TextSizeDynamicUtils.dHeight48,horizontal: isMobile?16: 32),

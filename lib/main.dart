@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/middlewares/auth_middle_ware.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -22,6 +24,8 @@ void main() async {
     )
 
   );
+
+  Get.put(AuthService());
   runApp(
 
      const MyApp(

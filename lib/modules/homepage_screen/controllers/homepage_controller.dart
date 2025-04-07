@@ -319,16 +319,15 @@ class OtpController extends GetxController {
   var isOTPValid = false.obs;
   var finalOTP = '';
 
-  var isOtpVerified=false.obs;
+  var isOtpVerified = false.obs;
 
   var isVerifying = false.obs;
 
   Rx<Color> inactiveColor = ColorUtils.BRAND_COLOR.obs;
 
 
-
   // forms
-  TextEditingController? phoneNumberController=TextEditingController();
+  TextEditingController? phoneNumberController = TextEditingController();
   RxBool nameStateHandler = false.obs;
   TextEditingController? userNameController = TextEditingController();
   var labeluserName = true.obs;
@@ -338,16 +337,15 @@ class OtpController extends GetxController {
   var labellastName = true.obs;
   Rx<bool> isPhoneEnabled = true.obs;
 
-  var labelphoneNumber=false.obs;
+  var labelphoneNumber = false.obs;
   TextEditingController? messageController = TextEditingController();
 
 
-  var formLoading=false.obs;
+  var formLoading = false.obs;
 
 
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   var verificationId = "".obs;
-
 
 
   GlobalKey<FormState> registerFormKey = GlobalKey<FormState>();
@@ -359,51 +357,52 @@ class OtpController extends GetxController {
     {"initiative": "Wellness Chaupal", "value": false.obs},
     {"initiative": "Step Count Challenge", "value": false.obs},
   ].obs;
-  var volunteerCommunity=<Map<String, dynamic>>[
+  var volunteerCommunity = <Map<String, dynamic>>[
 
     {
-      "initiative":"Tutor",
-      "value":false.obs
+      "initiative": "Tutor",
+      "value": false.obs
     },
     {
-      "initiative":"Mentor",
-      "value":false.obs
-    },{
-      "initiative":"Lets Talk English",
-      "value":false.obs
+      "initiative": "Mentor",
+      "value": false.obs
+    }, {
+      "initiative": "Lets Talk English",
+      "value": false.obs
     },
   ].obs;
-  var socialCircle=<Map<String, dynamic>>[
+  var socialCircle = <Map<String, dynamic>>[
 
     {
-      "initiative":"Melody Masters",
-      "value":false.obs
+      "initiative": "Melody Masters",
+      "value": false.obs
     },
     {
-      "initiative":"Story Telling",
-      "value":false.obs
-    },{
-      "initiative":"Fun Therapy with Art",
-      "value":false.obs
+      "initiative": "Story Telling",
+      "value": false.obs
+    }, {
+      "initiative": "Fun Therapy with Art",
+      "value": false.obs
     },
   ]
       .obs;
 
-  var otpVerificationCounter=0.obs;
-  var otpResendCounter=0.obs;
+  var otpVerificationCounter = 0.obs;
+  var otpResendCounter = 0.obs;
 
-  var isCheckNewUser=false.obs;
+  var isCheckNewUser = false.obs;
 
   ConfirmationResult? confirmationResult;
+
   @override
   void onInit() {
     // TODO: implement onInit
 
-      // _otpListener();
-      controller = OTPTextEditController(
-        codeLength: 6,
-        onCodeReceive: (code) => print('Your Application receive code - $code'),
-      );
+    // _otpListener();
+    controller = OTPTextEditController(
+      codeLength: 6,
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+    );
 
 
     super.onInit();
@@ -411,11 +410,10 @@ class OtpController extends GetxController {
 
   //resend code
   resendOTP() {
-
     print("clicking to resend");
-    otpResendCounter.value+=1;
+    otpResendCounter.value += 1;
 
-    if(otpResendCounter.value<=1) {
+    if (otpResendCounter.value <= 1) {
       HomepageController homepageController = Get.find();
       isResendVisible.value = false;
       startTime();
@@ -443,14 +441,13 @@ class OtpController extends GetxController {
     });
   }
 
-  onOTPCompletion(String otp,String type) {
+  onOTPCompletion(String otp, String type) {
     isOTPValid.value = true;
     finalOTP = otp;
-    if(type=="Login"){
+    if (type == "Login") {
       verifyOTPforLogin();
-    }else{
+    } else {
       verifyOTP();
-
     }
     return false;
   }
@@ -465,23 +462,64 @@ class OtpController extends GetxController {
     isVerifying.value = true;
     var isUser = await verifyOtp(finalOTP);
     print("user data ${isUser}");
-   await isUser == true ? OTPColor.value = false : OTPColor.value = true;
-    await isUser == true? isOtpVerified.value=true:isOtpVerified.value=false;
+    await isUser == true ? OTPColor.value = false : OTPColor.value = true;
+    await isUser == true ? isOtpVerified.value = true : isOtpVerified.value =
+    false;
     print("valling till ere");
     print("object${isOtpVerified.value}");
-    isOtpVerified.value?
-      FormClass().showThankYouDialog(Get.context!)
+    isOtpVerified.value ?
+    FormClass().showThankYouDialog(Get.context!)
 
-    :false;
+        : false;
 
 
-    isOtpVerified.value?
+    isOtpVerified.value ?
     continueForSignup()
-        :false;
+        : false;
+
+    sendWhatsAppTemplateMessage(recipientPhoneNumber:"9650373038" );
 
 
     isVerifying.value = false;
   }
+
+
+  Future<void> sendWhatsAppTemplateMessage({
+    required String recipientPhoneNumber,
+  }) async {
+    const String accessToken = '<access token>'; // Replace with your token
+    const String phoneNumberId = '614697528393435'; // Replace if different
+
+    final url = Uri.parse(
+      'https://graph.facebook.com/v22.0/$phoneNumberId/messages',
+    );
+
+    final headers = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    };
+
+    final body = jsonEncode({
+      "messaging_product": "whatsapp",
+      "to": recipientPhoneNumber, // E.g. "919999999999"
+      "type": "template",
+      "template": {
+        "name": "hello_world", // Must match approved template name
+        "language": {"code": "en_US"}
+      }
+    });
+
+    final response = await http.post(url, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      print('Template message sent successfully!');
+    } else {
+      print('Failed to send message. Status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+    }
+  }
+
+
 
   verifyOTPforLogin() async {
     HomepageController homepageController = Get.find();

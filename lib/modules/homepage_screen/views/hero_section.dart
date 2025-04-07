@@ -88,7 +88,7 @@ class HeroSection extends StatelessWidget {
                 "assets/images/homepage_banner_ai.png",
                 fit: BoxFit.cover,
                 width: width * 0.7,
-                height: height * 0.75,
+                height: height * 0.8,
               ),
 
               Positioned.fill(
@@ -124,7 +124,7 @@ class HeroSection extends StatelessWidget {
               // Gradient Overlay for Smooth Transition
               Container(
                 width: width * 0.7, // Same as image width
-                height: height * 0.75,
+                height: height * 0.8,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -155,7 +155,7 @@ class HeroSection extends StatelessWidget {
               children: [
                 Container(
                   color: ColorUtils.PURPLE_BRAND_LIGHT.withOpacity(0.4), // Final solid background
-                  height: height * 0.75,
+                  height: height * 0.8,
                 ),
 
                 Positioned.fill(
@@ -249,7 +249,7 @@ class HeroSection extends StatelessWidget {
       ),
 
 
-      height: MediaQuery.of(Get.context!).size.height * 0.75,
+      height: MediaQuery.of(Get.context!).size.height * 0.8,
       key: ValueKey<int>(index),
       padding: EdgeInsets.only(top: MediaQuery.of(Get.context!).size.height * 0.1,),
       child:

@@ -45,7 +45,7 @@ class CustomTextFieldV2 extends StatelessWidget {
           formatInput = true;
         }
         return TextFormField(
-            style: TextStyle(color: ColorUtils.BRAND_COLOR),
+            style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
             onTap: () {
               onTap;
             },
@@ -116,7 +116,7 @@ class CustomTextFieldV2 extends StatelessWidget {
             validator: validator);
       } else {
         return TextFormField(
-          style: TextStyle(color: ColorUtils.BRAND_COLOR),
+          style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
           onTap: () {
             onTap == null ? () {} : onTap();
           },
@@ -361,6 +361,108 @@ class CustomTextFieldV2WithWhite extends StatelessWidget {
           validator: validator,
         );
       }
+    });
+  }
+}
+
+
+
+
+class CustomPasswordField extends StatelessWidget {
+  final RxBool stateHandler;
+  final RxBool labela;
+  final String? label;
+  final TextEditingController? controller;
+  final Rx<Color>? inactiveColor;
+  final String? Function(String?)? validator;
+  final TextInputType? keyBoardtype;
+  final Function(String)? onChanged;
+  final Function(String?)? onSaved;
+  final VoidCallback? onTap;
+
+  final RxBool isObscure = true.obs;
+
+  CustomPasswordField({
+    required this.stateHandler,
+    required this.labela,
+    this.label,
+    this.controller,
+    this.inactiveColor,
+    this.validator,
+    Key? key,
+    this.keyBoardtype = TextInputType.visiblePassword,
+    this.onSaved,
+    this.onChanged,
+    this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      return TextFormField(
+        style: TextStyle(color: ColorUtils.BRAND_COLOR),
+        controller: controller,
+        obscureText: isObscure.value,
+        keyboardType: keyBoardtype,
+
+        readOnly: false,
+        cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+        onTap: onTap,
+        decoration: InputDecoration(
+          hoverColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+          labelStyle: TextStyleUtils.smallGreyTextStyle,
+          filled: true,
+          fillColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+          focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+          alignLabelWithHint: true,
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: const BorderSide(width: 2, color: ColorUtils.GREY_DOTTED),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: const BorderSide(width: 2, color: ColorUtils.GREY_DOTTED),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          floatingLabelStyle: TextStyle(
+            color: labela.value ? ColorUtils.GREY_COLOR_PLACEHOLDER : ColorUtils.ERROR_RED,
+          ),
+          isDense: false,
+          labelText: label ?? 'Password',
+          prefixIcon: Icon(Icons.lock_outline,color: ColorUtils.TRACK_GREY,),
+          suffixIcon: IconButton(
+            icon: Icon(
+              isObscure.value ? Icons.visibility_off : Icons.visibility,
+              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+            ),
+            onPressed: () {
+              isObscure.value = !isObscure.value;
+            },
+          ),
+          errorStyle: TextStyle(
+            color: ColorUtils.ERROR_RED,
+            fontSize: TextSizeDynamicUtils.dHeight12,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        onChanged: (value) {
+          if (value.isNotEmpty) {
+            stateHandler.value = true;
+          } else {
+            stateHandler.value = false;
+          }
+          if (onChanged != null) onChanged!(value);
+        },
+        validator: validator,
+        onSaved: onSaved,
+      );
     });
   }
 }

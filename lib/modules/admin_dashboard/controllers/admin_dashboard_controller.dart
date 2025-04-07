@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'dart:html';
 import 'dart:html' as html;
 
+import 'package:http/http.dart' as http;
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csv/csv.dart';
@@ -48,7 +50,7 @@ class AdminDashboardController extends GetxController
 
 
   final List<String> sortOptions = ['Name A-Z', 'Name Z-A', 'Newest', 'Oldest'];
-  final List<String> roleOptions = ['All Roles','Admin', 'Member', 'Volunteer', 'Partner'];
+  final List<String> roleOptions = ['All Roles','Super Admin','Admin', 'Member',];
 
   RxString selectedSort = ''.obs;
 
@@ -78,8 +80,6 @@ class AdminDashboardController extends GetxController
   var isStatusSelected=true.obs;
   var isRoleSelected=true.obs;
 
-  GlobalKey<FormState> addUserFormKey = GlobalKey<FormState>();
-  GlobalKey<FormState> editUserFormKey = GlobalKey<FormState>();
 
 
 
@@ -108,11 +108,20 @@ class AdminDashboardController extends GetxController
   var csvErrorEntries = <Map<String, dynamic>>[].obs;
   var successEntries = 0.obs;
 
+  Rx<User> currentLoggedInUser=User().obs;
+
+
 
   @override
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
+
+   var args= Get.arguments;
+   print(args[0]);
+
+    currentLoggedInUser.value=args[0];
+
 
     await fetchUsersWithPagination(0);
      fetchUsers();
@@ -630,12 +639,13 @@ class AdminDashboardController extends GetxController
      String? profilePic,
      String? phoneNumber,
      String?notes,
+    var key
   }) async {
 
 
     print("called for updation");
 
-    bool isValid = editUserFormKey.currentState!.validate();
+    bool isValid = key.currentState!.validate();
     if (isValid) {
 
       final original = currentSelectedUser.value;
@@ -668,6 +678,15 @@ class AdminDashboardController extends GetxController
         );
         return;
       }
+
+      if(currentLoggedInUser.value.role!.toLowerCase()=="admin"&&(role!.toLowerCase()=="super admin")){
+        Get.snackbar(
+          'Error',
+          'Admin cannot create a Super Admin or Admin.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return;
+      }
       try {
         isLoading.value = true;
         // Prepare update data
@@ -687,6 +706,9 @@ class AdminDashboardController extends GetxController
         Get.snackbar("Success", "User updated successfully",          snackPosition: SnackPosition.BOTTOM,
         );
 
+        selectedModule.value="User";
+
+
         // Refresh local user data
         await fetchUsers(); // or update local list if needed
       } catch (e) {
@@ -698,39 +720,130 @@ class AdminDashboardController extends GetxController
     }
   }
 
-  Future<void> addUser(User user) async {
-    bool isValid = addUserFormKey.currentState!.validate();
+  Future<void> addUser(User user, var key) async {
+    bool isValid = key.currentState!.validate();
     print("add user");
+
+    if(currentLoggedInUser.value.role!.toLowerCase()=="admin"&&(user.role!.toLowerCase()=="super admin"||user.role!.toLowerCase()=="admin")){
+      Get.snackbar(
+        'Error',
+        'Admin cannot create a Super Admin or Admin.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
     if (isValid) {
       try {
-
         String newUserId;
 
-        if(newUserIdFromProfilePic.value==''){
-         newUserId = generateUserId();
-
-        }else{
-          newUserId=newUserIdFromProfilePic.value;
+        if (newUserIdFromProfilePic.value == '') {
+          newUserId = generateUserId();
+        } else {
+          newUserId = newUserIdFromProfilePic.value;
         }
 
-        // Create user with generated ID
+        String? generatedPassword;
+
+        // ✅ If role is admin, generate a password
+        if (user.role!.toLowerCase() == 'admin') {
+          generatedPassword = _generateRandomPassword();
+          user = user.copyWith(password: generatedPassword,isPasswordSet:false);
+          await sendPasswordEmail(user.email!, generatedPassword);
+        }
+
+        // ✅ Save user to Firestore
         await FirebaseFirestore.instance
             .collection('users')
             .doc(newUserId)
             .set(
-            user.copyWith(id: newUserId, registerDate: DateTime.now()).toMap());
-
-        // Optionally, update the local list or refresh UI
-        await fetchUsers(); // or users.add(user)
-        Get.snackbar('Success', 'User added successfully.',          snackPosition: SnackPosition.BOTTOM,
+          user.copyWith(id: newUserId, registerDate: DateTime.now()).toMap(),
         );
+
+        await fetchUsers();
+
+        Get.snackbar(
+          'Success',
+          'User added successfully.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        selectedModule.value="User";
+
       } catch (e) {
         print('Error adding user: $e');
-        Get.snackbar('Error', 'Failed to add user.',          snackPosition: SnackPosition.BOTTOM,
+        Get.snackbar(
+          'Error',
+          'Failed to add user.',
+          snackPosition: SnackPosition.BOTTOM,
         );
       }
     }
   }
+
+  Future<void> sendPasswordEmail(String email, String password) async {
+
+
+    const serviceId = 'service_ylzyyld';
+    const templateId = 'template_h3pn8gm';
+    const userId = '1H93nf9euURV6FPgW'; // AKA public key
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(
+      url,
+      headers: {
+        'origin': 'http://localhost',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'email': email,
+          'passcode': password,
+        },
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Password email sent to $email');
+    } else {
+      print('Failed to send password email. ${response.body}');
+    }
+  }
+
+
+
+  String _generateRandomPassword({int length = 10}) {
+    const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+    const numbers = '0123456789';
+    const special = '@#\$%&*';
+
+    const allChars = uppercase + lowercase + numbers + special;
+    final rand = Random.secure();
+
+    // Ensure at least one character from each required set
+    String getRandomChar(String source) => source[rand.nextInt(source.length)];
+
+    List<String> password = [
+      getRandomChar(uppercase),
+      getRandomChar(lowercase),
+      getRandomChar(numbers),
+      getRandomChar(special),
+    ];
+
+    // Fill the rest of the password
+    for (int i = password.length; i < length; i++) {
+      password.add(getRandomChar(allChars));
+    }
+
+    // Shuffle the characters so the required ones aren't always at the start
+    password.shuffle();
+
+    return password.join();
+  }
+
+
 
   Future<void> deleteUser(String userId) async {
     try {
@@ -1063,7 +1176,10 @@ class AdminDashboardController extends GetxController
     if (selectedUserIds.contains(userId)) {
       selectedUserIds.remove(userId);
     } else {
+      print("users ids${userId}");
       selectedUserIds.add(userId);
+
+      print(selectedUserIds);
     }
   }
 
@@ -1072,6 +1188,7 @@ class AdminDashboardController extends GetxController
   }
 
   Future<void> deleteSelectedUsers() async {
+    print("deleting users are ${selectedUserIds.value}");
 
 
     try {
@@ -1082,9 +1199,11 @@ class AdminDashboardController extends GetxController
         return;
       }
       for (String id in selectedUserIds) {
+        print("printing all ids${id}");
         await FirebaseFirestore.instance.collection('users').doc(id).delete();
-        fetchUsers();
       }
+      fetchUsersWithPagination(0);
+
       clearSelectedUsers();
       Get.snackbar("Success", "Selected users deleted successfully",snackPosition: SnackPosition.BOTTOM);
       await fetchUsers();

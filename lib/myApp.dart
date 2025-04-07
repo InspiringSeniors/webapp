@@ -11,6 +11,7 @@ import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/admin_dashb
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/bindings/admin_login_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/views/admin_login_screen.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/bindings/blog_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_details_screen.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_screen.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/bindings/contact_us_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/controllers/contact_us_controller.dart';
@@ -50,6 +51,7 @@ import 'package:inspiringseniorswebapp/modules/story_telling_screen/bindings/sto
 import 'package:inspiringseniorswebapp/modules/story_telling_screen/views/st_screen.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/bindings/wellness_chaupal_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/views/wellness_chaupal_screen.dart';
+import 'package:inspiringseniorswebapp/utils/middlewares/auth_middle_ware.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'modules/custom_screens/google_form_screen/views/google_form_screen.dart';
 import 'modules/splash_screen/controller/initial_binding.dart';
@@ -216,6 +218,12 @@ class _MyAppState extends State<MyApp> {
               name: RoutingNames.BLOG_SCREEN,
               page: () =>  BlogScreen(),
               binding: BlogBindings()),
+
+
+          GetPage(
+              name: RoutingNames.BLOG_DETAIL_SCREEN,
+              page: () =>  BlogDetailPage(),
+              binding: BlogBindings()),
           GetPage(
               name: RoutingNames.PDF_VIEWER_SCREEN,
               page: () =>  PdfViewerScreen(),
@@ -231,7 +239,8 @@ class _MyAppState extends State<MyApp> {
           GetPage(
             name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
             page: () =>  AdminDashboardScreen(),
-            binding: AdminDashboardBindings()
+            binding: AdminDashboardBindings(),
+            middlewares:[ AuthMiddleware()]
           ),
 
           GetPage(

@@ -71,7 +71,7 @@ class SplashScreenController extends GetxController {
 
 
     Get.put(HomepageController());
-    Get.toNamed(RoutingNames.ADMIN_DASHBOARD_SCREEN);
+    Get.toNamed(RoutingNames.HOME_PAGE_SCREEN);
     // if (firstTime == true) {
     //   Get.offAllNamed(RoutingNames.FIRST_TIME_LANGUAGE_SCREEN);
     // } else {

@@ -1,5 +1,6 @@
 import 'dart:convert' as convert;
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -70,50 +71,99 @@ class ContactUsController extends GetxController{
     bool isValid = loginFormKey.currentState!.validate();
 
     formLoading.value=true;
-    if(isValid) {
+    // if(isValid) {
+    //
+    //   const String scriptURL = 'https://script.google.com/macros/s/AKfycbzc6djxnCc7QY6QQIsXT1g_21ogfozqhzvjZKLvUBQET6y3L4sdZ2VGTPcSbEudsdm1ew/exec';
+    //
+    //   String tempName = userNameController!.text;
+    //   String email = emailController!.text;
+    //   String userPhoneNumber = phoneNumberController!.text;
+    //   String message=messageController!.text==null||messageController!.text==""?"":messageController!.text;
+    //
+    //
+    //   print("name ${tempName} , email ${email} , number ${userPhoneNumber} , message ${message}");
+    //   String queryString = "?name=$tempName&email=$email&userPhoneNumber=$userPhoneNumber&message=$message";
+    //
+    //   var finalURI = Uri.parse(scriptURL + queryString);
+    //   var response = await http.get(finalURI);
+    //
+    //   if (response.statusCode == 200) {
+    //
+    //     formLoading.value=false;
+    //     Get.dialog(
+    //         AlertDialog(title: Text("Your form has been submitted successfully",style: TextStyleUtils.heading2,),content: Text("Thankyou for your response , we will get back to you soon",style: TextStyleUtils.paragraphMain,),)
+    //
+    //     );
+    //     var bodyR = convert.jsonDecode(response.body);
+    //     print(bodyR);
+    //
+    //     phoneNumberController!.text="";
+    //     emailController!.text="";
+    //     userNameController!.text="";
+    //     messageController!.text="";
+    //
+    //
+    //
+    //   }else{
+    //     formLoading.value=false;
+    //     Get.dialog(
+    //         AlertDialog(title: Text("There is some error while submitting the form",style: TextStyleUtils.heading2,),content: Text("Thankyou for your response , we will get back to you soon",style: TextStyleUtils.paragraphMain,),)
+    //
+    //     );
+    //   }
+    //
+    //   formLoading.value=false;
+    // }
 
-      const String scriptURL = 'https://script.google.com/macros/s/AKfycbzc6djxnCc7QY6QQIsXT1g_21ogfozqhzvjZKLvUBQET6y3L4sdZ2VGTPcSbEudsdm1ew/exec';
 
+
+    if(isValid){
       String tempName = userNameController!.text;
       String email = emailController!.text;
       String userPhoneNumber = phoneNumberController!.text;
       String message=messageController!.text==null||messageController!.text==""?"":messageController!.text;
 
+      CollectionReference users = FirebaseFirestore.instance.collection('contactUsUsers');
 
-      print("name ${tempName} , email ${email} , number ${userPhoneNumber} , message ${message}");
-      String queryString = "?name=$tempName&email=$email&userPhoneNumber=$userPhoneNumber&message=$message";
+ var userId= _generateCustomId();
+      try {
 
-      var finalURI = Uri.parse(scriptURL + queryString);
-      var response = await http.get(finalURI);
 
-      if (response.statusCode == 200) {
-
-        formLoading.value=false;
-        Get.dialog(
-            AlertDialog(title: Text("Your form has been submitted successfully",style: TextStyleUtils.heading2,),content: Text("Thankyou for your response , we will get back to you soon",style: TextStyleUtils.paragraphMain,),)
-
-        );
-        var bodyR = convert.jsonDecode(response.body);
-        print(bodyR);
+        await users.doc(userId).set({
+          'phoneNumber': userPhoneNumber,
+          'name': tempName,
+          'email':email,
+          'message': message,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
 
         phoneNumberController!.text="";
-        emailController!.text="";
         userNameController!.text="";
         messageController!.text="";
+        emailController!.text="";
 
+        Get.snackbar("Thankyou", "We have taken your details , Our team will contact you shortly ",snackPosition: SnackPosition.BOTTOM);
 
-
-      }else{
         formLoading.value=false;
-        Get.dialog(
-            AlertDialog(title: Text("There is some error while submitting the form",style: TextStyleUtils.heading2,),content: Text("Thankyou for your response , we will get back to you soon",style: TextStyleUtils.paragraphMain,),)
 
-        );
+        print("user created successfully");
+      } catch (e) {
+          formLoading.value=false;
+
+        ScaffoldMessenger.of(Get.context!)
+            .showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
       }
 
-      formLoading.value=false;
+
+
     }
 
+  }
+
+  String _generateCustomId() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final last4Digits = timestamp.substring(timestamp.length - 4);
+    return "uix$last4Digits";
   }
 
   String? validatename(String? text) {
