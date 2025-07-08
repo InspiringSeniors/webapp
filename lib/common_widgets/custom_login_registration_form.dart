@@ -3,21 +3,55 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_text_field.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
+import 'package:otp_autofill/otp_autofill.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../modules/homepage_screen/controllers/homepage_controller.dart';
 import '../utils/color_utils.dart';
+import '../utils/middlewares/auth_middle_ware.dart';
 
 class FormClass {
 
   OtpController homepageController=Get.find();
   void showFormDialog(BuildContext context) {
+
+    homepageController.phoneNumberController=TextEditingController();
+
+    homepageController.userNameController=TextEditingController();
+    homepageController.lastNameController=TextEditingController();
+    homepageController.messageController=TextEditingController();
+
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
+
+    isMobile?
+    showDialog(
+      useSafeArea: true,
+
+    // barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+
+        insetPadding: EdgeInsets.symmetric(horizontal: 24),
+
+        contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 8),
+
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        content: LoginForm(),
+      );
+    },
+    ):
     showDialog(
       // barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
+
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           content: LoginForm(),
         );
@@ -29,7 +63,106 @@ class FormClass {
     var width=MediaQuery.of(Get.context!).size.width ;
 
     var isMobile=width<800?true:false;
-    return SingleChildScrollView(
+    return
+
+      isMobile?      SingleChildScrollView(
+        child: Container(
+          child: Form(
+            key: homepageController.loginformKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    InkWell(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Icon(Icons.close, color: ColorUtils.BRAND_COLOR,
+                          size: TextSizeDynamicUtils.dHeight32,))
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: isMobile?10:30, vertical: isMobile?TextSizeDynamicUtils.dHeight18:TextSizeDynamicUtils.dHeight28),
+
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("Login ", style: isMobile?TextStyleUtils.heading3:TextStyleUtils.heading3,
+                        textAlign: TextAlign.center,),
+
+
+                      SizedBox(height: 16,),
+                      getNumberField(
+                          homepageController
+                              .isPhoneEnabled,
+
+
+                          Get.context!),
+                      SizedBox(height: 16,),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width:MediaQuery.of(Get.context!).size.width*0.7,
+                              child: Text("An OTP will be sent to the above phone number for verification.",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.BRAND_COLOR,fontWeight: FontWeight.w400,fontSize: 13),textAlign: TextAlign.center,)),
+
+
+                        ],
+                      ),
+
+
+
+
+                      SizedBox(height: 32,),
+                      Container(width: width,
+                        child: CustomButtonWithBorder(onpressed: ()async{
+
+                          var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
+
+                          if(homepageController.isCheckNewUser.value==true){
+                            Get.back();
+
+                            FormClass().showRegisterFirst(Get.context!) ;
+
+
+
+
+                          }else {
+                            await homepageController.submitFormforLogin();
+                            homepageController.didntReciveOtp.value = false;
+                            homepageController.isOtpVerified.value = false;
+                            homepageController.OTPColor.value = false;
+                            homepageController.formLoading.value
+                                ? () {}
+                                : showOtpVerification("Login");
+                          }
+
+                        },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Login",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                      ),
+
+
+
+
+
+
+                    ],
+                  ),
+                ),
+
+
+              ],
+            ),
+          ),
+        ),
+      ):
+    SingleChildScrollView(
       child: Container(
         width: MediaQuery
             .of(Get.context!)
@@ -62,38 +195,55 @@ class FormClass {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("Login ", style: isMobile?TextStyleUtils.heading3:TextStyleUtils.heading2,
+                    Text("Login ", style: isMobile?TextStyleUtils.heading3:TextStyleUtils.heading3,
                       textAlign: TextAlign.center,),
 
 
-                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:TextSizeDynamicUtils.dHeight18,),
+                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:32,),
                     getNumberField(
                         homepageController
                             .isPhoneEnabled,
 
 
                         Get.context!),
-                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:TextSizeDynamicUtils.dHeight18,),
+                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:16,),
 
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                            child: Text("An OTP will be sent to the above phone number for verification.",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.BRAND_COLOR,fontWeight: FontWeight.w400,fontSize: 12),textAlign: TextAlign.end,)),
+                            child: Text("An OTP will be sent to the above phone number for verification.",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.BRAND_COLOR,fontWeight: FontWeight.w400,fontSize: 13),textAlign: TextAlign.end,)),
                       ],
                     ),
 
 
-                    SizedBox(height:isMobile?TextSizeDynamicUtils.dHeight18: TextSizeDynamicUtils.dHeight28,),
+                    SizedBox(height:isMobile?TextSizeDynamicUtils.dHeight18: 32,),
+                    Container(width: width,
+                      child: CustomButtonWithBorder(onpressed: ()async{
 
-                    CustomButton(onpressed: () async {
+                        var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
 
-                      await homepageController.submitFormforLogin();
+                        if(homepageController.isCheckNewUser.value==true){
+                          Get.back();
 
-                      homepageController.formLoading.value?(){}:showOtpVerification();
+                            FormClass().showRegisterFirst(Get.context!) ;
 
-                      // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                    },shadowColor: ColorUtils.BRAND_COLOR,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
+
+
+                        }else {
+                          await homepageController.submitFormforLogin();
+                          homepageController.didntReciveOtp.value = false;
+                          homepageController.isOtpVerified.value = false;
+                          homepageController.OTPColor.value = false;
+                          homepageController.formLoading.value
+                              ? () {}
+                              : showOtpVerification("Login");
+                        }
+
+                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Login",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                    ),
+
 
 
 
@@ -180,18 +330,30 @@ class FormClass {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CustomButton(onpressed:() {
+                  CustomButtonWithBorder(onpressed: (){
                     Get.back();
                     showMoreDetailsForm(context) ;// Open More Details Form
+                    // FormClass()._showThankYouDialog(context);
 
-                  }
-                      // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                      ,shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Continue"),
+
+                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Continue",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
                   SizedBox(width: isMobile?10:20,),
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close dialog
-                    },
+                    onPressed: () async{
+
+
+                      UserAuthService.to.isLoggedIn=true;
+                      var waiat= await UserAuthService.to.login();
+
+                      print("checkss");
+                      SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                      var userId= sharedPreferences.getString("userId");
+
+                      print("checkss2 ");
+
+                      Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);                    },
                     child: Text("Do it later",style: TextStyleUtils.heading5,),
                   ),
 
@@ -292,9 +454,87 @@ class FormClass {
       },
     );
   }
+  showUserExistes(BuildContext context) {
+
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
+    showDialog(
+      // barrierDismissible: true,
+
+      context: context,
+      builder: (context) {
+        return Container(
+
+          child: AlertDialog(
+
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            content: Container(
+
+              height:  isMobile?MediaQuery.of(Get.context!).size.height*0.34:MediaQuery.of(Get.context!).size.height*0.34,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Icon(Icons.close, color: ColorUtils.BRAND_COLOR,
+                            size: TextSizeDynamicUtils.dHeight32,)),
+                    ],
+                  ),
 
 
-  void showOtpVerification(){
+                  Icon(Icons.check_circle, color: Colors.green, size: TextSizeDynamicUtils.dHeight42),
+                  SizedBox(height: 32),
+                  Text(
+                      "Welcome Again ! ",
+                      style: TextStyleUtils.heading3
+                  ),
+
+                  SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight18:18),
+
+                  Container(
+                    width:isMobile? MediaQuery.of(context).size.width*0.8:MediaQuery.of(context).size.width*0.3,
+
+                    child: Text(
+                      "User already exists , Please login! ",
+                      textAlign: TextAlign.center,
+                      style: TextStyleUtils.heading5.copyWith(
+                        color: ColorUtils.YELLOW_BRAND
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight18:32),
+                  Container(
+                    width: width*0.2,
+                    child: CustomButtonWithBorder(onpressed: (){
+
+                      // FormClass()._showThankYouDialog(context);
+
+                      FormClass().showFormDialog(context);
+
+                      // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                    },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Login",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                  ),
+
+
+                ],
+              ),
+            ),
+
+          ),
+        );
+      },
+    );
+  }
+
+
+  void showOtpVerification(String type){
     OtpController otpController=Get.find();
     var width=MediaQuery.of(Get.context!).size.width ;
 
@@ -333,6 +573,7 @@ class FormClass {
 
 
                   Text("Please enter the OTP sent to your phone number to proceed. If you haven’t received it, please wait for sometime and request a new OTP.",style: isMobile?TextStyleUtils.mobilesubHeading3:TextStyleUtils.subHeading3.copyWith(
+                    color: ColorUtils.BRAND_COLOR,
                       letterSpacing: 0
                   ),),
 
@@ -355,7 +596,8 @@ class FormClass {
                             obscureText: false,
                             animationType: AnimationType.fade,
                             controller:
-                            otpController.controller,
+                                type=="Login"?
+                            otpController.otpTextController:otpController.resgisterotpTextController,
                             pinTheme: PinTheme(
                                 shape: PinCodeFieldShape.box,
                                 borderRadius:
@@ -385,7 +627,7 @@ class FormClass {
                             onCompleted: (v) {
                               print('Completed'.tr);
                               otpController
-                                  .onOTPCompletion(v,"Login");
+                                  .onOTPCompletion(v,type);
                             },
                             onChanged: (value) {
                               print(value);
@@ -429,7 +671,8 @@ class FormClass {
                             obscureText: false,
                             animationType: AnimationType.fade,
                             controller:
-                            otpController.controller,
+                            type=="Login"?
+                            otpController.otpTextController:otpController.resgisterotpTextController,
                             pinTheme: PinTheme(
                                 shape: PinCodeFieldShape.box,
                                 borderRadius:
@@ -457,7 +700,7 @@ class FormClass {
                             onCompleted: (v) {
                               print('Completed'.tr);
                               otpController
-                                  .onOTPCompletion(v,"Login");
+                                  .onOTPCompletion(v,type);
                             },
                             onChanged: (value) {
                               print(value);
@@ -498,43 +741,45 @@ class FormClass {
                         Obx(() {
                           if (otpController.OTPColor.value ==
                               false&& homepageController.otpVerificationCounter.value<=3
-                              &&homepageController.otpResendCounter.value<=1) {
+                              &&homepageController.otpResendCounter.value<1) {
                             return Row(
                               children: [
-                                Container(
-                                  height: TextSizeDynamicUtils
-                                      .dHeight18,
-                                  width: 18,
-                                  margin:
-                                  const EdgeInsets.only(
-                                      right: 12),
-                                  child:
-                                  const CircularProgressIndicator(
-                                      color: ColorUtils
-                                          .BRAND_COLOR),
-                                ),
-                                Container(
-                                  child: Text(
-                                    'Trying to Auto Capture'
-                                        .tr,
-                                    style: TextStyle(
-                                        fontWeight:
-                                        FontWeight.w400,
-                                        fontSize:
-                                        TextSizeDynamicUtils
-                                            .dHeight14,
-                                        color: ColorUtils
-                                            .GREY_DOTTED),
-                                  ),
-                                ),
+                                // Container(
+                                //   height: TextSizeDynamicUtils
+                                //       .dHeight18,
+                                //   width: 18,
+                                //   margin:
+                                //   const EdgeInsets.only(
+                                //       right: 12),
+                                //   child:
+                                //   const CircularProgressIndicator(
+                                //       color: ColorUtils
+                                //           .BRAND_COLOR),
+                                // ),
+                                // Container(
+                                //   child: Text(
+                                //     'Trying to Auto Capture'
+                                //         .tr,
+                                //     style: TextStyle(
+                                //         fontWeight:
+                                //         FontWeight.w400,
+                                //         fontSize:
+                                //         TextSizeDynamicUtils
+                                //             .dHeight14,
+                                //         color: ColorUtils
+                                //             .GREY_DOTTED),
+                                //   ),
+                                // ),
                               ],
                             );
                           } else if(
                           homepageController.otpVerificationCounter.value>=3
                           ){
                             return Container(
+                              width: isMobile?width:width*0.25,
+
                               child: Text(
-                                'There is something wrong with our system , Please try again'.tr,
+                                "Oops! Something went wrong with the system. Please try again. If the issue persists, you can write to us.".tr,
                                 style: TextStyle(
                                     fontWeight:
                                     FontWeight.w400,
@@ -545,10 +790,13 @@ class FormClass {
                                     ColorUtils.ERROR_RED),
                               ),
                             );
-                          }else if(homepageController.otpResendCounter.value>1){
+                          }else if(              homepageController.didntReciveOtp.value==true
+                          ){
                             return Container(
+                              width: isMobile?width:width*0.25,
+
                               child: Text(
-                                'There is something wrong with our system , Please try again'.tr,
+                                "Oops! Something went wrong with the system. Please try again. If the issue persists, you can write to us.".tr,
                                 style: TextStyle(
                                     fontWeight:
                                     FontWeight.w400,
@@ -560,10 +808,11 @@ class FormClass {
                               ),
                             );
 
-                          }else{
+                          }else if(otpController.OTPColor.value&&homepageController.isOtpVerified.value==false){
                             return Container(
+                              width: isMobile?width:width*0.25,
                               child: Text(
-                                'This code is Incorrect'.tr,
+                                  "Incorrect OTP entered. Please check and try again. If you haven't received the OTP, request a new one.".tr,
                                 style: TextStyle(
                                     fontWeight:
                                     FontWeight.w400,
@@ -574,6 +823,8 @@ class FormClass {
                                     ColorUtils.ERROR_RED),
                               ),
                             );
+                          }else{
+                           return Container();
                           }
                         }),
                         Obx(() {
@@ -596,39 +847,38 @@ class FormClass {
                       ],
                     ),
                   ),
-                  Obx(() {
-                    return Container(
-                      margin: EdgeInsets.only(
-                          left: isMobile?8:16,
-                          right: isMobile?8:16,
-                          top: isMobile?TextSizeDynamicUtils.dHeight28:10
-                      ),
-                      child: CustomButton(
-                        fontSize: TextSizeDynamicUtils.dHeight16,
-
-
-                        shadowColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,
-                        text: "Verify",
-                        onpressed:
-                        otpController.isOTPValid.isTrue
-                            ? ()async{
-                          var wait=await otpController.verifyOTPforLogin();
-                          print("${wait}");
-                          print("object${otpController.isOtpVerified.value}");
-                          otpController.isOtpVerified.value?FormClass().showThankYouDialog(context):false;
-                        }
-                            : () {},
-                        bgColor: otpController
-                            .isVerifying.value
-                            ? ColorUtils.BRAND_COLOR
-                            : otpController
-                            .inactiveColor.value,
-                      ),
-                    );
-                  }),
-                  SizedBox(
-                    height: TextSizeDynamicUtils.dHeight28,
-                  ),
+                  // Obx(() {
+                  //   return Container(
+                  //     margin: EdgeInsets.only(
+                  //         left: isMobile?8:16,
+                  //         right: isMobile?8:16,
+                  //         top: isMobile?TextSizeDynamicUtils.dHeight28:10
+                  //     ),
+                  //     child: CustomButton(
+                  //       fontSize: TextSizeDynamicUtils.dHeight16,
+                  //
+                  //
+                  //       shadowColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,
+                  //       text: "Verify",
+                  //       onpressed:
+                  //       otpController.isOTPValid.isTrue
+                  //           ? ()async{
+                  //
+                  //         await otpController.onOTPCompletion(otpController.otpTextController.text, type);
+                  //         // otpController.isOtpVerified.value?FormClass().showThankYouDialog(context):false;
+                  //       }
+                  //           : () {},
+                  //       bgColor: otpController
+                  //           .isVerifying.value
+                  //           ? ColorUtils.BRAND_COLOR
+                  //           : otpController
+                  //           .inactiveColor.value,
+                  //     ),
+                  //   );
+                  // }),
+                  // SizedBox(
+                  //   height: TextSizeDynamicUtils.dHeight28,
+                  // ),
                   Container(
                     margin: EdgeInsets.only(
 
@@ -648,7 +898,6 @@ class FormClass {
                         //     : Text(
                         //         ' 00:${otpController.currentTime!.value}');
                       } else {
-                        return Obx(() {
                           return isMobile?Column(
                             mainAxisAlignment:
                             MainAxisAlignment.center,
@@ -679,37 +928,64 @@ class FormClass {
                               ),
                             ],
                           ):
-                          Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.center,
-                            children: [
-                              Text("Didn't recieve the OTP?".tr),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              GestureDetector(
+                          Obx(
+                            () {
 
 
-                                onTap: otpController
-                                    .isResendVisible
-                                    .isTrue
-                                    ? otpController.resendOTP
-                                    : () {},
-                                child: Text(
-                                  'Resend'.tr,
-                                  style: TextStyle(
-                                      fontSize:
-                                      TextSizeDynamicUtils
-                                          .dHeight14,
-                                      fontWeight:
-                                      FontWeight.w600,
-                                      color: ColorUtils
-                                          .BRAND_COLOR),
-                                ),
-                              ),
-                            ],
+                            return         homepageController.otpResendCounter.value>=1?
+          GestureDetector(
+
+
+            onTap: (){
+              homepageController.didntReciveOtp.value=true;
+
+            },
+            child: Text(
+              "Didn't recieve the OTP?".tr,
+              style: TextStyle(
+                  fontSize:
+                  TextSizeDynamicUtils
+                      .dHeight14,
+                  fontWeight:
+                  FontWeight.w600,
+                  color: ColorUtils
+                      .BRAND_COLOR),
+            ),
+          )
+
+          : Row(
+            mainAxisAlignment:
+            MainAxisAlignment.center,
+            children: [
+              Text("Didn't recieve the OTP?".tr),
+              SizedBox(
+                width: 10,
+              ),
+              GestureDetector(
+
+
+                onTap: otpController
+                    .isResendVisible
+                    .isTrue
+                    ? otpController.resendOTP
+                    : () {},
+                child: Text(
+                  'Resend'.tr,
+                  style: TextStyle(
+                      fontSize:
+                      TextSizeDynamicUtils
+                          .dHeight14,
+                      fontWeight:
+                      FontWeight.w600,
+                      color: ColorUtils
+                          .BRAND_COLOR),
+                ),
+              ),
+            ],
+          );
+        }
+
                           );
-                        });
                       }
                     }),
                   )
@@ -786,7 +1062,9 @@ class FormClass {
                   children: [
                     Text("Which program would you like to participate in ?", style: isMobile?TextStyleUtils.heading3.copyWith(
                         color: ColorUtils.BRAND_COLOR
-                    ):TextStyleUtils.heading4,
+                    ):TextStyleUtils.heading4.copyWith(
+                        color: ColorUtils.BRAND_COLOR
+                    ),
                       textAlign: TextAlign.center,),
                     SizedBox(height: TextSizeDynamicUtils.dHeight48,),
 
@@ -1120,16 +1398,46 @@ class FormClass {
                     ),
 
                     SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                    CustomButtonWithBorder(onpressed: ()async{
 
-                    CustomButton(onpressed: () async {
+                      // FormClass()._showThankYouDialog(context);
+
                       Get.back();
 
                       await homepageController.submitPreferences();
                       _showThankYouDialogFinal();
+                      UserAuthService.to.isLoggedIn=true;
+
+                      await UserAuthService.to.login();
+
+                      SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                      var userId= sharedPreferences.getString("userId");
+                      Get.back();
+                      Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);
 
 
                       // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                    },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR_LIGHT_2,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                    },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
+
+                    // CustomButton(onpressed: () async {
+                    //   Get.back();
+                    //
+                    //   await homepageController.submitPreferences();
+                    //   _showThankYouDialogFinal();
+                    //   UserAuthService.to.isLoggedIn=true;
+                    //
+                    //   await UserAuthService.to.login();
+                    //
+                    //   SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                    //   var userId= sharedPreferences.getString("userId");
+                    //   Get.back();
+                    //   Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);
+                    //
+                    //
+                    //
+                    //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                    // },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR_LIGHT_2,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
 
 
 
@@ -1234,7 +1542,7 @@ class FormClass {
                   prefixIcon: Icon(
                     Icons.phone_iphone,
                     color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                    size: TextSizeDynamicUtils.dHeight22,
+                    size: TextSizeDynamicUtils.dHeight20,
                   ),
                   errorStyle: TextStyle(
                       color: ColorUtils.ERROR_RED,
@@ -1341,6 +1649,31 @@ class FormClass {
 
 
   void showRegisterFormDialog(BuildContext context) {
+
+    homepageController.phoneNumberController=TextEditingController();
+
+    homepageController.userNameController=TextEditingController();
+    homepageController.lastNameController=TextEditingController();
+    homepageController.messageController=TextEditingController();
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
+
+    isMobile?
+    showDialog(
+    // barrierDismissible: false,
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+
+        insetPadding: EdgeInsets.symmetric(horizontal: 24),
+
+        contentPadding: EdgeInsets.symmetric(vertical: 12,horizontal: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        content: RegisterForm(),
+      );
+    },
+    ):
     showDialog(
       // barrierDismissible: false,
       context: context,
@@ -1357,12 +1690,9 @@ class FormClass {
     var width=MediaQuery.of(Get.context!).size.width ;
 
     var isMobile=width<800?true:false;
-    return SingleChildScrollView(
+    return isMobile? SingleChildScrollView(
       child: Container(
-        width: MediaQuery
-            .of(Get.context!)
-            .size
-            .width * 0.33,
+
         padding: EdgeInsets.symmetric(horizontal:isMobile?0: 10, vertical: 0),
         child: Form(
           key: homepageController.registerFormKey,
@@ -1390,7 +1720,7 @@ class FormClass {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Text("Register With Us!", style: isMobile?TextStyleUtils.heading3:TextStyleUtils.heading2,
+                    Text("Register With Us!", style: isMobile?TextStyleUtils.heading3:TextStyleUtils.heading3,
                       textAlign: TextAlign.center,),
                     SizedBox(height:isMobile?TextSizeDynamicUtils.dHeight18: TextSizeDynamicUtils.dHeight48,),
 
@@ -1405,7 +1735,7 @@ class FormClass {
                           .userNameController,
                       inactiveColor:homepageController.inactiveColor,
                       validator:homepageController.validatename,
-                      icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                      icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,size: 20,),
 
 
                     ),
@@ -1421,7 +1751,7 @@ class FormClass {
                           .lastNameController,
                       validator: homepageController.validateLastName,
                       inactiveColor:homepageController.inactiveColor,
-                      icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                      icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,size: 20,),
 
 
                     ),
@@ -1488,23 +1818,280 @@ class FormClass {
                     ),
                     SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:TextSizeDynamicUtils.dHeight18,),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                            child: Text("An OTP will be sent to the above phone number for verification.",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.BRAND_COLOR,fontWeight: FontWeight.w400,fontSize: 12),textAlign: TextAlign.end,)),
+                          width:width*0.7,
+                            child: Text("An OTP will be sent to the above phone number for verification.",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.BRAND_COLOR,fontWeight: FontWeight.w400,fontSize: 13),textAlign: TextAlign.center,)),
+                      ],
+                    ),
+
+                    SizedBox(height:isMobile?TextSizeDynamicUtils.dHeight32: TextSizeDynamicUtils.dHeight28,),
+
+
+                    Container(
+                      width: width,
+                      child: CustomButtonWithBorder(onpressed: ()async{
+
+                        // FormClass()._showThankYouDialog(context);
+
+
+                        var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
+
+                        if(homepageController.isCheckNewUser.value==false){
+                          Get.back();
+                          showUserExistes(Get.context!);
+
+
+                        }else {
+                          await homepageController.submitForm();
+
+                          homepageController.didntReciveOtp.value=false;
+                          homepageController.isOtpVerified.value=false;
+                          homepageController.OTPColor.value=false;
+
+                          homepageController.formLoading.value?(){}:showOtpVerification("Register");
+                        }
+
+                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                    ),
+
+
+                    // CustomButton(onpressed: () async {
+                    //
+                    //
+                    //
+                    //   var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
+                    //
+                    //   if(homepageController.isCheckNewUser.value==false){
+                    //     Get.back();
+                    //     showUserExistes(Get.context!);
+                    //
+                    //
+                    //                       }else {
+                    //     await homepageController.submitForm();
+                    //
+                    //     homepageController.didntReciveOtp.value=false;
+                    //     homepageController.isOtpVerified.value=false;
+                    //     homepageController.OTPColor.value=false;
+                    //
+                    //     homepageController.formLoading.value?(){}:showOtpVerification("Register");
+                    //   }
+                    //
+                    //
+                    //
+                    //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                    // },shadowColor: ColorUtils.BRAND_COLOR,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
+
+
+
+
+                  ],
+                ),
+              ),
+
+
+            ],
+          ),
+        ),
+      ),
+    ):SingleChildScrollView(
+      child: Container(
+        width: MediaQuery
+            .of(Get.context!)
+            .size
+            .width * 0.33,
+        padding: EdgeInsets.symmetric(horizontal:isMobile?0: 10, vertical: 0),
+        child: Form(
+          key: homepageController.registerFormKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Icon(Icons.close, color: ColorUtils.BRAND_COLOR,
+                        size: TextSizeDynamicUtils.dHeight32,))
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: isMobile?10:30, vertical: isMobile?TextSizeDynamicUtils.dHeight18:TextSizeDynamicUtils.dHeight28),
+
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text("Register With Us!", style: isMobile?TextStyleUtils.heading3:TextStyleUtils.heading3,
+                      textAlign: TextAlign.center,),
+                    SizedBox(height:isMobile?TextSizeDynamicUtils.dHeight18: TextSizeDynamicUtils.dHeight48,),
+
+                    CustomTextFieldV2(
+                      stateHandler:
+
+                      homepageController.nameStateHandler,
+                      labela:
+                      homepageController.labeluserName,
+                      label:'Fist Name'.tr,
+                      controller:homepageController
+                          .userNameController,
+                      inactiveColor:homepageController.inactiveColor,
+                      validator:homepageController.validatename,
+                      icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,size: 20,),
+
+
+                    ),
+                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:TextSizeDynamicUtils.dHeight18,),
+                    CustomTextFieldV2(
+                      stateHandler:
+
+                      homepageController.lastNameStateHandler,
+                      labela:
+                      homepageController.labellastName,
+                      label:'Last Name'.tr,
+                      controller:homepageController
+                          .lastNameController,
+                      validator: homepageController.validateLastName,
+                      inactiveColor:homepageController.inactiveColor,
+                      icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,size: 20,),
+
+
+                    ),
+                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:TextSizeDynamicUtils.dHeight18,),
+                    getNumberField(
+                        homepageController
+                            .isPhoneEnabled,
+
+
+                        Get.context!),
+                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:TextSizeDynamicUtils.dHeight18,),
+
+                    TextFormField(
+
+
+                      controller: homepageController.messageController,
+                      maxLines: 4, // Allows long te// xt input
+                      cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                      decoration: InputDecoration(
+
+                          labelStyle: TextStyle(
+                              color:  ColorUtils.GREY_COLOR_PLACEHOLDER),
+                          focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
+
+                          alignLabelWithHint: true,
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                  width: 2, color: ColorUtils.GREY_DOTTED
+
+                              )
+                          )
+                          ,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 2, color: ColorUtils.GREY_DOTTED
+                            ),
+                            //<-- SEE HERE
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 2, color: ColorUtils.ERROR_RED), //<-- SEE HERE
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+
+                          isDense: false,
+                          hintText: "If you have any comments or thoughts that you want to share , type here .",
+                          hintStyle: TextStyleUtils.smallGreyTextStyle,
+                          fillColor:Color(0xFFF6F4F4),
+
+                          filled: true,
+
+                          errorStyle: TextStyle(
+                              color: ColorUtils.ERROR_RED,
+                              fontSize: TextSizeDynamicUtils.dHeight12,
+                              fontWeight: FontWeight.w400)),
+
+                    ),
+                    SizedBox(height: isMobile?TextSizeDynamicUtils.dHeight12:TextSizeDynamicUtils.dHeight18,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                            child: Text("An OTP will be sent to the above phone number for verification.",style: TextStyleUtils.mobileheading6.copyWith(color: ColorUtils.BRAND_COLOR,fontWeight: FontWeight.w400,fontSize: 13),textAlign: TextAlign.end,)),
                       ],
                     ),
 
                     SizedBox(height:isMobile?TextSizeDynamicUtils.dHeight18: TextSizeDynamicUtils.dHeight28,),
 
-                    CustomButton(onpressed: () async {
 
-                      await homepageController.submitForm();
+                    Container(
+                      width: width,
+                      child: CustomButtonWithBorder(onpressed: ()async{
 
-                      homepageController.formLoading.value?(){}:showOtpVerification();
+                        // FormClass()._showThankYouDialog(context);
 
-                      // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                    },shadowColor: ColorUtils.BRAND_COLOR,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
+                        var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
+
+                        if(homepageController.isCheckNewUser.value==false){
+                          Get.back();
+                          showUserExistes(Get.context!);
+
+
+                        }else {
+                          await homepageController.submitForm();
+
+                          homepageController.didntReciveOtp.value=false;
+                          homepageController.isOtpVerified.value=false;
+                          homepageController.OTPColor.value=false;
+
+                          homepageController.formLoading.value?(){}:showOtpVerification("Register");
+                        }
+
+                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                    ),
+
+
+                    // CustomButton(onpressed: () async {
+                    //
+                    //
+                    //
+                    //   var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
+                    //
+                    //   if(homepageController.isCheckNewUser.value==false){
+                    //     Get.back();
+                    //     showUserExistes(Get.context!);
+                    //
+                    //
+                    //                       }else {
+                    //     await homepageController.submitForm();
+                    //
+                    //     homepageController.didntReciveOtp.value=false;
+                    //     homepageController.isOtpVerified.value=false;
+                    //     homepageController.OTPColor.value=false;
+                    //
+                    //     homepageController.formLoading.value?(){}:showOtpVerification("Register");
+                    //   }
+                    //
+                    //
+                    //
+                    //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                    // },shadowColor: ColorUtils.BRAND_COLOR,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
 
 
 
@@ -1591,17 +2178,33 @@ class FormClass {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CustomButton(onpressed:() {
+
+                  CustomButtonWithBorder(onpressed: (){
                     Get.back();
                     showMoreDetailsForm(context) ;// Open More Details Form
+                    // FormClass()._showThankYouDialog(context);
 
-                  }
-                      // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                      ,shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Continue"),
+
+                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Continue",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+
+
                   SizedBox(width: isMobile?10:20,),
                   TextButton(
-                    onPressed: () {
-                      Navigator.pop(context); // Close dialog
+                    onPressed: () async{
+                      print("checkss0");
+
+                      Get.back();
+                      UserAuthService.to.isLoggedIn=true;
+                      var waiat= await UserAuthService.to.login();
+
+                      print("checkss");
+                      SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                      var userId= sharedPreferences.getString("userId");
+
+                      print("checkss2 ");
+
+                      Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);
                     },
                     child: Text("Do it later",style: TextStyleUtils.heading5,),
                   ),

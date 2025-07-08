@@ -1,22 +1,33 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
+import 'package:inspiringseniorswebapp/utils/middlewares/auth_middle_ware.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:otp_autofill/otp_autofill.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:whatsapp/whatsapp.dart';
+
 
 import '../../../common_widgets/custom_carousel.dart';
 import '../../../common_widgets/custom_login_registration_form.dart';
 import '../../../common_widgets/custom_testimonials_section.dart';
 import '../../../utils/utility/utils.dart';
-import '../views/navbar.dart';
+import '../../admin_dashboard/models/user_model.dart' as Users;
 import 'package:http/http.dart' as http;
+
+import '../views_2/navbar.dart';
 
 
 class HomepageController extends GetxController {
@@ -42,7 +53,7 @@ class HomepageController extends GetxController {
 
   final List<Testimonial> testimonials = [
     Testimonial(
-      name: "Shiv Kumar Verma",
+      name: "Shiv Kumar Varma",
       role: "Senior Member, Inspiring Seniors Foundation",
       text: "Extremely useful session on how to inhale and exhale breaths, especially to release all the air inhaled inside. Shall try to practice.",
       image: "assets/images/shivkumar.png",
@@ -90,8 +101,8 @@ class HomepageController extends GetxController {
 
   final List images = [
     {"imageUrl":    'https://png.pngtree.com/background/20230403/original/pngtree-side-profile-of-old-man-vector-picture-image_2278848.jpg',
-    "testimonial":  '"At 87, S.K. Verma proves that age is just a number. With Inspiring Seniors Foundation he is engaging himself through technology, embracing every opportunity. Winning the Step Count Challenge 80+ category was just the beginning – he continues striving for health and growth."',    "username":"Shiv Kumar Verma",
-      "groupFrom":"🏆 Thriving at 87 – Shiv Verma’s Journey",
+    "testimonial":  '"At 87, S.K. Varma proves that age is just a number. With Inspiring Seniors Foundation he is engaging himself through technology, embracing every opportunity. Winning the Step Count Challenge 80+ category was just the beginning – he continues striving for health and growth."',    "username":"Shiv Kumar Varma",
+      "groupFrom":"🏆 Thriving at 87 – Shiv Varma’s Journey",
       "bgColor":ColorUtils.ORANGE_COLOR_LIGHT,
 "username":"We celebrate unstoppable spirits like his."
 
@@ -144,15 +155,47 @@ class HomepageController extends GetxController {
         ),
   ];
   @override
-  void onInit() {
+  void onInit() async{
+
+    // await fetchStats();
+
 
     Get.put(OtpController(),permanent: true);
-    super.onInit();
     startSwitcher();
     // sectionKey=GlobalKey();
 
 
   }
+
+
+  RxInt activeMembers = 0.obs;
+  RxInt volunteers = 0.obs;
+  RxInt classes = 0.obs;
+  RxInt studentBeneficiaries = 0.obs;
+  var isStatsLoading=false.obs;
+
+  // fetchStats() async {
+  //    isStatsLoading.value=true;
+  //   try {
+  //     final doc = await FirebaseFirestore.instance
+  //         .collection('stats')
+  //         .doc('counts')
+  //         .get();
+  //
+  //     activeMembers.value = int.tryParse(doc['active_members'] ?? '0') ?? 0;
+  //     volunteers.value = int.tryParse(doc['volunteers'] ?? '0') ?? 0;
+  //     classes.value = int.tryParse(doc['classes'] ?? '0') ?? 0;
+  //     studentBeneficiaries.value = int.tryParse(doc['student_beneficiaries'] ?? '0') ?? 0;
+  //
+  //
+  //     print("actives ${activeMembers.value}");
+  //     isStatsLoading.value=false;
+  //
+  //   } catch (e) {
+  //     isStatsLoading.value=false;
+  //     print("Error fetching stats: $e");
+  //   }
+  // }
 
 
   void setVisibility(bool visible) {
@@ -202,106 +245,187 @@ class HomepageController extends GetxController {
 
 
 
-  void sendWhatsAppMessage(String phoneNumber, String message) async {
-    final String accessToken = "EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD"; // Get from Meta Developer Account
-    final String phoneId = "614697528393435"; // Get from Meta Developer Account
-    final String apiUrl = "https://graph.facebook.com/v22.0/$phoneId/messages";
+  final pageController = PageController();
+  var current = 0.obs;
 
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $accessToken",
+
+  final slides = [
+    {
+      'title': 'Empowering Seniors to Live Their Best Lives',
+      'subtitle': 'Join our community of seniors and discover new opportunities for healthy, active and productive lives.',
+      // 'image': 'assets/images/homepage_banner_ai.png',
+      'image': 'assets/images/who_we_are_2.png',
+
+      "testimonial":  '"Thanks to ISF, I’ve been actively participating in sessions like Melody Masters, art, storytelling, and Wellness Choupal.Each session brings joy and connection. I’ve been able to overcome loneliness—while staying right at home."',
+      "username":"Anita Maghan",
+      'name': 'Anita Maghan',
+      'userprofilepic':"assets/images/anita_pp.jpeg",
+  'buttonText':'Join Our Community',
+      'onpressed':(){
+        Get.toNamed(RoutingNames.JOIN_US_SCREEN);
       },
-      body: jsonEncode({
-        "messaging_product": "whatsapp",
-        "to": phoneNumber,
-        "type": "text",
-        "text": {"body": message},
-      }),
+
+
+  'since': 'At home yet never alone , Thanks to ISF'
+    },
+    {
+      'title': 'Ensuring healthy longevity',
+      'subtitle': 'Stay active , stay healthy with our health hub programs',
+      // 'image': 'assets/images/who_we_are_2.png',
+      'image':'assets/images/health_hub2.jpeg',
+      "testimonial":  '"At 87, S.K. Varma proves that age is just a number. With Inspiring Seniors Foundation he is engaging himself through technology, embracing every opportunity. Winning the Step Count Challenge 80+ category was just the beginning – he continues striving for health and growth."',    "username":"Shiv Kumar Varma",
+      'name': 'S.K. Varma',
+      'userprofilepic':"assets/images/shivkumar.png",
+    'since': '🏆 Thriving at 87 – Shiv Varma’s Journey',
+
+    // "testimonial":  '"Life’s melodies returned for Prof. Manish Kumar through our ‘Gaata Rahe Mera Dil’ contest. Once a quiet listener, he rediscovered singing and sharing music with a vibrant community. His journey reflects the joy of reconnecting with forgotten passions."',
+      // 'userprofilepic':"",
+      // 'name': 'Manish Kumar',
+      // 'since': '🎵 Rekindling Passion',
+      'buttonText':'Learn More',
+      'onpressed':(){
+        Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
+
+      },
+
+    },
+    {
+      'title': 'Fostering purpose and intergenerational impact',
+      'subtitle': 'Find purpose and meaning to life by sharing your wisdom knowledge and experience ',
+      'image': 'assets/images/prod_banner.jpeg',
+      "testimonial":  '"Teaching in Hindi was unfamiliar, but Poonam Trivedi embraced the challenge with open arms. With the Inspiring Seniors Foundation, she found joy in learning alongside her students. Now, she eagerly waits for every class and feels incomplete if she misses one."',
+      'name': 'Poonam Trivedi',
+      'userprofilepic':"",
+      'buttonText':'Learn More',
+
+
+    'since': '🌱 Growing Through Teaching ',
+      'onpressed':(){
+        Get.toNamed(RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN);
+
+      },
+    },
+
+    {
+      'title': 'Building communities and social circle',
+      'subtitle': 'Rekindle your passion for music, stories, art, books and find social circles with common interest',
+      // 'image': 'assets/images/health_hub.jpg',
+      'image': 'assets/images/who_we_are.jpeg',
+
+      // "testimonial":   '"Hardeep Vilkhu comes with no teaching background but a drive to uplift young minds. With “Let’s Talk English” program, she turned her passion into pride as she watched her students shine on stage."',
+      // 'name': 'Hardeep Vikhu',
+      // 'userprofilepic':"assets/images/hardeepkaur.png",
+      'buttonText':'Learn More',
+
+      "testimonial":  '"Life’s melodies returned for Prof. Manish Kumar through our ‘Gaata Rahe Mera Dil’ contest. Once a quiet listener, he rediscovered singing and sharing music with a vibrant community. His journey reflects the joy of reconnecting with forgotten passions."',
+      'userprofilepic':"",
+      'name': 'Manish Kumar',
+      'since': '🎵 Rekindling Passion',
+
+      // 'since': '📚 From Boardroom to Classroom ',
+      'onpressed':(){
+        Get.toNamed(RoutingNames.SOCIAL_CIRCLE_SCREEN);
+
+      },
+    },
+
+  ];
+
+
+  final isSending = false.obs;
+
+  // Replace with your own Twilio Account SID and Auth Token
+  final String accountSid = 'AC26c12c609c33df4a3f9d9d727bf3f9e1';
+  final String authToken = 'd9ada69773f8471458eda174240c5163';
+  final String fromPhoneNumber = 'whatsapp:+15557596838'; // for WhatsApp, use 'whatsapp:+...'
+   String toPhoneNumber = 'whatsapp:+918527326465'; // your verified number
+  final String messageBody = 'Hello from Flutter with Twilio and GetX!';
+  final String contentSid= 'HXdac6575e43566b28edc5bf1268129c3f';
+  final String messagingServiceSid='MGffa60d6693ed348e9aa446bfa77578bd';
+
+  // Replace these values with your real credentials
+
+  final String templateName = 'test'; // lowercase with underscores
+  final String languageCode = 'en_US'; // or whatever you chose
+
+  // Optional: if your template has variables
+
+  Future<void> sendMessage(number) async {
+    isSending.value = true;
+
+    toPhoneNumber='whatsapp:+91${number}';
+    final url = Uri.parse(
+      'https://api.twilio.com/2010-04-01/Accounts/$accountSid/Messages.json',
     );
 
-    if (response.statusCode == 200) {
-      print("Message sent successfully!");
-    } else {
-      print("Failed to send message: ${response.body}");
+    final headers = {
+      'Authorization':
+      'Basic ${base64Encode(utf8.encode('$accountSid:$authToken'))}',
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+
+
+    final body = {
+      'ContentSid': contentSid,
+      'To': toPhoneNumber,
+      'From': fromPhoneNumber,
+      "mediaUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/ISF%20Brochure_compressed.pdf?alt=media&token=c1b13751-adf3-47f5-a7df-0e66a7c35ff7",
+
+      'MessagingServiceSid': messagingServiceSid,
+      // 'ContentVariables': contentVariables,
+    };
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 201) {
+        Get.snackbar("Welcome", "Welcome To ISF",          snackPosition: SnackPosition.BOTTOM,);
+
+      } else {
+        Get.snackbar("Something went wrong", "We were not able to send you our brochure. ",          snackPosition: SnackPosition.BOTTOM,);
+
+      }
+    } catch (e) {
+      print("error ${e}");
+      Get.snackbar('Exception', e.toString());
+    } finally {
+      isSending.value = false;
     }
   }
 
 
-  void sendWhatsAppMessage1() async {
-    final String accessToken = "EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD"; // Get from Meta Developer Account
-    final String phoneId = "614697528393435"; // WhatsApp Business Phone Number ID
-    final String apiUrl = "https://graph.facebook.com/v22.0/614697528393435/messages";
+  Future<void> sendWhatsApp(String number) async {
 
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        "Authorization": "Bearer $accessToken",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({
-        "messaging_product": "whatsapp",
-        "to": "919650373038", // Replace with recipient's phone number
-        "type": "template",
-        "template": {
-          "name": "hello_world",
-          "language": {"code": "en_US"}
-        }
-      }),
-    );
+    print("number ${number}");
 
-    if (response.statusCode == 200) {
-      print("Message sent successfully!");
-    } else {
-      print("Failed to send message: ${response.body}");
+
+
+    try {
+      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+        'sendWhatsAppMessage',
+      );
+
+      final response = await callable.call({
+        'number': number, // Pass the number directly, WITHOUT wrapping in data:
+      });
+
+      final result = response.data;
+      print("Response: $result");
+
+      if (result['success'] == true) {
+        // You can show a snackbar or alert
+        print("Message sent successfully");
+      } else {
+        print("Message sending failed: ${result['message']}");
+      }
+
+    } on FirebaseFunctionsException catch (e) {
+      print('FirebaseFunctionsException: ${e}');
+    } catch (e) {
+      print('Unexpected error: $e');
     }
   }
-
-  void sendRegistrationGreeting(String recipientPhone) async {
-    final String accessToken = "EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD"; // Get from Meta Developer Account
-    final String phoneId = "614697528393435"; // WhatsApp Business Phone Number ID
-    final String apiUrl = "https://graph.facebook.com/v22.0/$phoneId/messages";
-
-    // Define the template name (Replace with your actual template name)
-    final String templateName = "registration_greeting";
-
-    // Define language code
-    final String languageCode = "en_US";
-
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        "Authorization": "Bearer $accessToken",
-        "Content-Type": "application/json",
-      },
-      body: jsonEncode({
-        "messaging_product": "whatsapp",
-        "to": recipientPhone,
-        "type": "template",
-        "template": {
-          "name": templateName,
-          "language": {"code": languageCode},
-          "components": [
-            {
-              "type": "body",
-              "parameters": [
-                {"type": "text", "text": "John Doe"},  // Replace with dynamic user name
-                {"type": "text", "text": "Inspiring Seniors Foundation"} // Organization name
-              ]
-            }
-          ]
-        }
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print("Registration greeting sent successfully!");
-    } else {
-      print("Failed to send message: ${response.body}");
-    }
-  }
-
 
 
 }
@@ -313,7 +437,9 @@ class OtpController extends GetxController {
   Rx<int>? currentTime = 45.obs;
 
   var isResendVisible = false.obs;
-  late OTPTextEditController controller;
+  late OTPTextEditController otpTextController;
+  late OTPTextEditController resgisterotpTextController;
+
   var OTPColor = false.obs;
   String? mobileNumber;
   var isOTPValid = false.obs;
@@ -389,6 +515,7 @@ class OtpController extends GetxController {
 
   var otpVerificationCounter = 0.obs;
   var otpResendCounter = 0.obs;
+  var didntReciveOtp = false.obs;
 
   var isCheckNewUser = false.obs;
 
@@ -397,15 +524,28 @@ class OtpController extends GetxController {
   @override
   void onInit() {
     // TODO: implement onInit
+    super.onInit();
 
     // _otpListener();
-    controller = OTPTextEditController(
+    otpTextController = OTPTextEditController(
       codeLength: 6,
       onCodeReceive: (code) => print('Your Application receive code - $code'),
     );
 
 
-    super.onInit();
+    // _otpListener();
+    resgisterotpTextController = OTPTextEditController(
+      codeLength: 6,
+      onCodeReceive: (code) => print('Your Application receive code - $code'),
+    );
+
+
+  }
+
+  @override
+  void dispose() {
+    otpTextController.dispose();
+    super.dispose();
   }
 
   //resend code
@@ -416,9 +556,8 @@ class OtpController extends GetxController {
     if (otpResendCounter.value <= 1) {
       HomepageController homepageController = Get.find();
       isResendVisible.value = false;
-      startTime();
-      controller.clear();
-      controller.text = "";
+      otpTextController.clear();
+      otpTextController.text = "";
       proceedToSendOtp(phoneNumberController!.text!);
     }
   }
@@ -467,57 +606,63 @@ class OtpController extends GetxController {
     false;
     print("valling till ere");
     print("object${isOtpVerified.value}");
-    isOtpVerified.value ?
-    FormClass().showThankYouDialog(Get.context!)
-
-        : false;
 
 
-    isOtpVerified.value ?
-    continueForSignup()
-        : false;
+    if(isOtpVerified.value==true&&isCheckNewUser.value==true){
+      FormClass().showThankYouDialog(Get.context!);
 
-    sendWhatsAppTemplateMessage(recipientPhoneNumber:"9650373038" );
+      await continueForSignup();
+
+      var wait =await homepageController.sendWhatsApp(phoneNumberController!.text);
+
+    }else if(isCheckNewUser.value==false){
+      Get.back();
+      Get.snackbar(
+
+        "User Already Exists", "Please login , You are already registered with us",          snackPosition: SnackPosition.BOTTOM,);
+    }
+
+
 
 
     isVerifying.value = false;
   }
 
 
-  Future<void> sendWhatsAppTemplateMessage({
-    required String recipientPhoneNumber,
-  }) async {
-    const String accessToken = '<access token>'; // Replace with your token
-    const String phoneNumberId = '614697528393435'; // Replace if different
-
-    final url = Uri.parse(
-      'https://graph.facebook.com/v22.0/$phoneNumberId/messages',
-    );
-
-    final headers = {
-      'Authorization': 'Bearer $accessToken',
-      'Content-Type': 'application/json',
-    };
-
-    final body = jsonEncode({
-      "messaging_product": "whatsapp",
-      "to": recipientPhoneNumber, // E.g. "919999999999"
-      "type": "template",
-      "template": {
-        "name": "hello_world", // Must match approved template name
-        "language": {"code": "en_US"}
-      }
-    });
-
-    final response = await http.post(url, headers: headers, body: body);
-
-    if (response.statusCode == 200) {
-      print('Template message sent successfully!');
-    } else {
-      print('Failed to send message. Status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-    }
-  }
+  // Future<void> sendWhatsAppTemplateMessage({
+  //   required String recipientPhoneNumber,
+  // }) async {
+  //   const String accessToken = '<access token>'; // Replace with your token
+  //   const String phoneNumberId = '614697528393435'; // Replace if different
+  //
+  //   final url = Uri.parse(
+  //     'https://graph.facebook.com/v22.0/$phoneNumberId/messages',
+  //   );
+  //
+  //   final headers = {
+  //     'Authorization': 'Bearer $accessToken',
+  //     'Content-Type': 'application/json',
+  //   };
+  //
+  //   final body = jsonEncode({
+  //     "messaging_product": "whatsapp",
+  //     "to": recipientPhoneNumber, // E.g. "919999999999"
+  //     "type": "template",
+  //     "template": {
+  //       "name": "hello_world", // Must match approved template name
+  //       "language": {"code": "en_US"}
+  //     }
+  //   });
+  //
+  //   final response = await http.post(url, headers: headers, body: body);
+  //
+  //   if (response.statusCode == 200) {
+  //     print('Template message sent successfully!');
+  //   } else {
+  //     print('Failed to send message. Status: ${response.statusCode}');
+  //     print('Response body: ${response.body}');
+  //   }
+  // }
 
 
 
@@ -540,7 +685,12 @@ class OtpController extends GetxController {
 
 
     }else if(isOtpVerified.value==true){
-      FormClass().showThankYouDialog(Get.context!) ;
+      await UserAuthService.to.login();
+
+      SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+      var userId= sharedPreferences.getString("userId");
+      Get.back();
+      Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);
     }
 
 
@@ -548,12 +698,14 @@ class OtpController extends GetxController {
     isVerifying.value = false;
   }
 
+
+
   //for automatic listening to otp
   _otpListener() {
     OTPInteractor()
         .getAppSignature()
         .then((value) => print('signature - $value'));
-    controller = OTPTextEditController(
+    otpTextController = OTPTextEditController(
       codeLength: 6,
       onCodeReceive: (code) => print('Your Application receive code - $code'),
     )..startListenUserConsent(
@@ -583,7 +735,8 @@ class OtpController extends GetxController {
 
 
 
-      proceedToSendOtp(phoneNumberController!.text);
+
+        proceedToSendOtp(phoneNumberController!.text);
 
       // await continueForSignup();
 
@@ -599,6 +752,7 @@ class OtpController extends GetxController {
   submitFormforLogin() async{
     bool isValid = loginformKey.currentState!.validate();
 
+
     formLoading.value=true;
     if(isValid) {
       String userPhoneNumber = phoneNumberController!.text;
@@ -610,8 +764,12 @@ class OtpController extends GetxController {
   }
 
   Future<void> proceedToSendOtp(String phoneNumber) async {
+
+    try{
+
     OtpController otpController=Get.find();
     otpController.startTime();
+
 
     print("sending otp");
     if (phoneNumberController!.text != '9087654321') {}
@@ -620,6 +778,9 @@ class OtpController extends GetxController {
     confirmationResult = await auth.signInWithPhoneNumber("+91${phoneNumber}",);
 
     print("erroor otp");
+  }catch(e){
+    print("error is ${e}");
+  }
 
   }
 
@@ -650,8 +811,43 @@ class OtpController extends GetxController {
         return false;
       }
     } catch (e) {
-      Get.snackbar("Something went wrong", e.toString());
+      Get.snackbar("Error", "Something went wrong",          snackPosition: SnackPosition.BOTTOM,);
+
       return false;
+    }
+  }
+
+  checkForUserRegistrationNumber(String phoneNumber) async {
+
+
+    if ( phoneNumber != null) {
+      // Remove +91 or any other country code
+      String fullPhone = phoneNumber!; // e.g. "+919876543210"
+      String localPhone = fullPhone.replaceAll(RegExp(r'^\+\d{1,2}'), ''); // removes country code
+
+      print("Stripped phone number: $localPhone");
+
+      // Query Firestore where phone number matches the one without country code
+      QuerySnapshot userQuery = await FirebaseFirestore.instance
+          .collection('users')
+          .where('phoneNumber', isEqualTo: localPhone)
+          .limit(1)
+          .get();
+
+      if (userQuery.docs.isNotEmpty) {
+        // Get Firestore document ID
+        String firestoreUserId = userQuery.docs.first.id;
+
+        print("id is${firestoreUserId}");
+        // Store in SharedPreferences
+        var prefs = await SharedPreferences.getInstance();
+        await prefs.setString("userId", firestoreUserId);
+        print("User already exists in Firestore");
+        isCheckNewUser.value = false;
+      } else {
+        print("User does not exist in Firestore");
+        isCheckNewUser.value = true;
+      }
     }
   }
 
@@ -662,27 +858,35 @@ class OtpController extends GetxController {
     var prefs = await SharedPreferences.getInstance();
     prefs.setBool("IsUserLoggedIn", true);
 
-    print("current user ${user}");
-    if (user != null) {
-      // Reference to your Firestore database
-      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+    print("current user ${user?.phoneNumber}");
+
+    if (user != null && user.phoneNumber != null) {
+      // Remove +91 or any other country code
+      String fullPhone = user.phoneNumber!; // e.g. "+919876543210"
+      String localPhone = fullPhone.replaceAll(RegExp(r'^\+\d{1,2}'), ''); // removes country code
+
+      print("Stripped phone number: $localPhone");
+
+      // Query Firestore where phone number matches the one without country code
+      QuerySnapshot userQuery = await FirebaseFirestore.instance
           .collection('users')
-          .doc(user.uid)
+          .where('phoneNumber', isEqualTo: localPhone)
+          .limit(1)
           .get();
 
-      if (userDoc.exists) {
-        print("user already exists for firestore ");
+      if (userQuery.docs.isNotEmpty) {
+        // Get Firestore document ID
+        String firestoreUserId = userQuery.docs.first.id;
 
-        isCheckNewUser.value=false;
-        // Get.toNamed(RoutingNames.HOME_PAGE_SCREEN);
-        // User already exists, redirect to Home Screen
+        print("id is${firestoreUserId}");
+        // Store in SharedPreferences
+        var prefs = await SharedPreferences.getInstance();
+        await prefs.setString("userId", firestoreUserId);
+        print("User already exists in Firestore");
+        isCheckNewUser.value = false;
       } else {
-        isCheckNewUser.value=true;
-
-        // Get.toNamed(RoutingNames.SIGNUP_SCREEN);
-        print("user does not exists");
-
-        // User is new, redirect to Sign-Up Screen
+        print("User does not exist in Firestore");
+        isCheckNewUser.value = true;
       }
     }
   }
@@ -696,23 +900,50 @@ class OtpController extends GetxController {
     var message =messageController!.text;
 
     FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = auth.currentUser;
-    var userId= user!.uid;
+    String newUserId;
+    newUserId = generateUserId();
+
+
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
 
-    sharedPreferences.setString("userId", userId);
+    sharedPreferences.setString("userId", newUserId);
 
     try {
 
+      final now = DateTime.now();
+      final oneYearLater = now.add(const Duration(days: 365));
 
-      await users.doc(userId).set({
-        'phoneNumber': phone,
-        'firstName': firstName,
-        'lastName': lastname,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+      Users.User user = Users.User(
+        id: newUserId,
+        firstName: firstName,
+        lastName: lastname,
+        phoneNumber: phone,
+        status: 'pending',
+        role: 'member',
+        registerDate: now,
+        updatedAt: now,
+        memebershipType: 'silver',
+        lastDate: oneYearLater,
+        isPasswordSet: false,
+        preferences: [],
+        profilePic: '',
+      );
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(newUserId)
+          .set(user.toMap());
+
+
+      // await users.doc(newUserId).set({
+      //   'phoneNumber': phone,
+      //   'firstName': firstName,
+      //   'lastName': lastname,
+      //
+      //   'createdAt': FieldValue.serverTimestamp(),
+      // });
 
       lastNameController!.text="";
       userNameController!.text="";
@@ -722,17 +953,26 @@ class OtpController extends GetxController {
       print("user created successfully");
       print(users);
     } catch (e) {
-      ScaffoldMessenger.of(Get.context!)
-          .showSnackBar(SnackBar(content: Text("Error: ${e.toString()}")));
+      Get.snackbar("Error", "${e}",          snackPosition: SnackPosition.BOTTOM,);
+
     }
   }
 
+
+
+  String generateUserId() {
+    const prefix = 'uix';
+    final random = Random.secure();
+    final number = random.nextInt(9000) + 1000; // generates 4-digit number from 1000 to 9999
+    return '$prefix$number';
+  }
 
   submitPreferences() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user = auth.currentUser;
 
-    var userId=user!.uid;
+    SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+   var userId= sharedPreferences.getString("userId");
 
     CollectionReference users = FirebaseFirestore.instance.collection('users');
 
@@ -756,17 +996,16 @@ class OtpController extends GetxController {
       print("Preferences updated successfully!");
 
       // Show success message
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(content: Text("Preferences saved successfully!")),
-      );
+      Get.snackbar("Success", "Preferences saved successfully!",          snackPosition: SnackPosition.BOTTOM,);
+
+
       phoneNumberController!.text=""; // Get user phone number
 
     } catch (e) {
 
       print("e ");
-      ScaffoldMessenger.of(Get.context!).showSnackBar(
-        SnackBar(content: Text("Error: ${e.toString()}")),
-      );
+      Get.snackbar("Error", "${e}",          snackPosition: SnackPosition.BOTTOM,);
+
     }
   }
 

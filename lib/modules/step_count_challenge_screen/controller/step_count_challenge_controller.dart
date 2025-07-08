@@ -37,14 +37,14 @@ class StepCountChallengeController extends GetxController{
   final List<Widget> onboardingList = <Widget>[
     CarouselBuilderScreenV2.screen1(
       Get.context!,
-      'c4CJ9DvL2kc',
+      'HPLTxYNhy-M',
     ),
     CarouselBuilderScreenV2.screen1(
       Get.context!,
-      'iOJAoK1k7tU',),
+      '0GE0fzYHsBg',),
     CarouselBuilderScreenV2.screen1(
       Get.context!,
-      'CclkkCdSt44',
+      'f7kL6JridiQ',
     ),
 
     CarouselBuilderScreenV2.screen1(
@@ -58,9 +58,44 @@ class StepCountChallengeController extends GetxController{
     // TODO: implement onInit
     super.onInit();
 
-    faqList.value=[
-      {"Q":" How can I participate in the Step Count Challenge?","A":"ISF members can join Step Count Challenge by filling the google form for becoming member or volunteer with us or you can send 'Yes DDH' message on WhatsApp to 9315274243."},
-
+    faqList.value = [
+      {
+        "Q": "What is the Step Count Challenge?",
+        "A": "It’s a fun and friendly activity designed to help you stay active and healthy by walking more each day. You track your steps and share them with us regularly. It’s not about competition—it's about consistency and self-care!"
+      },
+      {
+        "Q": "Who can participate?",
+        "A": "Any ISF member who is 50 years or older can take part in the challenge. Whether you walk indoors, in your garden, or at the park, every step counts!"
+      },
+      {
+        "Q": "How do I track my steps?",
+        "A": "You can use a smartphone app called Stepup. We will provide you with the links and a step-by-step guide to join."
+      },
+      {
+        "Q": "How do I report my steps?",
+        "A": "You don’t need to report them manually. We’ll add you to a group in the Stepup app where your step data is automatically collected."
+      },
+      {
+        "Q": "What if I miss a day?",
+        "A": "That’s completely okay. The idea is to stay motivated, not stressed. Just resume the next day—consistency over time is what matters."
+      },
+      {
+        "Q": "Is there any reward?",
+        "A": "Yes—your health is the biggest reward! We also recognise participation and dedication with small surprises, appreciation messages, and shout-outs in our community."
+      },
+      {
+        "Q": "Can I join midway?",
+        "A": "Yes! You can join anytime during the challenge period. We’ll help you catch up and feel at home in the group."
+      },
+      {
+        "Q": "Do I need a doctor’s approval to participate?",
+        "A": "If you have any medical conditions, we recommend checking with your doctor before increasing your physical activity."
+      },
+      {
+        "Q": "Will someone guide or motivate us during the challenge?",
+        "A": "Yes, we have a community group where we share encouragement, tips, and gentle reminders. You're never walking alone!"
+      }
     ];
+
   }
 }

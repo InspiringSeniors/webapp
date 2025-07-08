@@ -10,6 +10,7 @@ import '../../../utils/color_utils.dart';
 
 class AdminLoginScreen extends StatelessWidget {
   AdminLoginController adminLoginController=Get.find();
+  GlobalKey<FormState> loginformKeyForAdmin = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,8 @@ class AdminLoginScreen extends StatelessWidget {
              Obx(() {
 
                if(adminLoginController.selectedModule.value=="resetPass"){
-                 return Expanded(child: Container(
+                 return
+                   Expanded(child: Container(
                    color: ColorUtils.TRACK_GREY_LIGHT,
                    child: Center(
                      child: Column(
@@ -38,7 +40,7 @@ class AdminLoginScreen extends StatelessWidget {
                          Image.asset("assets/images/primary_logo.png",
                            width: width * 0.1,),
                          Form(
-                           key: adminLoginController.loginformKeyForAdmin,
+                           key: loginformKeyForAdmin,
                            child: Container(
 
                              margin: EdgeInsets.symmetric(
@@ -181,7 +183,7 @@ class AdminLoginScreen extends StatelessWidget {
                                      return GestureDetector(
                                        onTap: () {
                                          adminLoginController
-                                             .resetPasswordForNewUser(adminLoginController.emailController!.text!,adminLoginController.passwordController!.text!);
+                                             .resetPasswordForNewUser(adminLoginController.emailController!.text!,adminLoginController.passwordController!.text!,loginformKeyForAdmin);
                                        },
                                        child: Container(
                                          width: width,
@@ -223,7 +225,8 @@ class AdminLoginScreen extends StatelessWidget {
                  ),);
 
                }else if(adminLoginController.selectedModule.value=="forgotPass"){
-                 return Expanded(child: Container(
+                 return
+                   Expanded(child: Container(
                    color: ColorUtils.TRACK_GREY_LIGHT,
                    child: Center(
                      child: Column(
@@ -233,7 +236,7 @@ class AdminLoginScreen extends StatelessWidget {
                          Image.asset("assets/images/primary_logo.png",
                            width: width * 0.1,),
                          Form(
-                           key: adminLoginController.loginformKeyForAdmin,
+                           key: loginformKeyForAdmin,
                            child: Container(
 
                              margin: EdgeInsets.symmetric(
@@ -316,7 +319,7 @@ class AdminLoginScreen extends StatelessWidget {
                                      return GestureDetector(
                                        onTap: () {
                                          adminLoginController
-                                             .updatePasswordByEmail(adminLoginController.emailController!.text!);
+                                             .updatePasswordByEmail(adminLoginController.emailController!.text!,loginformKeyForAdmin);
                                        },
                                        child: Container(
                                          width: width,
@@ -693,7 +696,7 @@ class AdminLoginScreen extends StatelessWidget {
                        Image.asset("assets/images/primary_logo.png",
                          width: width * 0.1,),
                        Form(
-                         key: adminLoginController.loginformKeyForAdmin,
+                         key: loginformKeyForAdmin,
                          child: Container(
 
                            margin: EdgeInsets.symmetric(
@@ -850,7 +853,7 @@ class AdminLoginScreen extends StatelessWidget {
                                    return GestureDetector(
                                      onTap: () {
                                        adminLoginController
-                                           .verifyUserAndSendOtp();
+                                           .verifyUserAndSendOtp(loginformKeyForAdmin);
                                      },
                                      child: Container(
                                        width: width,

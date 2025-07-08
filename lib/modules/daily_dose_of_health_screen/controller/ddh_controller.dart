@@ -54,12 +54,30 @@ class DDHController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-
-    faqList.value=[
-      {"Q":" How can I participate in the Daily Dose of Health sessions?","A":"ISF members can join Daily Dose of Health sessions by filling the google form for becoming member or volunteer with us or you can send 'Yes DDH' message on WhatsApp to 9315274243."},
-      {"Q":" How can I participate in the Wellness Chuapal sessions?","A":"ISF members can join Wellness Chaupal sessions by filling the google form for becoming member or volunteer with us or you can send 'Yes WC' message on WhatsApp to 9315274243."},
+    faqList.value = [
+      {
+        "Q": "I’ve never used Zoom. Can I still join the sessions?",
+        "A": "Absolutely! Our team is here to support you every step of the way. We provide simple step-by-step guides to help you connect on Zoom with ease."
+      },
+      {
+        "Q": "Are these programs doctor-approved?",
+        "A": "All our health and wellness programs are designed in consultation with certified yoga experts and healthcare professionals from the Indian Spinal Injuries Centre. We ensure safety, effectiveness, and age-appropriateness in every session."
+      },
+      {
+        "Q": "Can my family members join too?",
+        "A": "Our programs are specially designed for ISF members who are 50 years and above. However, your family is welcome to support and watch along with you! Some of our intergenerational events are open to all – stay tuned for those."
+      },
+      {
+        "Q": "How much does it cost to participate?",
+        "A": "There is no cost. These programs are completely free for all ISF members. We believe in making health and happiness accessible to every senior citizen."
+      },
+      {
+        "Q": "What if I miss a live session?",
+        "A": "Don’t worry! We share the YouTube recording of each session so you can watch it at your own time and pace. Your well-being should never be bound by a clock."
+      },
 
     ];
+
 
     teamList.value=[
       {

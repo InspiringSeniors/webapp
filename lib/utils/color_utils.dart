@@ -46,6 +46,8 @@ class ColorUtils {
   static const Color ORANGE_COLOR_LIGHT_2 = Color(0xFFFF987A);
   static const Color ORANGE_COLOR_DISABLED = Color(0xFFD9A195);
   static const Color ORANGE_COLOR_TRANSPARENT = Color(0x80FE5D37);
+  static const Color ORANGE_COLOR_2 = Color(0xFFF59E0B);
+
 
 
   static const Color PURPLE_BRAND = Color(0xFF786acf);
@@ -75,6 +77,9 @@ class ColorUtils {
   static const Color ERROR_RED = Color(0xFFDE4841);
   static const Color SECONDARY_BLACK = Color(0xFF2C2E35);
   static const WHITE_COLOR_BACKGROUND = Color(0xFFFFFFFF);
+  static const Color BACKGROUND_COLOR = Color(0xFFF9FAFB);
+
+
 }
 
 class TextStyleUtils {
@@ -99,7 +104,7 @@ class TextStyleUtils {
   );
 
   static TextStyle heading3 = TextStyle(
-  color: ColorUtils.HEADER_GREEN, // 🔄 Change to Green for Contrast
+  color: ColorUtils.BRAND_COLOR, // 🔄 Change to Green for Contrast
   fontSize: TextSizeDynamicUtils.dHeight30,
   fontWeight: FontWeight.w600,
     fontFamily: "Inter",
@@ -156,7 +161,7 @@ class TextStyleUtils {
   );
 
   static TextStyle paragraphSmall = TextStyle(
-  color: ColorUtils.GREY_COLOR, // ✅ Keep Grey for Soft Reading Sections
+  color: ColorUtils.SECONDARY_BLACK, // ✅ Keep Grey for Soft Reading Sections
   fontSize: TextSizeDynamicUtils.dHeight16,
   fontWeight: FontWeight.w300,
   letterSpacing: 0.4,
@@ -164,11 +169,17 @@ class TextStyleUtils {
 
   static TextStyle phoneparagraphSmall = TextStyle(
     color: ColorUtils.GREY_COLOR, // ✅ Keep Grey for Soft Reading Sections
-    fontSize: TextSizeDynamicUtils.dHeight14,
+    fontSize:15,
     fontWeight: FontWeight.w300,
     letterSpacing: 0.4,
   );
 
+  static TextStyle phoneparagraphSmaller = TextStyle(
+    color: ColorUtils.GREY_COLOR, // ✅ Keep Grey for Soft Reading Sections
+    fontSize:12,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.4,
+  );
   static TextStyle footerText = TextStyle(
   color: ColorUtils.GREY_COLOR_PLACEHOLDER, // ✅ Light Grey for Footer Readability
   fontSize: TextSizeDynamicUtils.dHeight16,
@@ -358,7 +369,7 @@ class TextStyleUtils {
   static TextStyle smallGreyTextStyle = TextStyle(
     color: ColorUtils.GREY_COLOR_PLACEHOLDER,
     fontWeight: FontWeight.w400,
-    fontSize: TextSizeDynamicUtils.dHeight16,
+    fontSize: TextSizeDynamicUtils.dHeight14,
     // letterSpacing: 0.5,
   );
 

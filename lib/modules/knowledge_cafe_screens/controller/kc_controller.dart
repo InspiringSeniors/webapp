@@ -47,9 +47,40 @@ class KCController extends GetxController{
     // TODO: implement onInit
     super.onInit();
 
-    faqList.value=[
-      {"Q":" How can I participate in the Knowlegde Cafe sessions?","A":"ISF members can join Knowledge Cafe sessions by filling the google form for becoming member or volunteer with us or you can send 'Yes DDH' message on WhatsApp to 9315274243."},
-
+    faqList.value = [
+      {
+        "Q": "What is the Knowledge Café Podcast?",
+        "A": "Knowledge Café is ISF’s exclusive online podcast series where inspiring guests—experts, achievers, and changemakers—share their life experiences, insights, and practical wisdom on topics like health, technology, entrepreneurship, and personal growth."
+      },
+      {
+        "Q": "Who can attend or listen to it?",
+        "A": "All ISF members and well-wishers are welcome to watch the episodes on the ISF YouTube channel."
+      },
+      {
+        "Q": "Is it live or recorded?",
+        "A": "Each episode is recorded live on Zoom with a small audience. The final version is later uploaded to YouTube so anyone can watch it anytime."
+      },
+      {
+        "Q": "Can I ask questions to the guest during the live session?",
+        "A": "Absolutely! The last segment of each episode is interactive. You can ask questions through the chat or directly if time permits."
+      },
+      {
+        "Q": "What kind of guests are invited?",
+        "A": "Our guests range from doctors, educators, entrepreneurs, and artists to senior achievers who’ve done something remarkable post-retirement. Each guest brings a unique perspective."
+      },
+      {
+        "Q": "Is it free to attend or watch?",
+        "A": "Yes, the podcast is completely free for all. It’s one of ISF’s initiatives to spark ideas, learning, and meaningful conversations in the senior community."
+      },
+      {
+        "Q": "Where can I watch past episodes?",
+        "A": "All episodes are available on our YouTube channel: Inspiring Seniors Foundation – YouTube."
+      },
+      {
+        "Q": "Can I recommend someone as a guest?",
+        "A": "Yes! We love hearing suggestions. If you know someone inspiring, write to us with a short note about their background and why you think they’d be a great fit."
+      }
     ];
+
   }
 }

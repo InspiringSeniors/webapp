@@ -27,52 +27,43 @@ class BlogController extends GetxController{
 
   var isLoading=false.obs;
 
+  var currentBlogById = Rx<Map<String, dynamic>>({}); // Reactive variable for the selected blog
 
+  var blogs = <Map<String, dynamic>>[].obs;
 
-   var blogs = [
-    {
-      'id':'123',
-      'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnMGl8QAo8SpCh_HJ4aia-8agpOdGGSxbKKg&s',
-      'userImage': 'https://t3.ftcdn.net/jpg/02/43/12/34/360_F_243123463_zTooub557xEWABDLk0jJklDyLSGl2jrr.jpg',
-      'userName': 'John Doe',
-      'title': 'Exploring Wellness in 2025',
-      'content': 'A sneak peek into the future of well-being...',
-      'type':"Active"
-    },
-    {
-      'id':'33',
-
-      'image': 'https://elearningindustry.com/wp-content/uploads/2013/09/how-to-use-blogs-in-the-classroom.jpg',
-      'userImage': 'https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg',
-      'userName': 'Jane Smith',
-      'title': 'Tips for Active Ageing',
-      'content': 'Simple routines to keep you active and energized...',
-      'type':"Productive"
-
-    },
+   var blogList = [
 
     {
-      'id':'336',
+      'url':"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/blogs%2FOped_2_Turning%20Silver%20into%20Gold.pdf?alt=media&token=3b20577c-bdca-4407-b323-6b20effdc7f4",
+      'id':'12',
+      'image': 'https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/blogs%2Flongevity_burdern.jpeg?alt=media&token=dc260506-ff2b-4d6b-97bc-b7c3e723c0a0',
+      'userImage': 'assets/images/Maltij.jpg',
+      'userDescription':"Founder - ISF",
+      'userName': 'Malti Jaswal',
+      'title': "Turning Silver into Gold: From Longevity Burden to Longevity Dividend ",
+      'content': "India is on the cusp of a demographic transformation. By 2050, India will have 347 million senior citizens. Can we turn this silver into gold?",
+      'type':"Active Ageing",
 
-      'image': 'https://elearningindustry.com/wp-content/uploads/2013/09/how-to-use-blogs-in-the-classroom.jpg',
-      'userImage': 'https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg',
-      'userName': 'Jane Smith',
-      'title': 'Tips for Active Ageing',
-      'content': 'Why building strong relationships can add years to your life and joy to your days...',
-      'type':"Social"
 
+      "heading":"The Future of Senior Living: Retirement Homes Offering Care & Dignity",
+      "p1":"As we age, our needs evolve, and many seniors find that retirement homes provide the necessary care, comfort, and community to navigate this phase of life. These homes are designed to support senior citizens by offering not just shelter but also a comprehensive care plan that ensures physical, emotional, and social well-being. Retirement homes cater to individuals who need assistance with daily activities, creating a nurturing and respectful environment.",
+      "subheading1":"The Importance of Retirement Homes for Seniors",
+      "p2":"Retirement homes offer a variety of essential services aimed at supporting the health and quality of life of senior residents. These services include on-site medical care, assistance with daily activities such as grooming and bathing, and the provision of nutritious meals tailored to individual health needs. The homes also facilitate social engagement by organizing group activities and outings, ensuring residents remain connected and active in their community.",
+      "subheading2":"Facilities and Services in Retirement Homes",
+      "p3":"There are different types of retirement homes available to seniors, each catering to various needs and preferences. These include government-run homes, non-governmental organization (NGO)-operated facilities, private homes, and assisted living options. Some facilities specialize in medical care for specific conditions, while others focus on providing a more independent living experience with supportive services like healthcare and social activities.",
+      "subheading3":"Types of Retirement Homes",
+      "subheading4":"Supporting Policies for Senior Citizens",
+      "p4":"Several policies and government initiatives aim to improve the lives of seniors, such as the Integrated Program for Older Persons (IPOP) and the National Policy for Older Persons (NPOP). These programs provide financial assistance to NGOs and support the development of retirement homes, day care centers, and home-based care for senior citizens. The Maintenance and Welfare of Parents and Senior Citizens Act, 2007, ensures that seniors receive proper care and maintenance, further emphasizing the importance of dignified living.",
+      "quote":"Retirement homes are not just shelters — they are communities where seniors thrive with respect, care, and companionship."
     },
-    // {
-    //   'id':'096',
-    //
-    //   'image': 'https://elearningindustry.com/wp-content/uploads/2013/09/how-to-use-blogs-in-the-classroom.jpg',
-    //   'userImage': 'https://t4.ftcdn.net/jpg/03/83/25/83/360_F_383258331_D8imaEMl8Q3lf7EKU2Pi78Cn0R7KkW9o.jpg',
-    //   'userName': 'Jane Smith',
-    //   'title': 'Tips for Active Ageing',
-    //   'content': 'Nutritional tips for boosting immunity and energy through every decade...',
-    // },
-    // Add more blogs as needed
-  ].obs;
+
+
+
+
+
+
+   ].obs;
+
 
 
   String? validatemail(String? text) {
@@ -86,14 +77,91 @@ class BlogController extends GetxController{
     }
   }
   @override
-  void onInit() {
+  void onInit()async {
     // TODO: implement onInit
 
     Get.put(HomepageController());
+    var waits =await getAllBlogs();
     filteredBlogs.value = blogs.value;
 
 
+    // uploadBlogs(blogList.value);
   }
+
+
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<void> uploadBlogs(List<Map<String, dynamic>> blogs) async {
+    for (var blog in blogs) {
+      // Create a document ID based on the shortTitle and number
+      String id =  blog['id']; // Combine shortTitle and id to form unique document ID
+
+      try {
+        await _firestore.collection('blogs').doc(id).set({
+          'url': blog['url'],
+          'id': blog['id'],
+          'image': blog['image'],
+          'userImage': blog['userImage'],
+          'userDescription': blog['userDescription'],
+          'userName': blog['userName'],
+          'title': blog['title'],
+          'content': blog['content'],
+          'type': blog['type'],
+          'heading': blog['heading'],
+          'p1': blog['p1'],
+          'subheading1': blog['subheading1'],
+          'p2': blog['p2'],
+          'subheading2': blog['subheading2'],
+          'p3': blog['p3'],
+          'subheading3': blog['subheading3'],
+          'subheading4': blog['subheading4'],
+          'p4': blog['p4'],
+          'quote': blog['quote'],
+        });
+        print('Blog uploaded successfully: $id');
+      } catch (e) {
+        print('Error uploading blog $id: $e');
+      }
+    }
+  }
+
+  // Fetch all blogs from Firestore
+  Future<void> getAllBlogs() async {
+    isLoading.value=true;
+    try {
+      QuerySnapshot snapshot = await _firestore.collection('blogs').get();
+      blogs.value = snapshot.docs.map((doc) {
+        return doc.data() as Map<String, dynamic>;
+      }).toList();
+
+      isLoading.value=false;
+
+    } catch (e) {
+      isLoading.value=false;
+
+      print('Error fetching blogs: $e');
+    }
+  }
+  Future<void> getBlogById(String blogId) async {
+
+    print("getting blog by id");
+    try {
+      DocumentSnapshot snapshot = await _firestore.collection('blogs').doc(blogId).get();
+      if (snapshot.exists) {
+        currentBlogById.value = snapshot.data() as Map<String, dynamic>; // Update the reactive variable
+        print('Blog fetched successfully: $blogId');
+      } else {
+        print('Blog not found');
+        currentBlogById.value = {}; // Set to empty if blog not found
+      }
+    } catch (e) {
+      print('Error fetching blog by ID: $e');
+      currentBlogById.value = {}; // Set to empty if error occurs
+    }
+
+}
+
 
 
   void filterBlogs(String query) {
@@ -120,42 +188,51 @@ class BlogController extends GetxController{
   }
 
 
-  void subscribeToNewsLetter({
+   subscribeToNewsLetter({
     required GlobalKey<FormState> key,
     required String email,
   }) async {
     final isValid = key.currentState?.validate() ?? false;
 
-    if (!isValid) return;
+    if (isValid) {
+      try {
 
-    try {
+        isLoading.value = true;
+        // Add email to Firestore
+        await FirebaseFirestore.instance.collection('newsletter_subscribers')
+            .add({
+          'email': email,
+          'subscribedAt': Timestamp.now(),
+        });
 
-      isLoading.value=true;
-      // Add email to Firestore
-      await FirebaseFirestore.instance.collection('newsletter_subscribers').add({
-        'email': email,
-        'subscribedAt': Timestamp.now(),
-      });
+        print("Email saved!");
 
-      print("Email saved!");
+        // Send welcome email (see next step)
+        await sendWelcomeEmail(email);
 
-      // Send welcome email (see next step)
-      await sendWelcomeEmail(email);
+        emailController!.text = "";
 
 
-      Get.snackbar(
-        'Welcome User',
-        'Successfully subscribed to our Newsletter.',
-        snackPosition: SnackPosition.BOTTOM,
-      );
+        update();
+        Get.snackbar(
+            'Welcome User',
+            'Successfully subscribed to our Newsletter.',
+            snackPosition: SnackPosition.BOTTOM,
+            margin: EdgeInsets.symmetric(vertical: MediaQuery
+                .of(Get.context!)
+                .size
+                .height * 0.1, horizontal: MediaQuery
+                .of(Get.context!)
+                .size
+                .width * 0.2)
+        );
 
-      emailController=TextEditingController();
-      isLoading.value=false;
+        isLoading.value = false;
+      } catch (e) {
+        isLoading.value = false;
 
-    } catch (e) {
-      isLoading.value=false;
-
-      print("Error saving email: $e");
+        print("Error saving email: $e");
+      }
     }
 
   }
@@ -167,7 +244,7 @@ class BlogController extends GetxController{
 
 
     const serviceId = 'service_ylzyyld';
-    const templateId = 'template_h3pn8gm';
+    const templateId = 'template_gb9ce1o';
     const userId = '1H93nf9euURV6FPgW'; // AKA public key
 
     final response = await http.post(

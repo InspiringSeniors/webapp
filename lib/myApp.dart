@@ -7,12 +7,18 @@ import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/bindings/aboutus_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/bindings/admin_dashboard_bindings.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/admin_dashboard_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/user_management_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/bindings/admin_login_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/views/admin_login_screen.dart';
+import 'package:inspiringseniorswebapp/modules/advocacy_and_research/controller/advocacy_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/advocacy_and_research/views/advocacy_screen.dart';
+import 'package:inspiringseniorswebapp/modules/art_gallery/controller/art_gallery_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/art_gallery/views/art_gallery.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/bindings/blog_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_details_screen.dart';
 import 'package:inspiringseniorswebapp/modules/blog_screen/views/blog_screen.dart';
+import 'package:inspiringseniorswebapp/modules/book_club_screen/controller/book_club_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/book_club_screen/views/book_club_screen.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/bindings/contact_us_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/controllers/contact_us_controller.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/views/contact_us_screen.dart';
@@ -25,8 +31,12 @@ import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/bindings/h
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/views/health_hub_main_screen.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homepage_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views/homepage_screen.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/homepage_screen_2.dart';
+import 'package:inspiringseniorswebapp/modules/hyderabad_state_chapter/views/hyderabad_state_chapter.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_mentors_program/bindings/isnpiring_mentors_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_mentors_program/views/inspiring_mentors_screen.dart';
+import 'package:inspiringseniorswebapp/modules/inspiring_seniors/controller/inspiring_seniors_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/inspiring_seniors/views/inspiring_seniors_scree.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_tutors_screen/bindings/it_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/inspiring_tutors_screen/views/it_screen.dart';
 import 'package:inspiringseniorswebapp/modules/join_us_screen/bindings/join_us_bindings.dart';
@@ -39,6 +49,8 @@ import 'package:inspiringseniorswebapp/modules/media_page_screen/bindings/media_
 import 'package:inspiringseniorswebapp/modules/media_page_screen/views/media_page_screen.dart';
 import 'package:inspiringseniorswebapp/modules/melody_masters_screen/bindings/mm_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/melody_masters_screen/views/mm_screen.dart';
+import 'package:inspiringseniorswebapp/modules/moral_storyTelling_screen/controllers/moral_story_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/moral_storyTelling_screen/views/moral_story_screen.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/bindings/productive_engagement_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/views/productive_engagement_screen.dart';
 import 'package:inspiringseniorswebapp/modules/program_all_screen/controller/program_all_bindings.dart';
@@ -49,11 +61,16 @@ import 'package:inspiringseniorswebapp/modules/step_count_challenge_screen/contr
 import 'package:inspiringseniorswebapp/modules/step_count_challenge_screen/views/step_count_challenge_screen.dart';
 import 'package:inspiringseniorswebapp/modules/story_telling_screen/bindings/story_telling_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/story_telling_screen/views/st_screen.dart';
+import 'package:inspiringseniorswebapp/modules/user_dashboard_screen/bindings/user_dashboard_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/user_dashboard_screen/views/user_dashboard_screen.dart';
+import 'package:inspiringseniorswebapp/modules/user_dashboard_screen/views/user_edit_profile.dart';
+import 'package:inspiringseniorswebapp/modules/user_dashboard_screen/views/user_reset_pass.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/bindings/wellness_chaupal_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/views/wellness_chaupal_screen.dart';
 import 'package:inspiringseniorswebapp/utils/middlewares/auth_middle_ware.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'modules/custom_screens/google_form_screen/views/google_form_screen.dart';
+import 'modules/hyderabad_state_chapter/bindings/state_bindings.dart';
 import 'modules/splash_screen/controller/initial_binding.dart';
 import 'modules/splash_screen/controller/splash_screen_binding.dart';
 import 'modules/splash_screen/views/splashscreen.dart';
@@ -81,9 +98,9 @@ class _MyAppState extends State<MyApp> {
 
     return GetMaterialApp(
         unknownRoute: GetPage(
-            name: RoutingNames.SPLASH_SCREEN,
-            page: () => SplashScreen(),
-            binding: SplashScreenBinding()),
+            name: RoutingNames.HOME_PAGE_SCREEN,
+            page: () => HomepageScreen2(),
+            binding: HomepageBindings()),
         debugShowCheckedModeBanner: false,
         builder: EasyLoading.init(),
         theme: theme(),
@@ -100,10 +117,11 @@ class _MyAppState extends State<MyApp> {
           }
         },
         initialBinding: InitialBinding(),
-        initialRoute: RoutingNames.SPLASH_SCREEN,
+        initialRoute: Get.currentRoute,
         translationsKeys: AppTranslation.translationsKeys,
         locale: Get.locale,
         fallbackLocale: Locale('en'),
+        defaultTransition: Transition.fadeIn,
 
         getPages: [
           GetPage(
@@ -113,7 +131,7 @@ class _MyAppState extends State<MyApp> {
 
           GetPage(
               name: RoutingNames.HOME_PAGE_SCREEN,
-              page: () =>  HomepageScreen(),
+              page: () =>  HomepageScreen2(),
               binding: HomepageBindings()),
 
           GetPage(
@@ -223,10 +241,10 @@ class _MyAppState extends State<MyApp> {
           GetPage(
               name: RoutingNames.BLOG_DETAIL_SCREEN,
               page: () =>  BlogDetailPage(),
-              binding: BlogBindings()),
+              binding: BlogDetailsBindings()),
           GetPage(
               name: RoutingNames.PDF_VIEWER_SCREEN,
-              page: () =>  PdfViewerScreen(),
+              page: () =>  PdfViewerScreen(""),
               ),
 
           GetPage(
@@ -238,15 +256,83 @@ class _MyAppState extends State<MyApp> {
 
           GetPage(
             name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
-            page: () =>  AdminDashboardScreen(),
+            page: () =>  UserManagementScreen(),
             binding: AdminDashboardBindings(),
-            middlewares:[ AuthMiddleware()]
+            middlewares:[ AuthMiddleware()
+            ]
           ),
 
           GetPage(
               name: RoutingNames.ADMIN_LOGIN_SCREEN,
               page: () =>  AdminLoginScreen(),
               binding: AdminLoginBindings()
+          ),
+
+
+          GetPage(
+              name: RoutingNames.USER_DASHBOARD_SCREEN,
+              page: () =>  UserDashboardScreen(),
+              binding: UserDashBoardBindings(),
+              middlewares:[
+                UserAuthMiddleware()
+        ]
+          ),
+
+          GetPage(
+              name: RoutingNames.USER_EDIT_PROFILE,
+              page: () =>  UserEditProfile(),
+              binding: UserDashBoardBindings(),
+              middlewares:[
+              UserAuthMiddleware()
+        ]
+
+          ),
+          GetPage(
+              name: RoutingNames.USER_RESET_PASS,
+              page: () =>  UserResetPass(),
+              binding: UserDashBoardBindings()
+              ,middlewares:[
+            UserAuthMiddleware()
+          ]
+
+          ),
+
+          GetPage(
+              name: RoutingNames.HYDERABAS_STATE_CHAPTER,
+              page: () =>  HyderabadStateChapter(),
+              binding: StateChapterBindings()
+          ),
+
+          GetPage(
+              name: RoutingNames.BOOK_CLUB,
+              page: () =>  BookClubScreen(),
+              binding: BookClubBindings()
+          ),
+
+          GetPage(
+              name: RoutingNames.MORAL_STORYTELLING,
+              page: () =>  MoralStoryScreen(),
+              binding: MoralStoryBindings()
+          ),
+
+
+          GetPage(
+              name: RoutingNames.INSPIRING_SENIORS,
+              page: () =>  InspiringSeniorsScreen(),
+              binding: InspiringSeniorsBindings()
+          ),
+
+
+          GetPage(
+              name: RoutingNames.ART_GALLERY,
+              page: () =>  ArtGallery(),
+              binding: ArtGalleryBinding()
+          ),
+
+          GetPage(
+              name: RoutingNames.ADVOCACY_RESEARCH,
+              page: () =>  AdvocacyResearchScreen(),
+              binding: AdvocacyBindings()
           ),
         ]);
   }

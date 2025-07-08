@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 import 'package:url_launcher/url_launcher.dart';
 
@@ -107,5 +108,10 @@ class Utils{
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  static String formatDate(DateTime? date) {
+    if (date == null) return 'No date available';
+    return DateFormat('dd-MM-yyyy').format(date);
   }
 }

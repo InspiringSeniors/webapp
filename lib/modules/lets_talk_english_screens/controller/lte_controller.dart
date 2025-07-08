@@ -41,6 +41,13 @@ class LetsTalkController extends GetxController{
     CarouselBuilderScreenV2.screen1(
       Get.context!,
       'm83tHcZsoDA',),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'g_WOlKPrqAE',),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '6gXAMrYq-mo',),
+
   ];
   @override
   void onInit() {
@@ -49,12 +56,12 @@ class LetsTalkController extends GetxController{
 
     faqList.value=[
 
-      {"Q":" What is the purpose of the program?","A":"The program aims to boost students' confidence, self-expression, and reading habits."},
-      {"Q":"Is there standardized content for teaching the students?","A":"ISF provides all teaching materials and content, with a facilitator available for select classes to support tutors as needed."
+      {"Q":"What are the content and resources for the sessions?","A":"All content and resource materials will be provided by the team! The program includes interactive exercises, conversation prompts, storytelling activities, and engaging reading materials."},
+      {"Q":"How can I help students build confidence in speaking English?","A":"Encourage small, casual conversations to get them comfortable. Use positive reinforcement, help them express their thoughts without fear, and introduce role-playing exercises to make speaking fun and effortless."
       },
 
 
-      {"Q":" Who can be a tutor?","A":"Tutors can be passionate individuals aged 50+ who believe in giving back to society using their experience and wisdom. No prior teaching background is necessary."
+      {"Q":"What if a student feels shy or hesitant to participate?","A":"Start with low-pressure activities like group discussions, storytelling, or simple reading aloud."
 
 
       },

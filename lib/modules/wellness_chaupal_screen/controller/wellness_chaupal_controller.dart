@@ -50,11 +50,44 @@ class WellnessChaupalController extends GetxController{
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-
-    faqList.value=[
-      {"Q":" Are these sessions suitable for seniors with health conditions?","A":"Yes, these sessions are designed to cater to various fitness levels and health conditions. However we recommend consulting with your healthcare providers before adapting new practices."},
-      {"Q":" How can I participate in the Wellness Chuapal sessions?","A":"ISF members can join Wellness Chaupal sessions by filling the google form for becoming member or volunteer with us or you can send 'Yes WC' message on WhatsApp to 9315274243."},
-
+    faqList.value = [
+      {
+        "Q": "What is the Wellness Choupal?",
+        "A": "Wellness Choupal is a weekly online gathering where doctors and wellness experts guide seniors on disease management and prevention across a range of topics."
+      },
+      {
+        "Q": "Who can attend the Wellness Choupal?",
+        "A": "All ISF members aged 50+ are welcome to attend. The sessions are designed with seniors in mind—interactive and relevant to everyday health."
+      },
+      {
+        "Q": "What topics are covered?",
+        "A": "We cover a wide range of topics—from lifestyle diseases like diabetes and hypertension to emotional wellness, breathing practices, nutrition, and more. Each week brings a new focus."
+      },
+      {
+        "Q": "How do I join the session?",
+        "A": "Sessions are held on Zoom. Once you register with ISF and show interest, we’ll send you the Zoom link via WhatsApp before each session."
+      },
+      {
+        "Q": "What if I don’t know how to use Zoom?",
+        "A": "No problem at all. Our team will guide you step by step. We also provide simple video and written instructions to help you join easily."
+      },
+      {
+        "Q": "What if I miss a session?",
+        "A": "We record every session and share the YouTube link afterward. You can watch it anytime at your convenience."
+      },
+      {
+        "Q": "Do I have to speak or keep my camera on?",
+        "A": "Not at all! You’re welcome to just listen. But if you have questions or want to interact, we encourage it—it adds to the spirit of the Choupal."
+      },
+      {
+        "Q": "Is there any cost to attend?",
+        "A": "No, the sessions are completely free for all registered ISF members."
+      },
+      {
+        "Q": "Can I suggest topics or ask personal health questions?",
+        "A": "Yes! You can share topic suggestions anytime. During sessions, you’re welcome to ask general health questions."
+      }
     ];
+
   }
 }

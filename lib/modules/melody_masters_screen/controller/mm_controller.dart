@@ -58,9 +58,32 @@ class MelodyMastersController extends GetxController{
     // TODO: implement onInit
     super.onInit();
 
-    faqList.value=[
-      {"Q":" How can I participate in the Melody Masters sessions?","A":"ISF members can join Melody Masters sessions by filling the google form for becoming member or volunteer with us or you can send 'Yes DDH' message on WhatsApp to 9315274243."},
-
+    faqList.value = [
+      {
+        "Q": "How can I participate in the Melody Masters sessions?",
+        "A": "ISF members can join Melody Masters sessions by filling the Google Form to become a member or volunteer with us. Alternatively, you can send a 'Yes DDH' message on WhatsApp to 9315274243."
+      },
+      {
+        "Q": "Who can join Melody Masters?",
+        "A": "Anyone aged 50 and above who enjoys music, whether it's singing or just listening, is welcome to join."
+      },
+      {
+        "Q": "How often are the sessions held?",
+        "A": "The sessions take place every alternate Thursday from 4:00 PM to 5:00 PM and are conducted online through Google Meet."
+      },
+      {
+        "Q": "Do I need to be a trained singer?",
+        "A": "No, you don’t need any formal training. Everyone is welcome, whether you’re a professional or someone who sings for fun."
+      },
+      {
+        "Q": "How can I join the Melody Masters WhatsApp group?",
+        "A": "To join the WhatsApp group, simply click on the register link provided. Once you register, the ISF team will add you to the group and share session updates there."
+      },
+      {
+        "Q": "Can I perform in the session?",
+        "A": "Yes, you can perform by informing the host in advance or by raising your hand during the session."
+      }
     ];
+
   }
 }

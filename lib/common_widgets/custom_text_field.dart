@@ -45,7 +45,7 @@ class CustomTextFieldV2 extends StatelessWidget {
           formatInput = true;
         }
         return TextFormField(
-            style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
+            style: TextStyleUtils.paragraphSmall,
             onTap: () {
               onTap;
             },
@@ -116,7 +116,7 @@ class CustomTextFieldV2 extends StatelessWidget {
             validator: validator);
       } else {
         return TextFormField(
-          style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
+          style: TextStyleUtils.paragraphSmall,
           onTap: () {
             onTap == null ? () {} : onTap();
           },
@@ -232,6 +232,7 @@ class CustomTextFieldV2WithWhite extends StatelessWidget {
             },
             obscureText: obscureText,
             readOnly: readOnly,
+
             cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
             decoration: InputDecoration(
                 hoverColor: ColorUtils.WHITE_COLOR_BACKGROUND,

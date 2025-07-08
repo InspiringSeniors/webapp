@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/admin_dashboard_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/lead_management_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/user_management_controller.dart';
 import 'package:inspiringseniorswebapp/modules/contact_us_screen/controllers/contact_us_controller.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/controller/ddh_controller.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
@@ -9,6 +11,9 @@ import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controlle
 class AdminDashboardBindings extends Bindings{
   @override
   void dependencies() {
-    Get.put(AdminDashboardController());
+    Get.put(AdminDashBoardController());
+Get.put(LeadManagementController());
+    Get.put(UserManagementController());
+
   }
 }

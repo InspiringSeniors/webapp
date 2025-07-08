@@ -49,8 +49,22 @@ class FunWithArtController extends GetxController{
     super.onInit();
 
     faqList.value=[
-      {"Q":" How can I participate in the Fun Therapy with Art sessions?","A":"ISF members can join Fun Therapy with Art sessions by filling the google form for becoming member or volunteer with us or you can send 'Yes DDH' message on WhatsApp to 9315274243."},
-
+      {
+        "Q": "Who can join Fun Therapy with Art?",
+        "A": "Anyone aged 50 and above who enjoys creativity and wants to try art in a fun and relaxing way can join."
+      },
+      {
+        "Q": "Do I need to know how to draw or paint?",
+        "A": "No, these sessions are for everyone; no prior art experience is needed."
+      },
+      {
+        "Q": "When are the sessions held?",
+        "A": "Sessions take place every alternate Wednesday from 4:00 PM to 5:00 PM, online via Zoom."
+      },
+      {
+        "Q": "How can I join the WhatsApp group?",
+        "A": "Click on the register link above, and the ISF team will add you to the group and share session updates there."
+      }
     ];
   }
 }

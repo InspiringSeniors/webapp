@@ -52,8 +52,22 @@ class StoryTellingController extends GetxController{
     super.onInit();
 
     faqList.value=[
-      {"Q":" How can I participate in the Story Telling sessions?","A":"ISF members can join Story Telling sessions by filling the google form for becoming member or volunteer with us or you can send 'Yes DDH' message on WhatsApp to 9315274243."},
-
+      {
+        "Q": "Who can join the Storytelling sessions?",
+        "A": "Anyone aged 50 and above who enjoys listening to or sharing stories is welcome to join."
+      },
+      {
+        "Q": "Do I have to share a story to participate?",
+        "A": "No, you can simply join to listen and enjoy. If you feel inspired, you’re always welcome to share."
+      },
+      {
+        "Q": "When are the sessions held?",
+        "A": "Sessions are held every alternate Wednesday from 4:00 PM to 5:00 PM, online via Zoom. The link is shared in the WhatsApp group."
+      },
+      {
+        "Q": "How can I join the WhatsApp group?",
+        "A": "Click on the register link above. Once registered, the ISF team will add you to the WhatsApp group and send session updates."
+      }
     ];
   }
 }

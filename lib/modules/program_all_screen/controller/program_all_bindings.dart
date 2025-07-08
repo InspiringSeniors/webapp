@@ -4,7 +4,9 @@ import 'package:inspiringseniorswebapp/modules/program_all_screen/controller/pro
 
 class ProgramAllBindings extends Bindings{
   @override
-  void dependencies() {
-    Get.put(ProgramAllController());
+  void dependencies()async {
+   await  Get.put(ProgramAllController());
+    await Get.put(MediaPageController());
+
   }
 }

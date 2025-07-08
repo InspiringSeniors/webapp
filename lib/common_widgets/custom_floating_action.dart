@@ -14,8 +14,10 @@ Widget CustomFloatingButton(){
   var isMobile= width<800?true:false;
   return InkWell(
     onTap: ()async {
+      Utils.launchUrlFor("https://api.whatsapp.com/send?phone=919315274243");
+
       // homepageController.sendWhatsAppMessage("+919650373038", "hii testing");
-      homepageController.sendWhatsAppMessage1();
+      // homepageController.sendWhatsAppMessage1();
       // homepageController.sendRegistrationGreeting("919650373038");
       //
       // print("calling here");
@@ -35,8 +37,8 @@ Widget CustomFloatingButton(){
     },
     child: Container(
       margin: EdgeInsets.all(20),
-      height: isMobile?TextSizeDynamicUtils.dHeight48:80,
-      width: isMobile?TextSizeDynamicUtils.dHeight48:80,
+      height: isMobile?TextSizeDynamicUtils.dHeight48:50,
+      width: isMobile?TextSizeDynamicUtils.dHeight48:50,
 
       child: Image.asset("assets/images/whatsapp_support.png",),
     ),

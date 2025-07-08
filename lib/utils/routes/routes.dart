@@ -41,5 +41,17 @@ class RoutingNames {
 
   static String ADMIN_DASHBOARD_SCREEN = "/adminDashboard";
   static String ADMIN_LOGIN_SCREEN = "/adminLogin";
+  static String USER_DASHBOARD_SCREEN = "/userDashboard";
+  static String USER_EDIT_PROFILE = "/userDashboard/editProfile";
+  static String USER_RESET_PASS = "/userDashboard/resetPassword";
+  static String HYDERABAS_STATE_CHAPTER="/hyderabadStateChapter";
+  static String BOOK_CLUB="/bookClub";
+  static String MORAL_STORYTELLING="/moralStoryTelling";
+
+  static String INSPIRING_SENIORS= "/inspiringSeniors";
+  static String ART_GALLERY= "/artGallery";
+  static String ADVOCACY_RESEARCH= "/advocacyResearch";
+
+
 
 }

@@ -1,15 +1,18 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
-import 'package:inspiringseniorswebapp/modules/homepage_screen/views/faq_section.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/faq_section.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/navbar.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/controller/productive_enegagment_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
 import '../../../common_widgets/custom_floating_action.dart';
+import '../../../common_widgets/custom_login_registration_form.dart';
 import '../../../common_widgets/custom_testimonials_section.dart';
-import '../../homepage_screen/views/footer_section.dart';
+import '../../homepage_screen/views_2/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
 
@@ -34,7 +37,7 @@ class ProductiveEngagementScreen extends StatelessWidget {
 
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Navbar(),
+            NavigationBar2(),
 
             isMobile?
             Container(
@@ -62,10 +65,11 @@ class ProductiveEngagementScreen extends StatelessWidget {
 
                         Image.asset("assets/images/prod_eng_poster.jpg",fit: BoxFit.cover,),
                         SizedBox(height: TextSizeDynamicUtils.dHeight18,),
-                        CustomButton(onpressed: (){
+                        CustomButtonWithBorder(onpressed: (){
+                          FormClass().showRegisterFormDialog(context);
 
                           // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                        },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 10,vpadding: 10,isHoverGetStarted: false.obs,text: "Register"),
+                        },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
 
 
                       ],
@@ -83,25 +87,37 @@ class ProductiveEngagementScreen extends StatelessWidget {
                           children: [
                             Container(child: Text("Initiatives",style: TextStyleUtils.heading2,),),
                             SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                            initiativesDesc("Inspiring Tutors Program","Connecting passionate seniors with underserved children to bridge the educational gap. As a tutor, you'll help middle school students boost academic performance, spark a love for learning, and build essential life skills.",(){
+                            initiativesDesc("Inspiring Tutors Program","Inspiring Tutors Program is an initiative where you offer academic support to underprivileged students (6th - 8th) as volunteers from the comfort of your home.",(){
                               Get.toNamed(RoutingNames.INSPIRING_TUTORS_SCREEN);
-                            })
+                            },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Ftutors.jpeg?alt=media&token=1671c0c2-fb98-4a02-8f34-2ef9045709f0")
                             ,
                             SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                            initiativesDesc("Inspiring Mentors Program","Inspiring Mentors are ‘Gurus’ who leverage their knowledge of corporate world and life-experience to help create a path for success for the youth. The program connects youth and young professionals with experienced seniors who in their roles as coach and mentor, guide the youth to acquire practical skills and unlock their full potential",(){
+                            initiativesDesc("Inspiring Mentors Program","Inspiring Mentors Program is an opportunity for you to share your experiences and life wisdom to guide youth and young professionals as a volunteer mentor and help them shape bright, successful futures.",(){
                               Get.toNamed(RoutingNames.INSPIRING_MENTORS_SCREEN);
 
-                            }),
+                            },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fmentors.jpeg?alt=media&token=0efa2546-1114-45d7-bbcb-5685fae0d78f"),
+                            SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                            initiativesDesc("Moral StoryTelling - Aao kahani Sunein",
+                                "Share warm, love and stories with underprivileged children living in orphanages and feel the joy in their smiles.",
+                                    (){
+                                  Get.toNamed(RoutingNames.MORAL_STORYTELLING);
+
+                                },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fbook_club.jpeg?alt=media&token=4ca8a1dd-1f42-400f-9de4-396ddb88577f"),
                             SizedBox(height: TextSizeDynamicUtils.dHeight28,),
 
-                            initiativesDesc("Lets Talk English","Our English Conversation Course is designed for 5th-8th grade government school students struggling with communication focusing on building confidence, improving speaking skills, and helping students to clearly express and articulate their thoughts and ideas.",(){
+
+                            initiativesDesc("Lets Talk English",
+                                "Let’s Talk English invites you to support 6th–8th grade underprivileged school students in building confidence, improving spoken English, and expressing their thoughts and ideas with clarity."
+                                ,(){
                                 Get.toNamed(RoutingNames.LETS_TALK_ENGLISH_SCREEN);
-                              }),
+                              },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Flets_talk_english.jpeg?alt=media&token=ab004a01-a044-4bdb-9e55-e00defceb762"),
         SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-        initiativesDesc("Knowledge Cafe","A unique platform where seniors share life stories, experiences and insights on diverse themes such as health, business, finance, science, technology and art . Join a vibrant community of seniors, learning together and sharing wisdom",(){
+        initiativesDesc("Knowledge Cafe",
+            "A vibrant space for seniors to share their stories, insights and experiences across themes like health, finance, science and art while learning together and celebrating wisdom.",
+                (){
                                 Get.toNamed(RoutingNames.KNOWLEDGE_CAFE_SCREEN);
 
-                              })
+                              },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_1.jpeg?alt=media&token=ba6f2e83-66bc-4d06-8f8f-01f9cdde76db")
 
 
                               ,
@@ -128,12 +144,12 @@ class ProductiveEngagementScreen extends StatelessWidget {
             )                :
             Container(
 
-              margin: EdgeInsets.symmetric(horizontal: 50),
-              padding: EdgeInsets.symmetric(vertical: 30),
               child: Column(
                 children: [
 
                   Container(
+                    padding: EdgeInsets.symmetric(vertical: 64,horizontal: width*0.08),
+
                     child:
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,8 +159,8 @@ class ProductiveEngagementScreen extends StatelessWidget {
                           margin:EdgeInsets.only(right: 60),
 
                           child: Image.asset("assets/images/prod_eng_poster.jpg",fit: BoxFit.fill,),
-                          width: MediaQuery.of(context).size.width*0.45,
-                          height:MediaQuery.of(context).size.height*0.55 ,
+                          width: MediaQuery.of(context).size.width*0.4,
+                          height:MediaQuery.of(context).size.height*0.5 ,
                           clipBehavior: Clip.hardEdge,
 
                           decoration: BoxDecoration(
@@ -154,50 +170,82 @@ class ProductiveEngagementScreen extends StatelessWidget {
 
                           ),
                         ),
-                        Container(
-                          width: width*0.4,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Productive Engagement",style: TextStyleUtils.heading1,),
-                              SizedBox(height: 20,),
-                              Text("We invite seniors to turn their skills, knowledge, and experience into meaningful contributions. Whether it's teaching or mentoring underprivileged students & youth, leading community projects, or participating in social events, our programs foster intergenerational bonds and create lasting impact. Aligned with the United Nations Sustainable Development Goals—Quality Education (SDG 4), Reduced Inequalities (SDG 10), and Good Health and Well-Being (SDG 3)—we strive to build inclusive, vibrant communities. Join us to make your golden years active, purposeful, and inspiring."
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 30,),
-                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight20,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: healHubController.isHoverRegistered),
-                            ],
+                        Expanded(
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Productive Engagement",style: TextStyleUtils.heading3.copyWith(
+                                  color: ColorUtils.BRAND_COLOR
+                                ),),
+                                SizedBox(height: 20,),
+                                SelectableText(
+                                  "Inspire the next generation with your knowledge, wisdom and experience."
+
+                                  ,style: TextStyleUtils.heading5.copyWith(
+                                    color: ColorUtils.HEADER_GREEN
+                                  ),),
+                                SizedBox(height: 20,),
+                                SelectableText("Support their growth while staying active, engaged, and connected to a cause that brings joy and purpose to your journey. Our programs are aligned with the UN Sustainable Development Goals and fosters intergenerational bonds and create meaningful opportunities for contribution and connection."
+                                  ,style: TextStyleUtils.paragraphSmall,),
+                                SizedBox(height: 32,),
+                                Container(
+
+                                  child: CustomButtonWithBorder(
+                                      onpressed: () {
+                                        FormClass().showRegisterFormDialog(context);
+
+                                      },
+
+                                      shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
 
-                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
 
                   Container(
-                    margin: EdgeInsets.only(
-                        left: 20
-                    ),                    child: Column(
+
+                    child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
+                          color: ColorUtils.BACKGROUND_COLOR,
+                          padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Container(child: Text("Initiatives",style: TextStyleUtils.heading2,),),
-                              SizedBox(height: TextSizeDynamicUtils.dHeight32,),
+                              Container(child: Text("Productive Engagement Initiatives",style: TextStyleUtils.heading3.copyWith(
+                                color: ColorUtils.BRAND_COLOR
+                              ),),),
+                              SizedBox(height: 64,),
                               Container(child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [initiativesDesc("Inspiring Tutors Program","Connecting passionate seniors with underserved children to bridge the educational gap. As a tutor, you'll help middle school students boost academic performance, spark a love for learning, and build essential life skills.",(){
+                                children: [
+                                  initiativesDesc("Inspiring Tutors Program","Inspiring Tutors Program is an initiative where you offer academic support to underprivileged students (6th - 8th) as volunteers from the comfort of your home.",(){
                                   Get.toNamed(RoutingNames.INSPIRING_TUTORS_SCREEN);
-                                }),initiativesDesc("Inspiring Mentors Program","Inspiring Mentors are ‘Gurus’ who leverage their knowledge of corporate world and life-experience to help create a path for success for the youth. The program connects youth and young professionals with experienced seniors who in their roles as coach and mentor, guide the youth to acquire practical skills and unlock their full potential",(){
-                                  Get.toNamed(RoutingNames.INSPIRING_TUTORS_SCREEN);
+                                },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Ftutors.jpeg?alt=media&token=1671c0c2-fb98-4a02-8f34-2ef9045709f0")
+                                  ,
+                                  initiativesDesc("Inspiring Mentors Program","Inspiring Mentors Program is an opportunity for you to share your experiences and life wisdom to guide youth and young professionals as a volunteer mentor and help them shape bright, successful futures.",(){
+                                  Get.toNamed(RoutingNames.INSPIRING_MENTORS_SCREEN);
 
-                                })
+                                },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fmentors.jpeg?alt=media&token=0efa2546-1114-45d7-bbcb-5685fae0d78f"),
+
+                                  initiativesDesc("Moral StoryTelling - Aao Kahani Sunein",
+                                          "Share warm, love and stories with underprivileged children living in orphanages and feel the joy in their smiles.",
+                                          (){
+                                    Get.toNamed(RoutingNames.MORAL_STORYTELLING);
+
+                                  },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fbook_club.jpeg?alt=media&token=4ca8a1dd-1f42-400f-9de4-396ddb88577f")
+
                                 ],),
 
                               ),
@@ -206,14 +254,23 @@ class ProductiveEngagementScreen extends StatelessWidget {
 
 
                               Container(child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [initiativesDesc("Lets Talk English","Our English Conversation Course is designed for 5th-8th grade government school students struggling with communication focusing on building confidence, improving speaking skills, and helping students to clearly express and articulate their thoughts and ideas.",(){
+                                children: [
+                                  initiativesDesc("Lets Talk English",
+                                          "Let’s Talk English invites you to support 6th–8th grade underprivileged school students in building confidence, improving spoken English, and expressing their thoughts and ideas with clarity.",
+                                          (){
                                   Get.toNamed(RoutingNames.LETS_TALK_ENGLISH_SCREEN);
-                                }),initiativesDesc("Knowledge Cafe","A unique platform where seniors share life stories, experiences and insights on diverse themes such as health, business, finance, science, technology and art . Join a vibrant community of seniors, learning together and sharing wisdom",(){
-                                  Get.toNamed(RoutingNames.KNOWLEDGE_CAFE_SCREEN);
+                                },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Flets_talk_english.jpeg?alt=media&token=ab004a01-a044-4bdb-9e55-e00defceb762"),
+                                  SizedBox(width: 48,),
 
-                                })
+
+                                  initiativesDesc("Knowledge Cafe",
+                                      "A vibrant space for seniors to share their stories, insights and experiences across themes like health, finance, science and art while learning together and celebrating wisdom.",
+                                          (){
+                                        Get.toNamed(RoutingNames.KNOWLEDGE_CAFE_SCREEN);
+
+                                      },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_1.jpeg?alt=media&token=ba6f2e83-66bc-4d06-8f8f-01f9cdde76db")
                                 ],),
 
                               ),
@@ -222,13 +279,19 @@ class ProductiveEngagementScreen extends StatelessWidget {
                           ),
                         ),
 
-                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                        Container(
+                            padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+                            child: TestimonialSectionProd(healHubController.testimonials)),
 
-                        TestimonialSection(healHubController.testimonials),
+
+
+                        // Container(
+                        //     color: ColorUtils.BACKGROUND_COLOR,
+                        //     width: width,
+                        //     child: Container(
+                        //         padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
                         //
-                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-
-                        FAQSection(faqList: healHubController.faqList.value)
+                        //         child: FAQSection(faqList: healHubController.faqList.value))),
 
                       ],
                     ),
@@ -238,49 +301,65 @@ class ProductiveEngagementScreen extends StatelessWidget {
               ),
             ),
 
-            FooterSection1(),
+            FooterSection2(),
           ],
         ),
       ),
     );
   }
 
-  Widget initiativesDesc(heading,subheading,onpressed){
+  Widget initiativesDesc(heading,subheading,onpressed,var imageUrl){
 
-    var height=MediaQuery.of(Get.context!).size.height ;
     var width=MediaQuery.of(Get.context!).size.width ;
 
-
-    var isMobile=width<800?true:false;
-    return isMobile?    Container(
-      width: MediaQuery.of(Get.context!).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(heading,style: TextStyleUtils.mobileheading3,),
-          SizedBox(height: TextSizeDynamicUtils.dHeight18,),
-          Container(
-              child: Text(subheading,style: TextStyleUtils.phoneparagraphSmall,overflow: TextOverflow.visible,)),
-          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-
-          CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 10,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: TextSizeDynamicUtils.dHeight14,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),
-
-        ],
+    var isMobile= width<800?true:false;
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      height: 460,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              spreadRadius: 2,
+              color: ColorUtils.TRACK_GREY_LIGHT,
+            )
+          ]
       ),
-    ):
-    Container(
-      width: MediaQuery.of(Get.context!).size.width*0.4,
+
+      width:isMobile?MediaQuery.of(Get.context!).size.width:MediaQuery.of(Get.context!).size.width*0.26,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment:isMobile?CrossAxisAlignment.start: CrossAxisAlignment.start,
         children: [
-          Text(heading,style: TextStyleUtils.heading3,),
-          SizedBox(height: 30,),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CachedNetworkImage(imageUrl: imageUrl,height: 180,width: width,fit: BoxFit.fill,),
+              SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: SelectableText(heading,style: isMobile?TextStyleUtils.mobileheading3:TextStyleUtils.mobileheading3,),
+              ),
+              SizedBox(height: 18,),
+              Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+
+                  child: SelectableText(maxLines: 5,subheading,style: isMobile?TextStyleUtils.phoneparagraphSmall:TextStyleUtils.paragraphSmall,textAlign: TextAlign.left,)),
+            ],
+          ),
+
           Container(
-              child: Text(subheading,style: TextStyleUtils.paragraphMain,overflow: TextOverflow.visible,)),
-          SizedBox(height: 30,),
+            padding: EdgeInsets.symmetric(vertical: 16,horizontal:18),
 
-          CustomButton(textColor: ColorUtils.BRAND_COLOR,isHoverGetStarted: false.obs,text: "Learn More",vpadding: 10,hpadding: 16,bgColor: Colors.white,borderColor: ColorUtils.BRAND_COLOR,fontSize: 16,onpressed: onpressed,hoveredColor: ColorUtils.HEADER_GREEN,),
+            child: CustomButtonWithBorder(
+                onpressed: onpressed,
 
+                shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,hoveredColor: ColorUtils.BRAND_COLOR,hpadding: 16,vpadding: 8,isHoverGetStarted: false.obs,text: "Learn More",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.BRAND_COLOR),
+          ),
         ],
       ),
     );

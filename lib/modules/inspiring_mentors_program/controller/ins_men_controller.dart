@@ -14,11 +14,11 @@ class InspiringMentorsController extends GetxController{
   final List<Widget> onboardingList = <Widget>[
     CarouselBuilderScreenV2.screen1(
       Get.context!,
-      '8lGEZZA-mck',
+      'xe8GequsDAs',
     ),
-    CarouselBuilderScreenV2.screen1(
-      Get.context!,
-      '4TIF85SdGeQ',),
+    // CarouselBuilderScreenV2.screen1(
+    //   Get.context!,
+    //   '4TIF85SdGeQ',),
 
   ];
 
@@ -50,13 +50,14 @@ class InspiringMentorsController extends GetxController{
     super.onInit();
 
     faqList.value=[
-      {"Q":" How do I use Google Meet and join a class?","A":"Our team will provide you the links and will always be available to assist and address any queries.."},
-      {"Q":" Teaching math online can be challenging. Any solutions?","A":"Tools like jam board are used to teach math and other subjects effectively. Our team will assist you to take ahead the classes."
+      {"Q":"What are the content and resources for the mentorship session?","A":"All content and resource materials will be provided by the team! You’ll have access to structured guides, session plans, inspirational materials."},
+      {"Q":"How can I build a strong connection with my mentee?","A":"The best mentorships start with trust! Listen actively, show empathy, and encourage open conversations. Share your own experiences when helpful, but also let your mentee explore their own path with your support."
       },
 
 
-      {"Q":" How can I keep online classes engaging for students?","A":"Interactive activities like story telling are very helpful to engage students. The material will be provided by our team."
+      {"Q":"What if my mentee is struggling or losing motivation?","A":"Stay patient and encouraging. Help them break big challenges into smaller, manageable steps. Remind them of their progress and strengths."
       },
+      {"Q":"How can I make mentorship engaging and impactful?","A":"Incorporate stories, real-life examples, role-playing scenarios, and hands-on projects. Celebrate small wins and encourage creative thinking."}
     ];
   }
 }

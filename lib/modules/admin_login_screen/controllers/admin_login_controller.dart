@@ -19,6 +19,7 @@ class AdminLoginController extends GetxController{
   RxBool emailStateHandler = false.obs;
   RxBool passwordStateHandler = false.obs;
   RxBool labelPassword = false.obs;
+  var errorLoginTimes=0.obs;
   TextEditingController? passwordController = TextEditingController();
 
   TextEditingController? emailController = TextEditingController();
@@ -45,7 +46,6 @@ class AdminLoginController extends GetxController{
   var email = ''.obs;
   var generatedOtp = ''.obs;
 
-  GlobalKey<FormState> loginformKeyForAdmin = GlobalKey<FormState>();
 
 
 
@@ -156,6 +156,9 @@ class AdminLoginController extends GetxController{
             .get();
 
          final doc = snapshot.docs.first;
+
+         print("docs is ${doc.data()}");
+
          var user = User.fromMap(doc.id, doc.data() as Map<String, dynamic>);
 
          SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
@@ -186,65 +189,146 @@ class AdminLoginController extends GetxController{
 
 
 
-  Future<void> verifyUserAndSendOtp() async {
+  Future<void> verifyUserAndSendOtp(var key) async {
+    var isValid = key.currentState!.validate();
 
-    var isValid=loginformKeyForAdmin.currentState!.validate();
+    if (errorLoginTimes.value < 3) {
+      if (isValid) {
+        try {
+          isLoading.value = true;
 
-    if(isValid) {
+          var inputEmail = emailController!.text.trim();
+          var inputPassword = passwordController!.text.trim();
+
+          final snapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .where('email', isEqualTo: inputEmail)
+              .limit(1)
+              .get();
+
+          if (snapshot.docs.isEmpty) {
+            errorLoginTimes.value += 1;
+            ScaffoldMessenger.of(Get.context!).showSnackBar(
+              SnackBar(content: Text("User not found with this email")),
+            );
+            isLoading.value = false;
+            return;
+          }
+
+          final doc = snapshot.docs.first;
+          final userData = doc.data();
+          final userStatus = userData['status'] ?? 'active';
+          final userRole= userData['role']??'member';
+          final isPasswordSet = userData['isPasswordSet'] ?? false;
+          final storedPassword = userData['password'];
+
+
+
+          // 🔒 Check if user is already locked
+          if (userStatus.toLowerCase() == 'locked') {
+            ScaffoldMessenger.of(Get.context!).showSnackBar(
+              SnackBar(
+                content: Text("Account is locked due to multiple failed attempts."),
+                backgroundColor: Colors.redAccent,
+              ),
+            );
+            isLoading.value = false;
+            return;
+          }
+
+
+
+          // ✅ Password matched, check further
+          if (storedPassword == inputPassword && isPasswordSet == false) {
+            selectedModule.value = "resetPass";
+            passwordController!.text = "";
+          } else if (storedPassword == inputPassword) {
+            email.value = inputEmail;
+           // await sendOtpViaEmailCheckTemp(key);
+            await sendOtpViaEmail(key);
+          } else {
+            errorLoginTimes.value += 1;
+            ScaffoldMessenger.of(Get.context!).showSnackBar(
+              SnackBar(content: Text("Incorrect password")),
+            );
+          }
+        } catch (e) {
+          print("Error verifying user: $e");
+          ScaffoldMessenger.of(Get.context!).showSnackBar(
+            SnackBar(content: Text("Error checking credentials")),
+          );
+        } finally {
+          isLoading.value = false;
+        }
+      }
+    } else {
+      // 🔐 Lock the user after 3 failed attempts
+      var inputEmail = emailController!.text.trim();
+
       try {
-        isLoading.value = true;
-
-        var inputEmail=emailController!.text.trim();
-        var inputPassword=passwordController!.text.trim();
-
-        // Query Firestore for the user by email
         final snapshot = await FirebaseFirestore.instance
             .collection('users')
             .where('email', isEqualTo: inputEmail)
             .limit(1)
             .get();
 
-        if (snapshot.docs.isEmpty) {
+        if (snapshot.docs.isNotEmpty) {
+          final doc = snapshot.docs.first;
+          final docId = doc.id;
+          final lockedUserData = doc.data();
+
+          // 🔒 Update user status to locked
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(docId)
+              .update({'status': 'locked'});
+
+          // ✅ Notify all super admins via email
+          final superAdminsSnapshot = await FirebaseFirestore.instance
+              .collection('users')
+              .where('role', isEqualTo: 'super admin')
+              .get();
+
+          for (final admin in superAdminsSnapshot.docs) {
+            final adminEmail = admin.data()['email'];
+            if (adminEmail != null) {
+              await sendLockedUserEmail(
+                 adminEmail,  lockedUserData['email'],
+              );
+            }
+          }
+
           ScaffoldMessenger.of(Get.context!).showSnackBar(
-            SnackBar(content: Text("User not found with this email")),
+            SnackBar(
+              content: Text("User Admin locked due to too many error attempts"),
+              backgroundColor: Colors.redAccent,
+              duration: Duration(seconds: 3),
+            ),
           );
-          isLoading.value = false;
-          return;
-        }
-
-        final userData = snapshot.docs.first.data();
-        final isPasswordSet =userData['isPasswordSet'];
-        final storedPassword = userData['password'];
-
-        // You can hash & compare here if using hashed passwords
-
-        if(storedPassword==inputPassword&&isPasswordSet==false){
-          selectedModule.value="resetPass";
-          passwordController!.text="";
-          return;
-        }
-        else if (storedPassword == inputPassword) {
-          email.value = inputEmail; // Store email for OTP
-          await sendOtpViaEmail(); // Now send the OTP
         } else {
           ScaffoldMessenger.of(Get.context!).showSnackBar(
-            SnackBar(content: Text("Incorrect password")),
+            SnackBar(
+              content: Text("No user found with this email."),
+              backgroundColor: Colors.grey,
+            ),
           );
         }
       } catch (e) {
-        print("Error verifying user: $e");
+        print("❌ Error checking or updating user: $e");
         ScaffoldMessenger.of(Get.context!).showSnackBar(
-          SnackBar(content: Text("Error checking credentials")),
+          SnackBar(
+            content: Text("Something went wrong. Please try again."),
+            backgroundColor: Colors.orange,
+          ),
         );
-      } finally {
-        isLoading.value = false;
       }
+
     }
   }
 
-  Future<void> resetPasswordForNewUser(String email, String newPassword) async {
+  Future<void> resetPasswordForNewUser(String email, String newPassword,var key) async {
 
-    var isValid=loginformKeyForAdmin.currentState!.validate();
+    var isValid=key.currentState!.validate();
 
     if(isValid) {
       try {
@@ -289,9 +373,9 @@ class AdminLoginController extends GetxController{
       }
     }
   }
-  Future<void> updatePasswordByEmail(String email) async {
+  Future<void> updatePasswordByEmail(String email,var key) async {
 
-    var isValid=loginformKeyForAdmin.currentState!.validate();
+    var isValid=key.currentState!.validate();
 
     if(isValid) {
       isLoading.value=true;
@@ -362,6 +446,39 @@ class AdminLoginController extends GetxController{
     }
   }
 
+  Future<void> sendLockedUserEmail(String email, String password) async {
+
+
+    const serviceId = 'service_ylzyyld';
+    const templateId = 'template_h3pn8gm';
+    const userId = '1H93nf9euURV6FPgW'; // AKA public key
+
+    final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+    final response = await http.post(
+      url,
+      headers: {
+        'origin': 'http://localhost',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'email': email,
+          'passcode': password,
+        },
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print('Password email sent to $email');
+    } else {
+      print('Failed to send password email. ${response.body}');
+    }
+  }
+
+
   Future<void> sendPasswordEmail(String email, String password) async {
 
 
@@ -425,10 +542,74 @@ class AdminLoginController extends GetxController{
     return password.join();
   }
 
+  Future<void> sendOtpViaEmailCheckTemp(var key) async {
 
-  Future<void> sendOtpViaEmail() async {
+    var isValid=key.currentState!.validate();
 
-    var isValid=loginformKeyForAdmin.currentState!.validate();
+    if(isValid) {
+      isLoading.value = true;
+
+      email.value = emailController!.text.trim();
+
+      try {
+        generatedOtp.value = (100000 + (DateTime
+            .now()
+            .millisecondsSinceEpoch % 900000)).toString();
+
+        const serviceId = 'service_ylzyyld';
+        const templateId = 'template_gb9ce1o';
+        const userId = '1H93nf9euURV6FPgW'; // AKA public key
+
+        final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+        final response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            'service_id': serviceId,
+            'template_id': templateId,
+            'user_id': userId,
+            'template_params': {
+              'email': email.value,
+              'name': "Hiiii",
+            },
+          }),
+        );
+        print('Sending OTP to: ${email.value}, OTP: ${generatedOtp.value}');
+
+
+        print("respinse is ${response.statusCode}  ${response.body}");
+
+
+        if (response.statusCode == 200) {
+          isLoading.value = false;
+
+          isOtpSend.value = true;
+
+          startTime();
+
+        } else {
+          isLoading.value = false;
+
+          ScaffoldMessenger.of(Get.context!).showSnackBar(
+            SnackBar(content: Text("There is some error!")),
+          );
+          // Fluttertoast.showToast(msg: 'Failed to send OTP');
+        }
+      } catch (e) {
+        isLoading.value = false;
+
+        print("error  ${e}");
+      }
+    }
+  }
+
+
+
+  Future<void> sendOtpViaEmail(var key) async {
+
+    var isValid=key.currentState!.validate();
 
     if(isValid) {
       isLoading.value = true;

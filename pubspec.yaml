@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
 
   get: ^4.6.6
   shared_preferences: ^2.2.2
@@ -66,9 +68,10 @@ dependencies:
   whatsapp: ^3.0.0
   dotted_border: ^2.1.0
   firebase_storage: ^12.4.4
-  image_picker: ^1.1.2
+  file_picker: ^10.1.2
   cached_network_image: ^3.4.1
   csv: ^6.0.0
+  cloud_functions: ^5.5.0
 
 dev_dependencies:
   flutter_test:
@@ -95,8 +98,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/images/media/
-    - assets/images/newsletter/
 
 
 

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -117,7 +118,9 @@ class CarouselBuilderScreenV2 {
       onHover: (v){
         print("hovermssing");
       },
-      child: YoutubePlayerWidget(videoId: videoId),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
+          child: YoutubePlayerWidget(videoId: videoId)),
     );
   }
 
@@ -145,14 +148,16 @@ class CarouselBuilderScreenV2 {
         print("hovermssing");
       },
       child: Container(
+
+        margin: EdgeInsets.symmetric(horizontal: 18),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20)
+          borderRadius: BorderRadius.circular(12)
         ),
 
         clipBehavior: Clip.hardEdge,
-        width: isMobile? MediaQuery.of(context).size.width*0.8:MediaQuery.of(context).size.width*0.3,
+        width: isMobile? MediaQuery.of(context).size.width*0.8:MediaQuery.of(context).size.width*0.37,
         height:isMobile?MediaQuery.of(context).size.height*0.16: MediaQuery.of(context).size.height*0.26,
-        child: Image.asset(imageUrl,fit: BoxFit.cover,),
+        child: CachedNetworkImage(imageUrl: imageUrl,fit: BoxFit.cover,),
       ),
     );
   }
@@ -276,6 +281,58 @@ class CarouselForHosts {
     );
 
 
+  }
+}
+
+
+
+class CustomCarouselWithArrows extends StatelessWidget {
+  ScrollController scrollController = ScrollController();
+
+  var list;
+  CustomCarouselWithArrows({ this.list});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          color: ColorUtils.BRAND_COLOR,
+          iconSize: 45,
+          onPressed: () {
+            scrollController.animateTo(
+              scrollController.offset - 600,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          },
+        ),
+        SizedBox(width: 30),
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            controller: scrollController,
+            child: Row(
+              children: list, // Using the list of widgets here
+            ),
+          ),
+        ),
+        SizedBox(width: 30),
+        IconButton(
+          color: ColorUtils.BRAND_COLOR,
+          iconSize: 45,
+          icon: Icon(Icons.arrow_forward_ios),
+          onPressed: () {
+            scrollController.animateTo(
+              scrollController.offset + 600,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          },
+        ),
+      ],
+    );
   }
 }
 

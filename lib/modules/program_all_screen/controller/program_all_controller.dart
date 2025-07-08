@@ -10,7 +10,9 @@ class ProgramAllController extends GetxController{
   @override
   void onInit() {
 
-    Get.put(MediaPageController());
+    Get.put(
+      MediaPageController()
+    );
     // TODO: implement onInit
     super.onInit();
 

@@ -13,6 +13,11 @@ class User {
   DateTime? updatedAt;
   String? password;
 
+  String? memebershipType;
+  DateTime? lastDate;
+  String? location;
+
+
   String? profilePic;
   List<dynamic>? preferences;
   String? notes;
@@ -33,6 +38,9 @@ class User {
     this.updatedAt,
     this.notes,
     this.password,
+    this.location,
+    this.lastDate,
+    this.memebershipType,
     this.isPasswordSet
   });
 
@@ -58,6 +66,11 @@ class User {
       notes: map['notes'],
       password: map['password'],
         isPasswordSet:map['isPasswordSet'],
+      memebershipType: map['memebershipType'],
+      lastDate:  map['lastDate'] != null
+          ? (map['lastDate'] as Timestamp).toDate()
+          : null,
+      location: map['location'],
       preferences: List<dynamic>.from(map['preferences'] ?? []),
     );
   }
@@ -83,6 +96,11 @@ class User {
       notes: json['notes'],
       password: json['password'],
       isPasswordSet: json['isPasswordSet'],
+      memebershipType: json['memebershipType'],
+      lastDate:  json['lastDate'] != null
+          ? (json['lastDate'] as Timestamp).toDate()
+          : null,
+      location: json['location'],
       preferences: List<dynamic>.from(json['preferences'] ?? []),
     );
   }
@@ -103,7 +121,10 @@ class User {
       'updatedAt':updatedAt,
       'notes': notes,
       'password':password,
-      'isPasswordSet':isPasswordSet
+      'isPasswordSet':isPasswordSet,
+      'memebershipType':memebershipType,
+      'lastDate':lastDate,
+      'location':location
 
     };
   }
@@ -117,14 +138,25 @@ class User {
       'phoneNumber': phoneNumber,
       'status': status,
       'role': role,
-      'registerDate': registerDate?.toIso8601String(),
+      'registerDate': registerDate is Timestamp
+          ? (registerDate as Timestamp).toDate().toIso8601String()
+          : (registerDate as DateTime?)?.toIso8601String(),
       'profilePic': profilePic,
-      'lastLogin': lastLogin?.toIso8601String(),
-      'updatedAt': updatedAt?.toIso8601String(),
+      'lastLogin': lastLogin is Timestamp
+          ? (lastLogin as Timestamp).toDate().toIso8601String()
+          : (lastLogin as DateTime?)?.toIso8601String(),
+      'updatedAt': updatedAt is Timestamp
+          ? (updatedAt as Timestamp).toDate().toIso8601String()
+          : (updatedAt as DateTime?)?.toIso8601String(),
       'notes': notes,
       'password': password,
       'isPasswordSet': isPasswordSet,
       'preferences': preferences,
+      'memebershipType': memebershipType,
+      'lastDate': lastDate is Timestamp
+          ? (lastDate as Timestamp).toDate().toIso8601String()
+          : (lastDate as DateTime?)?.toIso8601String(),
+      'location': location,
     };
   }
 
@@ -157,7 +189,12 @@ class User {
       preferences: preferences ?? this.preferences,
       notes: notes ?? this.notes,
       password: password??this.password,
-      isPasswordSet: isPasswordSet??this.isPasswordSet
+      isPasswordSet: isPasswordSet??this.isPasswordSet,
+        memebershipType: memebershipType??this.memebershipType,
+        location: location??this.location,
+
+        lastDate:lastDate??this.lastDate
+
 
     );
   }

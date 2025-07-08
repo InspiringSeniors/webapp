@@ -21,7 +21,7 @@ class PDFIframeViewer extends StatelessWidget {
 
     return SizedBox(
       height: MediaQuery.of(context).size.height*0.9,
-      width:        MediaQuery.of(context).size.width*0.8,
+      width:        MediaQuery.of(context).size.width*0.7,
     // Adjust height as needed
       child: HtmlElementView(
         viewType: pdfUrl,

@@ -1,16 +1,20 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_carousel.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/controller/ddh_controller.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller/health_hub_controller.dart';
-import 'package:inspiringseniorswebapp/modules/homepage_screen/views/faq_section.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/faq_section.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/navbar.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common_widgets/custom_floating_action.dart';
-import '../../homepage_screen/views/footer_section.dart';
+import '../../../common_widgets/custom_login_registration_form.dart';
+import '../../../utils/routes/routes.dart';
+import '../../homepage_screen/views_2/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 
 
@@ -34,216 +38,246 @@ class DailyDoseOfHealthScreen extends StatelessWidget {
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
 
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
-        child: Column(
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
+            child: Column(
 
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Navbar(),
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                NavigationBar2(),
 
-            isMobile?
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
-              padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight28),
+                isMobile?
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 16),
+                  padding: EdgeInsets.symmetric(vertical: TextSizeDynamicUtils.dHeight28),
 
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
 
-                        Text("Daily Dose Of Health ",style: TextStyleUtils.heading2,),
-                        SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                        Container(
+                            Text("Daily Dose Of Health ",style: TextStyleUtils.heading2,),
+                            SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                            Container(
 
-                          child: Image.asset("assets/images/health_hub.jpg",fit: BoxFit.cover,),
-                          width: MediaQuery.of(context).size.width,
-                          height:MediaQuery.of(context).size.height*0.33 ,
-                          clipBehavior: Clip.hardEdge,
+                              child: Image.asset("assets/images/health_hub.jpg",fit: BoxFit.cover,),
+                              width: MediaQuery.of(context).size.width,
+                              height:MediaQuery.of(context).size.height*0.33 ,
+                              clipBehavior: Clip.hardEdge,
 
-                          decoration: BoxDecoration(
+                              decoration: BoxDecoration(
 
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
 
-                          ),
+                              ),
+                            ),
+                      SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+
+
+                      Text("Personalized Wellness, Every Morning."
+                              ,style: TextStyleUtils.mobileheading3,),
+                            SizedBox(height: 10,),
+                            Text(
+                              "Start your day with calm, clarity, and care through Daily Dose of Health—a holistic wellness program designed especially for seniors. Held every weekday at 11 AM, this gentle yet impactful morning routine blends light fitness exercise, yoga, pranayama, meditation, and affirmations to nurture both body and mind.\n\nCurated by trusted yoga experts, physicians and fitness coach and led with warmth by trained volunteers, the program welcomes all fitness levels—no prior experience needed. Whether you seek better balance, inner peace, or simply a joyful way to start your day, this daily habit offers long-term wellness in a supportive, like-minded community. Accessible online from the comfort of your home. Join us and feel the difference, one breath at a time."
+                              ,style: TextStyleUtils.phoneparagraphSmall,),
+
+
+                            SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                      CustomButtonWithBorder(onpressed: (){
+                        FormClass().showRegisterFormDialog(context);
+
+
+                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
+
+
+
+
+
+
+
+                      SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                      Container(
+                        child: Column(
+                          children: [
+                            Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
+                            SizedBox(height: TextSizeDynamicUtils.dHeight32,),
+
+                            CustomCarousel(currentPageNotifier: _currentPageNotifier,viewportsection: 1,carouselList: ddhController.onboardingList,),
+                            SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                            FAQSection(faqList: ddhController.faqList.value)
+
+                          ],
                         ),
-                  SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                      ),
 
-
-                  Text("Personalized Wellness, Every Morning."
-                          ,style: TextStyleUtils.mobileheading3,),
-                        SizedBox(height: 10,),
-                        Text("The Daily Dose of Health isn’t just another fitness routine; it’s a holistic health experience crafted specifically for seniors. Our unique blend of gentle exercises, yoga, pranayama, meditation, and affirmations doesn’t just boost physical health—it nurtures the mind and soul. What makes it stand out?"
-                          ,style: TextStyleUtils.phoneparagraphSmall,),
-                        SizedBox(height: 10,),
-
-                        Text("With Elements"
-                          ,style: TextStyleUtils.phoneparagraphSmall,),
-                        SizedBox(height: 10,),
-                        Text(" - Expert-Curated, Volunteer-Led"
-                          ,style: TextStyleUtils.phoneparagraphSmall,),
-                        SizedBox(height: 5,),
-                        Text(" - Accessible for All Fitness Levels"
-                          ,style: TextStyleUtils.phoneparagraphSmall,),
-                        SizedBox(height: 5,),
-                        Text(" - A Community, Not Just a Class"
-                          ,style: TextStyleUtils.phoneparagraphSmall,),
-                        SizedBox(height: 5,),
-                        Text(" - Daily Routine, Lasting Impact"
-                          ,style: TextStyleUtils.phoneparagraphSmall,),
-                        SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                  CustomButton(onpressed: (){
-
-                    // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                  },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 10,vpadding: 10,isHoverGetStarted: false.obs,text: "Register"),
-
-
-
-
-
-
-
-                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-
-                  Container(
-                    child: Column(
-                      children: [
-                        Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
-                        SizedBox(height: TextSizeDynamicUtils.dHeight32,),
-
-                        CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier,viewportsection: 0.8,height: height*0.5,),
-                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                        FAQSection(faqList: ddhController.faqList.value)
-
-                      ],
-                    ),
+                    ],
                   ),
+                ):
+                Container(
 
-                ],
-              ),
-            ):
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 50),
-              padding: EdgeInsets.symmetric(vertical: 30),
+                  child: Column(
+                    children: [
 
-              child: Column(
-                children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(vertical: 64,horizontal: width*0.08),
 
-                  Container(
-                    child:
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin:EdgeInsets.only(right: 60),
+                        child:
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          // mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
 
-                          child: Image.asset("assets/images/health_hub.jpg",fit: BoxFit.cover,),
-                          width: MediaQuery.of(context).size.width*0.45,
-                          height:MediaQuery.of(context).size.height*0.7 ,
-                          clipBehavior: Clip.hardEdge,
+                              child: CachedNetworkImage(imageUrl: "https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fddh_ai.jpeg?alt=media&token=ea50698e-f268-4b63-bf89-dafc431df621",fit: BoxFit.fill,),
+                              width: MediaQuery.of(context).size.width*0.4,
+                              height:MediaQuery.of(context).size.height*0.65 ,
+                              clipBehavior: Clip.hardEdge,
 
-                          decoration: BoxDecoration(
+                              decoration: BoxDecoration(
 
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                                color: Colors.white,
 
-                          ),
+                              ),
+                            ),
+                            SizedBox(width: 50,),
+
+                            Expanded(
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Daily Dose Of Health ",style: TextStyleUtils.heading3.copyWith(
+                                      color: ColorUtils.BRAND_COLOR
+                                    ),),
+                                    SizedBox(height: 20,),
+                                    SelectableText("Personalized Wellness, Every Morning."
+                                      ,style: TextStyleUtils.heading5.copyWith(
+                                        color: ColorUtils.HEADER_GREEN
+                                      ),),
+                                    SizedBox(height: 10,),
+                                    SelectableText(
+                                      "Start your day with calm, clarity, and care through Daily Dose of Health—a holistic wellness program designed especially for seniors. Held every weekday at 11 AM, this gentle yet impactful morning routine blends light fitness exercise, yoga, pranayama, meditation, and affirmations to nurture both body and mind.\n\nCurated by trusted yoga experts, physicians and fitness coach and led with warmth by trained volunteers, the program welcomes all fitness levels—no prior experience needed. Whether you seek better balance, inner peace, or simply a joyful way to start your day, this daily habit offers long-term wellness in a supportive, like-minded community. Accessible online from the comfort of your home. Join us and feel the difference, one breath at a time."
+                                      ,style: TextStyleUtils.paragraphSmall,),
+                                    // SizedBox(height: 10,),
+                                    //
+                                    // Text("With Elements"
+                                    //   ,style: TextStyleUtils.paragraphSmall,),
+                                    // SizedBox(height: 10,),
+                                    // Text(" - Expert-Curated, Volunteer-Led"
+                                    //   ,style: TextStyleUtils.paragraphSmall,),
+                                    // SizedBox(height: 5,),
+                                    // Text(" - Accessible for All Fitness Levels"
+                                    //   ,style: TextStyleUtils.paragraphSmall,),
+                                    // SizedBox(height: 5,),
+                                    // Text(" - A Community, Not Just a Class"
+                                    //   ,style: TextStyleUtils.paragraphSmall,),
+                                    // SizedBox(height: 5,),
+                                    // Text(" - Daily Routine, Lasting Impact"
+                                    //   ,style: TextStyleUtils.paragraphSmall,),
+                                    SizedBox(height: 32,),
+
+                                    Container(
+
+                                      child: CustomButtonWithBorder(
+                                          onpressed: () {
+                                            FormClass().showRegisterFormDialog(context);
+
+                                          },
+
+                                          shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                                    ),
+
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 50,),
-
-                        Container(
-                          width: width*0.4,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Daily Dose Of Health ",style: TextStyleUtils.heading1,),
-                              SizedBox(height: 20,),
-                              Text("Personalized Wellness, Every Morning."
-                                ,style: TextStyleUtils.heading3,),
-                              SizedBox(height: 10,),
-                              Text("The Daily Dose of Health isn’t just another fitness routine; it’s a holistic health experience crafted specifically for seniors. Our unique blend of gentle exercises, yoga, pranayama, meditation, and affirmations doesn’t just boost physical health—it nurtures the mind and soul. What makes it stand out?"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 10,),
-
-                              Text("With Elements"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 10,),
-                              Text(" - Expert-Curated, Volunteer-Led"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 5,),
-                              Text(" - Accessible for All Fitness Levels"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 5,),
-                              Text(" - A Community, Not Just a Class"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 5,),
-                              Text(" - Daily Routine, Lasting Impact"
-                                ,style: TextStyleUtils.paragraphMain,),
-                              SizedBox(height: 30,),
-                              CustomButton(fontSize: TextSizeDynamicUtils.dHeight18,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,text: "Register",isHoverGetStarted: ddhController.isHoverRegistered),
-
-                              Container(margin: EdgeInsets.symmetric(vertical: 40),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-
-                                children: [
-                                  // Text("Our Hosts",style: TextStyleUtils.heading2,),
-                                  //
-                                  // SizedBox(height: 10,),
-                                  // Container(
-                                  //     child: CustomCarouselForHosts(carouselList: ddhController.hostList,currentPageNotifier:  _currentPageNotifierForHosts)),
-
-                                ],
-                              ),),
+                      ),
 
 
-                            ],
+
+
+
+
+                      Column(
+                        children: [
+                          Container(
+                            width: width,
+                            padding: EdgeInsets.symmetric(horizontal: width*0.05,vertical: 64),
+
+                            color: ColorUtils.BACKGROUND_COLOR,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(child: Text("Resources",style: TextStyleUtils.heading3.copyWith(
+                                  color: ColorUtils.BRAND_COLOR
+                                ),),),
+                                SizedBox(height: 64,),
+
+                                CustomCarouselWithArrows(list: ddhController.onboardingList,),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+
+                        ],
+                      ),
+
+                      Container(
+                          width: width,
+                          child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+
+                              child: FAQSection(faqList: ddhController.faqList.value))),
+
+                    ],
                   ),
+                ),
 
-
-                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-
-
-
-                  SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 30),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(child: Text("Resources",style: TextStyleUtils.heading2,),),
-                              SizedBox(height: TextSizeDynamicUtils.dHeight32,),
-
-                              CustomCarousel(carouselList: ddhController.onboardingList,currentPageNotifier:  _currentPageNotifier)
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                        FAQSection(faqList: ddhController.faqList.value)
-
-                      ],
-                    ),
+                FooterSection2(),
+              ],
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.6,
+            right: 0,
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(RoutingNames.HEALTH_HUB_MAIN_SCREEN);
+                // Handle button tap
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                    color: ColorUtils.ORANGE_COLOR_LIGHT_2,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(12),bottomLeft: Radius.circular(12))
+                ),
+                padding: EdgeInsets.symmetric(vertical:width<800?12: 14, horizontal:width<800?10: 12),
+                child: RotatedBox(
+                  quarterTurns: 3,
+                  child: Text(
+                      textAlign: TextAlign.center,
+                      "View Similar Programs",
+                      style: width<800?TextStyleUtils.phoneparagraphSmaller.copyWith(
+                          color: ColorUtils.WHITE_COLOR_BACKGROUND
+                      ):TextStyleUtils.paragraphSmall.copyWith(
+                          color: ColorUtils.WHITE_COLOR_BACKGROUND
+                      )
                   ),
-
-                ],
+                ),
               ),
             ),
+          ),
 
-            FooterSection(),
-          ],
-        ),
+        ],
       ),
     );
   }
