@@ -16,8 +16,6 @@ class GlobalKeyConsts {
   static BuildContext? buildContextPayload;
 }
 
-String API_KEY = "AIzaSyBvq8L1n19MRzTEyKGK5ZAVL17P7E6gb2M";
-
 class Validators {
   static bool validateMobileNumber(String value) {
     if (value == null || value == '') return false;

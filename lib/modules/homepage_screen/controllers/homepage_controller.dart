@@ -334,65 +334,6 @@ class HomepageController extends GetxController {
 
   final isSending = false.obs;
 
-  // Replace with your own Twilio Account SID and Auth Token
-  final String accountSid = 'AC26c12c609c33df4a3f9d9d727bf3f9e1';
-  final String authToken = 'd9ada69773f8471458eda174240c5163';
-  final String fromPhoneNumber = 'whatsapp:+15557596838'; // for WhatsApp, use 'whatsapp:+...'
-   String toPhoneNumber = 'whatsapp:+918527326465'; // your verified number
-  final String messageBody = 'Hello from Flutter with Twilio and GetX!';
-  final String contentSid= 'HXdac6575e43566b28edc5bf1268129c3f';
-  final String messagingServiceSid='MGffa60d6693ed348e9aa446bfa77578bd';
-
-  // Replace these values with your real credentials
-
-  final String templateName = 'test'; // lowercase with underscores
-  final String languageCode = 'en_US'; // or whatever you chose
-
-  // Optional: if your template has variables
-
-  Future<void> sendMessage(number) async {
-    isSending.value = true;
-
-    toPhoneNumber='whatsapp:+91${number}';
-    final url = Uri.parse(
-      'https://api.twilio.com/2010-04-01/Accounts/$accountSid/Messages.json',
-    );
-
-    final headers = {
-      'Authorization':
-      'Basic ${base64Encode(utf8.encode('$accountSid:$authToken'))}',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
-
-
-    final body = {
-      'ContentSid': contentSid,
-      'To': toPhoneNumber,
-      'From': fromPhoneNumber,
-      "mediaUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/ISF%20Brochure_compressed.pdf?alt=media&token=c1b13751-adf3-47f5-a7df-0e66a7c35ff7",
-
-      'MessagingServiceSid': messagingServiceSid,
-      // 'ContentVariables': contentVariables,
-    };
-
-    try {
-      final response = await http.post(url, headers: headers, body: body);
-
-      if (response.statusCode == 201) {
-        Get.snackbar("Welcome", "Welcome To ISF",          snackPosition: SnackPosition.BOTTOM,);
-
-      } else {
-        Get.snackbar("Something went wrong", "We were not able to send you our brochure. ",          snackPosition: SnackPosition.BOTTOM,);
-
-      }
-    } catch (e) {
-      print("error ${e}");
-      Get.snackbar('Exception', e.toString());
-    } finally {
-      isSending.value = false;
-    }
-  }
 
 
   Future<void> sendWhatsApp(String number) async {
