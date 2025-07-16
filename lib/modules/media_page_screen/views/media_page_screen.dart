@@ -171,7 +171,7 @@ class MediaPageScreen extends StatelessWidget {
                          crossAxisAlignment: CrossAxisAlignment.center,
                          mainAxisAlignment: MainAxisAlignment.center,
                          children: [
-                           Container(child: Text("Latest Blogs & Articles",style: TextStyleUtils.heading3.copyWith(
+                           Container(child: Text("Latest Blogs & Article",style: TextStyleUtils.heading3.copyWith(
                                color: ColorUtils.BRAND_COLOR
                            ),),),
                            Obx(() {

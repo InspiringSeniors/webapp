@@ -225,7 +225,7 @@ class InspiringMentorsScreen extends StatelessWidget {
                   ),
                 ),
 
-                FooterSection1(),
+                FooterSection2(),
               ],
             ),
           ),

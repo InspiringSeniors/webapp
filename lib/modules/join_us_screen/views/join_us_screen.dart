@@ -158,7 +158,7 @@ class JoinUsScreen extends StatelessWidget {
                           Text("Partner with us ",style: TextStyleUtils.heading2,),
                           SizedBox(height: TextSizeDynamicUtils.dHeight18,),
                           Text(
-"Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, or a community group, your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"                            ,style: TextStyleUtils.phoneparagraphSmall,),
+"Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, a community group,or an NGO your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"                            ,style: TextStyleUtils.phoneparagraphSmall,),
                           SizedBox(height: TextSizeDynamicUtils.dHeight28,),
                           CustomButtonWithBorder(onpressed: (){
                             // FormClass(). _showThankYouDialogFinal();
@@ -176,6 +176,65 @@ class JoinUsScreen extends StatelessWidget {
                     Container(
                       clipBehavior: Clip.hardEdge,
                       child: Image.asset("assets/images/partner_with_us.jpeg",fit: BoxFit.cover,),
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height*0.3,
+
+
+                      decoration: BoxDecoration(
+
+                        color: Colors.white,
+
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: ColorUtils.GREY_DOTTED,
+                        //     blurRadius: 1000,
+                        //     spreadRadius: 1
+                        //   )
+                        // ]
+                      ),
+                    ),
+
+                    SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                  ],
+                ),
+
+
+
+                SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: width,
+                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("Work With Us ",style: TextStyleUtils.heading2,),
+                          SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                          Text(
+                            "Work with Us: Be the Change Behind the Impact\n\nAre you passionate about making a difference through your skills in social media, digital strategy, or technology? Join us at the Inspiring Seniors Foundation as an intern and be part of a movement that redefines ageing in India.\n\nWe’re looking for driven, creative, and socially conscious individuals who want hands-on experience while contributing to meaningful change. Whether it’s creating engaging campaigns, building digital tools, or improving user experiences, your work will help empower seniors and enrich communities.\n\nApply now and let’s build an age-positive future together\n\n📧 Email us at programs@inspiringseniors.org \n\n📱Contact at  9315274243\n\n🌐 www.inspiringseniors.org "
+                            ,style: TextStyleUtils.phoneparagraphSmall,),
+                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                          CustomButtonWithBorder(onpressed: (){
+                            // FormClass(). _showThankYouDialogFinal();
+                            FormClassForPartner().showFormDialog(context);
+
+                            // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
+
+
+
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      child: Image.asset("assets/images/our_story1.jpeg",fit: BoxFit.cover,),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height*0.3,
 
@@ -385,7 +444,7 @@ class JoinUsScreen extends StatelessWidget {
                                 ),),
                               SizedBox(height: 20,),
                               SelectableText(
-                                "Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, or a community group, your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"
+                                "Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, a community group or an NGO, your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"
                                 ,style: TextStyleUtils.paragraphSmall,),
                               SizedBox(height: 30,),
                           Container(
@@ -411,6 +470,80 @@ class JoinUsScreen extends StatelessWidget {
                   ),
                 ),
 
+                Container(
+                  color: ColorUtils.BACKGROUND_COLOR,
+
+                  padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+
+
+                  width: width,
+                  child:
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(right: 64),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Work with Us ",
+                                style: TextStyleUtils.heading3.copyWith(
+                                    color: ColorUtils.BRAND_COLOR
+                                ),),
+                              SizedBox(height: 20,),
+                              SelectableText(
+                                "Work with Us: Be the Change Behind the Impact\n\nAre you passionate about making a difference through your skills in social media, digital strategy, or technology? Join us at the Inspiring Seniors Foundation as an intern and be part of a movement that redefines ageing in India.\n\nWe’re looking for driven, creative, and socially conscious individuals who want hands-on experience while contributing to meaningful change. Whether it’s creating engaging campaigns, building digital tools, or improving user experiences, your work will help empower seniors and enrich communities.\n\nApply now and let’s build an age-positive future together\n\n📧 Email us at programs@inspiringseniors.org \n\n📱Contact at  9315274243\n\n🌐 www.inspiringseniors.org "
+
+                                ,style: TextStyleUtils.paragraphSmall,),
+                              SizedBox(height: 30,),
+                              // Container(
+                              //
+                              //   child: CustomButtonWithBorder(
+                              //       onpressed: (){
+                              //         FormClassForPartner().showFormDialog(context);
+                              //
+                              //       },
+                              //
+                              //       shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                              // ),
+
+
+
+
+
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.asset("assets/images/our_story1.jpeg",fit: BoxFit.cover,),
+                        width: MediaQuery.of(context).size.width*0.4,
+                        height: MediaQuery.of(context).size.width*0.3,
+
+
+                        decoration: BoxDecoration(
+
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+
+                          // boxShadow: [
+                          //   BoxShadow(
+                          //     color: ColorUtils.GREY_DOTTED,
+                          //     blurRadius: 1000,
+                          //     spreadRadius: 1
+                          //   )
+                          // ]
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
 
 
               ],

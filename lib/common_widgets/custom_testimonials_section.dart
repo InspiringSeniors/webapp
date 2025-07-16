@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -229,7 +230,7 @@ class TestimonialSectionProd extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "What Our Volunteers Say",
+              "What Our Volunteers & Students Say",
               style: TextStyleUtils.heading3.copyWith(
                   color: ColorUtils.BRAND_COLOR
               ),
@@ -339,9 +340,15 @@ class TestimonialSectionProd extends StatelessWidget {
                 children: [
                   testimonial.image==""?
                   Container(
-                    height: 100,
+                      padding: EdgeInsets.all(30),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: ColorUtils.BACKGROUND_COLOR,
 
-                    child: Image.asset(testimonial.image==""?"assets/images/primary_logo_horizontal.png":testimonial.image,fit: BoxFit.cover,),
+                      ),
+
+                      child:
+                      Center(child: Icon(Icons.person,color: ColorUtils.BRAND_COLOR,size: 60,))
                   )
                       :  Container(
                     height: 100,
@@ -351,14 +358,17 @@ class TestimonialSectionProd extends StatelessWidget {
 
                     ),
                     clipBehavior: Clip.hardEdge,
-                    child: Image.asset(testimonial.image==""?"assets/images/primary_logo_horizontal.png":testimonial.image,fit: BoxFit.cover,),
+                    child: CachedNetworkImage(imageUrl:testimonial.image==""?"assets/images/primary_logo_horizontal.png":testimonial.image,fit: BoxFit.cover,),
                   ),
                   SizedBox(height: 30),
                   Text(
                     '"${testimonial.text}"',
                     textAlign: TextAlign.center,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyleUtils.paragraphSmall.copyWith(
                       fontStyle: FontStyle.italic,
+
                       // color: Colors.grey[800],
                     ),
                   ),
@@ -555,9 +565,15 @@ class TestimonialSectionAll
                 children: [
                   testimonial.image==""?
                   Container(
-                    height: 100,
+                    padding: EdgeInsets.all(30),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: ColorUtils.BACKGROUND_COLOR,
 
-                    child: Image.asset(testimonial.image==""?"assets/images/primary_logo_horizontal.png":testimonial.image,fit: BoxFit.cover,),
+                    ),
+
+                    child: 
+                      Center(child: Icon(Icons.person,color: ColorUtils.BRAND_COLOR,size: 60,))
                   )
                       :  Container(
                     height: 100,
@@ -573,6 +589,8 @@ class TestimonialSectionAll
                   Text(
                     '"${testimonial.text}"',
                     textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 4,
                     style: TextStyleUtils.paragraphSmall.copyWith(
                       fontStyle: FontStyle.italic,
                       // color: Colors.grey[800],

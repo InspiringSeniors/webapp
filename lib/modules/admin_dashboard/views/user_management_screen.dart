@@ -8,9 +8,11 @@ import 'package:inspiringseniorswebapp/common_widgets/custom_text_field.dart';
 import 'package:inspiringseniorswebapp/common_widgets/text_button.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/admin_dashboard_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/lead_management_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutors_program_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/user_management_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/admin_dashboard_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_porgram_dashboard.dart';
 import 'package:inspiringseniorswebapp/utils/middlewares/auth_middle_ware.dart';
 
 import '../../../utils/color_utils.dart';
@@ -101,12 +103,14 @@ class UserManagementScreen extends StatelessWidget {
                                     : Colors.white),
                         // moduleItem(
                         //     icon: Icons.safety_check_sharp,
-                        //     heading: "Roles And Permissions",
-                        //     ontap: () {
-                        //       userController.selectedModule.value = "Roles";
+                        //     heading: "Tutors Program Dashboard",
+                        //     ontap: () async{
+                        //       userController.selectedModule.value = "Tutors";
+                        //
+                        //       await Get.put(TutorsProgramController());
                         //     },
                         //     color:
-                        //         userController.selectedModule.value == "Roles"
+                        //         userController.selectedModule.value == "Tutors"
                         //             ? ColorUtils.HEADER_GREEN_TRANSPARENT_50
                         //             : Colors.white),
                       ],
@@ -197,6 +201,8 @@ class UserManagementScreen extends StatelessWidget {
                             return AdminDashboardScreen();
                           case "Leads":
                             return LeadManagementScreen();
+                          case "Tutors":
+                            return TutorPorgramDashboard();
                           default:
                             return Expanded(
                               child: Container(
@@ -216,64 +222,7 @@ class UserManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget headingCards(
-      {width,
-      height,
-      icon,
-      heading,
-      subheading,
-      color,
-      iconColor,
-      ontap,
-      bgColor}) {
-    return GestureDetector(
-      onTap: ontap,
-      child: Container(
-        width: width * 0.18,
-        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-        decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            border: Border.all(
-              color: ColorUtils.GREY_DOTTED,
-              width: 1,
-            )),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: iconColor,
-                )),
-            SizedBox(
-              width: 16,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  heading,
-                  style: TextStyleUtils.mobileheading6
-                      .copyWith(fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  subheading,
-                  style: TextStyleUtils.mobileheading3
-                      .copyWith(color: ColorUtils.PURPLE_BRAND),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget moduleItem({icon, heading, ontap, color}) {
     return GestureDetector(
@@ -3504,4 +3453,63 @@ class UserManagementScreen extends StatelessWidget {
       ],
     );
   }
+}
+
+Widget headingCards(
+    {width,
+      height,
+      icon,
+      heading,
+      subheading,
+      color,
+      iconColor,
+      ontap,
+      bgColor}) {
+  return GestureDetector(
+    onTap: ontap,
+    child: Container(
+      width: width * 0.18,
+      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+      decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          border: Border.all(
+            color: ColorUtils.GREY_DOTTED,
+            width: 1,
+          )),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              child: Icon(
+                icon,
+                size: 20,
+                color: iconColor,
+              )),
+          SizedBox(
+            width: 16,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                heading,
+                style: TextStyleUtils.mobileheading6
+                    .copyWith(fontWeight: FontWeight.w500),
+              ),
+              Text(
+                subheading,
+                style: TextStyleUtils.mobileheading3
+                    .copyWith(color: ColorUtils.PURPLE_BRAND),
+              )
+            ],
+          )
+        ],
+      ),
+    ),
+  );
 }

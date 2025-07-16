@@ -120,7 +120,6 @@ class UserManagementController extends GetxController
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
-
     await fetchUsersWithPagination(0);
     fetchUsers();
    var args= Get.arguments;
@@ -134,6 +133,33 @@ class UserManagementController extends GetxController
 
     // updateUserStatusCounts();
   }
+
+
+
+  Future<void> deleteNonAdminUsers() async {
+    final usersCollection = FirebaseFirestore.instance.collection('users');
+    final snapshot = await usersCollection.get();
+
+    for (final doc in snapshot.docs) {
+      final data = doc.data();
+
+      final role = (data['role'] ?? '').toString().toLowerCase().trim();
+
+      // Keep only admin or super admin
+      if (role != 'admin' && role != 'super admin') {
+        await usersCollection.doc(doc.id).delete();
+        print('Deleted user with ID: ${doc.id}, role: $role');
+      } else {
+        print('Kept user with ID: ${doc.id}, role: $role');
+      }
+    }
+
+    print('Finished deleting non-admin users.');
+  }
+
+
+
+
 
   Future<void> fetchUsers() async {
     try {
@@ -1137,6 +1163,8 @@ class UserManagementController extends GetxController
 
   Future<void> pickAndUploadCSV() async {
     isLoading.value=true;
+    successEntries.value=0;
+    csvErrorEntries.value=[];
     final uploadInput = FileUploadInputElement()..accept = '.csv';
     uploadInput.click();
 
@@ -1160,6 +1188,7 @@ class UserManagementController extends GetxController
         final existingSnapshot = await _firestore.collection('users').get();
         final existingEmails = existingSnapshot.docs.map((e) => e['email']?.toString().trim().toLowerCase()).toSet();
         final existingPhones = existingSnapshot.docs.map((e) => e['phoneNumber']?.toString().trim()).toSet();
+        final existingNames = existingSnapshot.docs.map((e) => e['firstName']?.toString().trim().toLowerCase()).toSet();
 
         for (final row in usersData) {
           final user = _mapRowToUser(headers, row);
@@ -1180,8 +1209,10 @@ class UserManagementController extends GetxController
 
           // ✅ Step 3: Check for duplicates
           final email = user.email?.trim().toLowerCase();
+          final name = user.firstName?.trim().toLowerCase();
+
           final phone = user.phoneNumber?.trim();
-          if ((existingEmails.contains(email)&&email!="") || existingPhones.contains(phone)) {
+          if ((existingEmails.contains(email)&&email!="") || (existingPhones.contains(phone)&&existingNames.contains(name))) {
             errorEntries.add({
               "firstName": user.firstName,
               "lastName": user.lastName,
@@ -1200,7 +1231,6 @@ class UserManagementController extends GetxController
             // existingEmails.add(email);
             existingPhones.add(phone);
             successEntries.value++;
-            isLoading.value=false;
 
           } catch (e) {
             errorEntries.add({
@@ -1223,13 +1253,14 @@ class UserManagementController extends GetxController
 
               "✅ Success", "All users uploaded successfully",snackPosition: SnackPosition.BOTTOM);
         } else {
-          isLoading.value=false;
 
           Get.snackbar(
               margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
               "⚠️ Partial Success", "${errorEntries.length} entries failed",snackPosition: SnackPosition.BOTTOM);
-          Get.find<UserManagementController>().csvErrorEntries.value = errorEntries;
+          csvErrorEntries.value = errorEntries;
+          isLoading.value=false;
+
         }
       }
     });

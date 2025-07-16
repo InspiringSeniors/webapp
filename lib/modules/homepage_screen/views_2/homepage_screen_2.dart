@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/footer_section.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views/programs_section.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/home_page_ticker.dart';
+import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/our_partners_section.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/trust_indicators_section.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/initiatives_section.dart';
 import 'package:inspiringseniorswebapp/modules/homepage_screen/views_2/join_family_section.dart';
@@ -26,6 +28,7 @@ class HomepageScreen2 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           NavigationBar2(),
+          AutoScrollTicker(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -37,6 +40,8 @@ class HomepageScreen2 extends StatelessWidget {
 
                   InitiativesSection(),
                   JoinFamilySection(),
+
+                  PartnersSection(),
 
                   FooterSection2(),
                 ],

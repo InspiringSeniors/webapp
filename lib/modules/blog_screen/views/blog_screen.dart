@@ -9,6 +9,7 @@ import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import '../../../common_widgets/custom_floating_action.dart';
 import '../../../common_widgets/custom_text_field.dart';
 import '../../../common_widgets/text_button.dart';
+import '../../custom_screens/pdf_viewer_screen/views/pdf_viewer_screen.dart';
 import '../../homepage_screen/views_2/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 import '../../homepage_screen/views_2/navbar.dart';
@@ -405,9 +406,22 @@ class BlogScreen extends StatelessWidget {
                                                             child: CustomButtonWithBorder(
                                                                 onpressed: ()async{
 
+
+                                                                  if(blog['userName'].toString().toLowerCase().contains("malti")){
+                                                                    Get.to(
+                                                                        PdfViewerScreen(blog["url"])
+                                                                    );
+                                                                  }
+
+                                                                  else {
+                                                                    // blogController.currentSelectedBlogUrl.value=blog;
+                                                                    Get
+                                                                        .toNamed(
+                                                                        '/blog/${blog['id']}');
+                                                                  }
                                                                   // blogController.currentSelectedBlogUrl.value=blog;
-                                                                  Get.toNamed(
-                                                                      '/blog/${blog['id']}');
+                                                                  // Get.toNamed(
+                                                                  //     '/blog/${blog['id']}');
 
 
                                                                   },
@@ -939,9 +953,21 @@ class BlogScreen extends StatelessWidget {
                                                        child: CustomButtonWithBorder(
                                                            onpressed: ()async{
 
+                                                             if(blog['userName'].toString().toLowerCase().contains("malti")){
+                                                               Get.to(
+                                                                   PdfViewerScreen(blog["url"])
+                                                               );
+                                                             }
+
+                                                             else {
+                                                               // blogController.currentSelectedBlogUrl.value=blog;
+                                                               Get
+                                                                   .toNamed(
+                                                                   '/blog/${blog['id']}');
+                                                             }
                                                              // blogController.currentSelectedBlogUrl.value=blog;
-                                                             Get.toNamed(
-                                                                 '/blog/${blog['id']}');
+                                                             // Get.toNamed(
+                                                             //     '/blog/${blog['id']}');
 
 
                                                            },

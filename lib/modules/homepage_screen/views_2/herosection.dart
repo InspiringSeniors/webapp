@@ -240,6 +240,7 @@ class HeroCarouselWidget extends StatelessWidget {
       return Obx(() =>
           Container(
             height: height * 0.88,
+            color: ColorUtils.WHITE_COLOR_BACKGROUND,
 
             child: Stack(
               children: [

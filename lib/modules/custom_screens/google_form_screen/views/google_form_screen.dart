@@ -25,7 +25,7 @@ class GoogleFormScreen extends StatelessWidget {
               ),
               child: GoogleFormIframe(),
             ),
-            FooterSection(),
+            FooterSection2(),
           ],
         ),
       ),

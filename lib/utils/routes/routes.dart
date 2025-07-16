@@ -52,6 +52,7 @@ class RoutingNames {
   static String ART_GALLERY= "/artGallery";
   static String ADVOCACY_RESEARCH= "/advocacyResearch";
 
+  static String DONATE_ISF= "/supportISF";
 
 
 }

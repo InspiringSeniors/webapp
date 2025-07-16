@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_login_registration_form.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 
 import '../../../common_widgets/text_button.dart';
 import '../../../utils/color_utils.dart';
@@ -147,7 +148,8 @@ class JoinFamilySection extends StatelessWidget {
                 _joinUsCard(
                     buttonText: "Donate Us",
                     buttoFunction: () {
-                      Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
+                      Get.toNamed(RoutingNames.DONATE_ISF);
+                      // Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
                     },
                     title: 'Support Our Mission',
                     description: 'Your donation helps us expand our programs and create greater social impact.',

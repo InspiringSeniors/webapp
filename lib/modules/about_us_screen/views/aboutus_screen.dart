@@ -432,9 +432,9 @@ class AboutUsScreen extends StatelessWidget {
                                     ),
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        Text("Our Team",style: TextStyleUtils.heading2,),
+                                        Text("Our Team",style: TextStyleUtils.heading2,textAlign: TextAlign.end,),
                                         SizedBox(height: 120,),
 
                                         Container(

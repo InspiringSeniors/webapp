@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/bindings/aboutus_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/bindings/admin_dashboard_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/bindings/tutors_program_bindings.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutors_program_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_porgram_dashboard.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/user_management_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/bindings/admin_login_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/views/admin_login_screen.dart';
@@ -25,6 +28,8 @@ import 'package:inspiringseniorswebapp/modules/contact_us_screen/views/contact_u
 import 'package:inspiringseniorswebapp/modules/custom_screens/pdf_viewer_screen/views/pdf_viewer_screen.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/bindings/ddh_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/daily_dose_of_health_screen/views/ddh_screen.dart';
+import 'package:inspiringseniorswebapp/modules/donate_us_screen/controller/donate_controller.dart';
+import 'package:inspiringseniorswebapp/modules/donate_us_screen/views/donate_screen.dart';
 import 'package:inspiringseniorswebapp/modules/fun_with_art_screen/bindings/fwa_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/fun_with_art_screen/views/fwa_screen.dart';
 import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/bindings/health_hub_bindings.dart';
@@ -117,13 +122,14 @@ class _MyAppState extends State<MyApp> {
           }
         },
         initialBinding: InitialBinding(),
-        initialRoute: Get.currentRoute,
+        initialRoute: "/",
         translationsKeys: AppTranslation.translationsKeys,
         locale: Get.locale,
         fallbackLocale: Locale('en'),
         defaultTransition: Transition.fadeIn,
 
         getPages: [
+
           GetPage(
               name: RoutingNames.SPLASH_SCREEN,
               page: () => const SplashScreen(),
@@ -334,6 +340,14 @@ class _MyAppState extends State<MyApp> {
               page: () =>  AdvocacyResearchScreen(),
               binding: AdvocacyBindings()
           ),
+
+
+          GetPage(
+              name: RoutingNames.DONATE_ISF,
+              page: () =>  DonateScreen(),
+              binding: DonateBindings()
+          ),
+
         ]);
   }
 }

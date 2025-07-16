@@ -45,9 +45,9 @@ class NavigationBar2 extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: width * 0.08),
         decoration: const BoxDecoration(
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(color: Colors.black12, blurRadius: 4),
-          ],
+          // boxShadow: [
+          //   BoxShadow(color: Colors.black12, blurRadius: 4),
+          // ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -77,7 +77,13 @@ class NavigationBar2 extends StatelessWidget {
                       "heading":"Our Story",
                       "navigate":RoutingNames.ABOUT_US_SCREEN
 
-                    } ,{
+                    } ,
+                    {
+                      "heading":"ISF State Chapter",
+                      "navigate":RoutingNames.ABOUT_US_SCREEN
+
+                    },
+                    {
                       "heading":"Our Advisory Board",
                       "navigate":RoutingNames.ABOUT_US_SCREEN
 
@@ -141,11 +147,17 @@ class NavigationBar2 extends StatelessWidget {
                       "heading":"Become A Volunteer",
                       "navigate":RoutingNames.JOIN_US_SCREEN
 
-                    } ,{
+                    } ,
+                    {
                       "heading":"Become A Partner",
                       "navigate":RoutingNames.JOIN_US_SCREEN
 
-                    }
+                    },
+                    {
+                      "heading":"Work With Us",
+                      "navigate":RoutingNames.JOIN_US_SCREEN
+
+                    },
 
 
                   ],
@@ -177,7 +189,8 @@ class NavigationBar2 extends StatelessWidget {
                       "heading":"Gallery",
                       "navigate":RoutingNames.MEDIA_PAGE
 
-                    }
+                    },
+
 
 
                   ],
@@ -197,7 +210,8 @@ class NavigationBar2 extends StatelessWidget {
 
                       // h.sendWhatsApp("9650373038");
 
-                      Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
+                      Get.toNamed(RoutingNames.DONATE_ISF);
+                      // Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
                     },
 
                     shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
@@ -208,6 +222,7 @@ class NavigationBar2 extends StatelessWidget {
                     vpadding: 10,
                     isHoverGetStarted: false.obs,
                     text: "Donate",
+
                     borderColor: ColorUtils.BRAND_COLOR,
                     textColor: ColorUtils.BRAND_COLOR),
                 SizedBox(width: 16),
@@ -511,21 +526,23 @@ class _MobileNavBarState extends State<MobileNavBar> {
                           onpressed: () {
                             HomepageController h = Get.find();
 
+                            _removeOverlay();
                             // h.sendWhatsApp("9650373038");
+                            Get.toNamed(RoutingNames.DONATE_ISF);
 
-                            Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
+                            // Utils.launchUrlFor("https://rzp.io/l/u0o8yej");
                           },
 
                           shadowColor: ColorUtils.BRAND_COLOR_LIGHT,
                           fontSize: TextSizeDynamicUtils.dHeight14,
-                          bgColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+                          bgColor: ColorUtils.HEADER_GREEN,
                           hoveredColor: ColorUtils.HEADER_GREEN,
                           hpadding: 14,
                           vpadding: 8,
                           isHoverGetStarted: false.obs,
                           text: "Donate",
-                          borderColor: ColorUtils.BRAND_COLOR,
-                          textColor: ColorUtils.BRAND_COLOR),
+                          borderColor: ColorUtils.HEADER_GREEN,
+                          textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
                       SizedBox(width: 16),
 
 
@@ -560,17 +577,36 @@ class _MobileNavBarState extends State<MobileNavBar> {
     );
   }
   Widget _menuItem(String title, IconData icon,{onpressed}) {
-    return ListTile(
 
-      leading: Icon(icon, color: ColorUtils.BRAND_COLOR,size: 20,),
-      title: Text(
-        title,
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 5,horizontal: 16),
+      width:MediaQuery.of(context).size.width,
+      child: GestureDetector(
+        onTap: onpressed,
+        child: Row(
+          children: [
+            Icon(icon, color: ColorUtils.BRAND_COLOR,size: TextSizeDynamicUtils.dHeight18,),
+            SizedBox(width: 16,),
+            Text(title,
         style: TextStyleUtils.heading6.copyWith(
-            color: ColorUtils.HEADER_GREEN
+            color: ColorUtils.HEADER_GREEN)
+            )
+          ],
         ),
       ),
-      onTap: onpressed,
+
     );
+    // return ListTile(
+    //
+    //   leading: Icon(icon, color: ColorUtils.BRAND_COLOR,size: 20,),
+    //   title: Text(
+    //     title,
+    //     style: TextStyleUtils.heading6.copyWith(
+    //         color: ColorUtils.HEADER_GREEN
+    //     ),
+    //   ),
+    //   onTap: onpressed,
+    // );
   }
 }
 

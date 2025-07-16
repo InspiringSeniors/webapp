@@ -35,6 +35,19 @@ class InspiringTutorsController extends GetxController{
       Get.context!,
       '4TIF85SdGeQ',),
 
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'DKoIW8q5wlA',),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'GOJyk2_JZIc',),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'foxpPneQ9Pw',),
+
+
+
+
   ];
 
   final List<Widget> hostList = <Widget>[

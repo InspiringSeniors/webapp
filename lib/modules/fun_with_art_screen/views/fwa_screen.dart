@@ -226,7 +226,7 @@ class FunWithArtScreen extends StatelessWidget {
                   ),
                 ),
 
-                FooterSection1(),
+                FooterSection2(),
               ],
             ),
           ),

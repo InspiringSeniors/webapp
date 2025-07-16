@@ -34,6 +34,7 @@ class HomepageController extends GetxController {
 
 
   TextEditingController? searchController = TextEditingController();
+
   // late final GlobalKey sectionKey ;
 
 
@@ -41,64 +42,43 @@ class HomepageController extends GetxController {
   var hovering = false.obs;
   var isVisible = true.obs;
 
-  var isDropdownClicked=false.obs;
-  var isInnerDropDownClicked=false.obs;
+  var isDropdownClicked = false.obs;
+  var isInnerDropDownClicked = false.obs;
 
   var animatedValues = <String, Animation<int>>{}.obs;
   late AnimationController _controller;
 
-  
-  WhatsApp whatsApp=WhatsApp('EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD', '614697528393435');
+
+  WhatsApp whatsApp = WhatsApp(
+      'EAANgaNzHw7YBOzSHiV5e21R9NkiwAok4EJPRGS8keeDGlcqsDDFDUyP3POlRfmj76EXcjL0ZBfyvXMDhh1w885gIJHs45t8G07a35Ai7ZAPTKc59G0erFNZAQcUfQJXePlFNLjAJZCEZBdAVwfeR0pCHJWZCVFAWkZBZCyZCSOv8wDXk5RzVf5VYGwxHahbPt2TSBjI6I8lAhcaHyCeUqcybPNy2bGp4ZD',
+      '614697528393435');
 
 
-  final List<Testimonial> testimonials = [
-    Testimonial(
-      name: "Shiv Kumar Varma",
-      role: "Senior Member, Inspiring Seniors Foundation",
-      text: "Extremely useful session on how to inhale and exhale breaths, especially to release all the air inhaled inside. Shall try to practice.",
-      image: "assets/images/shivkumar.png",
-    ),
-    Testimonial(
-      name: "BR Bakshi",
-      role: "Our Happy Tutors",
-      text: "It is pleasure for me to interact with such young mind, understand and analyze their problem in learning math and help them as much as i can.",
-      image: "",
-    ),
-    Testimonial(
-      name: "Hardeep Vikhu",
-      role: "Volunteer, Inspiring Seniors Foundation",
-      text: "What a fantastic session! It was really informative. I'm excited for the upcoming Friday session. Many thanks to the Inspiring Seniors Foundation.",
-      image: "assets/images/hardeepkaur.png",
-    ),
 
-    Testimonial(
-      name: "BR Bakshi",
-      role: "Wellness Chaupal Member",
-      text: "Thank you for a very informative and useful session on effective breathing. ",
-      image: "assets/images/brbakshi.png",
-    ),
 
-    Testimonial(
-      name: "Robel (9th Class)",
-      role: "Our Happy Students",
-      text: "Maths , English aur sciece maam bhot accha padhati hain aur samaj me bhi aajata hai. Hindi ko English me translate karna bhi sikhaati hain.",
-      image: "",
-    ),
-    Testimonial(
-      name: "TR Dua",
-      role: "Senior Member, Inspiring Seniors Foundation",
-      text: "Very nice session for Seniors and Very new techniques. Thanks!.",
-      image: "assets/images/trdua_pp.png",
-    ),
+  var partnerslist = [
 
-    Testimonial(
-      name: "Santosh",
-      role: "Senior Member, Inspiring Seniors Foundation",
-      text: "  Thank you! I was doing yoga for the first time and I liked it.",
-      image: "assets/images/santosh_ji.png",
-    ),
-  ];
 
+  ].obs;
+
+  var certificateList=[
+
+
+  ].obs
+  ;
+
+
+
+  // Future<void> uploadPartners() async {
+  //   final firestore = FirebaseFirestore.instance;
+  //   for (var partner in certificateList) {
+  //     await firestore.collection('isf_certificates').add({
+  //       'name': partner['name'],
+  //       'url': partner['url'],
+  //     });
+  //   }
+  //   print('All partners uploaded!');
+  // }
   final List images = [
     {"imageUrl":    'https://png.pngtree.com/background/20230403/original/pngtree-side-profile-of-old-man-vector-picture-image_2278848.jpg',
     "testimonial":  '"At 87, S.K. Varma proves that age is just a number. With Inspiring Seniors Foundation he is engaging himself through technology, embracing every opportunity. Winning the Step Count Challenge 80+ category was just the beginning – he continues striving for health and growth."',    "username":"Shiv Kumar Varma",
@@ -160,12 +140,24 @@ class HomepageController extends GetxController {
     // await fetchStats();
 
 
+
+
+
+    await fetchUpcomingEvents();
     Get.put(OtpController(),permanent: true);
+
+    fetchPartners();
+
+    fetchCertificates();
+
     startSwitcher();
     // sectionKey=GlobalKey();
 
 
   }
+
+
+
 
 
   RxInt activeMembers = 0.obs;
@@ -202,6 +194,67 @@ class HomepageController extends GetxController {
     isVisible.value = visible;
   }
 
+
+  var isPartnerLoading=false.obs;
+
+  Future<void> fetchPartners() async {
+
+    try {
+      isPartnerLoading.value=true;
+      final snapshot = await FirebaseFirestore.instance.collection('partners').get();
+      partnerslist.value = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+      isPartnerLoading.value=false;
+    } catch (e) {
+      isPartnerLoading.value=false;
+
+      print('Error fetching partners: $e');
+    }
+  }
+
+
+  Future<void> fetchCertificates() async {
+
+    try {
+      isPartnerLoading.value=true;
+      final snapshot = await FirebaseFirestore.instance.collection('isf_certificates').get();
+      certificateList.value = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+      isPartnerLoading.value=false;
+    } catch (e) {
+      isPartnerLoading.value=false;
+
+      print('Error fetching partners: $e');
+    }
+  }
+
+  final RxList<Map<String, dynamic>> upcomingEvents = <Map<String, dynamic>>[].obs;
+
+
+  var isEventsLoading=false.obs;
+
+  Future<void> fetchUpcomingEvents() async {
+
+
+    try {
+      isEventsLoading.value=true;
+      final snapshot = await FirebaseFirestore.instance.collection('upcoming_events').get();
+      upcomingEvents.value = snapshot.docs.map((doc) {
+        final data = doc.data();
+        return {
+          'heading': data['heading'],
+          'image': data['image'],
+
+        };
+      }).toList();
+      isEventsLoading.value=false;
+
+    } catch (e) {
+      isEventsLoading.value=false;
+
+      print('Error fetching upcoming events: $e');
+    }
+  }
 
   void startAnimation(String key, int endValue, TickerProvider vsync) {
     if (!animatedValues.containsKey(key)) {

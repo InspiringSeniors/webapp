@@ -204,41 +204,58 @@ var winnerData = {
     ),
     Testimonial(
       name: "BR Bakshi",
-      role: "Our Happy Tutors",
+      role: "Our Happy Tutor",
       text: "It is pleasure for me to interact with such young mind, understand and analyze their problem in learning math and help them as much as i can.",
       image: "",
     ),
     Testimonial(
       name: "Gursharan",
-      role: "Our Happy Tutors",
+      role: "Our Happy Tutor",
       text: "The students take the classes with great enthusiam. I create stories to help them understand the chapters better. They are good students who need guidance and i am really happy to be a part of ISF .",
       image: "",
     ),
     Testimonial(
       name: "Nimisha",
-      role: "Our Happy Tutors",
+      role: "Our Happy Tutor",
       text: "Based on what i have taught the children so far, i would say that the children genuinely wants to learn and teaching them brings me great joy as well!",
-      image: "",
-    ),
-    Testimonial(
-      name: "Robel (9th Class)",
-      role: "Our Happy Students",
-      text: "Maths , English aur sciece maam bhot accha padhati hain aur samaj me bhi aajata hai. Hindi ko English me translate karna bhi sikhaati hain.",
       image: "",
     ),
 
     Testimonial(
-      name: "Vidhya (7th Class)",
-      role: "Our Happy Students",
-      text: "Pehle se bhot saari cheezein seekh gyi hu , Ma'am science itne acche examples k saath smjati hai aur yaad bhi ho jaati hain",
+      name: "Shweta Khanna",
+      role: "Our Happy Tutor",
+      text:
+          "Thank you so much for your kind words and thoughtful gesture. I’m truly humbled and grateful for opportunity given by ISF . It has been a wonderful experience associated with such passionate and dedicated children,hope I had brought some positive impact on their lives .",
       image: "",
     ),
+
     Testimonial(
-      name: "Dilkush's Mother (8th Class)",
-      role: "Our Happy Students",
-      text: " Bhot accha lag raha hai aap log baccho ka saath de rahe hain. Aise hi madad karte rahiyega , Dilskush English se ghabrata tha , ab pdhne ki koshish karta hai aur class join bhi karta hai .",
+      name: "Rekha Velayudhan",
+      role: "Our Happy Tutor",
+      text:
+          "Hats off to you all for putting together a program like this where Seniors can express their skills through volunteering and that too helping underprivileged students.",
       image: "",
     ),
+
+    // Testimonial(
+    //   name: "Robel (9th Class)",
+    //   role: "Our Happy Students",
+    //   text: "Maths , English aur sciece maam bhot accha padhati hain aur samaj me bhi aajata hai. Hindi ko English me translate karna bhi sikhaati hain.",
+    //   image: "",
+    // ),
+
+    // Testimonial(
+    //   name: "Vidhya (7th Class)",
+    //   role: "Our Happy Students",
+    //   text: "Pehle se bhot saari cheezein seekh gyi hu , Ma'am science itne acche examples k saath smjati hai aur yaad bhi ho jaati hain",
+    //   image: "",
+    // ),
+    // Testimonial(
+    //   name: "Dilkush's Mother (8th Class)",
+    //   role: "Our Happy Students",
+    //   text: " Bhot accha lag raha hai aap log baccho ka saath de rahe hain. Aise hi madad karte rahiyega , Dilskush English se ghabrata tha , ab pdhne ki koshish karta hai aur class join bhi karta hai .",
+    //   image: "",
+    // ),
     Testimonial(
       name: "Girdhari Lal",
       role: "OUTREACH",
