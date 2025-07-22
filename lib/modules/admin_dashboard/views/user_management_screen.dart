@@ -101,18 +101,18 @@ class UserManagementScreen extends StatelessWidget {
                                             "View User"
                                     ? ColorUtils.HEADER_GREEN_TRANSPARENT_50
                                     : Colors.white),
-                        // moduleItem(
-                        //     icon: Icons.safety_check_sharp,
-                        //     heading: "Tutors Program Dashboard",
-                        //     ontap: () async{
-                        //       userController.selectedModule.value = "Tutors";
-                        //
-                        //       await Get.put(TutorsProgramController());
-                        //     },
-                        //     color:
-                        //         userController.selectedModule.value == "Tutors"
-                        //             ? ColorUtils.HEADER_GREEN_TRANSPARENT_50
-                        //             : Colors.white),
+                        moduleItem(
+                            icon: Icons.safety_check_sharp,
+                            heading: "Tutors Program Dashboard",
+                            ontap: () async{
+                              userController.selectedModule.value = "Tutors";
+
+                              await Get.put(TutorsProgramController());
+                            },
+                            color:
+                                userController.selectedModule.value == "Tutors"
+                                    ? ColorUtils.HEADER_GREEN_TRANSPARENT_50
+                                    : Colors.white),
                       ],
                     ),
                   ),

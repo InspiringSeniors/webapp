@@ -198,19 +198,24 @@ class HomepageController extends GetxController {
   var isPartnerLoading=false.obs;
 
   Future<void> fetchPartners() async {
-
     try {
-      isPartnerLoading.value=true;
-      final snapshot = await FirebaseFirestore.instance.collection('partners').get();
-      partnerslist.value = snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+      isPartnerLoading.value = true;
 
-      isPartnerLoading.value=false;
+      final snapshot = await FirebaseFirestore.instance
+          .collection('partners')
+          .where('isActive', isEqualTo: true)
+          .get();
+
+      partnerslist.value =
+          snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+      isPartnerLoading.value = false;
     } catch (e) {
-      isPartnerLoading.value=false;
-
+      isPartnerLoading.value = false;
       print('Error fetching partners: $e');
     }
   }
+
 
 
   Future<void> fetchCertificates() async {

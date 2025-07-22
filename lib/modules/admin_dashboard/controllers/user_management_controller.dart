@@ -13,6 +13,7 @@ import 'package:csv/csv.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutors_program_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/models/user_model.dart';
 import 'package:intl/intl.dart';
 
@@ -68,7 +69,7 @@ class UserManagementController extends GetxController
   RxBool hasMore = true.obs;
 
 
-  var selectedModule="Dashboard".obs;
+  var selectedModule="Tutors".obs;
 
   var selectedAddUserType="Manual".obs;
 
@@ -118,6 +119,7 @@ class UserManagementController extends GetxController
 
   @override
   void onInit() async{
+    Get.put(TutorsProgramController());
     // TODO: implement onInit
     super.onInit();
     await fetchUsersWithPagination(0);

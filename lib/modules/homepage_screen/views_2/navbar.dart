@@ -166,7 +166,7 @@ class NavigationBar2 extends StatelessWidget {
                   },
                 ),
 
-                NavItem("Help", () => navigateToSection("contact")),
+                NavItem("Contact Us", () => navigateToSection("contact")),
 
                 HoverableNavItem(
                   label: "Media",
@@ -503,7 +503,7 @@ class _MobileNavBarState extends State<MobileNavBar> {
 
                   Get.toNamed(RoutingNames.JOIN_US_SCREEN);
                 }),
-                _menuItem("Help", Icons.contact_support_outlined,onpressed: (){
+                _menuItem("Contact Us", Icons.contact_support_outlined,onpressed: (){
                   _removeOverlay();
 
                   Get.toNamed(RoutingNames.CONTACT_US_SCREEN);

@@ -357,7 +357,7 @@ class FooterSection2 extends StatelessWidget {
                                   Get.toNamed(RoutingNames.CONTACT_US_SCREEN);
                                 },
                                 child: Text(
-                                  "Help",
+                                  "Contact Us",
                                   style: TextStyleUtils.textStyleh14,
                                 )),
 
@@ -864,7 +864,7 @@ class FooterSection2 extends StatelessWidget {
                                             RoutingNames.CONTACT_US_SCREEN);
                                       },
                                       child: Text(
-                                        "Help",
+                                        "Contact Us",
                                         style: TextStyleUtils.textStyleh16,
                                       )),
 
