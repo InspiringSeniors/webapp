@@ -1,10 +1,21 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csv/csv.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import 'package:intl/intl.dart';
 
+import '../../../utils/utility/utils.dart';
 import '../models/student_models.dart';
 import '../models/tutors_model.dart';
+import '../models/user_model.dart';
+
+import 'dart:html';
+import 'dart:html' as html;
 
 class TutorsProgramController extends GetxController{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -16,7 +27,7 @@ class TutorsProgramController extends GetxController{
   var totalScheduledClasses=0.obs;
   var totalSchools=0.obs;
 
-  var selectedFilter="tutor".obs;
+  var selectedFilter="student".obs;
 
 
   var isLoading=false.obs;
@@ -89,13 +100,13 @@ class StudentsDashboardController extends  GetxController{
     '10'
   ];
 
-  final List<String> subjectOptions = [
-    'All',
-    'English',
-    'Math',
-    'Science',
-    'Hindi',
-  ];
+  // final List<String> subjectOptions = [
+  //   'All',
+  //   'English',
+  //   'Math',
+  //   'Science',
+  //   'Hindi',
+  // ];
 
   final List<String> statusOptions = [
     'All',
@@ -108,6 +119,371 @@ class StudentsDashboardController extends  GetxController{
   RxString selectedSubjectFilter = ''.obs;
   RxString selectedClassFilter = ''.obs;
   RxString selectedStatusFilter = ''.obs;
+
+  var selectedAddUserType ="Manual".obs;
+
+
+  TextEditingController? phoneNumberController=TextEditingController();
+  RxBool nameStateHandler = false.obs;
+  TextEditingController? userNameController = TextEditingController();
+  var labeluserName = true.obs;
+
+
+  RxBool shoolnameStateHandler = false.obs;
+  TextEditingController? schoolNameController = TextEditingController();
+  var labelschoolName = true.obs;
+  RxBool signatureStateHandler = false.obs;
+  TextEditingController? signatureeController = TextEditingController();
+  var labelsignaturelName = true.obs;
+
+  RxBool studentnameStateHandler = false.obs;
+  TextEditingController? studentuserNameController = TextEditingController();
+  var studentlabeluserName = true.obs;
+
+
+  RxBool studentAgeStateHandler = false.obs;
+  TextEditingController? studentAgeController = TextEditingController();
+  var studentlabelAge = true.obs;
+
+  RxBool emailStateHandler = false.obs;
+  TextEditingController? emailController = TextEditingController();
+  var labelemail = true.obs;
+
+  RxBool lastNameStateHandler = false.obs;
+  TextEditingController? lastNameController = TextEditingController();
+  var labellastName = true.obs;
+  Rx<bool> isPhoneEnabled = true.obs;
+
+  var labelphoneNumber=false.obs;
+  // TextEditingController? messageController = TextEditingController();
+  // TextEditingController? nextActionController = TextEditingController();
+
+  Rx<Color> inactiveColor = ColorUtils.BRAND_COLOR.obs;
+
+  var selectedValue=2.obs;
+  var selectedGenerValue=0.obs;
+
+  var isGenderSelected=true.obs;
+  var isSubjectSelected=true.obs;
+
+  var isFormSubmitting=false.obs;
+
+
+  // final List<String> classOptions = [
+  //   '5',
+  //   '6',
+  //   '7',
+  //   '8',
+  //   '9',
+  //   '10'
+  // ];
+
+  GlobalKey<FormState> studentRegisterFormKey = GlobalKey<FormState>();
+
+  var selectedInterests=<String>[].obs;
+
+  var timeOptions = [
+    {'showTime': '8:00 AM', 'timeValue': '08:00'},
+    {'showTime': '9:00 AM', 'timeValue': '09:00'},
+    {'showTime': '10:00 AM', 'timeValue': '10:00'},
+    {'showTime': '11:00 AM', 'timeValue': '11:00'},
+    {'showTime': '12:00 PM', 'timeValue': '12:00'},
+    {'showTime': '1:00 PM', 'timeValue': '13:00'},
+    {'showTime': '2:00 PM', 'timeValue': '14:00'},
+    {'showTime': '3:00 PM', 'timeValue': '15:00'},
+    {'showTime': '4:00 PM', 'timeValue': '16:00'},
+    {'showTime': '5:00 PM', 'timeValue': '17:00'},
+    {'showTime': '6:00 PM', 'timeValue': '18:00'},
+    {'showTime': '7:00 PM', 'timeValue': '19:00'},
+    {'showTime': '8:00 PM', 'timeValue': '20:00'},
+  ].obs;
+
+  var currentSelectedUser=StudentDetailModel().obs;
+
+  var csvErrorEntries = <Map<String, dynamic>>[].obs;
+  var successEntries = 0.obs;
+ var newuserProfilePic=''.obs;
+  TextEditingController? messageController = TextEditingController();
+
+
+  // List<String> getToTimeOptions(String fromTime) {
+  //   final fromIndex = timeOptions.value.indexOf(fromTime);
+  //   if (fromIndex == -1 || fromIndex == timeOptions.length - 1) {
+  //     return []; // No "to" options available if "from" is last or invalid
+  //   }
+  //   return timeOptions.value.sublist(fromIndex + 1);
+  // }
+
+
+  var subjectOptions = <Map<String, dynamic>>[
+    {"subject": "English".tr, "value": false.obs},
+    {"subject": "Math".tr, "value": false.obs},
+    {"subject": "Science".tr, "value": false.obs},
+    {"subject": "Sanskrit".tr, "value": false.obs},
+
+    {"subject": "Hindi".tr, "value": false.obs},
+    {"subject": "Social Studies".tr, "value": false.obs},
+
+  ].obs;
+
+  var selectedSubjects=[].obs;
+
+  RxString selectedFromTimeFilter = ''.obs;
+  RxString selectedToTimeFilter = ''.obs;
+
+
+  selectLanguage(value){
+
+    switch(value){
+      case 1:
+        selectedValue.value=value;
+        Locale locale = new Locale("hi");
+        Get.updateLocale(locale);
+
+        break;
+
+      case 2:
+        selectedValue.value=value;
+
+        Locale locale = new Locale("en");
+        Get.updateLocale(locale);
+
+        break;
+
+      default:
+        Locale locale = new Locale("hi");
+        Get.updateLocale(locale);
+
+    }
+
+
+
+
+  }
+  selectGender(value){
+
+    switch(value){
+      case 1:
+        selectedGenerValue.value=value;
+
+
+        break;
+
+      case 2:
+        selectedGenerValue.value=value;
+
+
+        break;
+
+      case 3:
+        selectedGenerValue.value=value;
+
+
+        break;
+
+      default:
+        Locale locale = new Locale("hi");
+        Get.updateLocale(locale);
+
+    }
+
+
+
+
+  }
+
+  String? validatemail(String? text) {
+    if(text==""){
+      return null;
+
+    }else if (Validators.validateEmail(emailController!.text) == false) {
+      return 'Spaces and symbols are not allowed'.tr;
+    } else {
+      return null;
+    }
+  }
+  String? validateLastName(String? text) {
+  }
+
+  String? validatePhoneNumber() {
+    if (Validators.validateMobileNumber(phoneNumberController!.text) == false) {
+      labelphoneNumber.value = true;
+      return 'Enter valid phone number'.tr;
+    } else {
+      labelphoneNumber.value = false;
+    }
+    return null;
+  }
+
+  String? validatename(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Fieled is Mandatory';
+    }
+
+    // final regex = RegExp(r'^[A-Za-z]{1,}([. ]?[A-Za-z]{1,})+$');
+    //
+    // if (!regex.hasMatch(value.trim())) {
+    //   return 'Enter at least 2 letters, only alphabets and initials allowed';
+    // }
+
+    return null;
+  }
+
+  String? validateEmpty(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Fieled is Mandatory';
+    }
+
+    return null;
+  }
+
+
+  String? validateAge(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Field is mandatory';
+    }
+
+
+    return null;
+  }
+
+
+
+  void submitForm() {
+    var isValidated = studentRegisterFormKey.currentState!.validate();
+
+    print("object ${selectedFromTimeFilter.value}  ${selectedToTimeFilter.value}");
+    // Validate gender selection
+    if (selectedGenerValue.value == 0) {
+      isGenderSelected.value = false;
+      return;
+    }
+
+    selectedSubjects.value = subjectOptions
+        .where((item) => item['value'].value == true)
+        .map((item) => item['subject'])
+        .toList();
+
+    // Validate subject selection
+    if (selectedSubjects.isEmpty) {
+      isSubjectSelected.value = false;
+      return;
+    }
+
+    if (isValidated) {
+
+      isFormSubmitting.value=true;
+      try {
+        // Generate random ID
+        String newStudentId = 'sid${DateTime.now().millisecondsSinceEpoch}';
+
+        Map<String, dynamic> subjectMap = {
+          for (var subject in selectedSubjects) subject: {'assigned': false}
+        };
+
+
+        List<Map<String, dynamic>> timings = [
+          {
+            'day': "All",
+            'start': parseTimeToIso(selectedFromTimeFilter.value),
+            'end': parseTimeToIso(selectedToTimeFilter.value),
+          }
+        ];
+
+        // Create a new student model
+        StudentDetailModel newStudent = StudentDetailModel(
+          id: newStudentId,
+          name: studentuserNameController!.text.trim(),
+          phone: phoneNumberController!.text.trim(),
+          studentClass: selectedClassFilter.value.trim(),
+          subjects: subjectMap,
+          school: schoolNameController!.text.trim(),
+          isAssigned: false,
+          assignedTutors: {},
+          attendancePercent: 0.0,
+          personalInfo: {
+            'dob': studentAgeController!.text.trim(),
+            'address': "",
+          },
+          interests: selectedInterests.toList(),
+          timingsAvailable: timings,
+          guardianDetails: {
+            'name': userNameController!.text.trim(),
+            'phone': phoneNumberController!.text.trim(),
+            // 'relation': guardianRelationController.text.trim(),
+          },
+          classHistory: [],
+          notesReports: [],
+        );
+
+        // Save to Firestore or add to your list
+        FirebaseFirestore.instance
+            .collection('students')
+            .doc(newStudentId)
+            .set({
+          'name': newStudent.name,
+          'phone': newStudent.phone,
+          'class': newStudent.studentClass,
+          'subjects': newStudent.subjects,
+          'school': newStudent.school,
+          'isAssigned': newStudent.isAssigned,
+          'assignedTutors': newStudent.assignedTutors,
+          'attendancePercent': newStudent.attendancePercent,
+          'personalInfo': newStudent.personalInfo,
+          'interests': newStudent.interests,
+          'timingsAvailable': newStudent.timingsAvailable,
+          'guardianDetails': newStudent.guardianDetails,
+          'classHistory': newStudent.classHistory,
+          'notesReports': newStudent.notesReports,
+        })
+            .then((_) {
+          // Show success message or navigate
+          isFormSubmitting.value=false;
+
+          Get.snackbar(
+              margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
+
+              "✅ Success", "Student uploaded successfully",snackPosition: SnackPosition.BOTTOM);
+        });
+
+
+
+      } catch (e) {
+        isFormSubmitting.value=false;
+
+        Get.snackbar(
+          margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
+
+          "Error ", "Something went wrong",          snackPosition: SnackPosition.BOTTOM,);
+      }
+    }
+  }
+  DateTime now = DateTime.now();
+
+  String parseTimeToIso(String timeStr) {
+    final now = DateTime.now();
+    print("time is $timeStr");
+
+    try {
+      Intl.defaultLocale = 'en_US';
+      final format = DateFormat.Hm(); // ✅ 24-hour format like "14:00"
+      final time = format.parse(timeStr);
+      final fullDateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        time.hour,
+        time.minute,
+      );
+      return fullDateTime.toIso8601String();
+    } catch (e) {
+      print("error in converting datetime: $e");
+      return DateTime.now().toIso8601String();
+    }
+  }
+
+
+
 
 
   @override
@@ -712,6 +1088,7 @@ class StudentsDashboardController extends  GetxController{
     phone: '',
     studentClass: '',
     subjects: {},
+
     school: '',
     isAssigned: false,
     assignedTutors: {},
@@ -725,28 +1102,69 @@ class StudentsDashboardController extends  GetxController{
   ).obs;
   //per user
   Future<StudentDetailModel?> getStudentById(String studentId) async {
-    try {
+    // try {
+
+    isLoading.value=true;
+
+      print("student id ${studentId}");
       final doc = await FirebaseFirestore.instance
           .collection('students')
           .doc(studentId)
           .get();
 
       if (doc.exists) {
-        currentSelectedStudent.value=StudentDetailModel.fromMap(doc.id, doc.data()!);
+        print("doc is ${doc.data()}");
+
+        currentSelectedStudent.value= StudentDetailModel.fromMap(doc.id, doc.data()!);
+
+
+        print("current s ${currentSelectedStudent.value.name}");
+
+        userNameController!.text=currentSelectedStudent.value.guardianDetails["name"];
+
+        phoneNumberController!.text=currentSelectedStudent.value.phone;
+
+        studentuserNameController!.text=currentSelectedStudent.value.name;
+
+        // selectedGenerValue.value=currentSelectedStudent.value.
+
+        isLoading.value=false;
+
         return StudentDetailModel.fromMap(doc.id, doc.data()!);
+
       } else {
+        isLoading.value=false;
+
         return null;
       }
-    } catch (e) {
-      print('Error fetching student by ID: $e');
+    // } catch (e) {
+    isLoading.value=false;
+
+    print('Error fetching student by ID: $e');
       return null;
-    }
+    // }
   }
 
   var students = <StudentListItem>[].obs;
 
   var isLoading = false.obs;
 
+  Future<User?> getUserByIdForAdd() async {
+    try {
+
+      emailController = TextEditingController();
+      phoneNumberController=TextEditingController();
+      lastNameController=TextEditingController();
+      userNameController=TextEditingController();
+      currentSelectedUser.value=StudentDetailModel();
+
+    } catch (e) {
+      isLoading.value=false;
+
+      print("Error fetching user: $e");
+      return null;
+    }
+  }
 
   //get all students
   Future<void> fetchStudents() async {
@@ -869,7 +1287,325 @@ class StudentsDashboardController extends  GetxController{
 
   var currentView='all'.obs;
 
+  String generateUserId() {
+    const prefix = 'uix';
+    final random = Random.secure();
+    final number = random.nextInt(9000) + 1000; // generates 4-digit number from 1000 to 9999
+    return '$prefix$number';
+  }
 
+  String formatDate(DateTime? date) {
+    if (date == null) return 'No date available';
+    return DateFormat('dd-MM-yyyy').format(date);
+  }
+
+
+
+  Future<void> pickAndUploadCSV() async {
+    isLoading.value=true;
+    successEntries.value=0;
+    csvErrorEntries.value=[];
+    final uploadInput = FileUploadInputElement()..accept = '.csv';
+    uploadInput.click();
+
+    uploadInput.onChange.listen((event) async {
+      final file = uploadInput.files!.first;
+      final reader = FileReader();
+
+      reader.readAsText(file);
+      await reader.onLoad.first;
+
+      final csvContent = reader.result as String;
+      final csvList = const CsvToListConverter().convert(csvContent, eol: '\n');
+
+      if (csvList.length > 1) {
+        final headers = csvList[0];
+        final usersData = csvList.sublist(1).take(100); // Limit 50 users
+        final _firestore = FirebaseFirestore.instance;
+        final List<Map<String, dynamic>> errorEntries = [];
+
+        // ✅ Step 1: Fetch existing users' email and phone
+        final existingSnapshot = await _firestore.collection('users').get();
+        final existingEmails = existingSnapshot.docs.map((e) => e['email']?.toString().trim().toLowerCase()).toSet();
+        final existingPhones = existingSnapshot.docs.map((e) => e['phoneNumber']?.toString().trim()).toSet();
+        final existingNames = existingSnapshot.docs.map((e) => e['firstName']?.toString().trim().toLowerCase()).toSet();
+
+        for (final row in usersData) {
+          final user = _mapRowToUser(headers, row);
+
+          // ✅ Step 2: Check for required fields
+          if (_hasMissingFields(user)) {
+            errorEntries.add({
+              "firstName": user.firstName,
+              "lastName": user.lastName,
+              "email": user.email,
+              "phoneNumber": user.phoneNumber,
+              "status": user.status,
+              "role": user.role,
+              "reason": "Missing required fields"
+            });
+            continue;
+          }
+
+          // ✅ Step 3: Check for duplicates
+          final email = user.email?.trim().toLowerCase();
+          final name = user.firstName?.trim().toLowerCase();
+
+          final phone = user.phoneNumber?.trim();
+          if ((existingEmails.contains(email)&&email!="") || (existingPhones.contains(phone)&&existingNames.contains(name))) {
+            errorEntries.add({
+              "firstName": user.firstName,
+              "lastName": user.lastName,
+              "email": user.email,
+              "phoneNumber": user.phoneNumber,
+              "status": user.status,
+              "role": user.role,
+              "reason": "Duplicate email or phone"
+            });
+            continue;
+          }
+
+          // ✅ Step 4: Upload to Firestore
+          try {
+            await _firestore.collection('users').doc(user.id).set(user.toMap());
+            // existingEmails.add(email);
+            existingPhones.add(phone);
+            successEntries.value++;
+
+          } catch (e) {
+            errorEntries.add({
+              "firstName": user.firstName,
+              "lastName": user.lastName,
+              "email": user.email,
+              "phoneNumber": user.phoneNumber,
+              "status": user.status,
+              "role": user.role,
+              "reason": "Firestore error: $e"
+            });
+          }
+        }
+
+        if (errorEntries.isEmpty) {
+          isLoading.value=false;
+
+          Get.snackbar(
+              margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
+
+              "✅ Success", "All users uploaded successfully",snackPosition: SnackPosition.BOTTOM);
+        } else {
+
+          Get.snackbar(
+              margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
+
+              "⚠️ Partial Success", "${errorEntries.length} entries failed",snackPosition: SnackPosition.BOTTOM);
+          csvErrorEntries.value = errorEntries;
+          isLoading.value=false;
+
+        }
+      }
+    });
+  }
+
+  void downloadCsvTemplate() {
+    final csvContent = [
+      ["firstName", "lastName", "email", "phoneNumber", "status", "role", "notes"],
+      ["John", "Doe", "john.doe@example.com", "9876543210", "active", "member", "This is a note"]
+    ];
+
+    final csvString = const ListToCsvConverter().convert(csvContent);
+
+    final blob = html.Blob([csvString]);
+    final url = html.Url.createObjectUrlFromBlob(blob);
+    final anchor = html.AnchorElement(href: url)
+      ..setAttribute("download", "user_template.csv")
+      ..click();
+    html.Url.revokeObjectUrl(url);
+  }
+
+  bool _hasMissingFields(User user) {
+    return user.firstName == null ||
+        user.firstName!.isEmpty ||
+        // user.email == null ||
+        // user.email!.isEmpty ||
+        user.phoneNumber == null ||
+        user.phoneNumber!.isEmpty ||
+        user.role == null ||
+        user.role!.isEmpty ||
+        user.status == null ||
+        user.status!.isEmpty;
+  }
+
+
+  User _mapRowToUser(List<dynamic> headers, List<dynamic> row) {
+    final Map<String, dynamic> data = {};
+    for (int i = 0; i < headers.length; i++) {
+      data[headers[i].toString()] = row[i];
+    }
+
+    final String userId = _generateCustomId();
+
+    return User(
+      id: userId,
+      firstName: data['firstName'],
+      lastName: data['lastName'],
+      email: data['email'],
+      phoneNumber: data['phoneNumber'].toString(),
+      status: data['status'],
+      role: data['role'],
+      notes: data['notes'],
+      registerDate: DateTime.now(),
+      updatedAt: DateTime.now(),
+      lastLogin: null,
+      profilePic: "",
+      preferences: [],
+    );
+  }
+
+  String _generateCustomId() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final last4Digits = timestamp.substring(timestamp.length - 4);
+    return "uix$last4Digits";
+  }
+
+
+  Future<void> handleProfileImageUpload(String userId) async {
+    isLoading.value = true;
+    try {
+      print("📸 Starting image upload process");
+      final PlatformFile? pickedFile = await pickProfileImage();
+
+      if (pickedFile != null && pickedFile.bytes != null) {
+        final imageUrl = await uploadProfileImageWeb(pickedFile, userId);
+
+        if (imageUrl != null) {
+          await saveProfileImageUrlToFirestore(userId, imageUrl);
+          print("✅ Profile image process completed");
+        }
+      } else {
+        print("⚠️ No image selected");
+      }
+    } catch (e) {
+      print("❌ Error in profile image upload process: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<PlatformFile?> pickProfileImage() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: false,
+        withData: true, // ensures we get the bytes for upload
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        return result.files.first;
+      } else {
+        print("⚠️ File picker returned no files");
+        return null;
+      }
+    } catch (e) {
+      print("❌ Error picking image: $e");
+      return null;
+    }
+  }
+
+  Future<String?> uploadProfileImageWeb(PlatformFile file, String userId) async {
+    try {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child('$userId.jpg');
+
+      final mimeType = _getMimeTypeFromExtension(file.extension);
+
+      final metadata = SettableMetadata(
+        contentType: mimeType,
+      );
+
+      final uploadTask = await ref.putData(file.bytes!, metadata);
+      final downloadUrl = await uploadTask.ref.getDownloadURL();
+
+      print("✅ Image uploaded. Download URL: $downloadUrl");
+      return downloadUrl;
+    } catch (e) {
+      print("❌ Error uploading image: $e");
+      return null;
+    }
+  }
+
+  Future<void> saveProfileImageUrlToFirestore(String userId, String imageUrl) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .update({'profilePic': imageUrl});
+
+
+      Get.snackbar(
+        margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
+
+        "Success",
+        "Profile pic uploaded successfully",
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      print("✅ Profile image URL updated in Firestore");
+    } catch (e) {
+      print("❌ Error saving image URL to Firestore: $e");
+    }
+  }
+
+  /// Helper function for safe MIME type fallback
+  String _getMimeTypeFromExtension(String? extension) {
+    switch (extension?.toLowerCase()) {
+      case 'png':
+        return 'image/png';
+      case 'webp':
+        return 'image/webp';
+      case 'gif':
+        return 'image/gif';
+      case 'bmp':
+        return 'image/bmp';
+      case 'jpeg':
+      case 'jpg':
+        return 'image/jpeg';
+      default:
+        return 'application/octet-stream'; // safe fallback
+    }
+  }
+
+
+
+
+  Future<void> deleteStudent(String id) async {
+    try {
+      await FirebaseFirestore.instance.collection('students').doc(id).delete();
+
+      students.removeWhere((user) => user.id == id);
+      filteredStudents.removeWhere((user) => user.id == id);
+      Get.snackbar(
+          margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
+
+          "Success", "User deleted successfully.",
+          backgroundColor: Colors.green.shade100,
+          snackPosition: SnackPosition.BOTTOM,
+          colorText: Colors.black);
+      print("✅ Student with ID $id deleted successfully.");
+    } catch (e) {
+      print("Error deleting user: $e");
+      Get.snackbar(
+          margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
+
+          "Error", "Failed to delete user.",
+          backgroundColor: Colors.red.shade100,
+          snackPosition: SnackPosition.BOTTOM,
+
+
+          colorText: Colors.black);
+      print("❌ Error deleting student: $e");
+    }
+  }
 
 
 }
@@ -1657,18 +2393,52 @@ class TutorsDashBoardController extends GetxController{
   }
 
 
-  Future<void> assignStudentsToTutor(String tutorId, bool scheduleNow) async {
-    final subject = selectedSubject.value;
-    for (final studentId in selectedStudentIds) {
-      final docRef = FirebaseFirestore.instance.collection('students').doc(studentId);
-      await docRef.update({
-        'assignedTutors.$tutorId': FieldValue.arrayUnion([subject]),
-        'isAssigned': true,
-      });
-    }
+  var isAssigning=false.obs;
+  Future<void> assignStudentsToTutor(String tutorId) async {
+    try {
+      isAssigning.value = true;
+      final subject = selectedSubject.value;
+      final tutorRef = FirebaseFirestore.instance.collection('tutors').doc(tutorId);
 
-    resetReassignFlow();
-    Get.snackbar("Done", "Students reassigned to tutor.");
+      for (final studentId in selectedStudentIds) {
+        // Update student document
+        final studentRef = FirebaseFirestore.instance.collection('students').doc(studentId);
+        await studentRef.update({
+          'assignedTutors.$tutorId': FieldValue.arrayUnion([subject]),
+          'isAssigned': true,
+          'subjects.$subject.assigned': true,
+        });
+
+        // Update tutor document with student mapping
+        await tutorRef.update({
+          'studentsMapped.$studentId': FieldValue.arrayUnion([subject]),
+        });
+      }
+
+      resetReassignFlow();
+
+      Get.snackbar(
+        "Success",
+        "Students assigned successfully",
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+      );
+    } catch (e) {
+      Get.snackbar(
+        "Error",
+        "$e",
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+      );
+    } finally {
+      isAssigning.value = false;
+    }
   }
 
   var schoolSearchQuery=''.obs;

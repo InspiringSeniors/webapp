@@ -90,6 +90,8 @@ class UserManagementScreen extends StatelessWidget {
                             ontap: () {
                               userController.selectedModule.value = "User";
                               userController.fetchUsers();
+                              userController.fetchUsersWithPagination(page: 0);
+
                             },
                             color:
                                 userController.selectedModule.value == "User" ||
@@ -349,7 +351,10 @@ class UserManagementScreen extends StatelessWidget {
                           hintText: 'Search by name , number ',
                           height: 45,
                           onchanged: (val) {
-                            userController.filterUsers(val);
+
+                              userController.fetchUsersWithPagination(page: 0,searchQuery: val);
+
+
                             print(
                                 "seach is ${userController.filteredUsers.value.length}");
                           })),

@@ -153,3 +153,57 @@ class TutorDetailModel {
   }
 
 }
+
+
+// /    {
+//       "tutorId": "tutorId1",
+//       "firstName": "First1",
+//       "lastName": "Last1",
+//       "phone": "+91-9876500001",
+//       "email": "first1.last1@example.com",
+//       "subjects": [
+//         "Science",
+//         "Social Studies"
+//       ],
+//       "classes": [
+//         "6A",
+//         "7B"
+//       ],
+//       "classIdsAssigned": [
+//         "class001_1",
+//         "class001_2"
+//       ],
+//       "classIdsCompleted": [
+//         "class001_prev1"
+//       ],
+//       "availabilitySlots": [
+//         {
+//           "day": "Mon",
+//           "start": "2025-07-28T16:00:00",
+//           "end": "2025-07-28T17:00:00"
+//         },
+//         {
+//           "day": "Thu",
+//           "start": "2025-07-31T16:00:00",
+//           "end": "2025-07-31T17:00:00"
+//         }
+//       ],
+//       "status": "inactive",
+//       "studentsMapped": {
+//         "student1": [
+//           "Science"
+//         ]
+//       },
+//       "personalInfo": {
+//         "dob": "1961-01-01",
+//         "location": "Delhi"
+//       },
+//       "teachingInterests": [
+//         "Poetry",
+//         "Storytelling"
+//       ],
+//       "performanceNotes": [
+//         "Enthusiastic",
+//         "Reliable"
+//       ]
+//     },

@@ -54,5 +54,7 @@ class RoutingNames {
 
   static String DONATE_ISF= "/supportISF";
 
+  static String STUDENT_REGISTRATION_SCREEN= "/registerStudent";
+  static String MEMBER_REGISTRATION_SCREEN= "/enrolmentForm";
 
 }

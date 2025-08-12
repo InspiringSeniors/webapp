@@ -54,6 +54,7 @@ import 'package:inspiringseniorswebapp/modules/media_page_screen/bindings/media_
 import 'package:inspiringseniorswebapp/modules/media_page_screen/views/media_page_screen.dart';
 import 'package:inspiringseniorswebapp/modules/melody_masters_screen/bindings/mm_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/melody_masters_screen/views/mm_screen.dart';
+import 'package:inspiringseniorswebapp/modules/member_registration_screen/controller/member_registration_controller.dart';
 import 'package:inspiringseniorswebapp/modules/moral_storyTelling_screen/controllers/moral_story_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/moral_storyTelling_screen/views/moral_story_screen.dart';
 import 'package:inspiringseniorswebapp/modules/productive_engagement_screen/bindings/productive_engagement_bindings.dart';
@@ -66,6 +67,8 @@ import 'package:inspiringseniorswebapp/modules/step_count_challenge_screen/contr
 import 'package:inspiringseniorswebapp/modules/step_count_challenge_screen/views/step_count_challenge_screen.dart';
 import 'package:inspiringseniorswebapp/modules/story_telling_screen/bindings/story_telling_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/story_telling_screen/views/st_screen.dart';
+import 'package:inspiringseniorswebapp/modules/student_registration_screen/controller/student_registration_controller.dart';
+import 'package:inspiringseniorswebapp/modules/student_registration_screen/views/student_registration_screen.dart';
 import 'package:inspiringseniorswebapp/modules/user_dashboard_screen/bindings/user_dashboard_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/user_dashboard_screen/views/user_dashboard_screen.dart';
 import 'package:inspiringseniorswebapp/modules/user_dashboard_screen/views/user_edit_profile.dart';
@@ -76,6 +79,7 @@ import 'package:inspiringseniorswebapp/utils/middlewares/auth_middle_ware.dart';
 import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'modules/custom_screens/google_form_screen/views/google_form_screen.dart';
 import 'modules/hyderabad_state_chapter/bindings/state_bindings.dart';
+import 'modules/member_registration_screen/views/member_registration_screen.dart';
 import 'modules/splash_screen/controller/initial_binding.dart';
 import 'modules/splash_screen/controller/splash_screen_binding.dart';
 import 'modules/splash_screen/views/splashscreen.dart';
@@ -125,7 +129,7 @@ class _MyAppState extends State<MyApp> {
         initialRoute: "/",
         translationsKeys: AppTranslation.translationsKeys,
         locale: Get.locale,
-        fallbackLocale: Locale('en'),
+        fallbackLocale: Locale('en_US'),
         defaultTransition: Transition.fadeIn,
 
         getPages: [
@@ -264,8 +268,8 @@ class _MyAppState extends State<MyApp> {
             name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
             page: () =>  UserManagementScreen(),
             binding: AdminDashboardBindings(),
-            middlewares:[ AuthMiddleware()
-            ]
+            // middlewares:[ AuthMiddleware()
+            // ]
           ),
 
           GetPage(
@@ -346,6 +350,19 @@ class _MyAppState extends State<MyApp> {
               name: RoutingNames.DONATE_ISF,
               page: () =>  DonateScreen(),
               binding: DonateBindings()
+          ),
+
+          GetPage(
+              name: RoutingNames.STUDENT_REGISTRATION_SCREEN,
+              page: () =>  StudentRegistrationScreen(),
+              binding: StudentRegistrationBinding()
+          ),
+
+
+          GetPage(
+              name: RoutingNames.MEMBER_REGISTRATION_SCREEN,
+              page: () =>  MemberRegistrationScreen(),
+              binding: MemberRegistrationBindings()
           ),
 
         ]);

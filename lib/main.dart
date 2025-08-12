@@ -31,6 +31,7 @@ void main() async {
   Get.put(UserAuthService());
   Get.lazyPut(() => HomepageController(), fenix: true);
 
+  Get.locale= Locale("en_US");
 
 
   runApp(

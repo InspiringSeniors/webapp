@@ -515,181 +515,6 @@ class TutorsView extends StatelessWidget {
                 ),
               )
 
-              // Expanded(
-              //   child: SingleChildScrollView(
-              //     child: Container(
-              //       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 32),
-              //       child: Column(
-              //         children: [
-              //           Obx(() {
-              //             if (tutorsDashBoardController.isLoading.value) {
-              //               return Center(child: CircularProgressIndicator());
-              //             }
-              //             if (tutorsDashBoardController.filteredStudents.value.isEmpty) {
-              //               return Center(child: Text('No students found.'));
-              //             }
-              //
-              //             return ListView.builder(
-              //               shrinkWrap: true,
-              //               physics: NeverScrollableScrollPhysics(),
-              //               itemCount: tutorsDashBoardController.filteredStudents.value.length,
-              //               itemBuilder: (context, index) {
-              //
-              //                 final student = tutorsDashBoardController.filteredStudents.value[index];
-              //                 final tutorNames = student.assignedTutors.keys
-              //                     .map((id) => tutorsDashBoardController.tutorIdNameMap[id] ?? '')
-              //                     .where((name) => name.isNotEmpty)
-              //                     .toList();
-              //                 return Container(
-              //                   padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-              //                   margin: EdgeInsets.symmetric(vertical: 2),
-              //                   decoration: BoxDecoration(
-              //                     color: Colors.white,
-              //                     borderRadius: BorderRadius.circular(8),
-              //                     border: Border.all(color: ColorUtils.GREY_DOTTED),
-              //                   ),
-              //                   child: Row(
-              //                     crossAxisAlignment: CrossAxisAlignment.center,
-              //                     mainAxisAlignment: MainAxisAlignment.start,
-              //                     children: [
-              //                       SizedBox(width: 20,),
-              //                       Container(
-              //                         width: width * 0.08,
-              //                         child: Text(
-              //                           student.name,
-              //                           textAlign: TextAlign.left,
-              //                           style: TextStyleUtils.mobileheading6.copyWith(
-              //                             fontWeight: FontWeight.w500,
-              //                             color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         width: width * 0.11,
-              //                         child: Text(
-              //                           student.phone,
-              //                           style: TextStyleUtils.mobileheading6.copyWith(
-              //                             fontWeight: FontWeight.w500,
-              //                             color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         width: width * 0.05,
-              //                         child: Text(
-              //                           student.studentClass,
-              //                           textAlign: TextAlign.start,
-              //                           style: TextStyleUtils.mobileheading6.copyWith(
-              //                             fontWeight: FontWeight.w500,
-              //                             color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         width: width * 0.08,
-              //                         child: Text(
-              //                           student.subjects.isNotEmpty ? student.subjects.join(", ") : '-',
-              //                           style: TextStyleUtils.mobileheading6.copyWith(
-              //                             fontWeight: FontWeight.w500,
-              //                             color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                             fontSize: 12,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         width: width * 0.07,
-              //                         alignment: Alignment.topRight,
-              //                         child: Text(
-              //                           student.school,
-              //                           textAlign: TextAlign.center,
-              //                           style: TextStyleUtils.mobileheading6.copyWith(
-              //                             fontWeight: FontWeight.w500,
-              //                             color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         width: width * 0.06,
-              //                         child: Text(
-              //                           textAlign: TextAlign.center,
-              //
-              //
-              //
-              //                           student.isAssigned ? 'Assigned' : 'Unassigned',
-              //                           style: TextStyleUtils.mobileheading6.copyWith(
-              //                             fontWeight: FontWeight.w500,
-              //                             color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Expanded(
-              //                         child: Container(
-              //                           alignment: Alignment.center,
-              //                           child: Text(
-              //                             tutorNames.isNotEmpty ? tutorNames.join(", ") : '-',
-              //                             style: TextStyleUtils.mobileheading6.copyWith(
-              //                               fontWeight: FontWeight.w500,
-              //                               color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                             ),
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         width: width * 0.05,
-              //                         alignment: Alignment.center,
-              //                         child: Text(
-              //                           '${student.attendancePercent.toStringAsFixed(1)}%',
-              //                           style: TextStyleUtils.mobileheading6.copyWith(
-              //                             fontWeight: FontWeight.w500,
-              //                             color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-              //                           ),
-              //                         ),
-              //                       ),
-              //                       Container(
-              //                         width: width * 0.08,
-              //                         child: Row(
-              //                           crossAxisAlignment: CrossAxisAlignment.end,
-              //                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //                           children: [
-              //                             GestureDetector(
-              //                               onTap: ()
-              //                               async  {
-              //
-              //                                 // tutorsDashBoardController.currentView.value="view student";
-              //                                 // await tutorsDashBoardController.getStudentById(student.id);
-              //                                 //
-              //
-              //
-              //
-              //                               },
-              //                               child: Icon(Icons.remove_red_eye_outlined, color: ColorUtils.HEADER_GREEN, size: 20),
-              //                             ),
-              //                             GestureDetector(
-              //                               // onTap: () => studentsDashboardController.editStudent(student.id),
-              //                               child: Icon(Icons.edit, color: ColorUtils.HEADER_GREEN, size: 20),
-              //                             ),
-              //                             GestureDetector(
-              //                               // onTap: () => studentsDashboardController.deleteStudent(student.id),
-              //                               child: Icon(Icons.delete, color: ColorUtils.ORANGE_COLOR_DARK, size: 20),
-              //                             ),
-              //                             GestureDetector(
-              //                               // onTap: () => studentsDashboardController.deleteStudent(student.id),
-              //                               child: Icon(Icons.person_add_alt_1, color: ColorUtils.BRAND_COLOR, size: 20),
-              //                             )
-              //                           ],
-              //                         ),
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 );
-              //               },
-              //             );
-              //           }),
-              //         ],
-              //       ),
-              //     ),
-              //   ),
-              // ),
 
             ],
 
@@ -1097,8 +922,12 @@ class TutorsView extends StatelessWidget {
                           color: ColorUtils.BRAND_COLOR,
                         ),
                       ...controller.filteredsubjectStudents.value.map((student) {
-                        final isSelected = controller.filteredsubjectStudents.value.contains(student.id);
+                        final isSelected = controller.selectedStudentIds.value.contains(student.id);
                         return CheckboxListTile(
+                          checkColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+                          activeColor: ColorUtils.HEADER_GREEN ,
+
+
                           contentPadding: EdgeInsets.symmetric(vertical: 2,horizontal: 12),
                           title: Row(
                             children: [
@@ -1136,6 +965,7 @@ class TutorsView extends StatelessWidget {
                           ),
                           value: isSelected,
                           onChanged: (val) {
+                            print("caleed");
                             if (val == true) {
                               controller.selectedStudentIds.add(student.id);
                             } else {
@@ -1147,8 +977,10 @@ class TutorsView extends StatelessWidget {
                       SizedBox(height: 20),
 
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async{
 
+
+                         await  tutorsDashBoardController.assignStudentsToTutor(tutor.id);
                           showScheduleConfirmDialog(controller.selectedStudentIds);
                         },
                         child: Container(
@@ -1161,13 +993,21 @@ class TutorsView extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
+                              Obx(
+                              ()=>
+                          tutorsDashBoardController.isAssigning.value?Center(
+                            child: CircularProgressIndicator(
+                              color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                            ),
+                          ):
+                                  Text(
 
-                                "Confirm ",
-                                textAlign: TextAlign.center,
-                                style: TextStyleUtils.mobileheading6.copyWith(
-                                    color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                    fontWeight: FontWeight.w500),
+                                  "Confirm ",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyleUtils.mobileheading6.copyWith(
+                                      color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                                      fontWeight: FontWeight.w500),
+                                ),
                               ),
                             ],
                           ),
@@ -1189,17 +1029,76 @@ class TutorsView extends StatelessWidget {
     final controller = Get.find<TutorsDashBoardController>();
 
     Get.defaultDialog(
-      title: "Schedule Class",
-      middleText: "Do you want to schedule the classes now or later?",
-      textConfirm: "Now",
-      textCancel: "Later",
-      onConfirm: () {
-        controller.assignStudentsToTutor(tutorId, true);
-        Get.back();
-      },
-      onCancel: () {
-        controller.assignStudentsToTutor(tutorId, false);
-      },
+      contentPadding:
+      EdgeInsets.only(left: 32, right: 32, top: 32, bottom: 40),
+      title: "Schedule Class Assign",
+      titleStyle: TextStyleUtils.heading5,
+      titlePadding: EdgeInsets.only(top: 32),
+      // middleText: "Are you sure you want to delete this user?",
+      content: Container(
+        margin: EdgeInsets.only(bottom: 20),
+        child: Text(
+          "Do you want to schedule a class now or later?",
+          style: TextStyleUtils.paragraphSmall
+      ),),
+
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+              decoration: BoxDecoration(
+                  border: Border.all(color: ColorUtils.GREY_DOTTED),
+                  borderRadius: BorderRadius.circular(10),
+                  color: ColorUtils.WHITE_COLOR_BACKGROUND),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Text(
+                      "Later",
+                      style: TextStyleUtils.smallGreyTextStyle
+                          .copyWith(color: ColorUtils.SECONDARY_BLACK),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 12,
+            ),
+            GestureDetector(
+              onTap: () {
+
+
+                // leadManagementController.reassignSelectedUsers();
+
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: ColorUtils.HEADER_GREEN),
+                child: Row(
+                  children: [
+                    Text(
+                      "Continue",
+                      style: TextStyleUtils.smallGreyTextStyle
+                          .copyWith(color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+
     );
   }
 

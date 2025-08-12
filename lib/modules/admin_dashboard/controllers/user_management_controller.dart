@@ -51,7 +51,7 @@ class UserManagementController extends GetxController
 
 
   final List<String> sortOptions = ['Name A-Z', 'Name Z-A', 'Newest', 'Oldest'];
-  final List<String> roleOptions = ['All','Super Admin','Admin', 'Member',];
+  final List<String> roleOptions = ['All','Super Admin','Admin', 'Member','Tutor',];
   final List<String> roleOptionsAdd = ['Super Admin','Admin', 'Member',];
 
   RxString selectedSort = ''.obs;
@@ -122,8 +122,10 @@ class UserManagementController extends GetxController
     Get.put(TutorsProgramController());
     // TODO: implement onInit
     super.onInit();
-    await fetchUsersWithPagination(0);
+   // await  updateUsersSearchFields();
+    await fetchUsersWithPagination(page: 0);
     fetchUsers();
+
    var args= Get.arguments;
    print(args[0]);
 
@@ -187,22 +189,91 @@ class UserManagementController extends GetxController
   var currentPage = 0.obs;
   final List<QueryDocumentSnapshot> pageStartDocs = []; // Keep track of page starts
 
+  Future<void> updateUsersSearchFields() async {
+    final usersRef = FirebaseFirestore.instance.collection('users');
+    final snapshot = await usersRef.get();
 
-  Future<void> fetchUsersWithPagination(int page) async {
+    for (final doc in snapshot.docs) {
+      final data = doc.data();
+
+      final firstName = data['firstName'];
+      final lastName = data['lastName'];
+      final phone = data['phoneNumber'];
+
+      final searchName = normalizeName(firstName, lastName);
+      final searchPhone = normalizePhone(phone);
+
+      await doc.reference.update({
+        'searchName': searchName,
+        'searchPhone': searchPhone,
+      });
+
+      print("✅ Updated ${doc.id}: searchName = $searchName, searchPhone = $searchPhone");
+    }
+
+    print("🎉 All users updated successfully.");
+  }
+
+
+  String normalizeName(String? first, String? last) =>
+      '${first ?? ''} ${last ?? ''}'.toLowerCase().trim();
+
+  String normalizePhone(String? phone) =>
+      phone?.replaceAll(RegExp(r'[^0-9]'), '') ?? '';
+
+
+
+
+  Future<void> fetchUsersWithPagination({
+    required int page,
+    String roleFilter = '',
+    String statusFilter = '',
+    String searchQuery = '',
+  }) async {
     try {
       isLoading.value = true;
-      Query query = _firestore
-          .collection('users')
-          .orderBy('registerDate', descending: true)
-          .limit(10);
 
-      // Add startAfter logic for pages > 0
-      if (page > 0 && pageStartDocs.length >= page) {
-        query = query.startAfterDocument(pageStartDocs[page - 1]);
+      Query queryRef = _firestore.collection('users');
+
+      // 🔹 Apply filters
+      if (roleFilter.isNotEmpty) {
+        queryRef = queryRef.where('role', isEqualTo: roleFilter);
       }
 
-      QuerySnapshot snapshot = await query.get();
+      if (statusFilter.isNotEmpty) {
+        queryRef = queryRef.where('status', isEqualTo: statusFilter);
+      }
 
+      final trimmedQuery = searchQuery.trim();
+
+      // 🔹 Dynamic search detection
+      if (trimmedQuery.isNotEmpty) {
+        if (trimmedQuery.isNumeric) {
+          final cleanPhone = trimmedQuery.replaceAll(RegExp(r'\s+|-'), '');
+          queryRef = queryRef
+              .orderBy('searchPhone')
+              .startAt([cleanPhone])
+              .endAt([cleanPhone + '\uf8ff']);
+        } else {
+          final name = trimmedQuery.toLowerCase();
+          queryRef = queryRef
+              .orderBy('searchName')
+              .startAt([name])
+              .endAt([name + '\uf8ff']);
+        }
+      } else {
+        // Default sorting when no search
+        queryRef = queryRef.orderBy('registerDate', descending: true);
+      }
+
+      // 🔹 Pagination
+      if (page > 0 && pageStartDocs.length >= page) {
+        queryRef = queryRef.startAfterDocument(pageStartDocs[page - 1]);
+      }
+
+      queryRef = queryRef.limit(pageSize);
+
+      final snapshot = await queryRef.get();
 
       if (snapshot.docs.isNotEmpty) {
         final newUsers = snapshot.docs
@@ -212,35 +283,35 @@ class UserManagementController extends GetxController
         if (pageStartDocs.length <= page) {
           pageStartDocs.add(snapshot.docs.last);
         }
-        isLoading.value = false;
 
-        print("check ");
-        filteredUsers.value=newUsers;
-
+        filteredUsers.value = newUsers;
         currentPage.value = page;
-
         hasMore.value = newUsers.length == pageSize;
       } else {
         hasMore.value = false;
+        if (page == 0) {
+          filteredUsers.clear();
+        }
       }
     } catch (e) {
-      isLoading.value = false;
-
       print("Pagination Error: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
+
+
+
   void nextPage() {
     if (hasMore.value) {
-      fetchUsersWithPagination(currentPage.value + 1);
+      fetchUsersWithPagination(page:currentPage.value + 1);
     }
   }
 
   void previousPage() {
     if (currentPage.value > 0) {
-      fetchUsersWithPagination(currentPage.value - 1);
+      fetchUsersWithPagination(page:currentPage.value - 1);
     }
   }
 
@@ -274,10 +345,11 @@ class UserManagementController extends GetxController
     }
   }
 
-  void filterUsersForRole(String query) {
+  void filterUsersForRole(String query, {int page = 0}) {
     searchText.value = query;
 
-    filteredUsers.value = users.where((user) {
+    // Step 1: Filter
+    final allFiltered = users.where((user) {
       final name = "${user.firstName ?? ''} ${user.lastName ?? ''}".toLowerCase();
       final phone = user.phoneNumber ?? '';
       final statusMatch = selectedStatusFilter.value.isEmpty || user.status == selectedStatusFilter.value;
@@ -285,8 +357,29 @@ class UserManagementController extends GetxController
       return (name.contains(query.toLowerCase()) || phone.contains(query)) && statusMatch && roleMatch;
     }).toList();
 
-    // Apply sorting after filtering
+    // Step 2: Pagination
+    final startIndex = page * pageSize;
+    final endIndex = (startIndex + pageSize) > allFiltered.length
+        ? allFiltered.length
+        : startIndex + pageSize;
+
+    filteredUsers.value = allFiltered.sublist(startIndex, endIndex);
+    currentPage.value = page;
   }
+
+  // void filterUsersForRole(String query) {
+  //   searchText.value = query;
+  //
+  //   filteredUsers.value = users.where((user) {
+  //     final name = "${user.firstName ?? ''} ${user.lastName ?? ''}".toLowerCase();
+  //     final phone = user.phoneNumber ?? '';
+  //     final statusMatch = selectedStatusFilter.value.isEmpty || user.status == selectedStatusFilter.value;
+  //     final roleMatch = selectedRoleFilter.value.isEmpty || user.role == selectedRoleFilter.value;
+  //     return (name.contains(query.toLowerCase()) || phone.contains(query)) && statusMatch && roleMatch;
+  //   }).toList();
+  //
+  //   // Apply sorting after filtering
+  // }
 
   void updateUserStatusCounts() {
     activeUserCount.value = users.where((u) => u.status?.toLowerCase() == 'active').length;
@@ -414,12 +507,13 @@ class UserManagementController extends GetxController
 
   void applyStatusFilter(String status) {
     selectedStatusFilter.value = status;
-    filterUsersForRole(searchText.value); // Reapply search + filters
+    fetchUsersWithPagination(page: 0,statusFilter: status);
+    // filterUsersForRole(searchText.value); // Reapply search + filters
   }
 
   void applyRoleFilter(String role) {
     selectedRoleFilter.value = role;
-    filterUsersForRole(searchText.value); // Reapply search + filters
+    fetchUsersWithPagination(page: 0,roleFilter: role.toLowerCase());
   }
 
 
@@ -770,6 +864,8 @@ class UserManagementController extends GetxController
 
         // Refresh local user data
         await fetchUsers(); // or update local list if needed
+        await fetchUsersWithPagination(page:0); // or update local list if needed
+
       } catch (e) {
         Get.snackbar(
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
@@ -835,6 +931,7 @@ class UserManagementController extends GetxController
         }
 
         await fetchUsers();
+        await fetchUsersWithPagination(page:0); // or update local list if needed
 
         Get.snackbar(
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
@@ -1364,7 +1461,7 @@ class UserManagementController extends GetxController
         print("printing all ids${id}");
         await FirebaseFirestore.instance.collection('users').doc(id).delete();
       }
-      fetchUsersWithPagination(0);
+      fetchUsersWithPagination(page: 0);
 
       clearSelectedUsers();
       Get.snackbar(
@@ -1379,4 +1476,8 @@ class UserManagementController extends GetxController
           "Error", "Failed to delete users: $e",snackPosition: SnackPosition.BOTTOM);
     }
   }
+}
+
+extension StringUtils on String {
+  bool get isNumeric => RegExp(r'^\d+$').hasMatch(this.trim());
 }
