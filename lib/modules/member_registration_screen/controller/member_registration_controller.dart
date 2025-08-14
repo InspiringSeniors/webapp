@@ -77,6 +77,7 @@ class MemberRegistrationController extends GetxController{
 
 
   var selectedPreferredModeValue=0.obs;
+  var selectedPreferredTime=0.obs;
 
   var isGenderSelected=true.obs;
   var isSubjectSelected=true.obs;
@@ -299,6 +300,45 @@ class MemberRegistrationController extends GetxController{
       default:
         Locale locale = new Locale("hi");
         Get.updateLocale(locale);
+
+    }
+
+
+
+
+  }
+  selectPreferredTimings(value){
+
+    switch(value){
+      case 1:
+        selectedPreferredTime.value=value;
+
+
+        selectedFromTimeFilter.value="1-2 Hours/Week";
+        break;
+
+      case 2:
+        selectedPreferredTime.value=value;
+        selectedFromTimeFilter.value="2-4 Hours/Week";
+
+
+        break;
+
+      case 3:
+        selectedPreferredTime.value=value;
+
+        selectedFromTimeFilter.value="4-6 Hours/Week";
+
+        break;
+
+      case 4:
+        selectedPreferredTime.value=value;
+
+        selectedFromTimeFilter.value="More than 6 Hours/Week";
+
+        break;
+      default:
+        selectedFromTimeFilter.value="";
 
     }
 

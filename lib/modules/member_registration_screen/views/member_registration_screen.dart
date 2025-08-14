@@ -2649,9 +2649,9 @@ class MemberRegistrationScreen extends StatelessWidget {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     buildRadioButton(1, "In-Person".tr,memberRegistrationController.selectedPreferredModeValue,memberRegistrationController.selectPreferredMode),
-                                                    SizedBox(width: 10,),
+                                                    SizedBox(width: 16,),
                                                     buildRadioButton(2, "Online".tr,memberRegistrationController.selectedPreferredModeValue,memberRegistrationController.selectPreferredMode),
-                                                    SizedBox(width: 10,),
+                                                    SizedBox(width: 16,),
 
                                                     buildRadioButton(3, "Hybrid/Both".tr,memberRegistrationController.selectedPreferredModeValue,memberRegistrationController.selectPreferredMode),
 
@@ -2660,108 +2660,110 @@ class MemberRegistrationScreen extends StatelessWidget {
                                               ],
                                             ),
 
-                                            SizedBox(height:48),
-                                            Column(
-                                                mainAxisAlignment:
-                                              MainAxisAlignment
-                                                  .start,
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .start,
-                                              children: [
-                                                Text(
-                                                  "5. How much time would you like to devote per week?".tr,
-                                                  style:
-                                                  TextStyleUtils.heading6.copyWith(
-                                                  ),
-                                                ),
-                                                // SizedBox(height: 10,),
-                                                //
-                                                // Text(
-                                                //   "How much time would you be available for per week".tr,
-                                                //   style:
-                                                //   TextStyleUtils.phoneparagraphSmaller.copyWith(
-                                                //   ),
-                                                // ),
-                                                SizedBox(height:10),
-                                                Obx(()=>
-                                                    Container(
-                                                      child: Column(
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .start,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                        children: [
-                                                          // Text(
-                                                          //   "P".tr,
-                                                          //   style: TextStyleUtils
-                                                          //       .mobileheading6
-                                                          //       .copyWith(
-                                                          //       color: ColorUtils
-                                                          //           .SECONDARY_BLACK),
-                                                          // ),
-                                                          // SizedBox(
-                                                          //   height: 5,
-                                                          // ),
-                                                          Container(
-                                                            width: width*0.34,
-
-                                                            child:
-                                                            DropdownButtonFormField<String>(
-                                                              isDense: true,
-                                                              value: memberRegistrationController.timeOptions.contains(memberRegistrationController.selectedFromTimeFilter.value)
-                                                                  ? memberRegistrationController.selectedFromTimeFilter.value
-                                                                  : null,
-                                                              items: memberRegistrationController.timeOptions.map((var value) {
-                                                                return DropdownMenuItem<String>(
-                                                                  value: value["showTime"],
-                                                                  child: Text(value["showTime"].toString().tr),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (String? newValue) {
-                                                                memberRegistrationController.selectedFromTimeFilter.value=newValue!;
-
-                                                                // studentRegistrationController.getToTimeOptions( studentRegistrationController.selectedFromTimeFilter.value!);
-                                                              },
-                                                              decoration: InputDecoration(
-                                                                filled: true,
-                                                                focusColor:ColorUtils.WHITE_COLOR_BACKGROUND ,
-                                                                fillColor: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                                                // labelText: 'Class',
-                                                                labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                                contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
-                                                                focusedBorder: OutlineInputBorder(
-                                                                    borderRadius: BorderRadius.circular(8),
-                                                                    borderSide: const BorderSide(
-                                                                        width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                                enabledBorder: OutlineInputBorder(
-                                                                  borderSide: const BorderSide(
-                                                                      width: 2, color: ColorUtils.GREY_DOTTED),
-                                                                  borderRadius: BorderRadius.circular(8),
-                                                                ),
-                                                                errorBorder: OutlineInputBorder(
-                                                                  borderSide: const BorderSide(
-                                                                      width: 2, color: ColorUtils.ERROR_RED),
-                                                                  borderRadius: BorderRadius.circular(8),
-                                                                ),
-                                                                focusedErrorBorder: OutlineInputBorder(
-                                                                  borderSide: const BorderSide(
-                                                                      width: 2, color: ColorUtils.ERROR_RED),
-                                                                  borderRadius: BorderRadius.circular(8),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                ),
-                                              ],
-                                            ),
                                           ],
                                         ),
+                                        SizedBox(height:48),
+
+                                        Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment
+                                              .start,
+                                          children: [
+                                            Text(
+                                              "5. How much time would you like to devote per week?".tr,
+                                              style:
+                                              TextStyleUtils.heading6.copyWith(
+                                              ),
+                                            ),
+
+                                            SizedBox(height:10),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                buildRadioButton(1, "1-2 Hours/Week".tr,memberRegistrationController.selectedPreferredTime,memberRegistrationController.selectPreferredTimings),
+                                                SizedBox(width: 16,),
+                                                buildRadioButton(2, "2-4 Hours/Week".tr,memberRegistrationController.selectedPreferredTime,memberRegistrationController.selectPreferredTimings),
+                                                SizedBox(width: 16,),
+
+                                                buildRadioButton(3, "4-6 Hours/Week".tr,memberRegistrationController.selectedPreferredTime,memberRegistrationController.selectPreferredTimings),
+                                                SizedBox(width: 16,),
+                                                buildRadioButton(4, "More than 6 Hours/Week".tr,memberRegistrationController.selectedPreferredTime,memberRegistrationController.selectPreferredTimings),
+
+                                              ],
+                                            ),
+
+                                            // Obx(()=>
+                                            //     Container(
+                                            //       child: Column(
+                                            //         mainAxisAlignment:
+                                            //         MainAxisAlignment
+                                            //             .start,
+                                            //         crossAxisAlignment:
+                                            //         CrossAxisAlignment
+                                            //             .start,
+                                            //         children: [
+                                            //
+                                            //
+                                            //           Container(
+                                            //             width: width*0.34,
+                                            //
+                                            //             child:
+                                            //             DropdownButtonFormField<String>(
+                                            //               isDense: true,
+                                            //               value: memberRegistrationController.timeOptions.contains(memberRegistrationController.selectedFromTimeFilter.value)
+                                            //                   ? memberRegistrationController.selectedFromTimeFilter.value
+                                            //                   : null,
+                                            //               items: memberRegistrationController.timeOptions.map((var value) {
+                                            //                 return DropdownMenuItem<String>(
+                                            //                   value: value["showTime"],
+                                            //                   child: Text(value["showTime"].toString().tr),
+                                            //                 );
+                                            //               }).toList(),
+                                            //               onChanged: (String? newValue) {
+                                            //                 memberRegistrationController.selectedFromTimeFilter.value=newValue!;
+                                            //
+                                            //                 // studentRegistrationController.getToTimeOptions( studentRegistrationController.selectedFromTimeFilter.value!);
+                                            //               },
+                                            //               decoration: InputDecoration(
+                                            //                 filled: true,
+                                            //                 focusColor:ColorUtils.WHITE_COLOR_BACKGROUND ,
+                                            //                 fillColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+                                            //                 // labelText: 'Class',
+                                            //                 labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
+                                            //                 contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
+                                            //                 focusedBorder: OutlineInputBorder(
+                                            //                     borderRadius: BorderRadius.circular(8),
+                                            //                     borderSide: const BorderSide(
+                                            //                         width: 2, color: ColorUtils.GREY_DOTTED)),
+                                            //                 enabledBorder: OutlineInputBorder(
+                                            //                   borderSide: const BorderSide(
+                                            //                       width: 2, color: ColorUtils.GREY_DOTTED),
+                                            //                   borderRadius: BorderRadius.circular(8),
+                                            //                 ),
+                                            //                 errorBorder: OutlineInputBorder(
+                                            //                   borderSide: const BorderSide(
+                                            //                       width: 2, color: ColorUtils.ERROR_RED),
+                                            //                   borderRadius: BorderRadius.circular(8),
+                                            //                 ),
+                                            //                 focusedErrorBorder: OutlineInputBorder(
+                                            //                   borderSide: const BorderSide(
+                                            //                       width: 2, color: ColorUtils.ERROR_RED),
+                                            //                   borderRadius: BorderRadius.circular(8),
+                                            //                 ),
+                                            //               ),
+                                            //             ),
+                                            //           ),
+                                            //         ],
+                                            //       ),
+                                            //     ),
+                                            // ),
+                                          ],
+                                        ),
+
                                         SizedBox(height:48),
 
                                         Text(

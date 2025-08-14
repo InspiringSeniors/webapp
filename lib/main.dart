@@ -8,6 +8,7 @@ import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'myApp.dart';
+import 'utils/services/scroll_service.dart';
 
 void main() async {
   setUrlStrategy(PathUrlStrategy()); // 👈 Add this line to enable clean URLs
@@ -32,6 +33,7 @@ void main() async {
   Get.lazyPut(() => HomepageController(), fenix: true);
 
   Get.locale= Locale("en_US");
+  Get.put(ScrollService());
 
 
   runApp(

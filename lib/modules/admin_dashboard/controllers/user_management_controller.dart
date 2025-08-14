@@ -69,7 +69,7 @@ class UserManagementController extends GetxController
   RxBool hasMore = true.obs;
 
 
-  var selectedModule="Tutors".obs;
+  var selectedModule="Leads".obs;
 
   var selectedAddUserType="Manual".obs;
 

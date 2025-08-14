@@ -12,6 +12,7 @@ import '../../../common_widgets/custom_login_registration_form.dart';
 import '../../../common_widgets/text_button.dart';
 import '../../../utils/color_utils.dart';
 import '../../../utils/routes/routes.dart';
+import '../../../utils/services/scroll_service.dart';
 import '../../../utils/utility/utils.dart';
 import '../../about_us_screen/controller/aboutus_controller.dart';
 import '../../about_us_screen/views/aboutus_screen.dart';
@@ -67,68 +68,45 @@ class NavigationBar2 extends StatelessWidget {
 
                 NavItem("Home", () => navigateToSection("home")),
                 HoverableNavItem(
+                  labelNavigation: RoutingNames.ABOUT_US_SCREEN,
+
                   label: "About Us",
                   subItems: [
-                    {
-                      "heading":"Our Vision",
-                      "navigate":RoutingNames.ABOUT_US_SCREEN
-
-                    },{
-                      "heading":"Our Story",
-                      "navigate":RoutingNames.ABOUT_US_SCREEN
-
-                    } ,
-                    {
-                      "heading":"ISF State Chapter",
-                      "navigate":RoutingNames.ABOUT_US_SCREEN
-
-                    },
-                    {
-                      "heading":"Our Advisory Board",
-                      "navigate":RoutingNames.ABOUT_US_SCREEN
-
-                    }      ,{
-                      "heading":"Our Team",
-                      "navigate":RoutingNames.ABOUT_US_SCREEN
-
-                    }
+                    {"heading": "Our Vision",         "navigate": RoutingNames.ABOUT_US_SCREEN, "section": "vision"},
+                    {"heading": "Our Story",          "navigate": RoutingNames.ABOUT_US_SCREEN, "section": "story"},
+                    {"heading": "Our Advisory Board", "navigate": RoutingNames.ABOUT_US_SCREEN, "section": "advisory"},
+                    {"heading": "Our Team",           "navigate": RoutingNames.ABOUT_US_SCREEN, "section": "team"},
+                    {"heading": "ISF State Chapter",  "navigate": RoutingNames.ABOUT_US_SCREEN, "section": "stateChapters"},
 
                   ],
-                  onSubItemTap: (subPage) {
-                    Get.toNamed(subPage);
+                  onSubItemTap: (sub) {
+                    Get.back();
+                    final route = sub["navigate"] as String;
+                    final section = sub["section"] as String?;
+                    if (Get.currentRoute == route && section != null) {
+                      final target = AboutSection.values.firstWhereOrNull((e) => e.name == section);
+                      if (target != null) ScrollService.to.scrollTo(target);
+                    } else {
+                      Get.toNamed(route, parameters: {'section': section ?? ''});
+                    }
                   },
                 ),
 
                 // NavItem("About Us", () => navigateToSection("aboutUs")),
                 HoverableNavItem(
+                  labelNavigation: RoutingNames.PROGRAMS_ALL_SCREEN,
+
                   label: "Programs",
                   subItems: [
-                    {
-                      "heading":"All Programs",
-                      "navigate":RoutingNames.PROGRAMS_ALL_SCREEN
-
-                    },
-                    {
-                      "heading":"Productive Engagement",
-                      "navigate":RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN
-
-                    },{
-                      "heading":"Health Hub",
-                      "navigate":RoutingNames.HEALTH_HUB_MAIN_SCREEN
-
-                    } ,{
-                      "heading":"Social Circle",
-                      "navigate":RoutingNames.SOCIAL_CIRCLE_SCREEN
-
-                    }      ,{
-                      "heading":"Advocacy & Research",
-                      "navigate":RoutingNames.ADVOCACY_RESEARCH
-
-                    }
-
+                    {"heading": "All Programs",         "navigate": RoutingNames.PROGRAMS_ALL_SCREEN},
+                    {"heading": "Productive Engagement","navigate": RoutingNames.PRODUCTIVE_ENGAGEMENT_SCREEN},
+                    {"heading": "Health Hub",           "navigate": RoutingNames.HEALTH_HUB_MAIN_SCREEN},
+                    {"heading": "Social Circle",        "navigate": RoutingNames.SOCIAL_CIRCLE_SCREEN},
+                    {"heading": "Advocacy & Research",  "navigate": RoutingNames.ADVOCACY_RESEARCH},
                   ],
-                  onSubItemTap: (subPage) {
-                    Get.toNamed(subPage);
+                  onSubItemTap: (sub) {
+                    Get.back();
+                    Get.toNamed(sub["navigate"] as String);
                   },
                 ),
 
@@ -137,32 +115,28 @@ class NavigationBar2 extends StatelessWidget {
                 // NavItem("Resources", () => navigateToSection( "resources")),
                 // NavItem("Join Us", () => navigateToSection("joinus")),
                 HoverableNavItem(
+                  labelNavigation: RoutingNames.JOIN_US_SCREEN,
+
                   label: "Join Us",
                   subItems: [
-                    {
-                      "heading":"Become A Member",
-                      "navigate":RoutingNames.JOIN_US_SCREEN
+                    {"heading":"Become A Volunteer","navigate": RoutingNames.JOIN_US_SCREEN, "section": "volunteer"},
 
-                    },{
-                      "heading":"Become A Volunteer",
-                      "navigate":RoutingNames.JOIN_US_SCREEN
-
-                    } ,
-                    {
-                      "heading":"Become A Partner",
-                      "navigate":RoutingNames.JOIN_US_SCREEN
-
-                    },
-                    {
-                      "heading":"Work With Us",
-                      "navigate":RoutingNames.JOIN_US_SCREEN
-
-                    },
-
-
+                    {"heading":"Become A Member",   "navigate": RoutingNames.JOIN_US_SCREEN, "section": "member"},
+                    {"heading":"Become A Partner",  "navigate": RoutingNames.JOIN_US_SCREEN, "section": "partner"},
+                    {"heading":"Work With Us",      "navigate": RoutingNames.JOIN_US_SCREEN, "section": "work"},
                   ],
-                  onSubItemTap: (subPage) {
-                    Get.toNamed(subPage);
+                  onSubItemTap: (sub) {
+                    print("called for scrolling");
+
+                    Get.back();
+                    final route = sub["navigate"] as String;
+                    final section = sub["section"] as String?;
+                    if (Get.currentRoute == route && section != null) {
+                      final target = JoinUsSection.values.firstWhereOrNull((e) => enumName(e) == section);
+                      if (target != null) ScrollService.to.scrollTo(target);
+                    } else {
+                      Get.toNamed(route, parameters: {'section': section ?? ''});
+                    }
                   },
                 ),
 
@@ -170,33 +144,32 @@ class NavigationBar2 extends StatelessWidget {
 
                 HoverableNavItem(
                   label: "Media",
+                  labelNavigation: RoutingNames.MEDIA_PAGE,
                   subItems: [
-                    {
-                      "heading":"Events",
-                      "navigate":RoutingNames.MEDIA_PAGE
-
-                    },{
-                      "heading":"NewsLetters",
-                      "navigate":RoutingNames.MEDIA_PAGE
-
-                    } ,
-                    {
-                      "heading":"Blogs & Articles",
-                      "navigate":RoutingNames.BLOG_SCREEN
-
-                    },
-                    {
-                      "heading":"Gallery",
-                      "navigate":RoutingNames.MEDIA_PAGE
-
-                    },
-
-
-
+                    {"heading":"Events",        "navigate": RoutingNames.MEDIA_PAGE, "section": "events"},
+                    {"heading":"NewsLetters",   "navigate": RoutingNames.MEDIA_PAGE, "section": "newsletters"},
+                    {"heading":"Blogs & Articles","navigate": RoutingNames.BLOG_SCREEN, "section": "top"},
+                    {"heading":"Gallery",       "navigate": RoutingNames.MEDIA_PAGE, "section": "gallery"},
                   ],
-                  onSubItemTap: (subPage) {
+                  onSubItemTap: (sub) {
+                    print("called for scrolling");
+
                     Get.back();
-                    Get.toNamed(subPage);
+                    final route = sub["navigate"] as String;
+                    final section = sub["section"] as String?;
+
+                    print("called for scrolling");
+
+                    if (Get.currentRoute == route) {
+                      if (route == RoutingNames.MEDIA_PAGE && section != null) {
+                        final target = MediaSection.values.firstWhereOrNull((e) => e.name == section);
+                        if (target != null) ScrollService.to.scrollTo(target);
+                      } else if (route == RoutingNames.BLOG_SCREEN) {
+                        ScrollService.to.scrollTo(BlogSection.top);
+                      }
+                      return;
+                    }
+                    Get.toNamed(route, parameters: {'section': section ?? ''});
                   },
                 ),
 
@@ -614,11 +587,13 @@ class _MobileNavBarState extends State<MobileNavBar> {
 
 class HoverableNavItem extends StatefulWidget {
   final String label;
+  final String labelNavigation;
   final List<Map<String,dynamic>> subItems;
-  final void Function(String subItem) onSubItemTap;
+  final void Function(Map<String, dynamic> subItem) onSubItemTap; // <- changed
 
   const HoverableNavItem({
     required this.label,
+    required this.labelNavigation,
     required this.subItems,
     required this.onSubItemTap,
     super.key,
@@ -682,7 +657,10 @@ class _HoverableNavItemState extends State<HoverableNavItem> {
                       return InkWell(
                         onTap: () {
                           _removeDropdown();
-                          widget.onSubItemTap(item["navigate"]);
+                          print("called for scrol1");
+
+                          widget.onSubItemTap(item);
+                          print("called for scrol1");
                         },
                         child: Container(
                           width: 180,
@@ -747,11 +725,16 @@ class _HoverableNavItemState extends State<HoverableNavItem> {
         child: Padding(
           key: _key,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          child: Text(
-            widget.label,
-            style: TextStyleUtils.heading5.copyWith(
-              color: ColorUtils.HEADER_GREEN,
-              fontWeight: FontWeight.w600,
+          child: GestureDetector(
+            onTap: (){
+              Get.toNamed(widget.labelNavigation);
+            },
+            child: Text(
+              widget.label,
+              style: TextStyleUtils.heading5.copyWith(
+                color: ColorUtils.HEADER_GREEN,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ),

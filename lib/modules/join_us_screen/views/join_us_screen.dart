@@ -15,6 +15,7 @@ import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import '../../../common_widgets/custom_floating_action.dart';
 import '../../../common_widgets/custom_login_registration_form.dart';
 import '../../../common_widgets/custom_text_field.dart';
+import '../../../utils/services/scroll_service.dart';
 import '../../homepage_screen/views_2/footer_section.dart';
 import '../../homepage_screen/views/navbar.dart';
 import '../../homepage_screen/views_2/navbar.dart';
@@ -27,6 +28,12 @@ class JoinUsScreen extends StatelessWidget {
 
   final _currentPageNotifier = ValueNotifier<int>(0);
 
+  final Map<JoinUsSection, GlobalKey> _keys = {
+    JoinUsSection.member: GlobalKey(),
+    JoinUsSection.volunteer: GlobalKey(),
+    JoinUsSection.partner: GlobalKey(),
+    JoinUsSection.work: GlobalKey(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -34,524 +41,545 @@ class JoinUsScreen extends StatelessWidget {
     var width=MediaQuery.of(context).size.width ;
 
     var isMobile=width<800?true:false;
+
+    scrollFromParamIfAny(_keys);
+
     return Scaffold(
       floatingActionButton:CustomFloatingButton(),
 
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(), // Enable page scrolling
-        child: Column(
+      body:  // Enable page scrolling
+         Column(
 
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             NavigationBar2(),
 
-
-
-            isMobile?     Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Become A Volunteer ",style: TextStyleUtils.heading2,),
-                      SizedBox(height: TextSizeDynamicUtils.dHeight18,),
-                      SelectableText("At Inspiring Seniors Foundation (ISF), we empower senior citizens to lead purposeful, active lives by engaging them in structured, meaningful volunteer roles. Whether it's teaching underprivileged children through the Inspiring Tutors Program, mentoring youth through the Inspiring Mentors Program, telling moral stories to orphanage kids or contributing to music, arts, and wellness activities through our Social Circles and Health Hub, seniors find opportunities that align with their skills and passions.  \n\nAs a volunteer, you also become a valued member of ISF—gaining access to all our programs and community offerings designed to support your own well-being. With simple onboarding, guided orientation, and ongoing support, every volunteer is recognized as part of our Hall of Volunteers—a vibrant community redefining ageing as a time of contribution, connection, and growth. Join ISF and turn your experience into impact, your time into transformation."),
-                      SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                      CustomButtonWithBorder(onpressed: (){
-                        FormClass().showRegisterFormDialog(context);
-
-                        // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                      },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
-
-
-
-                    ],
-                  ),
-                ),
-
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  child: Image.asset("assets/images/volunteers.jpeg",fit: BoxFit.cover,),
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height*0.3,
-
-
-                  decoration: BoxDecoration(
-
-                    color: Colors.white,
-
-                  ),
-                ),
-
-                SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: width,
-                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Become A Member ",style: TextStyleUtils.heading2,),
-                          SizedBox(height: TextSizeDynamicUtils.dHeight18,),
-                          Text(
-                            "Are you ready to embrace a healthier, more fulfilling life? At Inspiring Seniors Foundation (ISF), we are dedicated to empowering seniors through holistic health, social engagement, and lifelong learning. As a member of ISF, you will benefit from a wide range of programs and services designed to enhance your overall well-being. \n\nHere's what you can expect as a member: Daily Dose of Health – Recharge your mind and body with curated exercises and wellness activities for overall well-being. Program and Event Updates – Stay informed about health and other topics through expert-led sessions, complete with fellow seniors on fitness challenges, social gatherings - music, books, art and new learning opportunities. Exclusive Resources – Access valuable tools, research, and community support tailored for seniors. Volunteer and Partner Opportunities – Contribute your skills, mentor the younger generation, and connect with a like-minded community. Signing up is easy – just fill out the form and start experiencing the benefits of an engaged and enriching senior life. Let’s redefine ageing—stay active, stay healthy, stay productive!"
-                            ,style: TextStyleUtils.phoneparagraphSmall,),
-                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                          CustomButtonWithBorder(onpressed: (){
-                            FormClass().showRegisterFormDialog(context);
-
-                            // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
-
-
-
-                        ],
-                      ),
-                    ),
-
-                    Container(
-                      clipBehavior: Clip.hardEdge,
-                      child: Image.asset("assets/images/member_image.png",fit: BoxFit.cover,),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.3,
-
-
-                      decoration: BoxDecoration(
-
-                        color: Colors.white,
-
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: ColorUtils.GREY_DOTTED,
-                        //     blurRadius: 1000,
-                        //     spreadRadius: 1
-                        //   )
-                        // ]
-                      ),
-                    ),
-
-                    SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                  ],
-                ),
-                SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: width,
-                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Partner with us ",style: TextStyleUtils.heading2,),
-                          SizedBox(height: TextSizeDynamicUtils.dHeight18,),
-                          Text(
-"Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, a community group,or an NGO your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"                            ,style: TextStyleUtils.phoneparagraphSmall,),
-                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                          CustomButtonWithBorder(onpressed: (){
-                            // FormClass(). _showThankYouDialogFinal();
-                            FormClassForPartner().showFormDialog(context);
-
-                            // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
-
-
-
-                        ],
-                      ),
-                    ),
-
-                    Container(
-                      clipBehavior: Clip.hardEdge,
-                      child: Image.asset("assets/images/partner_with_us.jpeg",fit: BoxFit.cover,),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.3,
-
-
-                      decoration: BoxDecoration(
-
-                        color: Colors.white,
-
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: ColorUtils.GREY_DOTTED,
-                        //     blurRadius: 1000,
-                        //     spreadRadius: 1
-                        //   )
-                        // ]
-                      ),
-                    ),
-
-                    SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                  ],
-                ),
-
-
-
-                SizedBox(height: TextSizeDynamicUtils.dHeight56,),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: width,
-                      margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Work With Us ",style: TextStyleUtils.heading2,),
-                          SizedBox(height: TextSizeDynamicUtils.dHeight18,),
-                          Text(
-                            "Work with Us: Be the Change Behind the Impact\n\nAre you passionate about making a difference through your skills in social media, digital strategy, or technology? Join us at the Inspiring Seniors Foundation as an intern and be part of a movement that redefines ageing in India.\n\nWe’re looking for driven, creative, and socially conscious individuals who want hands-on experience while contributing to meaningful change. Whether it’s creating engaging campaigns, building digital tools, or improving user experiences, your work will help empower seniors and enrich communities.\n\nApply now and let’s build an age-positive future together\n\n📧 Email us at programs@inspiringseniors.org \n\n📱Contact at  9315274243\n\n🌐 www.inspiringseniors.org "
-                            ,style: TextStyleUtils.phoneparagraphSmall,),
-                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                          CustomButtonWithBorder(onpressed: (){
-                            // FormClass(). _showThankYouDialogFinal();
-                            FormClassForPartner().showFormDialog(context);
-
-                            // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                          },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
-
-
-
-                        ],
-                      ),
-                    ),
-
-                    Container(
-                      clipBehavior: Clip.hardEdge,
-                      child: Image.asset("assets/images/our_story1.jpeg",fit: BoxFit.cover,),
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height*0.3,
-
-
-                      decoration: BoxDecoration(
-
-                        color: Colors.white,
-
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: ColorUtils.GREY_DOTTED,
-                        //     blurRadius: 1000,
-                        //     spreadRadius: 1
-                        //   )
-                        // ]
-                      ),
-                    ),
-
-                    SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                  ],
-                ),
-
-
-
-
-
-              ],
-            ):
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                Container(
-                  width: width,
-                  padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
-                  child:
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-                    children: [
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        child: Image.asset("assets/images/volunteers.jpeg",fit: BoxFit.cover,),
-                        width: MediaQuery.of(context).size.width*0.4,
-                        height: MediaQuery.of(context).size.width*0.3,
-
-
-                        decoration: BoxDecoration(
-
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: ColorUtils.GREY_DOTTED,
-                          //     blurRadius: 1000,
-                          //     spreadRadius: 1
-                          //   )
-                          // ]
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 64),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Become A Volunteer ",
-                                style: TextStyleUtils.heading3.copyWith(
-                                    color: ColorUtils.BRAND_COLOR
-                                ),),
-                              SizedBox(height: 24,),
-                              SelectableText("At Inspiring Seniors Foundation (ISF), we empower senior citizens to lead purposeful, active lives by engaging them in structured, meaningful volunteer roles. Whether it's teaching underprivileged children through the Inspiring Tutors Program, mentoring youth through the Inspiring Mentors Program, telling moral stories to orphanage kids or contributing to music, arts, and wellness activities through our Social Circles and Health Hub, seniors find opportunities that align with their skills and passions.  \n\nAs a volunteer, you also become a valued member of ISF—gaining access to all our programs and community offerings designed to support your own well-being. With simple onboarding, guided orientation, and ongoing support, every volunteer is recognized as part of our Hall of Volunteers—a vibrant community redefining ageing as a time of contribution, connection, and growth. Join ISF and turn your experience into impact, your time into transformation."
-                                ,style: TextStyleUtils.paragraphSmall,),
-                              SizedBox(height: 32,),
-                              Container(
-
-                                child: CustomButtonWithBorder(
-                                    onpressed: (){
-                                      FormClass().showRegisterFormDialog(context);
-
-                                    },
-
-                                    shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
-                              ),
-
-
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
-
-
-                  width: width,
-                  color: ColorUtils.BACKGROUND_COLOR,
-                  child:
-                  Row(
+      Expanded(
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+        child:
+
+              Column(
+                children: [
+                  isMobile?     Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Become A Member ",
-                                style: TextStyleUtils.heading3.copyWith(
-                                    color: ColorUtils.BRAND_COLOR
-                                ),),
-                              SizedBox(height: 24,),
-                              SelectableText(
-                                "Are you ready to embrace a healthier, more fulfilling life? At Inspiring Seniors Foundation (ISF), we are dedicated to empowering seniors through holistic health, social engagement, and lifelong learning. As a member of ISF, you will benefit from a wide range of programs and services designed to enhance your overall well-being. \n\nHere's what you can expect as a member: Daily Dose of Health – Recharge your mind and body with curated exercises and wellness activities for overall well-being. Program and Event Updates – Stay informed about health and other topics through expert-led sessions, complete with fellow seniors on fitness challenges, social gatherings - music, books, art and new learning opportunities. Exclusive Resources – Access valuable tools, research, and community support tailored for seniors. Volunteer and Partner Opportunities – Contribute your skills, mentor the younger generation, and connect with a like-minded community. Signing up is easy – just fill out the form and start experiencing the benefits of an engaged and enriching senior life. Let’s redefine ageing—stay active, stay healthy, stay productive!"
-
-                                ,style: TextStyleUtils.paragraphSmall,),
-                              SizedBox(height: 32,),
-                              Container(
-
-                                child: CustomButtonWithBorder(
-                                    onpressed: (){
-                                      FormClass().showRegisterFormDialog(context);
-
-                                    },
-
-                                    shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
-                              ),
-
-
-                            ],
-                          ),
-                        ),
-                      ),
 
                       Container(
-                        margin: EdgeInsets.only(left: 64),
-                        clipBehavior: Clip.hardEdge,
-                        child: Image.asset("assets/images/become_a_member.jpeg",fit: BoxFit.cover,),
-                        width: MediaQuery.of(context).size.width*0.4,
-                        height: MediaQuery.of(context).size.width*0.3,
+                        margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Become A Volunteer ",style: TextStyleUtils.heading2,),
+                            SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                            SelectableText("At Inspiring Seniors Foundation (ISF), we empower senior citizens to lead purposeful, active lives by engaging them in structured, meaningful volunteer roles. Whether it's teaching underprivileged children through the Inspiring Tutors Program, mentoring youth through the Inspiring Mentors Program, telling moral stories to orphanage kids or contributing to music, arts, and wellness activities through our Social Circles and Health Hub, seniors find opportunities that align with their skills and passions.  \n\nAs a volunteer, you also become a valued member of ISF—gaining access to all our programs and community offerings designed to support your own well-being. With simple onboarding, guided orientation, and ongoing support, every volunteer is recognized as part of our Hall of Volunteers—a vibrant community redefining ageing as a time of contribution, connection, and growth. Join ISF and turn your experience into impact, your time into transformation."),
+                            SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                            CustomButtonWithBorder(onpressed: (){
+                              FormClass().showRegisterFormDialog(context);
 
-
-                        decoration: BoxDecoration(
-
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-
-                Container(
-
-                  padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
-
-
-                  width: width,
-                  child:
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-                    children: [
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        child: Image.asset("assets/images/partner_with_us.jpeg",fit: BoxFit.cover,),
-                        width: MediaQuery.of(context).size.width*0.4,
-                        height: MediaQuery.of(context).size.width*0.3,
-
-
-                        decoration: BoxDecoration(
-
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: ColorUtils.GREY_DOTTED,
-                          //     blurRadius: 1000,
-                          //     spreadRadius: 1
-                          //   )
-                          // ]
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(left: 64),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Partner with us ",
-                                style: TextStyleUtils.heading3.copyWith(
-                                    color: ColorUtils.BRAND_COLOR
-                                ),),
-                              SizedBox(height: 20,),
-                              SelectableText(
-                                "Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, a community group or an NGO, your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"
-                                ,style: TextStyleUtils.paragraphSmall,),
-                              SizedBox(height: 30,),
-                          Container(
-
-                            child: CustomButtonWithBorder(
-                                onpressed: (){
-                                  FormClassForPartner().showFormDialog(context);
-
-                                },
-
-                                shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
-                          ),
-
-
+                              // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                            },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
 
 
 
                           ],
-                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
 
-                Container(
-                  color: ColorUtils.BACKGROUND_COLOR,
-
-                  padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
-
-
-                  width: width,
-                  child:
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-                    children: [
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(right: 64),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Work with Us ",
-                                style: TextStyleUtils.heading3.copyWith(
-                                    color: ColorUtils.BRAND_COLOR
-                                ),),
-                              SizedBox(height: 20,),
-                              SelectableText(
-                                "Work with Us: Be the Change Behind the Impact\n\nAre you passionate about making a difference through your skills in social media, digital strategy, or technology? Join us at the Inspiring Seniors Foundation as an intern and be part of a movement that redefines ageing in India.\n\nWe’re looking for driven, creative, and socially conscious individuals who want hands-on experience while contributing to meaningful change. Whether it’s creating engaging campaigns, building digital tools, or improving user experiences, your work will help empower seniors and enrich communities.\n\nApply now and let’s build an age-positive future together\n\n📧 Email us at programs@inspiringseniors.org \n\n📱Contact at  9315274243\n\n🌐 www.inspiringseniors.org "
-
-                                ,style: TextStyleUtils.paragraphSmall,),
-                              SizedBox(height: 30,),
-                              // Container(
-                              //
-                              //   child: CustomButtonWithBorder(
-                              //       onpressed: (){
-                              //         FormClassForPartner().showFormDialog(context);
-                              //
-                              //       },
-                              //
-                              //       shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
-                              // ),
-
-
-
-
-
-                            ],
-                          ),
-                        ),
-                      ),
                       Container(
                         clipBehavior: Clip.hardEdge,
-                        child: Image.asset("assets/images/our_story1.jpeg",fit: BoxFit.cover,),
-                        width: MediaQuery.of(context).size.width*0.4,
-                        height: MediaQuery.of(context).size.width*0.3,
+                        child: Image.asset("assets/images/volunteers.jpeg",fit: BoxFit.cover,),
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height*0.3,
 
 
                         decoration: BoxDecoration(
 
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
 
-                          // boxShadow: [
-                          //   BoxShadow(
-                          //     color: ColorUtils.GREY_DOTTED,
-                          //     blurRadius: 1000,
-                          //     spreadRadius: 1
-                          //   )
-                          // ]
                         ),
                       ),
 
+                      SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: width,
+                            margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Become A Member ",style: TextStyleUtils.heading2,),
+                                SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                                Text(
+                                  "Are you ready to embrace a healthier, more fulfilling life? At Inspiring Seniors Foundation (ISF), we are dedicated to empowering seniors through holistic health, social engagement, and lifelong learning. As a member of ISF, you will benefit from a wide range of programs and services designed to enhance your overall well-being. \n\nHere's what you can expect as a member: Daily Dose of Health – Recharge your mind and body with curated exercises and wellness activities for overall well-being. Program and Event Updates – Stay informed about health and other topics through expert-led sessions, complete with fellow seniors on fitness challenges, social gatherings - music, books, art and new learning opportunities. Exclusive Resources – Access valuable tools, research, and community support tailored for seniors. Volunteer and Partner Opportunities – Contribute your skills, mentor the younger generation, and connect with a like-minded community. Signing up is easy – just fill out the form and start experiencing the benefits of an engaged and enriching senior life. Let’s redefine ageing—stay active, stay healthy, stay productive!"
+                                  ,style: TextStyleUtils.phoneparagraphSmall,),
+                                SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                                CustomButtonWithBorder(onpressed: (){
+                                  FormClass().showRegisterFormDialog(context);
+
+                                  // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
+
+
+
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            clipBehavior: Clip.hardEdge,
+                            child: Image.asset("assets/images/member_image.png",fit: BoxFit.cover,),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height*0.3,
+
+
+                            decoration: BoxDecoration(
+
+                              color: Colors.white,
+
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: ColorUtils.GREY_DOTTED,
+                              //     blurRadius: 1000,
+                              //     spreadRadius: 1
+                              //   )
+                              // ]
+                            ),
+                          ),
+
+                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                        ],
+                      ),
+                      SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: width,
+                            margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Partner with us ",style: TextStyleUtils.heading2,),
+                                SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                                Text(
+                  "Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, a community group,or an NGO your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"                            ,style: TextStyleUtils.phoneparagraphSmall,),
+                                SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                                CustomButtonWithBorder(onpressed: (){
+                                  // FormClass(). _showThankYouDialogFinal();
+                                  FormClassForPartner().showFormDialog(context);
+
+                                  // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
+
+
+
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            clipBehavior: Clip.hardEdge,
+                            child: Image.asset("assets/images/partner_with_us.jpeg",fit: BoxFit.cover,),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height*0.3,
+
+
+                            decoration: BoxDecoration(
+
+                              color: Colors.white,
+
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: ColorUtils.GREY_DOTTED,
+                              //     blurRadius: 1000,
+                              //     spreadRadius: 1
+                              //   )
+                              // ]
+                            ),
+                          ),
+
+                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                        ],
+                      ),
+
+
+
+                      SizedBox(height: TextSizeDynamicUtils.dHeight56,),
+
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: width,
+                            margin: EdgeInsets.symmetric(horizontal: 16,vertical: TextSizeDynamicUtils.dHeight28),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Work With Us ",style: TextStyleUtils.heading2,),
+                                SizedBox(height: TextSizeDynamicUtils.dHeight18,),
+                                Text(
+                                  "Work with Us: Be the Change Behind the Impact\n\nAre you passionate about making a difference through your skills in social media, digital strategy, or technology? Join us at the Inspiring Seniors Foundation as an intern and be part of a movement that redefines ageing in India.\n\nWe’re looking for driven, creative, and socially conscious individuals who want hands-on experience while contributing to meaningful change. Whether it’s creating engaging campaigns, building digital tools, or improving user experiences, your work will help empower seniors and enrich communities.\n\nApply now and let’s build an age-positive future together\n\n📧 Email us at programs@inspiringseniors.org \n\n📱Contact at  9315274243\n\n🌐 www.inspiringseniors.org "
+                                  ,style: TextStyleUtils.phoneparagraphSmall,),
+                                SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                                CustomButtonWithBorder(onpressed: (){
+                                  // FormClass(). _showThankYouDialogFinal();
+                                  FormClassForPartner().showFormDialog(context);
+
+                                  // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
+                                },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight12,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 12,vpadding: 8,isHoverGetStarted: false.obs,text: "Register Now"),
+
+
+
+                              ],
+                            ),
+                          ),
+
+                          Container(
+                            clipBehavior: Clip.hardEdge,
+                            child: Image.asset("assets/images/our_story1.jpeg",fit: BoxFit.cover,),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height*0.3,
+
+
+                            decoration: BoxDecoration(
+
+                              color: Colors.white,
+
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: ColorUtils.GREY_DOTTED,
+                              //     blurRadius: 1000,
+                              //     spreadRadius: 1
+                              //   )
+                              // ]
+                            ),
+                          ),
+
+                          SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                        ],
+                      ),
+
+
+
+
+
+                    ],
+                  ):
+
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+
+                      Container(
+                        key:_keys[JoinUsSection.volunteer],
+                        width: width,
+                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+                        child:
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+                            Container(
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.asset("assets/images/volunteers.jpeg",fit: BoxFit.cover,),
+                              width: MediaQuery.of(context).size.width*0.4,
+                              height: MediaQuery.of(context).size.width*0.3,
+
+
+                              decoration: BoxDecoration(
+
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+
+                                // boxShadow: [
+                                //   BoxShadow(
+                                //     color: ColorUtils.GREY_DOTTED,
+                                //     blurRadius: 1000,
+                                //     spreadRadius: 1
+                                //   )
+                                // ]
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(left: 64),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Become A Volunteer ",
+                                      style: TextStyleUtils.heading3.copyWith(
+                                          color: ColorUtils.BRAND_COLOR
+                                      ),),
+                                    SizedBox(height: 24,),
+                                    SelectableText("At Inspiring Seniors Foundation (ISF), we empower senior citizens to lead purposeful, active lives by engaging them in structured, meaningful volunteer roles. Whether it's teaching underprivileged children through the Inspiring Tutors Program, mentoring youth through the Inspiring Mentors Program, telling moral stories to orphanage kids or contributing to music, arts, and wellness activities through our Social Circles and Health Hub, seniors find opportunities that align with their skills and passions.  \n\nAs a volunteer, you also become a valued member of ISF—gaining access to all our programs and community offerings designed to support your own well-being. With simple onboarding, guided orientation, and ongoing support, every volunteer is recognized as part of our Hall of Volunteers—a vibrant community redefining ageing as a time of contribution, connection, and growth. Join ISF and turn your experience into impact, your time into transformation."
+                                      ,style: TextStyleUtils.paragraphSmall,),
+                                    SizedBox(height: 32,),
+                                    Container(
+
+                                      child: CustomButtonWithBorder(
+                                          onpressed: (){
+                                            FormClass().showRegisterFormDialog(context);
+
+                                          },
+
+                                          shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                                    ),
+
+
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        key:_keys[JoinUsSection.member],
+
+                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+
+
+                        width: width,
+                        color: ColorUtils.BACKGROUND_COLOR,
+                        child:
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Become A Member ",
+                                      style: TextStyleUtils.heading3.copyWith(
+                                          color: ColorUtils.BRAND_COLOR
+                                      ),),
+                                    SizedBox(height: 24,),
+                                    SelectableText(
+                                      "Are you ready to embrace a healthier, more fulfilling life? At Inspiring Seniors Foundation (ISF), we are dedicated to empowering seniors through holistic health, social engagement, and lifelong learning. As a member of ISF, you will benefit from a wide range of programs and services designed to enhance your overall well-being. \n\nHere's what you can expect as a member: Daily Dose of Health – Recharge your mind and body with curated exercises and wellness activities for overall well-being. Program and Event Updates – Stay informed about health and other topics through expert-led sessions, complete with fellow seniors on fitness challenges, social gatherings - music, books, art and new learning opportunities. Exclusive Resources – Access valuable tools, research, and community support tailored for seniors. Volunteer and Partner Opportunities – Contribute your skills, mentor the younger generation, and connect with a like-minded community. Signing up is easy – just fill out the form and start experiencing the benefits of an engaged and enriching senior life. Let’s redefine ageing—stay active, stay healthy, stay productive!"
+
+                                      ,style: TextStyleUtils.paragraphSmall,),
+                                    SizedBox(height: 32,),
+                                    Container(
+
+                                      child: CustomButtonWithBorder(
+                                          onpressed: (){
+                                            FormClass().showRegisterFormDialog(context);
+
+                                          },
+
+                                          shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                                    ),
+
+
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            Container(
+                              margin: EdgeInsets.only(left: 64),
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.asset("assets/images/become_a_member.jpeg",fit: BoxFit.cover,),
+                              width: MediaQuery.of(context).size.width*0.4,
+                              height: MediaQuery.of(context).size.width*0.3,
+
+
+                              decoration: BoxDecoration(
+
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+
+                      Container(
+                        key:_keys[JoinUsSection.partner],
+
+
+                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+
+
+                        width: width,
+                        child:
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+                            Container(
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.asset("assets/images/partner_with_us.jpeg",fit: BoxFit.cover,),
+                              width: MediaQuery.of(context).size.width*0.4,
+                              height: MediaQuery.of(context).size.width*0.3,
+
+
+                              decoration: BoxDecoration(
+
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+
+                                // boxShadow: [
+                                //   BoxShadow(
+                                //     color: ColorUtils.GREY_DOTTED,
+                                //     blurRadius: 1000,
+                                //     spreadRadius: 1
+                                //   )
+                                // ]
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(left: 64),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Partner with us ",
+                                      style: TextStyleUtils.heading3.copyWith(
+                                          color: ColorUtils.BRAND_COLOR
+                                      ),),
+                                    SizedBox(height: 20,),
+                                    SelectableText(
+                                      "Partner with Us: Empower Seniors, Enrich Communities! Join hands with the Inspiring Seniors Foundation to create meaningful opportunities for active and healthy aging with purpose. As a partner, you’ll help us bring innovative programs, resources, and engagement platforms that empower seniors to lead fulfilling lives. Whether you're an organization, a brand, a community group or an NGO, your collaboration can drive impactful change.\n\nLet’s work together to build a more inclusive, vibrant, and age-friendly society!"
+                                      ,style: TextStyleUtils.paragraphSmall,),
+                                    SizedBox(height: 30,),
+                                Container(
+
+                                  child: CustomButtonWithBorder(
+                                      onpressed: (){
+                                        FormClassForPartner().showFormDialog(context);
+
+                                      },
+
+                                      shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                                ),
+
+
+
+
+
+                                ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        key:_keys[JoinUsSection.work],
+
+                        color: ColorUtils.BACKGROUND_COLOR,
+
+                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+
+
+                        width: width,
+                        child:
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(right: 64),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Work with Us ",
+                                      style: TextStyleUtils.heading3.copyWith(
+                                          color: ColorUtils.BRAND_COLOR
+                                      ),),
+                                    SizedBox(height: 20,),
+                                    SelectableText(
+                                      "Work with Us: Be the Change Behind the Impact\n\nAre you passionate about making a difference through your skills in social media, digital strategy, or technology? Join us at the Inspiring Seniors Foundation as an intern and be part of a movement that redefines ageing in India.\n\nWe’re looking for driven, creative, and socially conscious individuals who want hands-on experience while contributing to meaningful change. Whether it’s creating engaging campaigns, building digital tools, or improving user experiences, your work will help empower seniors and enrich communities.\n\nApply now and let’s build an age-positive future together\n\n📧 Email us at programs@inspiringseniors.org \n\n📱Contact at  9315274243\n\n🌐 www.inspiringseniors.org "
+
+                                      ,style: TextStyleUtils.paragraphSmall,),
+                                    SizedBox(height: 30,),
+                                    // Container(
+                                    //
+                                    //   child: CustomButtonWithBorder(
+                                    //       onpressed: (){
+                                    //         FormClassForPartner().showFormDialog(context);
+                                    //
+                                    //       },
+                                    //
+                                    //       shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 18,vpadding: 10,isHoverGetStarted: false.obs,text: "Register Now",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                                    // ),
+
+
+
+
+
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Container(
+                              clipBehavior: Clip.hardEdge,
+                              child: Image.asset("assets/images/our_story1.jpeg",fit: BoxFit.cover,),
+                              width: MediaQuery.of(context).size.width*0.4,
+                              height: MediaQuery.of(context).size.width*0.3,
+
+
+                              decoration: BoxDecoration(
+
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+
+                                // boxShadow: [
+                                //   BoxShadow(
+                                //     color: ColorUtils.GREY_DOTTED,
+                                //     blurRadius: 1000,
+                                //     spreadRadius: 1
+                                //   )
+                                // ]
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
+
+
                     ],
                   ),
-                ),
+
+                  FooterSection2(),
+
+                ],
+              ),
 
 
-              ],
-            ),
-
-            FooterSection2(),
-          ],
-        ),
+          ),
+      ),
+      ]
       ),
     );
   }

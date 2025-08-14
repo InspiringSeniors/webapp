@@ -10,6 +10,7 @@ import 'package:inspiringseniorswebapp/modules/health_hub_main_screen/controller
 import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homepage_controller.dart';
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
+import 'package:inspiringseniorswebapp/utils/services/scroll_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -29,10 +30,18 @@ class AboutUsScreen extends StatelessWidget {
 
   HomepageController homepageController=Get.find();
   final _currentPageNotifier = ValueNotifier<int>(0);
-
+  final Map<AboutSection, GlobalKey> _keys = {
+    AboutSection.vision: GlobalKey(),
+    AboutSection.story: GlobalKey(),
+    AboutSection.stateChapters: GlobalKey(),
+    AboutSection.advisory: GlobalKey(),
+    AboutSection.team: GlobalKey(),
+  };
 
   @override
   Widget build(BuildContext context) {
+
+    scrollFromParamIfAny(_keys); // reads Get.parameters['section'] and scrolls
 
     var height=MediaQuery.of(context).size.height ;
     var width=MediaQuery.of(context).size.width ;
@@ -79,7 +88,7 @@ class AboutUsScreen extends StatelessWidget {
                         ),
                       ):
                       Container(
-
+                      key: _keys[AboutSection.vision],
                         padding: EdgeInsets.symmetric(
                             vertical: isMobile ? TextSizeDynamicUtils.dHeight20 : 60, horizontal: isMobile ? 20 : MediaQuery.of(Get.context!).size.width*0.08),
 
@@ -121,6 +130,8 @@ class AboutUsScreen extends StatelessWidget {
 
                       ),
                       Container(
+                          key: _keys[AboutSection.story],
+
 
                           width:width,
                           color: ColorUtils.BACKGROUND_COLOR,
@@ -148,59 +159,6 @@ class AboutUsScreen extends StatelessWidget {
 
                             ],
                           )
-                      ),
-
-                      isMobile?                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
-
-                        child: Column(
-                          children: [
-                            Container(child: Text("ISF State Chapters",style: TextStyleUtils.heading3.copyWith(
-                              color: ColorUtils.BRAND_COLOR,
-                            ),),),
-                            SizedBox(height: 48,),
-
-
-                            Container(
-                              width: width*0.8,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  initiativesDesc("Telangana State Chapter","Along with our Pan-India presence, we are excited to open our State Chapter, a hub for empowering seniors and uplifting local communities through meaningful connections and impactful initiatives. Join us in making a difference where it matters most.",
-                                          () { Get.toNamed(RoutingNames.HYDERABAS_STATE_CHAPTER);
-                                      },"assets/images/hyderabadStateChapter.png"),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ):
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
-
-                        child: Column(
-                          children: [
-                            Container(child: Text("ISF State Chapters",style: TextStyleUtils.heading3.copyWith(
-                              color: ColorUtils.BRAND_COLOR,
-                            ),),),
-                            SizedBox(height: 64,),
-
-
-                            Container(
-                              width: width,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  initiativesDesc("Telangana State Chapter","Along with our Pan-India presence, we are excited to open our State Chapter, a hub for empowering seniors and uplifting local communities through meaningful connections and impactful initiatives. Join us in making a difference where it matters most.",
-                                          () { Get.toNamed(RoutingNames.HYDERABAS_STATE_CHAPTER);
-                                  },"assets/images/hyderabadStateChapter.png"),
-                                               ],
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
 
 
@@ -343,14 +301,17 @@ class AboutUsScreen extends StatelessWidget {
                       )
                 :
                       Container(
+
                         width: width,
                         child: Column(
                           children: [
 
                             Container(
+                              key: _keys[AboutSection.advisory],
+
                               padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
                 width: width,
-                              color:ColorUtils.BACKGROUND_COLOR ,
+                              color:ColorUtils.WHITE_COLOR_BACKGROUND ,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -417,6 +378,9 @@ class AboutUsScreen extends StatelessWidget {
                             ),
 
                             Container(
+                              key: _keys[AboutSection.team],
+                              color:ColorUtils.BACKGROUND_COLOR ,
+
                               padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
 
                               child: Row(
@@ -463,6 +427,63 @@ class AboutUsScreen extends StatelessWidget {
                             ),
 
 
+                          ],
+                        ),
+                      ),
+
+
+
+                      isMobile?                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+
+                        child: Column(
+                          children: [
+                            Container(child: Text("ISF State Chapters",style: TextStyleUtils.heading3.copyWith(
+                              color: ColorUtils.BRAND_COLOR,
+                            ),),),
+                            SizedBox(height: 48,),
+
+
+                            Container(
+                              width: width*0.8,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  initiativesDesc("Telangana State Chapter","Along with our Pan-India presence, we are excited to open our State Chapter, a hub for empowering seniors and uplifting local communities through meaningful connections and impactful initiatives. Join us in making a difference where it matters most.",
+                                          () { Get.toNamed(RoutingNames.HYDERABAS_STATE_CHAPTER);
+                                      },"assets/images/hyderabadStateChapter.png"),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ):
+                      Container(
+                        key: _keys[AboutSection.stateChapters],
+
+                        padding: EdgeInsets.symmetric(horizontal: width*0.08,vertical: 64),
+
+                        child: Column(
+                          children: [
+                            Container(child: Text("ISF State Chapters",style: TextStyleUtils.heading3.copyWith(
+                              color: ColorUtils.BRAND_COLOR,
+                            ),),),
+                            SizedBox(height: 64,),
+
+
+                            Container(
+                              width: width,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  initiativesDesc("Telangana State Chapter","Along with our Pan-India presence, we are excited to open our State Chapter, a hub for empowering seniors and uplifting local communities through meaningful connections and impactful initiatives. Join us in making a difference where it matters most.",
+                                          () { Get.toNamed(RoutingNames.HYDERABAS_STATE_CHAPTER);
+                                      },"assets/images/hyderabadStateChapter.png"),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),
