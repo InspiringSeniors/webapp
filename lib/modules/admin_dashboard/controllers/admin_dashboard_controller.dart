@@ -73,7 +73,7 @@ class AdminDashBoardController extends GetxController{
 
    await  fetchUsersWithPagination(0);
 
-    fetchRemindersForDate(DateTime.now(),userManagementController.currentLoggedInUser.value.id!);
+    // fetchRemindersForDate(DateTime.now(),userManagementController.currentLoggedInUser.value.id!);
 
     loadAdminUsers();
     // TODO: implement onInit
@@ -172,8 +172,8 @@ class AdminDashBoardController extends GetxController{
 
       // filteredUsers.value=users;
       print("users are here ${users.value}");
-    } catch (e) {
-      print("Error fetching users: $e");
+    // } catch (e) {
+    //   print("Error fetching users: $e");
     } finally {
       isLoading.value = false;
     }

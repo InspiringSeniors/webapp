@@ -456,7 +456,7 @@ class MemberRegistrationController extends GetxController{
           selectedReferralOption.value.add(otherRefferarSource!.text.trim());
         }
 
-       var id=generateUserId();
+       var id=generateMemberId(userNameController!.text, phoneNumberController!.text);
 
         // Prepare data
         final leadData = {
@@ -569,12 +569,28 @@ class MemberRegistrationController extends GetxController{
   DateTime now = DateTime.now();
 
 
-  String generateUserId() {
-    final now = DateTime.now();
-    // Extract last 5 digits of milliseconds since epoch
-    final lastFiveDigits = now.millisecondsSinceEpoch.toString().substring(8);
-    return "uix$lastFiveDigits";
+  String generateMemberId(String fullName, String mobile) {
+    // 1. Trim leading/trailing spaces
+    fullName = fullName.trim();
+
+    // 2. Get first name (till first space)
+    String firstName = fullName.split(" ").first;
+
+    // 3. Remove special characters like "."
+    firstName = firstName.replaceAll(RegExp(r'[^a-zA-Z]'), "");
+
+    // 4. If length < 4, prepend "O" until it reaches 4
+    while (firstName.length < 4) {
+      firstName = "O" + firstName;
+    }
+
+    // 5. Take only first 4 letters, convert to lowercase
+    String firstFour = firstName.substring(0, 4).toLowerCase();
+
+    // 6. Append mobile number
+    return "$firstFour$mobile";
   }
+
   String parseTimeToIso(String timeStr) {
     final now = DateTime.now();
     print("time is $timeStr");

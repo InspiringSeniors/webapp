@@ -1771,7 +1771,6 @@ class MemberRegistrationScreen extends StatelessWidget {
                                                   )
                                                 ],
                                               ),
-
                                               Container(
                                                 width:                                                   width * 0.34,
 
@@ -1814,6 +1813,7 @@ class MemberRegistrationScreen extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
+
 
 
 

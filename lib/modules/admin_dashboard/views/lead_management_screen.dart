@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/lead_management_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_views/add_lead.dart';
 import 'package:inspiringseniorswebapp/utils/utility/utils.dart';
 
 import '../../../common_widgets/custom_search_field.dart';
@@ -10,12 +11,11 @@ import '../../../common_widgets/custom_text_field.dart';
 import '../../../utils/color_utils.dart';
 import '../models/leads_model.dart';
 import '../models/user_model.dart';
+import 'lead_management_views/view_lead.dart';
 
 class LeadManagementScreen extends StatelessWidget {
   LeadManagementController leadManagementController = Get.find();
-  GlobalKey<FormState> addUserFormKey1 = GlobalKey<FormState>();
-  GlobalKey<FormState> editUserFormKey1 = GlobalKey<FormState>();
-  final GlobalKey<FormState> nextActionKey = GlobalKey<FormState>();
+
   final GlobalKey roleButtonKey = GlobalKey();
 
 
@@ -29,12 +29,12 @@ class LeadManagementScreen extends StatelessWidget {
         case "Leads":
           return AllLeads();
         case "Add User":
-          return addUser();
+          return AddLead();
 
         case "Edit User":
-          return addUser();
+          return AddLead();
         case "View User":
-          return viewUser();
+          return viewLead();
 
         default:
           return AllLeads();
@@ -158,7 +158,7 @@ class LeadManagementScreen extends StatelessWidget {
                     children: [
 
                       Container(
-                        width: width*0.082,
+                        width: width*0.1,
 
                        child:
                        DropdownButtonFormField<String>(
@@ -168,6 +168,7 @@ class LeadManagementScreen extends StatelessWidget {
                               : null,
                           items: leadManagementController.roleOptions.map((String value) {
                             return DropdownMenuItem<String>(
+
                               value: value,
                               child: Text(value),
                             );
@@ -292,8 +293,12 @@ class LeadManagementScreen extends StatelessWidget {
 
                       GestureDetector(
                         onTap: () {
-                          leadManagementController.selectedModule.value =
-                              "Add User";
+
+                          print("butto click");
+                          leadManagementController.selectedModule.value = "Add User";
+
+                          print("butto click ${leadManagementController.selectedModule.value}");
+
                           leadManagementController.getUserByIdForAdd();
                         },
                         child: Container(
@@ -306,7 +311,7 @@ class LeadManagementScreen extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(
-                                "Add Lead ",
+                                "Add Lead",
                                 style: TextStyleUtils.mobileheading6.copyWith(
                                     color: ColorUtils.WHITE_COLOR_BACKGROUND,
                                     fontWeight: FontWeight.w500),
@@ -323,39 +328,39 @@ class LeadManagementScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          showDeleteUserDialog(Get.context!, "Multi");
-                          leadManagementController.selectedModule.value =
-                              "Leads";
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 9, horizontal: 12),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: ColorUtils.GREY_DOTTED),
-                              color: ColorUtils.ORANGE_COLOR_LIGHT_2),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Delete ",
-                                style: TextStyleUtils.mobileheading6.copyWith(
-                                    color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Icon(
-                                Icons.delete,
-                                size: 20,
-                                color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     showDeleteUserDialog(Get.context!, "Multi");
+                      //     leadManagementController.selectedModule.value =
+                      //         "Leads";
+                      //   },
+                      //   child: Container(
+                      //     padding:
+                      //         EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                      //     decoration: BoxDecoration(
+                      //         borderRadius: BorderRadius.circular(8),
+                      //         border: Border.all(color: ColorUtils.GREY_DOTTED),
+                      //         color: ColorUtils.ORANGE_COLOR_LIGHT_2),
+                      //     child: Row(
+                      //       children: [
+                      //         Text(
+                      //           "Delete ",
+                      //           style: TextStyleUtils.mobileheading6.copyWith(
+                      //               color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                      //               fontWeight: FontWeight.w500),
+                      //         ),
+                      //         SizedBox(
+                      //           width: 4,
+                      //         ),
+                      //         Icon(
+                      //           Icons.delete,
+                      //           size: 20,
+                      //           color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                       GestureDetector(
                         onTap: () {
                           leadManagementController.toggleDropdownForAssignedTo(
@@ -849,1222 +854,6 @@ class LeadManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget addUser() {
-    var width = MediaQuery.of(Get.context!).size.width;
-    var height = MediaQuery.of(Get.context!).size.height;
-    return Expanded(
-      child: Container(
-        color: ColorUtils.TRACK_GREY_LIGHT,
-        child: SingleChildScrollView(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Obx(
-                  () => Container(
-                    margin: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              leadManagementController.selectedModule.value =
-                                  "Leads";
-                            },
-                            child: Text(
-                              "Lead Management",
-                              style: TextStyleUtils.mobileheading6
-                                  .copyWith(fontWeight: FontWeight.w400),
-                            )),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Icon(
-                          Icons.navigate_next,
-                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        Text(
-                          leadManagementController.selectedModule.value ==
-                                  "Edit User"
-                              ? "Edit"
-                              : "Add",
-                          style: TextStyleUtils.mobileheading6.copyWith(
-                              fontWeight: FontWeight.w400,
-                              color: ColorUtils.GREY_COLOR_PLACEHOLDER),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                    width: width * 0.8,
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 32),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        border: Border.all(
-                          color: ColorUtils.GREY_DOTTED,
-                          width: 1,
-                        )),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        leadManagementController.selectedModule.value ==
-                                "Edit User"
-                            ? Container()
-                            : Container(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        leadManagementController
-                                            .selectedAddUserType
-                                            .value = "Manual";
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 15, horizontal: 24),
-                                        decoration: BoxDecoration(
-                                            border: leadManagementController
-                                                        .selectedAddUserType
-                                                        .value ==
-                                                    "Manual"
-                                                ? Border(
-                                                    bottom: BorderSide(
-                                                        width: 1,
-                                                        color: ColorUtils
-                                                            .HEADER_GREEN))
-                                                : Border(
-                                                    bottom: BorderSide(
-                                                        width: 1,
-                                                        color: ColorUtils
-                                                            .WHITE_COLOR_BACKGROUND))),
-                                        child: Text(
-                                          "Manual Entry",
-                                          style: TextStyleUtils.smallHighlighted
-                                              .copyWith(
-                                                  fontWeight: FontWeight.w500,
-                                                  color: leadManagementController
-                                                              .selectedAddUserType
-                                                              .value ==
-                                                          "Manual"
-                                                      ? ColorUtils.HEADER_GREEN
-                                                      : ColorUtils
-                                                          .GREY_COLOR_PLACEHOLDER),
-                                        ),
-                                      ),
-                                    ),
-                                    GestureDetector(
-                                        onTap: () {
-                                          leadManagementController
-                                              .selectedAddUserType
-                                              .value = "Bulk";
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 15, horizontal: 24),
-                                          decoration: BoxDecoration(
-                                              border: leadManagementController
-                                                          .selectedAddUserType
-                                                          .value ==
-                                                      "Bulk"
-                                                  ? Border(
-                                                      bottom: BorderSide(
-                                                          width: 1,
-                                                          color: ColorUtils
-                                                              .HEADER_GREEN))
-                                                  : Border(
-                                                      bottom: BorderSide(
-                                                          width: 1,
-                                                          color: ColorUtils
-                                                              .WHITE_COLOR_BACKGROUND))),
-                                          child: Text(
-                                            "Bulk Import",
-                                            style: TextStyleUtils
-                                                .smallHighlighted
-                                                .copyWith(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: leadManagementController
-                                                                .selectedAddUserType
-                                                                .value ==
-                                                            "Bulk"
-                                                        ? ColorUtils
-                                                            .HEADER_GREEN
-                                                        : ColorUtils
-                                                            .GREY_COLOR_PLACEHOLDER),
-                                          ),
-                                        ))
-                                  ],
-                                ),
-                              ),
-                        Obx(() {
-                          if (leadManagementController
-                                  .selectedAddUserType.value ==
-                              "Manual") {
-                            return Obx(()=>
-                               Form(
-                                key: leadManagementController
-                                            .selectedModule.value ==
-                                        "Edit User"
-                                    ? editUserFormKey1
-                                    : addUserFormKey1,
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 28, vertical: 26),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${leadManagementController.selectedModule.value}",
-                                        style: TextStyleUtils.heading5,
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "First Name",
-                                                      style: TextStyleUtils
-                                                          .smallHighlighted
-                                                          .copyWith(
-                                                              color: ColorUtils
-                                                                  .SECONDARY_BLACK),
-                                                    ),
-                                                    SizedBox(width: 5,),
-                                                    Text(
-                                                      "*",
-                                                      style: TextStyleUtils
-                                                          .smallHighlighted
-                                                          .copyWith(
-                                                          color: ColorUtils
-                                                              .ORANGE_COLOR),
-                                                    ),
-                                                  ],
-                                                ),
-
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Container(
-                                                  width: width * 0.34,
-                                                  child:
-                                                      CustomTextFieldV2WithWhite(
-                                                    stateHandler:
-                                                        leadManagementController
-                                                            .nameStateHandler,
-                                                    labela:
-                                                        leadManagementController
-                                                            .labeluserName,
-                                                    label: ''.tr,
-                                                    controller:
-                                                        leadManagementController
-                                                            .userNameController,
-                                                    inactiveColor:
-                                                        leadManagementController
-                                                            .inactiveColor,
-                                                    validator:
-                                                        leadManagementController
-                                                            .validatename,
-                                                    // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Last Name",
-                                                  style: TextStyleUtils
-                                                      .smallHighlighted
-                                                      .copyWith(
-                                                          color: ColorUtils
-                                                              .SECONDARY_BLACK),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Container(
-                                                    width: width * 0.34,
-                                                    child:
-                                                        CustomTextFieldV2WithWhite(
-                                                      stateHandler:
-                                                          leadManagementController
-                                                              .lastNameStateHandler,
-                                                      labela:
-                                                          leadManagementController
-                                                              .labellastName,
-                                                      label: ''.tr,
-                                                      controller:
-                                                          leadManagementController
-                                                              .lastNameController,
-                                                      validator:
-                                                          leadManagementController
-                                                              .validateLastName,
-                                                      inactiveColor:
-                                                          leadManagementController
-                                                              .inactiveColor,
-                                                      // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
-                                                    )),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Email Address",
-                                                style: TextStyleUtils
-                                                    .smallHighlighted
-                                                    .copyWith(
-                                                        color: ColorUtils
-                                                            .SECONDARY_BLACK),
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Container(
-                                                width: width * 0.34,
-                                                child: CustomTextFieldV2WithWhite(
-                                                  stateHandler:
-                                                      leadManagementController
-                                                          .emailStateHandler,
-                                                  labela: leadManagementController
-                                                      .labelemail,
-                                                  label: ''.tr,
-                                                  controller:
-                                                      leadManagementController
-                                                          .emailController,
-                                                  inactiveColor:
-                                                      leadManagementController
-                                                          .inactiveColor,
-                                                  validator:
-                                                      leadManagementController
-                                                          .validatemail,
-                                                  icon: Icon(
-                                                    Icons.email,
-                                                    color: ColorUtils.TRACK_GREY,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "Phone Number ",
-                                                    style: TextStyleUtils
-                                                        .smallHighlighted
-                                                        .copyWith(
-                                                            color: ColorUtils
-                                                                .SECONDARY_BLACK),
-                                                  ),
-                                                  Text(
-                                                    "*",
-                                                    style: TextStyleUtils
-                                                        .smallHighlighted
-                                                        .copyWith(
-                                                        color: ColorUtils
-                                                            .ORANGE_COLOR),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(
-                                                height: 5,
-                                              ),
-                                              Container(
-                                                width: width * 0.34,
-                                                child: getNumberField(
-                                                    leadManagementController
-                                                        .isPhoneEnabled,
-                                                    Get.context!),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: width * 0.16,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  "Role",
-                                                  style: TextStyleUtils
-                                                      .smallHighlighted
-                                                      .copyWith(
-                                                          color: ColorUtils
-                                                              .SECONDARY_BLACK),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-
-                                                Container(
-
-                                                  child: DropdownButtonFormField<String>(
-
-                                                    value: leadManagementController.roleOptionsForAdd.contains(leadManagementController.currentSelectedUser.value.role)
-                                                        ? leadManagementController.currentSelectedUser.value.role
-                                                        : null,
-                                                    items: leadManagementController.roleOptionsForAdd.map((String value) {
-                                                      return DropdownMenuItem<String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (String? newValue) {
-                                                      leadManagementController.selectRole(newValue!);
-
-
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: '',
-                                                      labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          borderSide: const BorderSide(
-                                                              width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.GREY_DOTTED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      errorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      focusedErrorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-
-                                                // Obx(
-                                                //   () => GestureDetector(
-                                                //     key: roleButtonKey,
-                                                //
-                                                //     onTap: () =>
-                                                //         leadManagementController
-                                                //             .toggleDropdownForRolesForAddUser(
-                                                //                 Get.context!,roleButtonKey),
-                                                //     child: Container(
-                                                //       padding:
-                                                //           EdgeInsets.symmetric(
-                                                //               vertical: 9,
-                                                //               horizontal: 12),
-                                                //       decoration: BoxDecoration(
-                                                //           borderRadius:
-                                                //               BorderRadius
-                                                //                   .circular(8),
-                                                //           border: Border.all(
-                                                //               color: ColorUtils
-                                                //                   .GREY_DOTTED)),
-                                                //       child: Row(
-                                                //         mainAxisAlignment:
-                                                //             MainAxisAlignment
-                                                //                 .spaceBetween,
-                                                //         crossAxisAlignment:
-                                                //             CrossAxisAlignment
-                                                //                 .center,
-                                                //         children: [
-                                                //           leadManagementController
-                                                //                       .selectedModule
-                                                //                       .value ==
-                                                //                   "Edit User"
-                                                //               ? Text(
-                                                //                   leadManagementController.currentSelectedUser.value.role ==
-                                                //                               "" ||
-                                                //                           leadManagementController.currentSelectedUser.value.role ==
-                                                //                               null
-                                                //                       ? "No Role Assigned"
-                                                //                       : leadManagementController
-                                                //                           .currentSelectedUser
-                                                //                           .value
-                                                //                           .role!,
-                                                //                   style: TextStyleUtils
-                                                //                       .mobileheading6
-                                                //                       .copyWith(
-                                                //                           fontWeight:
-                                                //                               FontWeight.w500),
-                                                //                 )
-                                                //               : Text(
-                                                //                   leadManagementController
-                                                //                               .selectedRoleFilterForAddEditUser
-                                                //                               .value ==
-                                                //                           ""
-                                                //                       ? "Select Role"
-                                                //                       : leadManagementController
-                                                //                           .selectedRoleFilterForAddEditUser
-                                                //                           .value,
-                                                //                   style: TextStyleUtils
-                                                //                       .mobileheading6
-                                                //                       .copyWith(
-                                                //                           fontWeight:
-                                                //                               FontWeight.w500),
-                                                //                 ),
-                                                //           Icon(Icons
-                                                //               .arrow_drop_down_outlined)
-                                                //         ],
-                                                //       ),
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            width: width * 0.16,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  "Disposition",
-                                                  style: TextStyleUtils
-                                                      .smallHighlighted
-                                                      .copyWith(
-                                                          color: ColorUtils
-                                                              .SECONDARY_BLACK),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-
-                                                Container(
-
-                                                  child: DropdownButtonFormField<String>(
-                                                    value: leadManagementController.dispositionOptionsforAdd.contains(leadManagementController.currentSelectedUser.value.disposition)
-                                                        ? leadManagementController.currentSelectedUser.value.disposition
-                                                        : null,
-                                                    items: leadManagementController.dispositionOptionsforAdd.map((String value) {
-                                                      return DropdownMenuItem<String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (String? newValue) {
-                                                      leadManagementController.selectDisposition(newValue!);
-
-
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: '',
-                                                      labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          borderSide: const BorderSide(
-                                                              width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.GREY_DOTTED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      errorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      focusedErrorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-
-
-
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            width: width * 0.16,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  "",
-                                                  style: TextStyleUtils
-                                                      .smallHighlighted
-                                                      .copyWith(
-                                                          color: ColorUtils
-                                                              .SECONDARY_BLACK),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-
-                                                Container(
-
-                                                  child: DropdownButtonFormField<String>(
-                                                    value: leadManagementController.assignedToOtpions.value.contains(leadManagementController.currentSelectedUser.value.assignedTo)
-                                                        ? leadManagementController.currentSelectedUser.value.assignedTo
-                                                        : null,
-                                                    items: leadManagementController.assignedToOtpions.value.map((String value) {
-                                                      return DropdownMenuItem<String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (String? newValue) {
-                                                      leadManagementController.selectAssignedToForAddEditUser(newValue!);
-
-
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: '',
-                                                      labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          borderSide: const BorderSide(
-                                                              width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.GREY_DOTTED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      errorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      focusedErrorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-
-                                              ],
-                                            ),
-                                          ),
-                                          Container(
-                                            width: width * 0.16,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  "Type",
-                                                  style: TextStyleUtils
-                                                      .smallHighlighted
-                                                      .copyWith(
-                                                          color: ColorUtils
-                                                              .SECONDARY_BLACK),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Container(
-
-                                                  child: DropdownButtonFormField<String>(
-                                                    value: leadManagementController.typeOptionsforAdd.contains(leadManagementController.currentSelectedUser.value.status)
-                                                        ? leadManagementController.currentSelectedUser.value.status
-                                                        : null,
-                                                    items: leadManagementController.typeOptionsforAdd.map((String value) {
-                                                      return DropdownMenuItem<String>(
-                                                        value: value,
-                                                        child: Text(value),
-                                                      );
-                                                    }).toList(),
-                                                    onChanged: (String? newValue) {
-                                                      leadManagementController.selectType(newValue!);
-
-
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      labelText: '',
-                                                      labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(8),
-                                                          borderSide: const BorderSide(
-                                                              width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.GREY_DOTTED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      errorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                      focusedErrorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2, color: ColorUtils.ERROR_RED),
-                                                        borderRadius: BorderRadius.circular(8),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        "Next Action",
-                                        style: TextStyleUtils.smallHighlighted
-                                            .copyWith(
-                                                color:
-                                                    ColorUtils.SECONDARY_BLACK),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-
-                                      TextFormField(
-                                        controller: leadManagementController
-                                            .nextActionController,
-                                        maxLines: 1, // Allows long te// xt input
-                                        cursorColor:
-                                            ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        decoration: InputDecoration(
-                                            labelStyle: TextStyle(
-                                                color: ColorUtils
-                                                    .GREY_COLOR_PLACEHOLDER),
-                                            alignLabelWithHint: true,
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: const BorderSide(
-                                                    width: 2,
-                                                    color:
-                                                        ColorUtils.GREY_DOTTED)),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  width: 2,
-                                                  color: ColorUtils.GREY_DOTTED),
-                                              //<-- SEE HERE
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  width: 2,
-                                                  color: ColorUtils
-                                                      .ERROR_RED), //<-- SEE HERE
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  width: 2,
-                                                  color: ColorUtils
-                                                      .ERROR_RED), //<-- SEE HERE
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            isDense: false,
-                                            hintStyle:
-                                                TextStyleUtils.smallGreyTextStyle,
-                                            fillColor:
-                                                ColorUtils.WHITE_COLOR_BACKGROUND,
-                                            filled: true,
-                                            errorStyle: TextStyle(
-                                                color: ColorUtils.ERROR_RED,
-                                                fontSize: TextSizeDynamicUtils
-                                                    .dHeight12,
-                                                fontWeight: FontWeight.w400)),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        "Notes",
-                                        style: TextStyleUtils.smallHighlighted
-                                            .copyWith(
-                                                color:
-                                                    ColorUtils.SECONDARY_BLACK),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      TextFormField(
-                                        controller: leadManagementController
-                                            .messageController,
-                                        maxLines: 4, // Allows long te// xt input
-                                        cursorColor:
-                                            ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        decoration: InputDecoration(
-                                            labelStyle: TextStyle(
-                                                color: ColorUtils
-                                                    .GREY_COLOR_PLACEHOLDER),
-                                            alignLabelWithHint: true,
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                borderSide: const BorderSide(
-                                                    width: 2,
-                                                    color:
-                                                        ColorUtils.GREY_DOTTED)),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  width: 2,
-                                                  color: ColorUtils.GREY_DOTTED),
-                                              //<-- SEE HERE
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            errorBorder: OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  width: 2,
-                                                  color: ColorUtils
-                                                      .ERROR_RED), //<-- SEE HERE
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            focusedErrorBorder:
-                                                OutlineInputBorder(
-                                              borderSide: const BorderSide(
-                                                  width: 2,
-                                                  color: ColorUtils
-                                                      .ERROR_RED), //<-- SEE HERE
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                            isDense: false,
-                                            hintStyle:
-                                                TextStyleUtils.smallGreyTextStyle,
-                                            fillColor:
-                                                ColorUtils.WHITE_COLOR_BACKGROUND,
-                                            filled: true,
-                                            errorStyle: TextStyle(
-                                                color: ColorUtils.ERROR_RED,
-                                                fontSize: TextSizeDynamicUtils
-                                                    .dHeight12,
-                                                fontWeight: FontWeight.w400)),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          leadManagementController
-                                                      .selectedModule.value ==
-                                                  "Edit User"
-                                              ? GestureDetector(
-                                                  onTap: () {
-                                                    print("Printing user info:\n"
-                                                        "ID: ${leadManagementController.currentSelectedUser.value.id}\n"
-                                                        "First Name: ${leadManagementController.userNameController!.text}\n"
-                                                        "Email: ${leadManagementController.emailController!.text}\n"
-                                                        "Status: ${leadManagementController.currentSelectedUser.value.status}\n"
-                                                        "Role: ${leadManagementController.currentSelectedUser.value.role}\n"
-                                                        "Last Name: ${leadManagementController.lastNameController!.text}\n"
-                                                        "Phone Number: ${leadManagementController.phoneNumberController!.text}\n"
-                                                        "Message: ${leadManagementController.messageController!.text}"
-                                                        "Assi: ${leadManagementController.currentSelectedUser.value.assignedTo}\n"
-                                                        "Depositon: ${leadManagementController.currentSelectedUser.value.disposition}\n");
-
-                                                    leadManagementController.updateUserIfChanged(
-                                                        id: leadManagementController
-                                                            .currentSelectedUser!
-                                                            .value
-                                                            .id,
-                                                        firstName: leadManagementController
-                                                            .userNameController!
-                                                            .text,
-                                                        email: leadManagementController
-                                                            .emailController!
-                                                            .text,
-                                                        status: leadManagementController
-                                                            .currentSelectedUser
-                                                            .value
-                                                            .status,
-                                                        role: leadManagementController
-                                                            .currentSelectedUser
-                                                            .value
-                                                            .role,
-                                                        lastName: leadManagementController
-                                                            .lastNameController!
-                                                            .text,
-                                                        phoneNumber:
-                                                            leadManagementController
-                                                                .phoneNumberController!
-                                                                .text,
-                                                        assignedTo:
-                                                            leadManagementController
-                                                                .currentSelectedUser
-                                                                .value
-                                                                .assignedTo,
-                                                        depostion: leadManagementController.currentSelectedUser.value.disposition,
-                                                        nextAction: leadManagementController.currentSelectedUser.value.nextAction,
-                                                        notes: leadManagementController.messageController!.text,
-                                                        key: editUserFormKey1);
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(
-                                                        vertical: 8,
-                                                        horizontal: 14),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10),
-                                                        color: ColorUtils
-                                                            .HEADER_GREEN),
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          "Save Changes",
-                                                          style: TextStyleUtils
-                                                              .smallGreyTextStyle
-                                                              .copyWith(
-                                                                  color: ColorUtils
-                                                                      .WHITE_COLOR_BACKGROUND),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                )
-                                              : GestureDetector(
-                                                  onTap: () {
-                                                    leadManagementController
-                                                        .addUser(
-                                                            Lead(
-                                                              firstName:
-                                                                  leadManagementController
-                                                                      .userNameController!
-                                                                      .text,
-                                                              email: leadManagementController
-                                                                  .emailController!
-                                                                  .text,
-                                                              assignedTo:
-                                                                  leadManagementController
-                                                                      .selectedAssignedTo
-                                                                      .value,
-                                                              disposition:
-                                                                  leadManagementController
-                                                                      .selectedDisposition
-                                                                      .value,
-                                                              nextAction:
-                                                                  leadManagementController
-                                                                      .nextActionController!
-                                                                      .text,
-                                                              status:
-                                                                  leadManagementController
-                                                                      .selectedType
-                                                                      .value,
-                                                              role: leadManagementController
-                                                                  .selectedRoleFilterForAddEditUser
-                                                                  .value,
-                                                              lastName:
-                                                                  leadManagementController
-                                                                      .lastNameController!
-                                                                      .text,
-                                                              phoneNumber:
-                                                                  leadManagementController
-                                                                      .phoneNumberController!
-                                                                      .text,
-                                                              notes: leadManagementController
-                                                                  .messageController!
-                                                                  .text,
-                                                            ),
-                                                            addUserFormKey1);
-                                                  },
-                                                  child: Container(
-                                                    padding: EdgeInsets.symmetric(
-                                                        vertical: 10,
-                                                        horizontal: 12),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                10),
-                                                        color: ColorUtils
-                                                            .HEADER_GREEN),
-                                                    child: Text(
-                                                      "Create User",
-                                                      style: TextStyleUtils
-                                                          .smallGreyTextStyle
-                                                          .copyWith(
-                                                              color: ColorUtils
-                                                                  .WHITE_COLOR_BACKGROUND),
-                                                    ),
-                                                  ),
-                                                ),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Container(
-                              height: height * 0.7,
-                              width: width * 0.8,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      leadManagementController
-                                          .pickAndUploadCSV();
-                                    },
-                                    child: Container(
-                                      margin:
-                                          EdgeInsets.only(top: height * 0.05),
-                                      child: DottedBorder(
-                                          color: Colors.grey,
-                                          dashPattern: [6, 3],
-                                          strokeWidth: 1,
-                                          borderType: BorderType.RRect,
-                                          radius: Radius.circular(10),
-                                          child: Container(
-                                            height: height * 0.28,
-                                            width: width * 0.5,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Icon(
-                                                  Icons.cloud_upload,
-                                                  size: 40,
-                                                  color: ColorUtils
-                                                      .GREY_COLOR_PLACEHOLDER,
-                                                ),
-                                                Text(
-                                                  "Drop Your CSV file here",
-                                                  style:
-                                                      TextStyleUtils.heading6,
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text("or click to browse")
-                                              ],
-                                            ),
-                                          )),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  Container(
-                                    width: width * 0.5,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Maximum Entries allowed : 50",
-                                          style: TextStyleUtils
-                                              .smallGreyTextStyleHighlighted
-                                              .copyWith(
-                                                  color:
-                                                      ColorUtils.BRAND_COLOR),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Icon(Icons.summarize,
-                                                size: 14,
-                                                color: ColorUtils.BRAND_COLOR),
-                                            GestureDetector(
-                                                onTap: () {
-                                                  leadManagementController
-                                                      .downloadCsvTemplate();
-                                                },
-                                                child: Text(
-                                                  "Download CSV Template",
-                                                  style: TextStyleUtils
-                                                      .smallGreyTextStyleHighlighted
-                                                      .copyWith(
-                                                          color: ColorUtils
-                                                              .BRAND_COLOR),
-                                                )),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                    child: Container(
-                                      margin: EdgeInsets.only(bottom: 20),
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 40),
-                                      width: width * 0.5,
-                                      decoration: BoxDecoration(
-                                          color: ColorUtils.TRACK_GREY_LIGHT,
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            "Import Summary",
-                                            style:
-                                                TextStyleUtils.mobileheading6,
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          Obx(() {
-                                            final errors =
-                                                leadManagementController
-                                                    .csvErrorEntries;
-
-                                            if (leadManagementController
-                                                .isLoading.value)
-                                              return CircularProgressIndicator(
-                                                color: ColorUtils.BRAND_COLOR,
-                                              );
-                                            if (errors.isEmpty)
-                                              return SizedBox();
-
-                                            return Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                        "🚫 Failed Entries (${errors.length})",
-                                                        style: TextStyleUtils
-                                                            .heading6),
-                                                    Text(
-                                                        " Success Entries (${leadManagementController.successEntries.value})",
-                                                        style: TextStyleUtils
-                                                            .heading6
-                                                            .copyWith(
-                                                                color: ColorUtils
-                                                                    .HEADER_GREEN)),
-                                                  ],
-                                                ),
-                                                SizedBox(height: 10),
-                                                ...errors
-                                                    .map((entry) => Card(
-                                                          color: Colors.red[50],
-                                                          child: ListTile(
-                                                            title: Text(
-                                                                "${entry['firstName']} ${entry['lastName']}"),
-                                                            subtitle: Text(
-                                                                "Reason: ${entry['reason']}"),
-                                                            trailing: Text(
-                                                                entry['email'] ??
-                                                                    'No Email'),
-                                                          ),
-                                                        ))
-                                                    .toList(),
-                                              ],
-                                            );
-                                          })
-                                        ],
-                                      ),
-                                    ),
-                                  )),
-                                ],
-                              ),
-                            );
-                          }
-                        }),
-                      ],
-                    )),
-              ]),
-        ),
-      ),
-    );
-  }
 
   Widget getNumberField(stateHandler, context) {
     var height = MediaQuery.of(context).size.height;
@@ -2080,7 +869,7 @@ class LeadManagementScreen extends StatelessWidget {
               decoration: InputDecoration(
                   filled: true,
                   fillColor: ColorUtils.WHITE_COLOR_BACKGROUND,
-                  focusColor: ColorUtils.WHITE_COLOR_BACKGROUND,
+                  focusColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
                   alignLabelWithHint: true,
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -2092,32 +881,31 @@ class LeadManagementScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   errorBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+                    borderSide: const BorderSide(
+                        width: 2, color: ColorUtils.ERROR_RED),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   focusedErrorBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+                    borderSide: const BorderSide(
+                        width: 2, color: ColorUtils.ERROR_RED),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   floatingLabelStyle: TextStyle(
-                      color: leadManagementController.labelphoneNumber.value ==
-                              true
+                      color: leadManagementController.labelphoneNumber.value == true
                           ? ColorUtils.ERROR_RED
                           : ColorUtils.GREY_COLOR_PLACEHOLDER),
                   isDense: false,
-                  labelText: ''.tr,
                   labelStyle: TextStyleUtils.smallGreyTextStyle,
-                  prefixText: "+91 ", // ✅ Added "+91" prefix
+
+                  prefixText: "+91 ",  // ✅ Added "+91" prefix
                   prefixStyle: TextStyle(
                     color: ColorUtils.GREY_COLOR_PLACEHOLDER,
                     fontWeight: FontWeight.bold,
                   ),
                   prefixIcon: Icon(
                     Icons.phone_iphone,
-                    color: ColorUtils.TRACK_GREY,
-                    size: TextSizeDynamicUtils.dHeight22,
+                    color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                    size: TextSizeDynamicUtils.dHeight20,
                   ),
                   errorStyle: TextStyle(
                       color: ColorUtils.ERROR_RED,
@@ -2134,9 +922,9 @@ class LeadManagementScreen extends StatelessWidget {
                 if (value.isNotEmpty) {
                   stateHandler.value = true;
                   leadManagementController.inactiveColor.value =
-                      value.length == 10
-                          ? ColorUtils.BRAND_COLOR
-                          : ColorUtils.BRAND_COLOR;
+                  value.length == 10
+                      ? ColorUtils.BRAND_COLOR
+                      : ColorUtils.BRAND_COLOR;
                 } else {
                   stateHandler.value = false;
                 }
@@ -2152,7 +940,6 @@ class LeadManagementScreen extends StatelessWidget {
             style: TextStyle(color: ColorUtils.GREY_COLOR_PLACEHOLDER),
             cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
             decoration: InputDecoration(
-                fillColor: ColorUtils.WHITE_COLOR_BACKGROUND,
                 filled: true,
                 focusColor: ColorUtils.WHITE_COLOR_BACKGROUND,
                 alignLabelWithHint: true,
@@ -2161,29 +948,27 @@ class LeadManagementScreen extends StatelessWidget {
                     borderSide: const BorderSide(
                         width: 2, color: ColorUtils.GREY_DOTTED)),
                 enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(width: 2, color: ColorUtils.GREY_DOTTED),
+                  borderSide: const BorderSide(
+                      width: 2, color: ColorUtils.GREY_DOTTED),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 errorBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+                  borderSide: const BorderSide(
+                      width: 2, color: ColorUtils.ERROR_RED),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedErrorBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+                  borderSide: const BorderSide(
+                      width: 2, color: ColorUtils.ERROR_RED),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 isDense: false,
-                labelText: ''.tr,
                 labelStyle: TextStyleUtils.smallGreyTextStyle,
                 floatingLabelStyle: TextStyle(
-                    color:
-                        leadManagementController.labelphoneNumber.value == true
-                            ? ColorUtils.ERROR_RED
-                            : ColorUtils.GREY_COLOR_PLACEHOLDER),
-                prefixText: "+91 ", // ✅ Added "+91" prefix here too
+                    color: leadManagementController.labelphoneNumber.value == true
+                        ? ColorUtils.ERROR_RED
+                        : ColorUtils.GREY_COLOR_PLACEHOLDER),
+                prefixText: "+91 ",  // ✅ Added "+91" prefix here too
                 prefixStyle: TextStyle(
                   color: ColorUtils.GREY_COLOR_PLACEHOLDER,
                   fontWeight: FontWeight.bold,
@@ -2208,9 +993,9 @@ class LeadManagementScreen extends StatelessWidget {
               if (value.isNotEmpty) {
                 stateHandler.value = true;
                 leadManagementController.inactiveColor.value =
-                    value.length == 10
-                        ? ColorUtils.BRAND_COLOR
-                        : ColorUtils.BRAND_COLOR;
+                value.length == 10
+                    ? ColorUtils.BRAND_COLOR
+                    : ColorUtils.BRAND_COLOR;
               } else {
                 stateHandler.value = false;
               }
@@ -2224,1218 +1009,6 @@ class LeadManagementScreen extends StatelessWidget {
     });
   }
 
-  Widget viewUser() {
-    var width = MediaQuery.of(Get.context!).size.width;
-    var height = MediaQuery.of(Get.context!).size.height;
-    return Expanded(
-      child: Container(
-          color: ColorUtils.TRACK_GREY_LIGHT,
-          child: Obx(() {
-            if (leadManagementController.isLoading.value) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            return SingleChildScrollView(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                leadManagementController.selectedModule.value =
-                                    "User";
-                              },
-                              child: Text(
-                                "Lead Management",
-                                style: TextStyleUtils.mobileheading6
-                                    .copyWith(fontWeight: FontWeight.w400),
-                              )),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Icon(
-                            Icons.navigate_next,
-                            color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            leadManagementController.selectedModule.value ==
-                                    "View User"
-                                ? "View "
-                                : "Edit ",
-                            style: TextStyleUtils.mobileheading6.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: ColorUtils.GREY_COLOR_PLACEHOLDER),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                        width: width * 0.8,
-                        margin:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              color: ColorUtils.GREY_DOTTED,
-                              width: 1,
-                            )),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 25, horizontal: 25),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          leadManagementController
-                                                          .currentSelectedUser
-                                                          .value
-                                                          .profilePic ==
-                                                      "" ||
-                                                  leadManagementController
-                                                          .currentSelectedUser
-                                                          .value
-                                                          .profilePic ==
-                                                      null
-                                              ? Container(
-                                                  padding: EdgeInsets.all(30),
-                                                  decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: ColorUtils
-                                                          .GREY_DOTTED),
-                                                  child: Icon(
-                                                    Icons.person,
-                                                    color: ColorUtils
-                                                        .GREY_COLOR_PLACEHOLDER,
-                                                    size: 30,
-                                                  ),
-                                                )
-                                              : Container(
-                                                  clipBehavior: Clip.hardEdge,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  child: Image.network(
-                                                    leadManagementController
-                                                        .currentSelectedUser
-                                                        .value
-                                                        .profilePic!,
-                                                    fit: BoxFit.contain,
-                                                    height: 100,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      return Icon(Icons.error);
-                                                    },
-                                                  ),
-                                                ),
-                                          SizedBox(
-                                            width: 12,
-                                          ),
-                                          Container(
-                                            height: 80,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                    "${leadManagementController.currentSelectedUser.value.firstName == "" || leadManagementController.currentSelectedUser.value.firstName == null ? "" : leadManagementController.currentSelectedUser.value.firstName!} " +
-                                                        "${leadManagementController.currentSelectedUser.value.lastName == "" || leadManagementController.currentSelectedUser.value.lastName == null ? "" : leadManagementController.currentSelectedUser.value.lastName!} ",
-                                                    style: TextStyleUtils
-                                                        .heading5),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                    "User Id : ${leadManagementController.currentSelectedUser.value.id == "" ? "" : leadManagementController.currentSelectedUser.value.id!}",
-                                                    style: TextStyleUtils
-                                                        .smallGreyTextStyleHighlighted
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500))
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Container(
-                                        height: 80,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            vertical: 6,
-                                                            horizontal: 10),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                        color: leadManagementController
-                                                            .getStatusColor(
-                                                                "${leadManagementController.currentSelectedUser.value.status == "" || leadManagementController.currentSelectedUser.value.status == null ? "" : leadManagementController.currentSelectedUser.value.status!}")),
-                                                    child: Row(
-                                                      children: [
-                                                        Container(
-                                                          height: 10,
-                                                          width: 10,
-                                                          decoration: BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              color: leadManagementController
-                                                                  .getStatusColor(
-                                                                      "${leadManagementController.currentSelectedUser.value.status == "" || leadManagementController.currentSelectedUser.value.status == null ? "" : leadManagementController.currentSelectedUser.value.status!}")),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 6,
-                                                        ),
-                                                        Text(
-                                                          "${leadManagementController.currentSelectedUser.value.status == "" || leadManagementController.currentSelectedUser.value.status == null ? "No Status" : leadManagementController.currentSelectedUser.value.status!}",
-                                                          style: TextStyleUtils
-                                                              .smallGreyTextStyleHighlighted
-                                                              .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
-                                                                  color: ColorUtils
-                                                                      .SECONDARY_BLACK),
-                                                        ),
-                                                      ],
-                                                    ))),
-                                            SizedBox(
-                                              width: 12,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () async {
-                                                leadManagementController
-                                                    .selectedModule
-                                                    .value = "Edit User";
-
-                                                leadManagementController
-                                                        .currentSelectedUser
-                                                        .value =
-                                                    (await leadManagementController
-                                                        .getUserById(
-                                                            leadManagementController
-                                                                .currentSelectedUser
-                                                                .value
-                                                                .id!))!;
-
-                                                leadManagementController
-                                                        .originalUser.value =
-                                                    leadManagementController
-                                                        .currentSelectedUser
-                                                        .value;
-                                                leadManagementController.nextActionController=TextEditingController();
-
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8,
-                                                    horizontal: 14),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: ColorUtils
-                                                        .HEADER_GREEN),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .mode_edit_outline_outlined,
-                                                      size: 18,
-                                                      color: ColorUtils
-                                                          .WHITE_COLOR_BACKGROUND,
-                                                    ),
-                                                    SizedBox(
-                                                      width: 6,
-                                                    ),
-                                                    Text(
-                                                      "Edit ",
-                                                      style: TextStyleUtils
-                                                          .smallGreyTextStyle
-                                                          .copyWith(
-                                                              color: ColorUtils
-                                                                  .WHITE_COLOR_BACKGROUND),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 25,
-                                  ),
-                                  Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-
-
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: width * 0.34,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Personal Information",
-                                                    style:
-                                                        TextStyleUtils.heading6,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Container(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              "Full Name",
-                                                              style: TextStyleUtils
-                                                                  .smallHighlighted
-                                                                  .copyWith(
-                                                                      color: ColorUtils
-                                                                          .SECONDARY_BLACK),
-                                                            ),
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
-                                                            Container(
-                                                              width:
-                                                                  width * 0.34,
-                                                              child:
-                                                                  CustomTextFieldV2WithWhite(
-                                                                stateHandler:
-                                                                    leadManagementController
-                                                                        .nameStateHandler,
-                                                                labela: leadManagementController
-                                                                    .labeluserName,
-                                                                label: ''.tr,
-                                                                controller:
-                                                                    leadManagementController
-                                                                        .userNameController,
-                                                                inactiveColor:
-                                                                    leadManagementController
-                                                                        .inactiveColor,
-                                                                validator:
-                                                                    leadManagementController
-                                                                        .validatename,
-                                                                // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 12,
-                                                  ),
-                                                  Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "Email Address",
-                                                        style: TextStyleUtils
-                                                            .smallHighlighted
-                                                            .copyWith(
-                                                                color: ColorUtils
-                                                                    .SECONDARY_BLACK),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Container(
-                                                        width: width * 0.72,
-                                                        child:
-                                                            CustomTextFieldV2WithWhite(
-                                                          stateHandler:
-                                                              leadManagementController
-                                                                  .emailStateHandler,
-                                                          labela:
-                                                              leadManagementController
-                                                                  .labelemail,
-                                                          label: ''.tr,
-                                                          controller:
-                                                              leadManagementController
-                                                                  .emailController,
-                                                          inactiveColor:
-                                                              leadManagementController
-                                                                  .inactiveColor,
-                                                          validator:
-                                                              leadManagementController
-                                                                  .validatemail,
-                                                          icon: Icon(
-                                                            Icons.email,
-                                                            color: ColorUtils
-                                                                .TRACK_GREY,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 12,
-                                                  ),
-                                                  Text(
-                                                    "Phone Number",
-                                                    style: TextStyleUtils
-                                                        .smallHighlighted
-                                                        .copyWith(
-                                                            color: ColorUtils
-                                                                .SECONDARY_BLACK),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  getNumberField(
-                                                      leadManagementController
-                                                          .isPhoneEnabled,
-                                                      Get.context!),
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              width: width * 0.34,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Account Information",
-                                                    style:
-                                                        TextStyleUtils.heading6,
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Container(
-                                                    width: width * 0.34,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "Role",
-                                                          style: TextStyleUtils
-                                                              .smallHighlighted
-                                                              .copyWith(
-                                                                  color: ColorUtils
-                                                                      .SECONDARY_BLACK),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Obx(
-                                                          () => GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          9,
-                                                                      horizontal:
-                                                                          12),
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8),
-                                                                  border: Border.all(
-                                                                      color: ColorUtils
-                                                                          .GREY_DOTTED)),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                                                    leadManagementController.currentSelectedUser.value.role ==
-                                                                                "" ||
-                                                                            leadManagementController.currentSelectedUser.value.role ==
-                                                                                null
-                                                                        ? "No Role Assigned"
-                                                                        : leadManagementController
-                                                                            .currentSelectedUser
-                                                                            .value
-                                                                            .role!,
-                                                                    style: TextStyleUtils
-                                                                        .mobileheading6
-                                                                        .copyWith(
-                                                                            fontWeight:
-                                                                                FontWeight.w500),
-                                                                  ),
-                                                                  // Icon(Icons
-                                                                  //     .arrow_drop_down_outlined)
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Container(
-                                                    width: width * 0.34,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "Assigned To",
-                                                          style: TextStyleUtils
-                                                              .smallHighlighted
-                                                              .copyWith(
-                                                                  color: ColorUtils
-                                                                      .SECONDARY_BLACK),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Obx(
-                                                          () => GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          9,
-                                                                      horizontal:
-                                                                          12),
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8),
-                                                                  border: Border.all(
-                                                                      color: ColorUtils
-                                                                          .GREY_DOTTED)),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                                                    leadManagementController.currentSelectedUser.value.assignedTo ==
-                                                                                "" ||
-                                                                            leadManagementController.currentSelectedUser.value.assignedTo ==
-                                                                                null
-                                                                        ? "Not Assigned"
-                                                                        : leadManagementController
-                                                                            .currentSelectedUser
-                                                                            .value
-                                                                            .assignedTo!,
-                                                                    style: TextStyleUtils
-                                                                        .mobileheading6
-                                                                        .copyWith(
-                                                                            fontWeight:
-                                                                                FontWeight.w500),
-                                                                  ),
-                                                                  // Icon(Icons
-                                                                  //     .arrow_drop_down_outlined)
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-
-                                                  SizedBox(
-                                                    height: 20,
-                                                  ),
-                                                  Container(
-                                                    width: width * 0.34,
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .start,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Text(
-                                                          "Deposition ",
-                                                          style: TextStyleUtils
-                                                              .smallHighlighted
-                                                              .copyWith(
-                                                                  color: ColorUtils
-                                                                      .SECONDARY_BLACK),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Obx(
-                                                          () => GestureDetector(
-                                                            onTap: () {},
-                                                            child: Container(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      vertical:
-                                                                          9,
-                                                                      horizontal:
-                                                                          12),
-                                                              decoration: BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              8),
-                                                                  border: Border.all(
-                                                                      color: ColorUtils
-                                                                          .GREY_DOTTED)),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Text(
-                                                                    leadManagementController.currentSelectedUser.value.disposition ==
-                                                                                "" ||
-                                                                            leadManagementController.currentSelectedUser.value.disposition ==
-                                                                                null
-                                                                        ? "Not Assigned"
-                                                                        : leadManagementController
-                                                                            .currentSelectedUser
-                                                                            .value
-                                                                            .disposition!,
-                                                                    style: TextStyleUtils
-                                                                        .mobileheading6
-                                                                        .copyWith(
-                                                                            fontWeight:
-                                                                                FontWeight.w500),
-                                                                  ),
-                                                                  // Icon(Icons
-                                                                  //     .arrow_drop_down_outlined)
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  // Text("Registration Date",
-                                                  //   style: TextStyleUtils
-                                                  //       .smallHighlighted.copyWith(
-                                                  //       color: ColorUtils
-                                                  //           .SECONDARY_BLACK),),
-                                                  // SizedBox(height: 6,),
-                                                  // Text("${(leadManagementController.currentSelectedUser.value.registerDate==""||leadManagementController.currentSelectedUser.value.registerDate==null?"No Data Logged":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.registerDate))!} ",
-                                                  //   style: TextStyleUtils
-                                                  //       .smallHighlighted.copyWith(
-                                                  //       fontWeight: FontWeight
-                                                  //           .w500),),
-                                                  //
-                                                  // SizedBox(height: 12,),
-                                                  //
-                                                  // Text("Last Login",
-                                                  //   style: TextStyleUtils
-                                                  //       .smallHighlighted.copyWith(
-                                                  //       color: ColorUtils
-                                                  //           .SECONDARY_BLACK),),
-                                                  // SizedBox(height: 6,),
-                                                  //
-                                                  // Text("${(leadManagementController.currentSelectedUser.value.lastLogin==""||leadManagementController.currentSelectedUser.value.lastLogin==null?"No Data Logged":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.lastLogin))!} ",
-                                                  //   style: TextStyleUtils
-                                                  //       .smallHighlighted.copyWith(
-                                                  //       fontWeight: FontWeight
-                                                  //           .w500),),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 25, horizontal: 25),
-                              decoration: BoxDecoration(
-                                  color: ColorUtils.TRACK_GREY_LIGHT,
-                                  border: Border(
-                                      top: BorderSide(
-                                          color: ColorUtils.GREY_DOTTED))),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Last updated: ${(leadManagementController.currentSelectedUser.value.updatedAt == "" || leadManagementController.currentSelectedUser.value.updatedAt == null ? "No Data Logged" : leadManagementController.currentSelectedUser.value.updatedAt)!}",
-                                    style: TextStyleUtils
-                                        .smallGreyTextStyleHighlighted
-                                        .copyWith(fontWeight: FontWeight.w500),
-                                  ),
-
-                                  // Row(
-                                  //   children: [
-                                  //     Container(
-                                  //       child: Row(
-                                  //         mainAxisAlignment: MainAxisAlignment.start,
-                                  //         crossAxisAlignment: CrossAxisAlignment
-                                  //             .center,
-                                  //         children: [
-                                  //
-                                  //
-                                  //           Container(
-                                  //             padding: EdgeInsets.symmetric(
-                                  //                 vertical: 8, horizontal: 14),
-                                  //             decoration: BoxDecoration(
-                                  //                 border: Border.all(
-                                  //                     color: ColorUtils.GREY_DOTTED),
-                                  //                 borderRadius: BorderRadius.circular(
-                                  //                     10),
-                                  //
-                                  //                 color: ColorUtils
-                                  //                     .WHITE_COLOR_BACKGROUND
-                                  //             ),
-                                  //             child: Row(
-                                  //               children: [
-                                  //                 Text("Cancel", style: TextStyleUtils
-                                  //                     .smallGreyTextStyle.copyWith(
-                                  //                     color: ColorUtils
-                                  //                         .SECONDARY_BLACK),),
-                                  //               ],
-                                  //             ),
-                                  //           ),
-                                  //           SizedBox(width: 12,),
-                                  //           Container(
-                                  //             padding: EdgeInsets.symmetric(
-                                  //                 vertical: 8, horizontal: 14),
-                                  //             decoration: BoxDecoration(
-                                  //                 borderRadius: BorderRadius.circular(
-                                  //                     10),
-                                  //
-                                  //                 color: ColorUtils.HEADER_GREEN
-                                  //             ),
-                                  //             child: Row(
-                                  //               children: [
-                                  //                 Text("Save Changes",
-                                  //                   style: TextStyleUtils
-                                  //                       .smallGreyTextStyle.copyWith(
-                                  //                       color: ColorUtils
-                                  //                           .WHITE_COLOR_BACKGROUND),),
-                                  //               ],
-                                  //             ),
-                                  //           ),
-                                  //         ],
-                                  //
-                                  //       ),
-                                  //     )
-                                  //
-                                  //   ],
-                                  // )
-                                ],
-                              ),
-                            )
-                          ],
-                        )),
-                    SizedBox(
-                      height: 28,
-                    ),
-                    Container(
-                        width: width * 0.8,
-                        margin:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              color: ColorUtils.GREY_DOTTED,
-                              width: 1,
-                            )),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 25, horizontal: 25),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Administrative Controls",
-                                          style: TextStyleUtils.heading6,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              width: width,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 25, horizontal: 25),
-                              decoration: BoxDecoration(
-                                  border: Border(
-                                      top: BorderSide(
-                                          color: ColorUtils.GREY_DOTTED))),
-                              child: Container(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Account Status",
-                                              style: TextStyleUtils
-                                                  .smallHighlighted
-                                                  .copyWith(
-                                                      color: ColorUtils
-                                                          .SECONDARY_BLACK),
-                                            ),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            Text(
-                                              "Temporarily disable user access ",
-                                              style: TextStyleUtils
-                                                  .smallHighlighted
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
-                                        Obx(() {
-                                          leadManagementController
-                                                          .currentSelectedUser
-                                                          .value
-                                                          .status ==
-                                                      "Locked" ||
-                                                  leadManagementController
-                                                          .currentSelectedUser
-                                                          .value
-                                                          .status ==
-                                                      null ||
-                                                  leadManagementController
-                                                          .currentSelectedUser
-                                                          .value
-                                                          .status ==
-                                                      ""
-                                              ? leadManagementController
-                                                  .isOn.value = false
-                                              : leadManagementController
-                                                  .isOn.value = true;
-                                          return GestureDetector(
-                                            onTap:
-                                                leadManagementController.toggle,
-                                            child: AnimatedContainer(
-                                              duration:
-                                                  Duration(milliseconds: 200),
-                                              width: 48,
-                                              height: 24,
-                                              padding: EdgeInsets.all(3),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
-                                                color: leadManagementController
-                                                        .isOn.value
-                                                    ? Colors.green
-                                                    : Colors.grey.shade300,
-                                              ),
-                                              child: AnimatedAlign(
-                                                alignment:
-                                                    leadManagementController
-                                                            .isOn.value
-                                                        ? Alignment.centerRight
-                                                        : Alignment.centerLeft,
-                                                duration:
-                                                    Duration(milliseconds: 200),
-                                                child: Container(
-                                                  width: 22,
-                                                  height: 22,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        })
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 25,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Delete Account",
-                                              style: TextStyleUtils
-                                                  .smallHighlighted
-                                                  .copyWith(
-                                                      color: ColorUtils
-                                                          .SECONDARY_BLACK),
-                                            ),
-                                            SizedBox(
-                                              height: 6,
-                                            ),
-                                            Text(
-                                              "Permanently delete this user and all user data",
-                                              style: TextStyleUtils
-                                                  .smallHighlighted
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            showDeleteUserDialog(
-                                                Get.context!,
-                                                leadManagementController
-                                                    .currentSelectedUser
-                                                    .value
-                                                    .id!);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 8, horizontal: 14),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                color: ColorUtils
-                                                    .ORANGE_COLOR_DARK),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.delete,
-                                                  size: 18,
-                                                  color: ColorUtils
-                                                      .WHITE_COLOR_BACKGROUND,
-                                                ),
-                                                SizedBox(
-                                                  width: 6,
-                                                ),
-                                                Text(
-                                                  "Delete User",
-                                                  style: TextStyleUtils
-                                                      .smallGreyTextStyle
-                                                      .copyWith(
-                                                          color: ColorUtils
-                                                              .WHITE_COLOR_BACKGROUND),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        )),
-                    SizedBox(
-                      height: 28,
-                    ),
-
-                    Container(
-                        width: width * 0.8,
-                        margin:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              color: ColorUtils.GREY_DOTTED,
-                              width: 1,
-                            )),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 25, horizontal: 25),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width:width,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Remarks",
-                                          style: TextStyleUtils.heading6,
-                                        ),
-                                        Form(
-                                          key: nextActionKey,
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                width:width*0.3,
-                                                child: TextFormField(
-                                                  controller: leadManagementController
-                                                      .nextActionController,
-                                                  maxLines: 1, // Allows long te// xt input
-                                                  cursorColor:
-                                                  ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                                  decoration: InputDecoration(
-                                                      labelStyle: TextStyle(
-                                                          color: ColorUtils
-                                                              .GREY_COLOR_PLACEHOLDER),
-                                                      alignLabelWithHint: true,
-                                                      focusedBorder: OutlineInputBorder(
-                                                          borderRadius:
-                                                          BorderRadius.circular(8),
-                                                          borderSide: const BorderSide(
-                                                              width: 2,
-                                                              color:
-                                                              ColorUtils.GREY_DOTTED)),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2,
-                                                            color: ColorUtils.GREY_DOTTED),
-                                                        //<-- SEE HERE
-                                                        borderRadius:
-                                                        BorderRadius.circular(8),
-                                                      ),
-                                                      errorBorder: OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2,
-                                                            color: ColorUtils
-                                                                .ERROR_RED), //<-- SEE HERE
-                                                        borderRadius:
-                                                        BorderRadius.circular(8),
-                                                      ),
-                                                      focusedErrorBorder:
-                                                      OutlineInputBorder(
-                                                        borderSide: const BorderSide(
-                                                            width: 2,
-                                                            color: ColorUtils
-                                                                .ERROR_RED), //<-- SEE HERE
-                                                        borderRadius:
-                                                        BorderRadius.circular(8),
-                                                      ),
-                                                      isDense: false,
-                                                      hintStyle:
-                                                      TextStyleUtils.smallGreyTextStyle,
-                                                      fillColor:
-                                                      ColorUtils.WHITE_COLOR_BACKGROUND,
-                                                      filled: true,
-                                                      errorStyle: TextStyle(
-                                                          color: ColorUtils.ERROR_RED,
-                                                          fontSize: TextSizeDynamicUtils
-                                                              .dHeight12,
-                                                          fontWeight: FontWeight.w400)),
-                                                    validator: (s){
-                                                    if(s==""||s!.length<5||s==null){
-                                                      return "Please enter valid action";
-                                                    }
-
-                                                    return null;
-                                                    },
-                                                ),
-                                              ),
-
-                                              SizedBox(width: 10),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  leadManagementController.addNextAction(
-                                                    key:nextActionKey,
-                                                    date: DateTime.now(),
-                                                    actionText: leadManagementController.nextActionController!.text.trim(),
-                                                    userId: leadManagementController.currentSelectedUser.value.id!,
-                                                  );
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 14),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(10),
-                                                      color: ColorUtils.HEADER_GREEN),
-                                                  child: Row(
-                                                    children: [
-
-                                                      Text(
-                                                        "Add",
-                                                        style: TextStyleUtils.smallGreyTextStyle
-                                                            .copyWith(color: ColorUtils.WHITE_COLOR_BACKGROUND),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-
-
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: 24,),
-                                  Obx(() {
-                                    final actions = leadManagementController.flatActionsList.value;
-
-                                    if (actions.isEmpty) {
-                                      return Center(child: Text("No actions added yet."));
-                                    }
-
-                                    if (leadManagementController.isLoading.value) {
-                                      return Center(child: CircularProgressIndicator());
-                                    }
-
-                                    return ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: actions.length,
-                                      itemBuilder: (context, index) {
-                                        final action = actions[index];
-                                        final date = action['date'];
-                                        final time = action['time'];
-                                        final text = action['text'];
-
-                                        return Card(
-                                          margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                          child: ListTile(
-                                            title: Text(text ?? '',style: TextStyleUtils.heading6,),
-                                            trailing: Text("${date}",style: TextStyleUtils.mobileheading6,),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  })
-
-
-                                ],
-                              ),
-                            ),
-                          ],
-                        )),
-                    SizedBox(
-                      height: 28,
-                    ),
-
-
-                  ]),
-            );
-          })),
-    );
-  }
 
   void showReassigneDialog(BuildContext context, String userId) {
     if (userId == "Multi") {
@@ -3608,7 +1181,68 @@ class LeadManagementScreen extends StatelessWidget {
     }
   }
 
-  void showDeleteUserDialog(BuildContext context, String userId) {
+
+  Widget headingCards(
+      {width,
+      height,
+      icon,
+      heading,
+      subheading,
+      color,
+      iconColor,
+      ontap,
+      bgColor}) {
+    return GestureDetector(
+      onTap: ontap,
+      child: Container(
+        width: width * 0.18,
+        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+        decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.all(Radius.circular(8)),
+            border: Border.all(
+              color: ColorUtils.GREY_DOTTED,
+              width: 1,
+            )),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+                child: Icon(
+                  icon,
+                  size: 20,
+                  color: iconColor,
+                )),
+            SizedBox(
+              width: 16,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  heading,
+                  style: TextStyleUtils.mobileheading6
+                      .copyWith(fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  subheading,
+                  style: TextStyleUtils.mobileheading3
+                      .copyWith(color: ColorUtils.PURPLE_BRAND),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+
+   void showDeleteUserDialog(BuildContext context, String userId) {
     Get.defaultDialog(
       contentPadding: EdgeInsets.only(left: 32, right: 32, top: 32, bottom: 40),
       title: "Confirm Deletion",
@@ -3697,62 +1331,6 @@ class LeadManagementScreen extends StatelessWidget {
     );
   }
 
-  Widget headingCards(
-      {width,
-      height,
-      icon,
-      heading,
-      subheading,
-      color,
-      iconColor,
-      ontap,
-      bgColor}) {
-    return GestureDetector(
-      onTap: ontap,
-      child: Container(
-        width: width * 0.18,
-        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-        decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            border: Border.all(
-              color: ColorUtils.GREY_DOTTED,
-              width: 1,
-            )),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-                child: Icon(
-                  icon,
-                  size: 20,
-                  color: iconColor,
-                )),
-            SizedBox(
-              width: 16,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  heading,
-                  style: TextStyleUtils.mobileheading6
-                      .copyWith(fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  subheading,
-                  style: TextStyleUtils.mobileheading3
-                      .copyWith(color: ColorUtils.PURPLE_BRAND),
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
 }
+
+

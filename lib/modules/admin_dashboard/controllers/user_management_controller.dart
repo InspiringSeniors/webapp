@@ -127,7 +127,7 @@ class UserManagementController extends GetxController
     fetchUsers();
 
    var args= Get.arguments;
-   print(args[0]);
+   // print(args[0]);
 
     currentLoggedInUser.value=args[0];
 
