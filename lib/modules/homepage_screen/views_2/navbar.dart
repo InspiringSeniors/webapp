@@ -30,8 +30,8 @@ import '../controllers/homepage_controller.dart';
 import '../views/homepage_screen.dart';
 
 class NavigationBar2 extends StatelessWidget {
-  const NavigationBar2({super.key});
 
+  HomepageController homepageController=Get.find();
   @override
   Widget build(BuildContext context) {
 
@@ -55,6 +55,12 @@ class NavigationBar2 extends StatelessWidget {
           children: [
             GestureDetector(
                 onTap: () {
+
+
+
+                  // homepageController.sendWhatsApp("919650373038");
+
+
                   Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
                 },
                 child: Container(child: Image.asset(

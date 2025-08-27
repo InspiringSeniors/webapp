@@ -84,6 +84,35 @@ class Validators {
 
 class Utils{
 
+  static String generateMemberId(String fullName, String mobile) {
+    // 1. Trim leading/trailing spaces
+    fullName = fullName.trim();
+
+    // 2. Get first name (till first space)
+    String firstName = fullName.split(" ").first;
+
+    // 3. Remove special characters like "."
+    firstName = firstName.replaceAll(RegExp(r'[^a-zA-Z]'), "");
+
+    // 4. If length < 4, prepend "O" until it reaches 4
+    while (firstName.length < 4) {
+      firstName = "O" + firstName;
+    }
+
+    // 5. Take only first 4 letters, convert to lowercase
+    String firstFour = firstName.substring(0, 4).toLowerCase();
+
+// Keep digits only
+    final cleaned = mobile.replaceAll(RegExp(r'\D'), '');
+
+// Last 4 digits (or fewer if shorter)
+    final String lastFour = cleaned.length <= 4
+        ? cleaned
+        : cleaned.substring(cleaned.length - 4);    // 6. Append mobile number
+    return "$firstFour$lastFour";
+  }
+
+
   static openWhatsappForChatSupport() async {
     String urle =
         "https://wa.me/919315274243/?text=Hi!%20I'm%20interested%20to%20know%20more.";

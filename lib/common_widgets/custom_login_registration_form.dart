@@ -126,15 +126,47 @@ class FormClass {
 
                           var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
 
-                          if(homepageController.isCheckNewUser.value==true){
+                          if (homepageController.isCheckNewUser.value == true) {
+                            // Completely new user → show registration form
                             Get.back();
+                            FormClass().showRegisterFirst(Get.context!);
 
-                            FormClass().showRegisterFirst(Get.context!) ;
+                          } else if (homepageController.isFormFilled.value == false) {
+                            // User exists (lead or converted) but has NOT filled form yet
+                            Get.back();
+                            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                            var userId = sharedPreferences.getString("userId");
 
+                            Get.snackbar(
+                              duration: Duration(seconds: 5),
+                              margin: EdgeInsets.symmetric(
+                                vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+                                horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+                              ),
+                              "Welcome Again",
+                              "Please fill the form to proceed further",
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
 
+                            Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN, arguments: [userId]);
 
+                          } else if (homepageController.isConvertedUser.value == false) {
+                            Get.back();
+                            // Lead user who filled form but is not yet in users
+                            Get.snackbar(
+                              duration: Duration(seconds: 5),
 
-                          }else {
+                              margin: EdgeInsets.symmetric(
+                                vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+                                horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+                              ),
+                              "Welcome Again",
+                              "Your form is under process. Please wait for confirmation.",
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
+
+                          } else {
+                            // Fully registered + converted user → allow login
                             await homepageController.submitFormforLogin();
                             homepageController.didntReciveOtp.value = false;
                             homepageController.isOtpVerified.value = false;
@@ -143,6 +175,9 @@ class FormClass {
                                 ? () {}
                                 : showOtpVerification("Login");
                           }
+
+
+
 
                         },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Login",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
                       ),
@@ -222,16 +257,49 @@ class FormClass {
                       child: CustomButtonWithBorder(onpressed: ()async{
 
                         var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
+                        if (homepageController.isCheckNewUser.value == true) {
+                          // Completely new user → show registration form
+                          Get.back();
+                          FormClass().showRegisterFirst(Get.context!);
 
-                        if(homepageController.isCheckNewUser.value==true){
+                        } else if (homepageController.isFormFilled.value == false) {
+                          // User exists (lead or converted) but has NOT filled form yet
+                          Get.back();
+                          SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                          var userId = sharedPreferences.getString("userId");
+
+                          Get.snackbar(
+                            duration: Duration(seconds: 5),
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+                              horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+                            ),
+                            "Welcome Again",
+                            "Please fill the form to proceed further",
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+
+                          Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN, arguments: [userId]);
+
+                        } else if (homepageController.isConvertedUser.value == false) {
                           Get.back();
 
-                            FormClass().showRegisterFirst(Get.context!) ;
+                          // Lead user who filled form but is not yet in users
+                          Get.snackbar(
+                            duration: Duration(seconds: 5),
 
+                            margin: EdgeInsets.symmetric(
+                              vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+                              horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+                            ),
+                            "Welcome Again",
+                            "Your form is under process. Please wait for confirmation.",
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
 
-
-
-                        }else {
+                        } else {
+                          // Fully registered + converted user → allow login
                           await homepageController.submitFormforLogin();
                           homepageController.didntReciveOtp.value = false;
                           homepageController.isOtpVerified.value = false;
@@ -240,6 +308,7 @@ class FormClass {
                               ? () {}
                               : showOtpVerification("Login");
                         }
+
 
                       },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Login",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
                     ),
@@ -330,10 +399,15 @@ class FormClass {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CustomButtonWithBorder(onpressed: (){
+                  CustomButtonWithBorder(onpressed: ()async{
                     Get.back();
-                    showMoreDetailsForm(context) ;// Open More Details Form
-                    // FormClass()._showThankYouDialog(context);
+
+                    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+
+                    var userId=sharedPreferences.getString("userId");
+                    print("user id${userId}");
+
+                    Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN,arguments: [userId]);
 
 
                     // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
@@ -342,18 +416,22 @@ class FormClass {
                   SizedBox(width: isMobile?10:20,),
                   TextButton(
                     onPressed: () async{
+                      Get.back();
+
+                      _showThankYouDialogFinal();
 
 
-                      UserAuthService.to.isLoggedIn=true;
-                      var waiat= await UserAuthService.to.login();
-
-                      print("checkss");
-                      SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-                      var userId= sharedPreferences.getString("userId");
-
-                      print("checkss2 ");
-
-                      Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);                    },
+                      // UserAuthService.to.isLoggedIn=true;
+                      // var waiat= await UserAuthService.to.login();
+                      //
+                      // print("checkss");
+                      // SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                      // var userId= sharedPreferences.getString("userId");
+                      //
+                      // print("checkss2 ");
+                      //
+                      // Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);
+                      },
                     child: Text("Do it later",style: TextStyleUtils.heading5,),
                   ),
 
@@ -514,7 +592,6 @@ class FormClass {
                     width: width*0.2,
                     child: CustomButtonWithBorder(onpressed: (){
 
-                      // FormClass()._showThankYouDialog(context);
 
                       FormClass().showFormDialog(context);
 
@@ -1400,7 +1477,6 @@ class FormClass {
                     SizedBox(height: TextSizeDynamicUtils.dHeight28,),
                     CustomButtonWithBorder(onpressed: ()async{
 
-                      // FormClass()._showThankYouDialog(context);
 
                       Get.back();
 
@@ -1424,7 +1500,6 @@ class FormClass {
                     //   Get.back();
                     //
                     //   await homepageController.submitPreferences();
-                    //   _showThankYouDialogFinal();
                     //   UserAuthService.to.isLoggedIn=true;
                     //
                     //   await UserAuthService.to.login();
@@ -1478,13 +1553,13 @@ class FormClass {
 
 
             padding: EdgeInsets.symmetric(vertical: 20,horizontal: 16),
-            child: Text("Thankyou ! Our team will get back to you shortly",style: TextStyleUtils.heading5,),
+            child: Text("Welcome to Inspiring Seniors Foundation ! Thankyou for being a part of ISF. Our team will get back to you shortly",style: TextStyleUtils.heading5,),
           ):
           Container(
 
 
             padding: EdgeInsets.symmetric(vertical: 30,horizontal: 40),
-            child: Text("Thankyou ! Our team will get to you shortly",style: TextStyleUtils.heading2,),
+            child: Text("Welcome to Inspiring Seniors Foundation ! Thankyou for being a part of ISF. Our team will get to you shortly",style: TextStyleUtils.heading5,),
           ),
         );
       },
@@ -1833,56 +1908,70 @@ class FormClass {
                       width: width,
                       child: CustomButtonWithBorder(onpressed: ()async{
 
-                        // FormClass()._showThankYouDialog(context);
 
 
                         var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
 
-                        if(homepageController.isCheckNewUser.value==false){
-                          Get.back();
-                          showUserExistes(Get.context!);
 
 
-                        }else {
+
+                        final isNew = homepageController.isCheckNewUser.value;        // brand new (not in leads/users)
+                        final isFormFilled = homepageController.isFormFilled.value;   // registration form completed?
+                        final isConverted = homepageController.isConvertedUser.value; // moved from leads -> users
+
+                        if (isNew) {
+                          // Fresh registration: create lead, send OTP for Register
                           await homepageController.submitForm();
+                          homepageController.didntReciveOtp.value = false;
+                          homepageController.isOtpVerified.value = false;
+                          homepageController.OTPColor.value = false;
 
-                          homepageController.didntReciveOtp.value=false;
-                          homepageController.isOtpVerified.value=false;
-                          homepageController.OTPColor.value=false;
+                          homepageController.formLoading.value ? () {} : showOtpVerification("Register");
 
-                          homepageController.formLoading.value?(){}:showOtpVerification("Register");
+                        } else if (!isFormFilled) {
+                          // User exists but has NOT filled form yet -> take them to form
+                          Get.back();
+
+                          final prefs = await SharedPreferences.getInstance();
+                          final userId = prefs.getString("userId");
+
+                          Get.snackbar(
+                            duration: Duration(seconds: 5),
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+                              horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+                            ),
+                            "Welcome Again",
+                            "Please fill the form to proceed further",
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+
+                          if (userId != null) {
+                            Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN, arguments: [userId]);
+                          } else {
+                            // Safety fallback: open blank registration if no stored id
+                            Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN);
+                          }
+
+                        } else if (!isConverted) {
+                          // Form filled but not yet converted to users -> block re-register
+                          Get.back();
+                          // Your existing popup; keep the same method you use elsewhere
+                          showUserExistes(Get.context!); // e.g., message: "Your registration is under review."
+
+                        } else {
+                          // Fully registered user trying to register again -> suggest login instead
+                          Get.back();
+                          showUserExistes(Get.context!); // e.g., message: "You are already registered. Please login."
                         }
+
 
                         // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
                       },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
                     ),
 
 
-                    // CustomButton(onpressed: () async {
-                    //
-                    //
-                    //
-                    //   var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
-                    //
-                    //   if(homepageController.isCheckNewUser.value==false){
-                    //     Get.back();
-                    //     showUserExistes(Get.context!);
-                    //
-                    //
-                    //                       }else {
-                    //     await homepageController.submitForm();
-                    //
-                    //     homepageController.didntReciveOtp.value=false;
-                    //     homepageController.isOtpVerified.value=false;
-                    //     homepageController.OTPColor.value=false;
-                    //
-                    //     homepageController.formLoading.value?(){}:showOtpVerification("Register");
-                    //   }
-                    //
-                    //
-                    //
-                    //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                    // },shadowColor: ColorUtils.BRAND_COLOR,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
 
 
 
@@ -2042,56 +2131,67 @@ class FormClass {
                       width: width,
                       child: CustomButtonWithBorder(onpressed: ()async{
 
-                        // FormClass()._showThankYouDialog(context);
 
 
                         var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
+                        final isNew = homepageController.isCheckNewUser.value;        // brand new (not in leads/users)
+                        final isFormFilled = homepageController.isFormFilled.value;   // registration form completed?
+                        final isConverted = homepageController.isConvertedUser.value; // moved from leads -> users
 
-                        if(homepageController.isCheckNewUser.value==false){
-                          Get.back();
-                          showUserExistes(Get.context!);
-
-
-                        }else {
+                        if (isNew) {
+                          // Fresh registration: create lead, send OTP for Register
                           await homepageController.submitForm();
+                          homepageController.didntReciveOtp.value = false;
+                          homepageController.isOtpVerified.value = false;
+                          homepageController.OTPColor.value = false;
 
-                          homepageController.didntReciveOtp.value=false;
-                          homepageController.isOtpVerified.value=false;
-                          homepageController.OTPColor.value=false;
+                          homepageController.formLoading.value ? () {} : showOtpVerification("Register");
 
-                          homepageController.formLoading.value?(){}:showOtpVerification("Register");
+                        } else if (!isFormFilled) {
+                          // User exists but has NOT filled form yet -> take them to form
+                          Get.back();
+
+                          final prefs = await SharedPreferences.getInstance();
+                          final userId = prefs.getString("userId");
+
+                          Get.snackbar(
+                            duration: Duration(seconds: 5),
+
+                            margin: EdgeInsets.symmetric(
+                              vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+                              horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+                            ),
+                            "Welcome Again",
+                            "Please fill the form to proceed further",
+                            snackPosition: SnackPosition.BOTTOM,
+                          );
+
+                          if (userId != null) {
+                            Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN, arguments: [userId]);
+                          } else {
+                            // Safety fallback: open blank registration if no stored id
+                            Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN);
+                          }
+
+                        } else if (!isConverted) {
+                          // Form filled but not yet converted to users -> block re-register
+                          Get.back();
+                          // Your existing popup; keep the same method you use elsewhere
+                          showUserExistes(Get.context!); // e.g., message: "Your registration is under review."
+
+                        } else {
+                          // Fully registered user trying to register again -> suggest login instead
+                          Get.back();
+                          showUserExistes(Get.context!); // e.g., message: "You are already registered. Please login."
                         }
+
+
 
                         // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
                       },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
                     ),
 
 
-                    // CustomButton(onpressed: () async {
-                    //
-                    //
-                    //
-                    //   var wait=await homepageController.checkForUserRegistrationNumber(homepageController.phoneNumberController!.text);
-                    //
-                    //   if(homepageController.isCheckNewUser.value==false){
-                    //     Get.back();
-                    //     showUserExistes(Get.context!);
-                    //
-                    //
-                    //                       }else {
-                    //     await homepageController.submitForm();
-                    //
-                    //     homepageController.didntReciveOtp.value=false;
-                    //     homepageController.isOtpVerified.value=false;
-                    //     homepageController.OTPColor.value=false;
-                    //
-                    //     homepageController.formLoading.value?(){}:showOtpVerification("Register");
-                    //   }
-                    //
-                    //
-                    //
-                    //   // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                    // },shadowColor: ColorUtils.BRAND_COLOR,fontSize: 16,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Submit",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
 
 
 
@@ -2179,11 +2279,15 @@ class FormClass {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
 
-                  CustomButtonWithBorder(onpressed: (){
+                  CustomButtonWithBorder(onpressed: ()async{
                     Get.back();
-                    showMoreDetailsForm(context) ;// Open More Details Form
-                    // FormClass()._showThankYouDialog(context);
 
+                    SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
+
+                    var userId=sharedPreferences.getString("userId");
+                    print("user id${userId}");
+
+                    Get.toNamed(RoutingNames.MEMBER_REGISTRATION_SCREEN,arguments: [userId]);
 
                     // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
                   },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 10,isHoverGetStarted: false.obs,text: "Continue",borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
@@ -2192,36 +2296,34 @@ class FormClass {
                   SizedBox(width: isMobile?10:20,),
                   TextButton(
                     onPressed: () async{
-                      print("checkss0");
 
                       Get.back();
-                      UserAuthService.to.isLoggedIn=true;
-                      var waiat= await UserAuthService.to.login();
 
-                      print("checkss");
-                      SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
-                      var userId= sharedPreferences.getString("userId");
+                      _showThankYouDialogFinal();
 
-                      print("checkss2 ");
-
-                      Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);
+                      // print("checkss0");
+                      //
+                      // Get.back();
+                      // UserAuthService.to.isLoggedIn=true;
+                      // var waiat= await UserAuthService.to.login();
+                      //
+                      // print("checkss");
+                      // SharedPreferences sharedPreferences=await SharedPreferences.getInstance();
+                      // var userId= sharedPreferences.getString("userId");
+                      //
+                      // print("checkss2 ");
+                      //
+                      // Get.offAllNamed(RoutingNames.USER_DASHBOARD_SCREEN,arguments: userId);
                     },
                     child: Text("Do it later",style: TextStyleUtils.heading5,),
                   ),
-
                 ],
               ),
-
-
-
-
             ],
           ),
         );
       },
     );
   }
-
-
 }
 

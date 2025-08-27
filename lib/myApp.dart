@@ -268,8 +268,8 @@ class _MyAppState extends State<MyApp> {
             name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
             page: () =>  UserManagementScreen(),
             binding: AdminDashboardBindings(),
-            // middlewares:[ AuthMiddleware()
-            // ]
+            middlewares:[ AuthMiddleware()
+            ]
           ),
 
           GetPage(

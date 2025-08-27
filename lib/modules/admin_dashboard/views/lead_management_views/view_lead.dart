@@ -170,6 +170,17 @@ class viewLead extends StatelessWidget {
                                                         .copyWith(
                                                         fontWeight:
                                                         FontWeight
+                                                            .w500)),
+                                                SizedBox(
+                                                  height: 5,
+                                                ),
+                                                Text(
+                                                    "Consent : ${leadManagementController.currentSelectedUser.value.isConsentGiven == null ? false : leadManagementController.currentSelectedUser.value.isConsentGiven!}",
+                                                    style: TextStyleUtils
+                                                        .smallGreyTextStyleHighlighted
+                                                        .copyWith(
+                                                        fontWeight:
+                                                        FontWeight
                                                             .w500))
                                               ],
                                             ),
@@ -182,7 +193,7 @@ class viewLead extends StatelessWidget {
                                         children: [
                                           Row(
                                             children: [
-                                              Text("Registration Date : ${(leadManagementController.currentSelectedUser.value.registerDate==""||leadManagementController.currentSelectedUser.value.registerDate==null?"No Data Logged":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.registerDate))!} ",
+                                              Text("Registration Date : ${(leadManagementController.currentSelectedUser.value.registerDate==""||leadManagementController.currentSelectedUser.value.registerDate==null?"No Data":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.registerDate))!} ",
                                                 style: TextStyleUtils
                                                     .smallHighlighted.copyWith(
                                                     fontWeight: FontWeight
@@ -190,15 +201,7 @@ class viewLead extends StatelessWidget {
 
                                               SizedBox(width: 12,),
 
-                                              Text("Last Active : ${(leadManagementController.currentSelectedUser.value.lastLogin==""||leadManagementController.currentSelectedUser.value.lastLogin==null?"No Data Logged":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.lastLogin))!} ",
-                                                style: TextStyleUtils
-                                                    .smallHighlighted.copyWith(
-                                                    fontWeight: FontWeight
-                                                        .w500),),
-                                              SizedBox(width: 12,),
-
-                                              Text(
-                                                "Last updated: ${(leadManagementController.currentSelectedUser.value.updatedAt == "" || leadManagementController.currentSelectedUser.value.updatedAt == null ? "No Data Logged" : leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.updatedAt))!}",
+                                              Text("Last Active : ${(leadManagementController.currentSelectedUser.value.lastLogin==""||leadManagementController.currentSelectedUser.value.lastLogin==null?"No Data":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.lastLogin))!} ",
                                                 style: TextStyleUtils
                                                     .smallHighlighted.copyWith(
                                                     fontWeight: FontWeight
@@ -206,7 +209,15 @@ class viewLead extends StatelessWidget {
                                               SizedBox(width: 12,),
 
                                               Text(
-                                                "Updated By: ${(leadManagementController.currentSelectedUser.value.updatedAt == "" || leadManagementController.currentSelectedUser.value.updatedAt == null ? "No Data Logged" : leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.updatedAt))!}",
+                                                "Last updated: ${(leadManagementController.currentSelectedUser.value.updatedAt == "" || leadManagementController.currentSelectedUser.value.updatedAt == null ? "No Data" : leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.updatedAt))!}",
+                                                style: TextStyleUtils
+                                                    .smallHighlighted.copyWith(
+                                                    fontWeight: FontWeight
+                                                        .w500),),
+                                              SizedBox(width: 12,),
+
+                                              Text(
+                                                "Updated By: ${(leadManagementController.currentSelectedUser.value.updatedBy == "" || leadManagementController.currentSelectedUser.value.updatedBy == null ? "No Data" : leadManagementController.currentSelectedUser.value.updatedBy)}",
                                                 style: TextStyleUtils
                                                     .smallHighlighted.copyWith(
                                                     fontWeight: FontWeight
@@ -553,7 +564,7 @@ class viewLead extends StatelessWidget {
                                                     .start,
                                                 children: [
                                                   Text(
-                                                    "City/Area".tr,
+                                                    "Alternative Phone Number".tr,
                                                     style: TextStyleUtils
                                                         .mobileheading6
                                                         .copyWith(
@@ -564,10 +575,11 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   textContainer(
-                                                      leadManagementController.currentSelectedUser.value.city
+                                                      ""
                                                   ),
                                                 ],
                                               ),
+
 
 
 
@@ -615,47 +627,7 @@ class viewLead extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                              Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .start,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .start,
-                                                children: [
-                                                  Text(
-                                                    "Pincode".tr,
-                                                    style: TextStyleUtils
-                                                        .mobileheading6
-                                                        .copyWith(
-                                                        color: ColorUtils
-                                                            .SECONDARY_BLACK),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  textContainer(
-                                                      leadManagementController.currentSelectedUser.value.pincode
-                                                  ),
-                                                ],
-                                              ),
 
-
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 16,
-                                        ),
-                                        Container(
-                                          child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment
-                                                .spaceBetween,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .start,
-                                            children: [
                                               Container(
                                                 width:                                                   width * 0.34,
 
@@ -679,7 +651,56 @@ class viewLead extends StatelessWidget {
                                                       height: 5,
                                                     ),
                                                     textContainer(
-                                                       leadManagementController.currentSelectedUser.value.languagePreference==null?"": leadManagementController.currentSelectedUser.value.languagePreference!.join(", ")
+                                                        leadManagementController.currentSelectedUser.value.languagePreference==null?"": leadManagementController.currentSelectedUser.value.languagePreference!.join(", ")
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(
+                                          height: 16,
+                                        ),
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .start,
+                                            children: [
+                                              Container(
+
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .start,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment
+                                                      .start,
+                                                  children: [
+                                                    Text(
+                                                      "Country".tr,
+                                                      style: TextStyleUtils
+                                                          .mobileheading6
+                                                          .copyWith(
+                                                          color: ColorUtils
+                                                              .SECONDARY_BLACK),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Container(
+                                                      width: width*0.16,
+                                                      child: textContainer(
+                                                          leadManagementController.currentSelectedUser.value.languagePreference==null?"": leadManagementController.currentSelectedUser.value.languagePreference!.join(", ")
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -693,7 +714,105 @@ class viewLead extends StatelessWidget {
                                                     .start,
                                                 children: [
                                                   Text(
-                                                    "Alternative Phone Number".tr,
+                                                    "State".tr,
+                                                    style: TextStyleUtils
+                                                        .mobileheading6
+                                                        .copyWith(
+                                                        color: ColorUtils
+                                                            .SECONDARY_BLACK),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Container(
+                                                    width: width*0.16,
+                                                    child: textContainer(
+                                                        leadManagementController.currentSelectedUser.value.state==null?"": leadManagementController.currentSelectedUser.value.state
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .start,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .start,
+                                                children: [
+                                                  Text(
+                                                    "City/Area".tr,
+                                                    style: TextStyleUtils
+                                                        .mobileheading6
+                                                        .copyWith(
+                                                        color: ColorUtils
+                                                            .SECONDARY_BLACK),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Container(
+                                                    width: width*0.16,
+                                                    child: textContainer(
+                                                        leadManagementController.currentSelectedUser.value.city==null?"": leadManagementController.currentSelectedUser.value.city
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .start,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .start,
+                                                children: [
+                                                  Text(
+                                                    "Pincode".tr,
+                                                    style: TextStyleUtils
+                                                        .mobileheading6
+                                                        .copyWith(
+                                                        color: ColorUtils
+                                                            .SECONDARY_BLACK),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Container(
+                                                    width: width*0.16,
+                                                    child: textContainer(
+                                                        leadManagementController.currentSelectedUser.value.pincode==null?"": leadManagementController.currentSelectedUser.value.pincode
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 16,
+                                        ),
+                                        Container(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .spaceBetween,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .start,
+                                            children: [
+                                              Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .start,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment
+                                                    .start,
+                                                children: [
+                                                  Text(
+                                                    "Address".tr,
                                                     style: TextStyleUtils
                                                         .mobileheading6
                                                         .copyWith(
@@ -704,15 +823,17 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   textContainer(
-                                                      ""
+                                                      leadManagementController.currentSelectedUser.value.address
                                                   ),
                                                 ],
                                               ),
 
 
+
                                             ],
                                           ),
                                         ),
+
 
 
                                       ],
@@ -1547,12 +1668,15 @@ class viewLead extends StatelessWidget {
                                         final date = action['date'];
                                         final time = action['time'];
                                         final text = action['text'];
+                                        final updatedBy = action['updatedBy']==null?"":action['updatedBy'];
+
 
                                         return Card(
                                           margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                           child: ListTile(
                                             title: Text(text ?? '',style: TextStyleUtils.heading6,),
-                                            trailing: Text("${date}",style: TextStyleUtils.mobileheading6,),
+
+                                            trailing: Text("${updatedBy} on ${date}",style: TextStyleUtils.mobileheading6,),
                                           ),
                                         );
                                       },
@@ -1822,41 +1946,27 @@ class viewLead extends StatelessWidget {
 
 
 
-  Widget textContainer(text){
-    return      Container(
-      width: width*0.34,
-      padding: EdgeInsets
-          .symmetric(
-          vertical:
-          9,
-          horizontal:
-          12),
+  Widget textContainer( text) {
+    final display = text.isEmpty
+        ? ''
+        : text[0].toUpperCase() + text.substring(1);
+
+    return Container(
+      width: width * 0.34,
+      padding: const EdgeInsets.symmetric(vertical: 9, horizontal: 12),
       decoration: BoxDecoration(
-          borderRadius:
-          BorderRadius
-              .circular(
-              8),
-          border: Border.all(
-              color: ColorUtils
-                  .GREY_DOTTED)),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: ColorUtils.GREY_DOTTED),
+      ),
       child: Row(
-        mainAxisAlignment:
-        MainAxisAlignment
-            .spaceBetween,
-        crossAxisAlignment:
-        CrossAxisAlignment
-            .center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            text,
-            style: TextStyleUtils
-                .mobileheading6
-                .copyWith(
-                fontWeight:
-                FontWeight.w500),
+            display,
+            style: TextStyleUtils.mobileheading6.copyWith(fontWeight: FontWeight.w500),
           ),
-          // Icon(Icons
-          //     .arrow_drop_down_outlined)
+          // Icon(Icons.arrow_drop_down_outlined)
         ],
       ),
     );

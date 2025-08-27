@@ -79,11 +79,11 @@ class LeadManagementController extends GetxController{
 
   final List<String> roleOptions = ['All','Member','Volunteer','Tutor','Young Volunteer', 'Donor',];
   final List<String> typeOptions = ['All','Cold', 'Warm', 'Hot',];
-  final List<String> dispositionOptions = ['All', 'New', 'Follow Up', 'Not Connected','Not Interested','Junk','Interested'];
+  final List<String> dispositionOptions = ['All', 'New', 'Follow Up', 'Not Connected','Not Interested Currently','Junk','Interested'];
   // final List<String> assignedToOptions = ['Shurti', 'Praneta', 'Pragati','Khusbhu',];
   final List<String> roleOptionsForAdd = ['New','Member','Volunteer','Tutor','Young Volunteer', 'Donor',];
   final List<String> typeOptionsforAdd = ['Cold', 'Warm', 'Hot',];
-  final List<String> dispositionOptionsforAdd = [ 'New', 'Follow Up', 'Not Connected','Not Interested','Junk','Interested'];
+  final List<String> dispositionOptionsforAdd = [ 'New', 'Follow Up', 'Not Connected','Not Interested Currently','Junk','Interested'];
 
 
   final List<String> stateOptions = ["Andhra Pradesh",
@@ -281,6 +281,7 @@ class LeadManagementController extends GetxController{
   TextEditingController? countryController = TextEditingController(text: "India");
   TextEditingController? stateController = TextEditingController();
   TextEditingController? areaController = TextEditingController();
+  TextEditingController? addressController = TextEditingController();
 
   TextEditingController? backgroundController = TextEditingController();
 
@@ -808,6 +809,7 @@ class LeadManagementController extends GetxController{
       backgroundController?.text    = (lead.background ?? '').trim();
       messageController?.text       = (lead.message ?? '').trim();
       areaController?.text          = (lead.city ?? '').trim();
+      addressController?.text = (lead.address ?? '').trim();
       stateController?.text         = (lead.state ?? '').trim();
       pincodeController?.text       = (lead.pincode ?? '').trim();
       dobController?.text           = (lead.dob ?? '').trim();
@@ -1006,6 +1008,7 @@ class LeadManagementController extends GetxController{
 
     // Text fields
     final _city       = t(areaController?.text);
+    final _address = t(addressController?.text);
     final _state      = t(stateController?.text);
     final _pincode    = t(pincodeController?.text);
     final _background = t(backgroundController?.text);
@@ -1085,6 +1088,8 @@ class LeadManagementController extends GetxController{
     if (_preferredMode != null && _preferredMode != (original.preferredMode ?? '').trim()) updateData['preferredMode'] = _preferredMode;
     if (_preferredTime != null && _preferredTime != (original.preferredTime ?? '').trim()) updateData['preferredTime'] = _preferredTime;
     if (_city          != null && _city          != (original.city ?? '').trim())          updateData['city'] = _city;
+    if (_address          != null && _address          != (original.address ?? '').trim())          updateData['address'] = _address;
+
     if (_state         != null && _state         != (original.state ?? '').trim())         updateData['state'] = _state;
     if (_pincode       != null && _pincode       != (original.pincode ?? '').trim())       updateData['pincode'] = _pincode;
     if (_background    != null && _background    != (original.background ?? '').trim())    updateData['background'] = _background;
@@ -1103,6 +1108,8 @@ class LeadManagementController extends GetxController{
 
     if (updateData.isEmpty) {
       Get.snackbar(
+        duration: Duration(seconds: 5),
+
         margin: EdgeInsets.symmetric(
           vertical: MediaQuery.of(Get.context!).size.height * 0.1,
           horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1175,6 +1182,7 @@ class LeadManagementController extends GetxController{
           "lastLogin": null,
           "updatedAt": Timestamp.fromDate(now),
           "password": null,
+          'isFormFilled':true,
           "membershipType": "silver",
           "lastDate": Timestamp.fromDate(now.add(const Duration(days: 365))),
           "location": null,
@@ -1210,6 +1218,8 @@ class LeadManagementController extends GetxController{
       update();
 
       Get.snackbar(
+        duration: Duration(seconds: 5),
+
         margin: EdgeInsets.symmetric(
           vertical: MediaQuery.of(Get.context!).size.height * 0.1,
           horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1220,6 +1230,8 @@ class LeadManagementController extends GetxController{
       );
     } catch (e) {
       Get.snackbar(
+        duration: Duration(seconds: 5),
+
         margin: EdgeInsets.symmetric(
           vertical: MediaQuery.of(Get.context!).size.height * 0.1,
           horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1309,6 +1321,8 @@ class LeadManagementController extends GetxController{
 
       if (fullName.isEmpty || mobile.isEmpty) {
         Get.snackbar(
+          duration: Duration(seconds: 5),
+
           'Missing Info',
           'Name and phone number are required.',
           snackPosition: SnackPosition.BOTTOM,
@@ -1325,6 +1339,8 @@ class LeadManagementController extends GetxController{
 
       if (existingUser.docs.isNotEmpty) {
         Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(
             vertical: MediaQuery.of(Get.context!).size.height * 0.1,
             horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1337,7 +1353,7 @@ class LeadManagementController extends GetxController{
       }
 
       // 🆔 Generate member id
-      final id = generateMemberId(fullName, mobile);
+      final id = Utils.generateMemberId(fullName, mobile);
 
       // Compose data from Lead model
 
@@ -1380,7 +1396,7 @@ class LeadManagementController extends GetxController{
       };
 
 
-      final roleCheck = selectedRoleFilterForAddEditUser.value.trim().toLowerCase();
+      final roleCheck = user.role?.trim().toLowerCase();
       if (roleCheck != 'new') {
         final Map<String, dynamic> leadData = {
           'id': id,
@@ -1391,6 +1407,7 @@ class LeadManagementController extends GetxController{
           'phoneNumber': mobile,
           'status': 'pending',
           'role': user.role,
+          'isFormFilled':true,
           // Timestamps from model if provided, else leave null (Firestore will ignore null)
           'registerDate': FieldValue.serverTimestamp(),
           'lastLogin': user.lastLogin != null ? Timestamp.fromDate(user.lastLogin!) : null,
@@ -1443,6 +1460,8 @@ class LeadManagementController extends GetxController{
         await leadDocRef.delete();
 
         Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(
             vertical: MediaQuery.of(Get.context!).size.height * 0.1,
             horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1461,6 +1480,7 @@ class LeadManagementController extends GetxController{
           'phoneNumber': mobile,
           'status': user.status ?? 'Hot',
           'role': user.role,
+          'isFormFilled':true,
           // Timestamps from model if provided, else leave null (Firestore will ignore null)
           'registerDate': FieldValue.serverTimestamp(),
           'lastLogin': user.lastLogin != null ? Timestamp.fromDate(user.lastLogin!) : null,
@@ -1494,14 +1514,16 @@ class LeadManagementController extends GetxController{
         await FirebaseFirestore.instance.collection('leads').doc(id).set(
             leadData);
         // Add next action if present
+
+
         final na = (user.nextAction ?? '').trim();
         if (na.isNotEmpty) {
           final now = DateTime.now();
-          final formattedDate =
-              '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+          final formattedDate = DateFormat('dd-MM-yyyy HH:mm:ss').format(now); // 24-hour
 
           final action = {
             'text': na,
+            'updatedBy':currentLoggedInUser.value.id==null?"":currentLoggedInUser.value.id,
             'time': now.toIso8601String(), // For sorting
             'date': formattedDate,         // Readable
           };
@@ -1513,6 +1535,8 @@ class LeadManagementController extends GetxController{
               .add(action);
 
           Get.snackbar(
+            duration: Duration(seconds: 5),
+
             margin: EdgeInsets.symmetric(
               vertical: MediaQuery.of(Get.context!).size.height * 0.1,
               horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1527,6 +1551,8 @@ class LeadManagementController extends GetxController{
         await fetchUsersWithPagination(0);
 
         Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(
             vertical: MediaQuery.of(Get.context!).size.height * 0.1,
             horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1567,6 +1593,8 @@ class LeadManagementController extends GetxController{
     } catch (e) {
       print('Error adding user: $e');
       Get.snackbar(
+        duration: Duration(seconds: 5),
+
         margin: EdgeInsets.symmetric(
           vertical: MediaQuery.of(Get.context!).size.height * 0.1,
           horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
@@ -1593,6 +1621,7 @@ class LeadManagementController extends GetxController{
     emailController?.clear();
     ageController?.clear();
     stateController?.clear();
+    addressController?.clear();
     areaController?.clear();          // city/area
     pincodeController?.clear();
     backgroundController?.clear();
@@ -1728,6 +1757,8 @@ class LeadManagementController extends GetxController{
       await fetchUsers();
       await fetchUsersWithPagination(0);
       Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
           "Success", "User deleted successfully.",
@@ -1737,6 +1768,8 @@ class LeadManagementController extends GetxController{
     } catch (e) {
       print("Error deleting user: $e");
       Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
           "Error", "Failed to delete user.",
@@ -1763,27 +1796,6 @@ class LeadManagementController extends GetxController{
   // }
 
 
-  String generateMemberId(String fullName, String mobile) {
-    // 1. Trim leading/trailing spaces
-    fullName = fullName.trim();
-
-    // 2. Get first name (till first space)
-    String firstName = fullName.split(" ").first;
-
-    // 3. Remove special characters like "."
-    firstName = firstName.replaceAll(RegExp(r'[^a-zA-Z]'), "");
-
-    // 4. If length < 4, prepend "O" until it reaches 4
-    while (firstName.length < 4) {
-      firstName = "O" + firstName;
-    }
-
-    // 5. Take only first 4 letters, convert to lowercase
-    String firstFour = firstName.substring(0, 4).toLowerCase();
-
-    // 6. Append mobile number
-    return "$firstFour$mobile";
-  }
 
 
 
@@ -2031,6 +2043,8 @@ class LeadManagementController extends GetxController{
 
       if(selectedUserIds.isEmpty){
         Get.snackbar(
+            duration: Duration(seconds: 5),
+
             margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
             "Error", "Please select users to delete",snackPosition: SnackPosition.BOTTOM);
@@ -2045,12 +2059,16 @@ class LeadManagementController extends GetxController{
 
       clearSelectedUsers();
       Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
           "Success", "Selected users deleted successfully",snackPosition: SnackPosition.BOTTOM);
       await fetchUsers();
     } catch (e) {
       Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
           "Error", "Failed to delete users: $e",snackPosition: SnackPosition.BOTTOM);
@@ -2068,6 +2086,8 @@ class LeadManagementController extends GetxController{
 
       if(selectedUserIds.isEmpty){
         Get.snackbar(
+            duration: Duration(seconds: 5),
+
             margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
             "Error", "Please select users to delete",snackPosition: SnackPosition.BOTTOM);
@@ -2092,12 +2112,16 @@ class LeadManagementController extends GetxController{
       Get.back();
 
       Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
           "Success", "Selected users deleted successfully",snackPosition: SnackPosition.BOTTOM);
       await fetchUsers();
     } catch (e) {
       Get.snackbar(
+          duration: Duration(seconds: 5),
+
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
           "Error", "Failed to delete users: $e",snackPosition: SnackPosition.BOTTOM);
@@ -2140,10 +2164,11 @@ class LeadManagementController extends GetxController{
       isLoading.value = true;
       try {
         final now = DateTime.now();
-        final formattedDate = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
+        final formattedDate = DateFormat('dd-MM-yyyy HH:mm:ss').format(now); // 24-hour
 
         final action = {
           'text': actionText,
+          'updatedBy':currentLoggedInUser.value.id==null?"":currentLoggedInUser.value.id,
           'time': now.toIso8601String(), // Used for sorting and formatted time
           'date': formattedDate,         // Human-readable date if needed
         };
@@ -2155,6 +2180,8 @@ class LeadManagementController extends GetxController{
             .add(action); // Add as a new document
 
         Get.snackbar(
+            duration: Duration(seconds: 5),
+
             margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
             "Success", "Action added", snackPosition: SnackPosition.BOTTOM);
@@ -2162,6 +2189,8 @@ class LeadManagementController extends GetxController{
         await fetchNextActions(userId);
       } catch (e) {
         Get.snackbar(
+            duration: Duration(seconds: 5),
+
             margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
             "Error", "Failed to add action", snackPosition: SnackPosition.BOTTOM);
@@ -2292,6 +2321,8 @@ class LeadManagementController extends GetxController{
       await getUserById(userId);
 
       Get.snackbar(
+        duration: Duration(seconds: 5),
+
         margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
         "Success",

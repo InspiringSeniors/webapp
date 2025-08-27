@@ -27,6 +27,7 @@ class Lead {
   String? gender;
   String? city;
   String? state;
+  String? address;
 
   String? pincode;
   String? background;
@@ -39,6 +40,9 @@ class Lead {
   String? preferredTime;
 
   String? message;
+
+  bool? isFormFilled;
+  bool? isConsentGiven;
   List<dynamic>? referralSources;
 
   Lead({
@@ -50,6 +54,7 @@ class Lead {
     this.phoneNumber,
 
     this.status,
+    this.isFormFilled,
     this.role,
     this.registerDate,
     this.lastLogin,
@@ -76,7 +81,9 @@ class Lead {
     this.message,
     this.languagePreference,
     this.dob,
+    this.address,
     this.referralSources,
+    this.isConsentGiven,
   });
 
   factory Lead.fromMap(String id, Map<String, dynamic> map) {
@@ -86,9 +93,12 @@ class Lead {
       lastName: map['lastName'],
       dob: map['dob']==null?"":map['dob'],
       name: map['name'],
+      isFormFilled: map['isFormFilled']==null?false:map['isFormFilled'],
       email: map['email'],
       phoneNumber: map['phoneNumber'],
       status: map['status'],
+      address: map['address']==null?'':map['address'],
+      isConsentGiven: map['isConsentGiven']==null?false:map["isConsentGiven"],
       updatedBy: map['updatedBy']==null?"":map['updatedBy'],
       role: map['role'],
       registerDate: map['registerDate'] != null
@@ -135,6 +145,8 @@ class Lead {
       'phoneNumber': phoneNumber,
       'status': status,
       'role': role,
+      'isConsentGiven':isConsentGiven,
+      'isFormFilled':isFormFilled,
       'updatedBy':updatedBy,
       'registerDate': registerDate != null ? Timestamp.fromDate(registerDate!) : null,
       'lastLogin': lastLogin != null ? Timestamp.fromDate(lastLogin!) : null,
@@ -142,6 +154,7 @@ class Lead {
       'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : null,
       'profilePic': profilePic,
       'preferences': preferences ?? [],
+      'address':address,
       'notes': notes,
       'assignedTo': assignedTo,
       'disposition': disposition,
@@ -172,6 +185,7 @@ class Lead {
     String? email,
     String? phoneNumber,
     String? status,
+    bool? isFormFilled,
     String? role,
     DateTime? registerDate,
     DateTime? lastLogin,
@@ -181,6 +195,7 @@ class Lead {
     List<dynamic>? preferences,
     String? notes,
     String? assignedTo,
+    String? address,
     String? disposition,
     String? nextAction,
     String? age,
@@ -192,6 +207,7 @@ class Lead {
     List<dynamic>? opportunities,
     List<dynamic>? motivations,
     String? preferredMode,
+    bool? isConsentGiven,
     String? preferredTime,
     String? message,
     List<dynamic>? referralSources,
@@ -202,6 +218,7 @@ class Lead {
       lastName: lastName ?? this.lastName,
       name: name ?? this.name,
       email: email ?? this.email,
+      isFormFilled: isFormFilled?? this.isFormFilled,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       status: status ?? this.status,
       role: role ?? this.role,
@@ -210,6 +227,7 @@ class Lead {
       updatedAt: updatedAt ?? this.updatedAt,
       createdAt: createdAt ?? this.createdAt,
       profilePic: profilePic ?? this.profilePic,
+      isConsentGiven: isConsentGiven??this.isConsentGiven,
       preferences: preferences ?? this.preferences,
       notes: notes ?? this.notes,
       assignedTo: assignedTo ?? this.assignedTo,
@@ -219,6 +237,7 @@ class Lead {
       gender: gender ?? this.gender,
       city: city ?? this.city,
       pincode: pincode ?? this.pincode,
+      address: address??this.address,
       background: background ?? this.background,
       interests: interests ?? this.interests,
       opportunities: opportunities ?? this.opportunities,

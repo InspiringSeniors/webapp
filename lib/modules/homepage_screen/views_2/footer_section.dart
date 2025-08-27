@@ -495,6 +495,126 @@ class FooterSection2 extends StatelessWidget {
                   SizedBox(
                     height: TextSizeDynamicUtils.dHeight24,
                   ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap:(){
+
+                          Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
+
+                        },
+                        child: Text(
+                          "Terms & Conditions",
+                          style: TextStyleUtils.textStyleh14.copyWith(
+                              fontSize: TextSizeDynamicUtils.dHeight12,
+
+                              color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap:(){
+                          Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
+
+                        },
+                        child: Text(
+                          "Privacy Policy",
+                          style: TextStyleUtils.textStyleh14.copyWith(
+                              fontSize: TextSizeDynamicUtils.dHeight12,
+
+                              color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                        ),
+                      ),
+
+                      GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(16)),
+                            ),
+                            builder: (BuildContext context) {
+                              return Container(
+                                padding: EdgeInsets.all(16),
+                                height: 400,
+                                child: Column(
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.start,
+                                  children: [
+                                    Text("Certificates",
+                                        style: TextStyleUtils.textStyleh16
+                                            .copyWith(
+                                            fontWeight:
+                                            FontWeight.bold)),
+                                    SizedBox(height: 16),
+                                    Obx(
+                                          ()=>
+
+                                      controller.isPartnerLoading.value?CircularProgressIndicator(
+                                        color: ColorUtils.BRAND_COLOR,
+                                      ):
+
+                                      Expanded(
+                                        child: ListView.builder(
+                                          itemCount: controller.certificateList.value.length,
+                                          itemBuilder: (context, index) {
+                                            return GestureDetector(
+                                              onTap: (){
+                                                print("clicked");
+                                                print("${controller.certificateList.value[index]["url"]}");
+                                                Utils.launchUrlFor(controller.certificateList.value[index]["url"]);
+                                              },
+                                              child: ListTile(
+
+                                                leading: Icon(
+                                                  Icons.picture_as_pdf,color: ColorUtils.BRAND_COLOR,),
+                                                title: Text(
+                                                  '${controller.certificateList.value[index]["name"]}',style: TextStyleUtils.heading6,),
+                                                onTap: () {
+                                                  Utils.launchUrlFor(controller.certificateList.value[index]["url"]);
+
+                                                  // Handle tap on individual certificate
+                                                  // For example: open a PDF or navigate to details page
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          "Certificates",
+                          style: TextStyleUtils.textStyleh14.copyWith(
+                              fontSize: TextSizeDynamicUtils.dHeight12,
+                              color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                        ),
+                      ),
+                      // SizedBox(width: 20,),
+                      // Text("Accesibility ",style: TextStyleUtils.textStyleh14.copyWith(
+                      //     color: ColorUtils.WHITE_COLOR_BACKGROUND
+                      // ),),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      // SizedBox(width: 20,),
+
+                      // GestureDetector(
+                      //     onTap:(){
+                      //       launchUrlFor("https://x.com/ISF2024");
+                      //     },child: Icon(FontAwesomeIcons.x,size: 30,color: ColorUtils.BRAND_COLOR)),
+                    ],
+                  ),
+
+                  SizedBox(height: 20,),
                   Container(
                       width: width,
                       alignment: Alignment.center,
@@ -1012,10 +1132,29 @@ class FooterSection2 extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              "Privacy Policy",
-                              style: TextStyleUtils.textStyleh14.copyWith(
-                                  color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                            GestureDetector(
+                              onTap:(){
+
+                                Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
+
+                              },
+                              child: Text(
+                                "Terms & Conditions",
+                                style: TextStyleUtils.textStyleh14.copyWith(
+                                    color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                              ),
+                            ),
+                            SizedBox(width: 20,),
+                            GestureDetector(
+                              onTap:(){
+                                Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
+
+                              },
+                              child: Text(
+                                "Privacy Policy",
+                                style: TextStyleUtils.textStyleh14.copyWith(
+                                    color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                              ),
                             ),
                             SizedBox(
                               width: 20,

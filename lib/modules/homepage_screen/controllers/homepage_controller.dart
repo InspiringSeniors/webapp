@@ -24,7 +24,9 @@ import '../../../common_widgets/custom_carousel.dart';
 import '../../../common_widgets/custom_login_registration_form.dart';
 import '../../../common_widgets/custom_testimonials_section.dart';
 import '../../../utils/utility/utils.dart';
+import '../../admin_dashboard/models/leads_model.dart';
 import '../../admin_dashboard/models/user_model.dart' as Users;
+
 import 'package:http/http.dart' as http;
 
 import '../views_2/navbar.dart';
@@ -517,6 +519,9 @@ class OtpController extends GetxController {
   var didntReciveOtp = false.obs;
 
   var isCheckNewUser = false.obs;
+  var isConvertedUser = false.obs;
+
+  var isFormFilled = false.obs;
 
   ConfirmationResult? confirmationResult;
 
@@ -612,12 +617,18 @@ class OtpController extends GetxController {
 
       await continueForSignup();
 
-      var wait =await homepageController.sendWhatsApp(phoneNumberController!.text);
+      // var wait =await homepageController.sendWhatsApp(phoneNumberController!.text);
 
     }else if(isCheckNewUser.value==false){
       Get.back();
       Get.snackbar(
 
+        duration: Duration(seconds: 5),
+
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
         "User Already Exists", "Please login , You are already registered with us",          snackPosition: SnackPosition.BOTTOM,);
     }
 
@@ -628,40 +639,6 @@ class OtpController extends GetxController {
   }
 
 
-  // Future<void> sendWhatsAppTemplateMessage({
-  //   required String recipientPhoneNumber,
-  // }) async {
-  //   const String accessToken = '<access token>'; // Replace with your token
-  //   const String phoneNumberId = '614697528393435'; // Replace if different
-  //
-  //   final url = Uri.parse(
-  //     'https://graph.facebook.com/v22.0/$phoneNumberId/messages',
-  //   );
-  //
-  //   final headers = {
-  //     'Authorization': 'Bearer $accessToken',
-  //     'Content-Type': 'application/json',
-  //   };
-  //
-  //   final body = jsonEncode({
-  //     "messaging_product": "whatsapp",
-  //     "to": recipientPhoneNumber, // E.g. "919999999999"
-  //     "type": "template",
-  //     "template": {
-  //       "name": "hello_world", // Must match approved template name
-  //       "language": {"code": "en_US"}
-  //     }
-  //   });
-  //
-  //   final response = await http.post(url, headers: headers, body: body);
-  //
-  //   if (response.statusCode == 200) {
-  //     print('Template message sent successfully!');
-  //   } else {
-  //     print('Failed to send message. Status: ${response.statusCode}');
-  //     print('Response body: ${response.body}');
-  //   }
-  // }
 
 
 
@@ -810,45 +787,151 @@ class OtpController extends GetxController {
         return false;
       }
     } catch (e) {
-      Get.snackbar("Error", "Something went wrong",          snackPosition: SnackPosition.BOTTOM,);
+      Get.snackbar("Error", "Something went wrong",
+        duration: Duration(seconds: 5),
+
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+        snackPosition: SnackPosition.BOTTOM,);
 
       return false;
     }
   }
 
-  checkForUserRegistrationNumber(String phoneNumber) async {
+  Future<void> checkForUserRegistrationNumber(String? phoneNumber) async {
+    try {
+      if (phoneNumber == null || phoneNumber.trim().isEmpty) return;
 
+      // 1) Normalize phone: keep digits only; prefer last 10 (India)
+      String digits = phoneNumber.replaceAll(RegExp(r'\D'), ''); // "+91-987..." -> "91987..."
+      // If it looks like country+number (>=11), take last 10. Else keep as-is.
+      String localPhone = digits.length >= 10 ? digits.substring(digits.length - 10) : digits;
 
-    if ( phoneNumber != null) {
-      // Remove +91 or any other country code
-      String fullPhone = phoneNumber!; // e.g. "+919876543210"
-      String localPhone = fullPhone.replaceAll(RegExp(r'^\+\d{1,2}'), ''); // removes country code
+      print("Stripped phone number (last 10): $localPhone");
 
-      print("Stripped phone number: $localPhone");
-
-      // Query Firestore where phone number matches the one without country code
-      QuerySnapshot userQuery = await FirebaseFirestore.instance
+      // 2) Query USERS first (converted state wins)
+      final userQuery = await FirebaseFirestore.instance
           .collection('users')
           .where('phoneNumber', isEqualTo: localPhone)
           .limit(1)
           .get();
 
-      if (userQuery.docs.isNotEmpty) {
-        // Get Firestore document ID
-        String firestoreUserId = userQuery.docs.first.id;
+      // 3) Query LEADS next
+      final leadQuery = await FirebaseFirestore.instance
+          .collection('leads')
+          .where('phoneNumber', isEqualTo: localPhone)
+          .limit(1)
+          .get();
 
-        print("id is${firestoreUserId}");
-        // Store in SharedPreferences
-        var prefs = await SharedPreferences.getInstance();
-        await prefs.setString("userId", firestoreUserId);
-        print("User already exists in Firestore");
+      // SharedPrefs for IDs
+      final prefs = await SharedPreferences.getInstance();
+
+      // Case A: Converted user exists (preferred)
+      if (userQuery.docs.isNotEmpty) {
+        final userDoc = userQuery.docs.first;
+        final userId = userDoc.id;
+
+        // Optional: also see if a lead exists (for reference)
+        final leadId = leadQuery.docs.isNotEmpty ? leadQuery.docs.first.id : null;
+
+        await prefs.setString("userId", userId);
+        if (leadId != null) await prefs.setString("leadId", leadId);
+
+        // Load the user model by ID (your method)
+        await getUserById(userId);
+
+        // Flags
         isCheckNewUser.value = false;
-      } else {
-        print("User does not exist in Firestore");
-        isCheckNewUser.value = true;
+        isConvertedUser.value = true;
+
+        // Prefer isFormFilled from USERS doc (fallback false)
+        final fromUsers = userDoc.data() as Map<String, dynamic>;
+        final bool filled = (fromUsers['isFormFilled'] as bool?) ??
+            (currentSelectedUser.value.isFormFilled ?? false);
+        isFormFilled.value = filled;
+
+        print("User exists in USERS. userId=$userId leadId=$leadId converted=true isFormFilled=$filled");
+        return;
       }
+
+      // Case B: Only lead exists (not yet converted)
+      if (leadQuery.docs.isNotEmpty) {
+        final leadDoc = leadQuery.docs.first;
+        final leadId = leadDoc.id;
+
+        await prefs.setString("userId", leadId);   // you were using this key; keep behavior
+        await prefs.setString("leadId", leadId);
+
+        // Load the user model by ID (this should handle leads too)
+        await getUserById(leadId);
+
+        // Flags
+        isCheckNewUser.value = false;
+        isConvertedUser.value = false;
+
+        // Prefer isFormFilled from LEADS doc (fallback false)
+        final fromLeads = leadDoc.data() as Map<String, dynamic>;
+        final bool filled = (fromLeads['isFormFilled'] as bool?) ??
+            (currentSelectedUser.value.isFormFilled ?? false);
+        isFormFilled.value = filled;
+
+        print("User exists in LEADS. leadId=$leadId converted=false isFormFilled=$filled");
+        return;
+      }
+
+      // Case C: Neither exists → brand new user
+      isCheckNewUser.value = true;
+      isConvertedUser.value = false;
+      isFormFilled.value = false;
+
+      // Clear any stale IDs
+      await prefs.remove("userId");
+      await prefs.remove("leadId");
+
+      print("No record found. New user.");
+    } catch (e, st) {
+      print("checkForUserRegistrationNumber error: $e\n$st");
+      // Conservative defaults on error
+      isCheckNewUser.value = true;
+      isConvertedUser.value = false;
+      isFormFilled.value = false;
     }
   }
+
+  var isLoading=false.obs;
+
+  Rx<Lead> currentSelectedUser=Lead().obs;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<Lead?> getUserById(String userId) async {
+    try {
+      isLoading.value = true;
+
+      final doc = await _firestore.collection('leads').doc(userId).get();
+      if (!doc.exists) {
+        isLoading.value = false;
+        return null;
+      }
+
+      final data = doc.data() as Map<String, dynamic>;
+      final lead = Lead.fromMap(doc.id, data);
+      currentSelectedUser.value = lead;
+
+      // ---------- helpers ----------
+
+
+      update();
+      isLoading.value = false;
+      return lead;
+    } catch (e) {
+      isLoading.value = false;
+      print('Error fetching user: $e');
+      return null;
+    }
+  }
+
 
   checkForUserRegistration() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -900,11 +983,11 @@ class OtpController extends GetxController {
 
     FirebaseAuth auth = FirebaseAuth.instance;
     String newUserId;
-    newUserId = generateUserId();
+    newUserId = Utils.generateMemberId(userNameController!.text, phoneNumberController!.text);
 
 
 
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    CollectionReference users = FirebaseFirestore.instance.collection('leads');
     SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
 
     sharedPreferences.setString("userId", newUserId);
@@ -914,35 +997,25 @@ class OtpController extends GetxController {
       final now = DateTime.now();
       final oneYearLater = now.add(const Duration(days: 365));
 
-      Users.User user = Users.User(
+      Lead user = Lead(
         id: newUserId,
         firstName: firstName,
         lastName: lastname,
         phoneNumber: phone,
-        status: 'pending',
-        role: 'member',
+        status: 'hot',
+        role: 'new',
         registerDate: now,
         updatedAt: now,
-        memebershipType: 'silver',
-        lastDate: oneYearLater,
-        isPasswordSet: false,
+        message: message,
         preferences: [],
         profilePic: '',
       );
 
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection('leads')
           .doc(newUserId)
           .set(user.toMap());
 
-
-      // await users.doc(newUserId).set({
-      //   'phoneNumber': phone,
-      //   'firstName': firstName,
-      //   'lastName': lastname,
-      //
-      //   'createdAt': FieldValue.serverTimestamp(),
-      // });
 
       lastNameController!.text="";
       userNameController!.text="";
@@ -952,19 +1025,20 @@ class OtpController extends GetxController {
       print("user created successfully");
       print(users);
     } catch (e) {
-      Get.snackbar("Error", "${e}",          snackPosition: SnackPosition.BOTTOM,);
+      Get.snackbar("Error", "${e}",
+        duration: Duration(seconds: 5),
+
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),snackPosition: SnackPosition.BOTTOM,);
 
     }
   }
 
 
 
-  String generateUserId() {
-    const prefix = 'uix';
-    final random = Random.secure();
-    final number = random.nextInt(9000) + 1000; // generates 4-digit number from 1000 to 9999
-    return '$prefix$number';
-  }
+
 
   submitPreferences() async {
     FirebaseAuth auth = FirebaseAuth.instance;
@@ -995,7 +1069,13 @@ class OtpController extends GetxController {
       print("Preferences updated successfully!");
 
       // Show success message
-      Get.snackbar("Success", "Preferences saved successfully!",          snackPosition: SnackPosition.BOTTOM,);
+      Get.snackbar("Success", "Preferences saved successfully!",
+        duration: Duration(seconds: 5),
+
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),snackPosition: SnackPosition.BOTTOM,);
 
 
       phoneNumberController!.text=""; // Get user phone number
@@ -1003,7 +1083,13 @@ class OtpController extends GetxController {
     } catch (e) {
 
       print("e ");
-      Get.snackbar("Error", "${e}",          snackPosition: SnackPosition.BOTTOM,);
+      Get.snackbar("Error", "${e}",
+        duration: Duration(seconds: 5),
+
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),snackPosition: SnackPosition.BOTTOM,);
 
     }
   }

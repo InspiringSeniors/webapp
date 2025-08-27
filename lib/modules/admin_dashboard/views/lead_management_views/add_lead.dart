@@ -216,7 +216,7 @@ class AddLead extends StatelessWidget {
                                                   Row(
                                                     children: [
                                                       Text(
-                                                        "First Name",
+                                                        "Full Name",
                                                         style: TextStyleUtils
                                                             .smallHighlighted
                                                             .copyWith(
@@ -263,47 +263,47 @@ class AddLead extends StatelessWidget {
                                                   )
                                                 ],
                                               ),
-                                              Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Last Name",
-                                                    style: TextStyleUtils
-                                                        .smallHighlighted
-                                                        .copyWith(
-                                                        color: ColorUtils
-                                                            .SECONDARY_BLACK),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Container(
-                                                      width: width * 0.34,
-                                                      child:
-                                                      CustomTextFieldV2WithWhite(
-                                                        stateHandler:
-                                                        leadManagementController
-                                                            .lastNameStateHandler,
-                                                        labela:
-                                                        leadManagementController
-                                                            .labellastName,
-                                                        label: ''.tr,
-                                                        controller:
-                                                        leadManagementController
-                                                            .lastNameController,
-                                                        validator:
-                                                        leadManagementController
-                                                            .validateLastName,
-                                                        inactiveColor:
-                                                        leadManagementController
-                                                            .inactiveColor,
-                                                        // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
-                                                      )),
-                                                ],
-                                              ),
+                                              // Column(
+                                              //   mainAxisAlignment:
+                                              //   MainAxisAlignment.start,
+                                              //   crossAxisAlignment:
+                                              //   CrossAxisAlignment.start,
+                                              //   children: [
+                                              //     Text(
+                                              //       "Last Name",
+                                              //       style: TextStyleUtils
+                                              //           .smallHighlighted
+                                              //           .copyWith(
+                                              //           color: ColorUtils
+                                              //               .SECONDARY_BLACK),
+                                              //     ),
+                                              //     SizedBox(
+                                              //       height: 5,
+                                              //     ),
+                                              //     Container(
+                                              //         width: width * 0.34,
+                                              //         child:
+                                              //         CustomTextFieldV2WithWhite(
+                                              //           stateHandler:
+                                              //           leadManagementController
+                                              //               .lastNameStateHandler,
+                                              //           labela:
+                                              //           leadManagementController
+                                              //               .labellastName,
+                                              //           label: ''.tr,
+                                              //           controller:
+                                              //           leadManagementController
+                                              //               .lastNameController,
+                                              //           validator:
+                                              //           leadManagementController
+                                              //               .validateLastName,
+                                              //           inactiveColor:
+                                              //           leadManagementController
+                                              //               .inactiveColor,
+                                              //           // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                                              //         )),
+                                              //   ],
+                                              // ),
                                             ],
                                           ),
                                         ),
@@ -1022,7 +1022,7 @@ class AddLead extends StatelessWidget {
                                                     .start,
                                                 children: [
                                                   Text(
-                                                    "Address".tr,
+                                                    "City/Area".tr,
                                                     style: TextStyleUtils
                                                         .smallHighlighted
                                                         .copyWith(
@@ -1054,7 +1054,8 @@ class AddLead extends StatelessWidget {
 
                                                       // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
                                                     ),
-                                                  )
+                                                  ),
+
 
 
 
@@ -1064,6 +1065,63 @@ class AddLead extends StatelessWidget {
 
                                           ],
                                         ),
+                                        SizedBox(
+                                          height: 12,
+                                        ),
+                                        Container(
+                                          width:                                                   width * 0.16,
+
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .start,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .start,
+                                            children: [
+                                              Text(
+                                                "Address".tr,
+                                                style: TextStyleUtils
+                                                    .smallHighlighted
+                                                    .copyWith(
+                                                    color: ColorUtils
+                                                        .SECONDARY_BLACK),
+                                              ),
+                                              SizedBox(
+                                                height: 12,
+                                              ),
+
+                                              Container(
+
+                                                child:
+                                                CustomTextFieldV2WithWhite(
+                                                  stateHandler:
+                                                  leadManagementController
+                                                      .pinCodeStateHandler,
+                                                  labela: leadManagementController
+                                                      .labelPincode,
+                                                  label: ''.tr,
+                                                  formatInput:true,
+                                                  onTap: () {
+                                                  },
+                                                  controller:
+                                                  leadManagementController
+                                                      .addressController,
+                                                  inactiveColor:
+                                                  leadManagementController
+                                                      .inactiveColor,
+
+                                                  // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
+                                                ),
+                                              )
+
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
                                         SizedBox(
                                           height: 20,
                                         ),
@@ -1092,7 +1150,7 @@ class AddLead extends StatelessWidget {
 
                                               SizedBox(height: 16,),
                                               Text(
-                                                "1. Tell us about areas of your interest".tr,
+                                                "1. Areas of Interest".tr,
                                                 style:
                                                 TextStyleUtils.heading6.copyWith(
                                                 ),
@@ -1882,7 +1940,7 @@ class AddLead extends StatelessWidget {
 
                                                       value: leadManagementController.roleOptionsForAdd.contains(leadManagementController.currentSelectedUser.value.role)
                                                           ? leadManagementController.currentSelectedUser.value.role
-                                                          : null,
+                                                          :"New",
                                                       items: leadManagementController.roleOptionsForAdd.map((String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
@@ -2149,71 +2207,79 @@ class AddLead extends StatelessWidget {
                                         SizedBox(
                                           height: 20,
                                         ),
-                                        Text(
-                                          "Next Action",
-                                          style: TextStyleUtils.smallHighlighted
-                                              .copyWith(
-                                              color:
-                                              ColorUtils.SECONDARY_BLACK),
-                                        ),
-                                        SizedBox(
-                                          height: 5,
-                                        ),
+                                        Obx(
+                                          ()=>
+                                          leadManagementController.selectedModule.value=="Edit User"?Container():
+                                              Column(
+                                            children: [
+                                              Text(
+                                                "Next Action",
+                                                style: TextStyleUtils.smallHighlighted
+                                                    .copyWith(
+                                                    color:
+                                                    ColorUtils.SECONDARY_BLACK),
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
 
-                                        TextFormField(
-                                          controller: leadManagementController
-                                              .nextActionController,
-                                          maxLines: 1, // Allows long te// xt input
-                                          cursorColor:
-                                          ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                          decoration: InputDecoration(
-                                              labelStyle: TextStyle(
-                                                  color: ColorUtils
-                                                      .GREY_COLOR_PLACEHOLDER),
-                                              alignLabelWithHint: true,
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                  BorderRadius.circular(8),
-                                                  borderSide: const BorderSide(
-                                                      width: 2,
-                                                      color:
-                                                      ColorUtils.GREY_DOTTED)),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    width: 2,
-                                                    color: ColorUtils.GREY_DOTTED),
-                                                //<-- SEE HERE
-                                                borderRadius:
-                                                BorderRadius.circular(8),
+                                              TextFormField(
+                                                controller: leadManagementController
+                                                    .nextActionController,
+                                                maxLines: 1, // Allows long te// xt input
+                                                cursorColor:
+                                                ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                                decoration: InputDecoration(
+                                                    labelStyle: TextStyle(
+                                                        color: ColorUtils
+                                                            .GREY_COLOR_PLACEHOLDER),
+                                                    alignLabelWithHint: true,
+                                                    focusedBorder: OutlineInputBorder(
+                                                        borderRadius:
+                                                        BorderRadius.circular(8),
+                                                        borderSide: const BorderSide(
+                                                            width: 2,
+                                                            color:
+                                                            ColorUtils.GREY_DOTTED)),
+                                                    enabledBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          width: 2,
+                                                          color: ColorUtils.GREY_DOTTED),
+                                                      //<-- SEE HERE
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    errorBorder: OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          width: 2,
+                                                          color: ColorUtils
+                                                              .ERROR_RED), //<-- SEE HERE
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                      borderSide: const BorderSide(
+                                                          width: 2,
+                                                          color: ColorUtils
+                                                              .ERROR_RED), //<-- SEE HERE
+                                                      borderRadius:
+                                                      BorderRadius.circular(8),
+                                                    ),
+                                                    isDense: false,
+                                                    hintStyle:
+                                                    TextStyleUtils.smallGreyTextStyle,
+                                                    fillColor:
+                                                    ColorUtils.WHITE_COLOR_BACKGROUND,
+                                                    filled: true,
+                                                    errorStyle: TextStyle(
+                                                        color: ColorUtils.ERROR_RED,
+                                                        fontSize: TextSizeDynamicUtils
+                                                            .dHeight12,
+                                                        fontWeight: FontWeight.w400)),
                                               ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    width: 2,
-                                                    color: ColorUtils
-                                                        .ERROR_RED), //<-- SEE HERE
-                                                borderRadius:
-                                                BorderRadius.circular(8),
-                                              ),
-                                              focusedErrorBorder:
-                                              OutlineInputBorder(
-                                                borderSide: const BorderSide(
-                                                    width: 2,
-                                                    color: ColorUtils
-                                                        .ERROR_RED), //<-- SEE HERE
-                                                borderRadius:
-                                                BorderRadius.circular(8),
-                                              ),
-                                              isDense: false,
-                                              hintStyle:
-                                              TextStyleUtils.smallGreyTextStyle,
-                                              fillColor:
-                                              ColorUtils.WHITE_COLOR_BACKGROUND,
-                                              filled: true,
-                                              errorStyle: TextStyle(
-                                                  color: ColorUtils.ERROR_RED,
-                                                  fontSize: TextSizeDynamicUtils
-                                                      .dHeight12,
-                                                  fontWeight: FontWeight.w400)),
+                                            ],
+                                          ),
                                         ),
                                         SizedBox(
                                           height: 20,

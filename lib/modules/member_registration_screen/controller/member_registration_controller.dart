@@ -1,21 +1,85 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/utils/routes/routes.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/color_utils.dart';
 import '../../../utils/utility/utils.dart';
+import '../../admin_dashboard/models/leads_model.dart';
 import '../../admin_dashboard/models/student_models.dart';
 
 class MemberRegistrationController extends GetxController{
 
 
+  var isFromRegisterScreen=false.obs;
+
   @override
-  void onInit() {
+  void onInit() async{
     // TODO: implement onInit
 
 
+    try {
+     var args =Get.arguments[0];
+     var userid=args;
+      isFromRegisterScreen.value=true;
+      var wait =await getUserById(userid);
+    }catch(e){
+      isFromRegisterScreen.value=false;
+
+    }
+
+
   }
+  Rx<Lead> currentSelectedUser=Lead().obs;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+
+  var isLoading=false.obs;
+
+
+  Future<Lead?> getUserById(String userId) async {
+
+    print("get user by id ${userId}");
+    try {
+      isLoading.value = true;
+
+      final doc = await _firestore.collection('leads').doc(userId).get();
+
+
+      print("updation is${userNameController!.text}");
+
+      if (!doc.exists) {
+        isLoading.value = false;
+        return null;
+      }
+
+      final data = doc.data() as Map<String, dynamic>;
+      final lead = Lead.fromMap(doc.id, data);
+      currentSelectedUser.value = lead;
+      print("updation is${userNameController!.text}");
+
+      // ---------- helpers ----------
+
+      userNameController!.text=currentSelectedUser.value.firstName!+" "+currentSelectedUser.value.lastName!;
+
+      phoneNumberController!.text=currentSelectedUser.value.phoneNumber!;
+
+
+      print("updation is${userNameController!.text}");
+      update();
+      isLoading.value = false;
+      return lead;
+    } catch (e) {
+      isLoading.value = false;
+      print('Error fetching user: $e');
+      return null;
+    }
+  }
+
+
 
 
 
@@ -34,6 +98,11 @@ class MemberRegistrationController extends GetxController{
   RxBool pinCodeStateHandler = false.obs;
   TextEditingController? pincodeController = TextEditingController();
   var labelPincode = true.obs;
+
+  final RxBool agreed = false.obs;
+  final RxBool isConsentGiven = true.obs;
+
+  void toggle(bool v) => agreed.value = v;
 
   RxBool signatureStateHandler = false.obs;
 
@@ -172,6 +241,12 @@ class MemberRegistrationController extends GetxController{
       "subject": "Sharing knowledge and learning from others".tr,
       "value": false.obs
     },
+
+    {
+      "subject": "Contributing to knowledge and skill bank".tr,
+      "value": false.obs
+    },
+
     {
       "subject": "Commercial employment (Full-time / Part-time)".tr,
       "value": false.obs
@@ -410,10 +485,54 @@ class MemberRegistrationController extends GetxController{
     if (selectedGenerValue.value == 0) {
       isGenderSelected.value = false;
       return;
+    }else{
+      isGenderSelected.value = true;
+
+    }
+
+    if (agreed.value == false) {
+      isConsentGiven.value = false;
+      return;
+    }else{
+      isConsentGiven.value=true;
     }
 
     if (isValidated) {
       isFormSubmitting.value = true;
+
+
+
+
+      print("value of registered scren ${isFromRegisterScreen.value}");
+      if(isFromRegisterScreen.value==false) {
+        final existingLeads = await FirebaseFirestore.instance
+            .collection('leads')
+            .where('phoneNumber', isEqualTo: phoneNumberController!.text)
+            .limit(1)
+            .get();
+
+        if (existingLeads.docs.isNotEmpty) {
+          isFormSubmitting.value = false;
+          _showUserAlreadyExists();
+          return;
+        }
+
+        final existingUser = await FirebaseFirestore.instance
+            .collection('users')
+            .where('phoneNumber', isEqualTo: phoneNumberController!.text)
+            .limit(1)
+            .get();
+
+        if (existingUser.docs.isNotEmpty) {
+          isFormSubmitting.value = false;
+
+          _showUserAlreadyExists();
+
+          return;
+
+        }
+
+      }
 
       try {
         // Collect selected interests
@@ -456,17 +575,19 @@ class MemberRegistrationController extends GetxController{
           selectedReferralOption.value.add(otherRefferarSource!.text.trim());
         }
 
-       var id=generateMemberId(userNameController!.text, phoneNumberController!.text);
+       var id=Utils.generateMemberId(userNameController!.text, phoneNumberController!.text);
 
         // Prepare data
         final leadData = {
           "id":id,
+          "isFormFilled":true,
           "firstName":userNameController!.text.trim(),
           "name": userNameController!.text.trim(),
           "phoneNumber": phoneNumberController!.text.trim(),
           "email": emailController!.text.trim(),
           "age": ageController!.text.trim(),
           "gender": selectedGender.value,
+          'isConsentGiven':true,
           "city": cityNameController!.text.trim(),
           "pincode": pincodeController!.text.trim(),
           "background": backgroundController!.text.trim(),
@@ -487,6 +608,8 @@ class MemberRegistrationController extends GetxController{
 
         // Save to Firestore
         await FirebaseFirestore.instance.collection('leads').doc(id).set(leadData);
+
+        sendWhatsApp(phoneNumberController!.text);
 
         // Print data for verification
         print("📋 Submitted Form Data:");
@@ -527,24 +650,19 @@ class MemberRegistrationController extends GetxController{
         selectedPreffredMode.value = '';
         selectedFromTimeFilter.value = '';
 
+        isFromRegisterScreen.value=false;
         // Uncheck all options
         for (var item in interestOptions) item['value'].value = false;
         for (var item in opportunityOptions) item['value'].value = false;
         for (var item in motivationOptions) item['value'].value = false;
         for (var item in referralSourceOptions) item['value'].value = false;
 
+
         // Show success snackbar
-        Get.snackbar(
-          "Success",
-          "Form submitted successfully!",
-          backgroundColor: Colors.green.shade600,
-          colorText: Colors.white,
-          margin: EdgeInsets.symmetric(
-            vertical: MediaQuery.of(Get.context!).size.height * 0.1,
-            horizontal: MediaQuery.of(Get.context!).size.width <800?32:MediaQuery.of(Get.context!).size.width * 0.25,
-          ),
-          snackPosition: SnackPosition.BOTTOM,
-        );
+
+        Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+
+        _showThankYouDialogFinal();
 
         isFormSubmitting.value = false;
       } catch (e) {
@@ -555,6 +673,8 @@ class MemberRegistrationController extends GetxController{
         Get.snackbar(
           "Error",
           "Something went wrong",
+          duration: Duration(seconds: 5),
+
           backgroundColor: Colors.red.shade600,
           colorText: Colors.white,
           margin: EdgeInsets.symmetric(
@@ -569,27 +689,7 @@ class MemberRegistrationController extends GetxController{
   DateTime now = DateTime.now();
 
 
-  String generateMemberId(String fullName, String mobile) {
-    // 1. Trim leading/trailing spaces
-    fullName = fullName.trim();
 
-    // 2. Get first name (till first space)
-    String firstName = fullName.split(" ").first;
-
-    // 3. Remove special characters like "."
-    firstName = firstName.replaceAll(RegExp(r'[^a-zA-Z]'), "");
-
-    // 4. If length < 4, prepend "O" until it reaches 4
-    while (firstName.length < 4) {
-      firstName = "O" + firstName;
-    }
-
-    // 5. Take only first 4 letters, convert to lowercase
-    String firstFour = firstName.substring(0, 4).toLowerCase();
-
-    // 6. Append mobile number
-    return "$firstFour$mobile";
-  }
 
   String parseTimeToIso(String timeStr) {
     final now = DateTime.now();
@@ -612,6 +712,119 @@ class MemberRegistrationController extends GetxController{
       return DateTime.now().toIso8601String();
     }
   }
+
+
+  Future<void> sendWhatsApp(String number) async {
+
+    print("number ${number}");
+
+
+
+    try {
+      final HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+        'sendWhatsAppMessage',
+      );
+
+      final response = await callable.call({
+        'number': number, // Pass the number directly, WITHOUT wrapping in data:
+      });
+
+      final result = response.data;
+      print("Response: $result");
+
+      if (result['success'] == true) {
+        // You can show a snackbar or alert
+        print("Message sent successfully");
+      } else {
+        print("Message sending failed: ${result['message']}");
+      }
+
+    } on FirebaseFunctionsException catch (e) {
+      print('FirebaseFunctionsException: ${e}');
+    } catch (e) {
+      print('Unexpected error: $e');
+    }
+  }
+
+  _showThankYouDialogFinal(){
+
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
+    showDialog(
+
+
+      context: Get.context!,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 4), () {
+          Get.back(); // Closes the dialog automatically
+
+        });
+        return AlertDialog(
+
+          insetPadding: EdgeInsets.symmetric(horizontal: width*0.3),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+
+          content: isMobile?
+          Container(
+
+
+            padding: EdgeInsets.symmetric(vertical: 20,horizontal: 16),
+            child: Text("Welcome to Inspiring Seniors Foundation ! Thankyou for becoming a part of ISF . Our team will get back to you shortly".tr,style: TextStyleUtils.heading5.copyWith(
+              color: ColorUtils.HEADER_GREEN
+            ),),
+          ):
+          Container(
+
+
+            padding: EdgeInsets.symmetric(vertical: 30,horizontal: 40),
+            child: Text("Welcome to Inspiring Seniors Foundation ! Thankyou for becoming a part of ISF . Our team will get to you shortly".tr,style: TextStyleUtils.heading5.copyWith(
+              color: ColorUtils.HEADER_GREEN
+            ),),
+          ),
+        );
+      },
+    );
+  }
+  _showUserAlreadyExists(){
+
+    var width=MediaQuery.of(Get.context!).size.width ;
+
+    var isMobile=width<800?true:false;
+    showDialog(
+
+      context: Get.context!,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 4), () {
+          Get.back(); // Closes the dialog automatically
+
+        });
+        return AlertDialog(
+
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+
+          content: isMobile?
+          Container(
+
+
+            padding: EdgeInsets.symmetric(vertical: 20,horizontal: 16),
+            child: Text("Welcome to Inspiring Seniors Foundation ! We already have a member with this phone number".tr,style: TextStyleUtils.heading5.copyWith(
+              color: ColorUtils.ERROR_RED
+            ),),
+          ):
+          Container(
+
+
+            padding: EdgeInsets.symmetric(vertical: 30,horizontal: 40),
+            child: Text("Welcome to Inspiring Seniors Foundation ! We already have a member with this phone number".tr,style: TextStyleUtils.heading5.copyWith(
+              color: ColorUtils.ERROR_RED
+            ),),
+          ),
+        );
+      },
+    );
+  }
+
 
 }
 

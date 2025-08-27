@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import '../../../common_widgets/custom_floating_action.dart';
 import '../../../common_widgets/custom_text_field.dart';
 import '../../../common_widgets/text_button.dart';
 import '../../../utils/color_utils.dart';
+import '../../../utils/utility/utils.dart';
 import '../../homepage_screen/views_2/footer_section.dart';
 import '../controller/member_registration_controller.dart';
 
@@ -1529,6 +1531,70 @@ class MemberRegistrationScreen extends StatelessWidget {
                                 ],
                               ),
                             ),
+                            SizedBox(height: 32,),
+
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Obx(() => Checkbox(
+                                  activeColor: ColorUtils.HEADER_GREEN,
+                                  value: memberRegistrationController.agreed.value,
+                                  onChanged: (v) => memberRegistrationController.toggle(v ?? false),
+                                )),
+                                Flexible(
+                                  child: RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      style: TextStyleUtils.paragraphSmall,
+                                      children: [
+                                         TextSpan(text: 'I agree to the'.tr),
+                                        TextSpan(
+                                          text: ' Terms & Conditions '.tr,
+                                          style: TextStyleUtils.heading6.copyWith(
+                                              color: ColorUtils.HEADER_GREEN
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+
+                                              Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
+
+                                              // Open your Terms page here
+                                              // Example: open a new screen or external link
+                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
+                                            },
+
+
+                                        ),
+                                         TextSpan(text: 'and'.tr),
+                                        TextSpan(
+
+
+                                          text: ' Privacy Policy'.tr,
+                                          style: TextStyleUtils.heading6.copyWith(
+                                              color: ColorUtils.HEADER_GREEN
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+
+                                              Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
+
+                                              // Open your Terms page here
+                                              // Example: open a new screen or external link
+                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
+                                            },
+
+                                        ),
+                                        const TextSpan(text: '.'),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+
+                            Obx(()=>memberRegistrationController.isConsentGiven.value?Container():Text("Thankyou for filling the form , please mark the checkbox to give consent".tr,style: TextStyleUtils.smallGreyTextStyle.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),)),
 
                             SizedBox(height: 32,),
 
@@ -1541,7 +1607,7 @@ class MemberRegistrationScreen extends StatelessWidget {
 
 
                               // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                            },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit Enfrollment Form".tr,borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                            },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit Enrolment Form".tr,borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
                             ),
 
 
@@ -3001,6 +3067,67 @@ class MemberRegistrationScreen extends StatelessWidget {
 
                             SizedBox(height: 32,),
 
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Obx(() => Checkbox(
+                                  activeColor: ColorUtils.HEADER_GREEN,
+                                  value: memberRegistrationController.agreed.value,
+                                  onChanged: (v) => memberRegistrationController.toggle(v ?? false),
+                                )),
+                                Flexible(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: TextStyleUtils.paragraphSmall,
+                                      children: [
+                                        const TextSpan(text: 'I agree to the '),
+                                        TextSpan(
+                                          text: 'Terms & Conditions',
+                                          style: TextStyleUtils.heading6.copyWith(
+                                              color: ColorUtils.HEADER_GREEN
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                            Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
+
+
+                                              // Open your Terms page here
+                                              // Example: open a new screen or external link
+                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
+                                            },
+
+                                        ),
+                                        const TextSpan(text: ' and '),
+                                        TextSpan(
+                                          text: 'Privacy Policy',
+                                          style: TextStyleUtils.heading6.copyWith(
+                                            color: ColorUtils.HEADER_GREEN
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+
+                                              Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
+
+                                              // Open your Terms page here
+                                              // Example: open a new screen or external link
+                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
+                                            },
+
+                                        ),
+                                        const TextSpan(text: '.'),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            Obx(()=>memberRegistrationController.isConsentGiven.value?Container():Text("Thankyou for filling the form , please mark the checkbox to give consent".tr,style: TextStyleUtils.smallGreyTextStyle.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),)),
+
+                            SizedBox(height: 32,),
+
+
 
                             Obx(()=>memberRegistrationController.isFormSubmitting.value?Center(child:CircularProgressIndicator(color: ColorUtils.HEADER_GREEN,)):                            CustomButtonWithBorder(onpressed: ()async{
 
@@ -3010,7 +3137,7 @@ class MemberRegistrationScreen extends StatelessWidget {
 
 
                               // Get.toNamed(RoutingNames.PDF_VIEWER_SCREEN);
-                            },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit Enfrollment Form".tr,borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
+                            },shadowColor: ColorUtils.BRAND_COLOR_LIGHT,fontSize: TextSizeDynamicUtils.dHeight14,bgColor: ColorUtils.BRAND_COLOR,hoveredColor: ColorUtils.HEADER_GREEN,hpadding: 16,vpadding: 12,isHoverGetStarted: false.obs,text: "Submit Enrolment Form".tr,borderColor: ColorUtils.BRAND_COLOR,textColor: ColorUtils.WHITE_COLOR_BACKGROUND),
                             ),
 
 
