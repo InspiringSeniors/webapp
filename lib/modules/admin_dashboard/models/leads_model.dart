@@ -28,6 +28,7 @@ class Lead {
   String? city;
   String? state;
   String? address;
+  String? country;
 
   String? pincode;
   String? background;
@@ -43,6 +44,10 @@ class Lead {
 
   bool? isFormFilled;
   bool? isConsentGiven;
+
+  Map<String,dynamic>? consentDetails;
+  Map<String,dynamic>? sourceDetails;
+
   List<dynamic>? referralSources;
 
   Lead({
@@ -82,8 +87,11 @@ class Lead {
     this.languagePreference,
     this.dob,
     this.address,
+    this.consentDetails,
     this.referralSources,
     this.isConsentGiven,
+    this.country,
+    this.sourceDetails
   });
 
   factory Lead.fromMap(String id, Map<String, dynamic> map) {
@@ -97,10 +105,12 @@ class Lead {
       email: map['email'],
       phoneNumber: map['phoneNumber'],
       status: map['status'],
+      country: map['country'],
       address: map['address']==null?'':map['address'],
-      isConsentGiven: map['isConsentGiven']==null?false:map["isConsentGiven"],
+      isConsentGiven: map['isConsentGiven'],
       updatedBy: map['updatedBy']==null?"":map['updatedBy'],
       role: map['role'],
+        consentDetails:map['consentDetails'],
       registerDate: map['registerDate'] != null
           ? (map['registerDate'] as Timestamp).toDate()
           : null,
@@ -132,6 +142,7 @@ class Lead {
       preferredMode: map['preferredMode'],
       preferredTime: map['preferredTime'],
       message: map['message'],
+      sourceDetails: map['sourceDetails']==null?{}: map['sourceDetails'],
       referralSources: List<dynamic>.from(map['referralSources'] ?? [])
     );
   }
@@ -143,6 +154,7 @@ class Lead {
       'name': name,
       'email': email,
       'phoneNumber': phoneNumber,
+      'country':country,
       'status': status,
       'role': role,
       'isConsentGiven':isConsentGiven,
@@ -159,6 +171,7 @@ class Lead {
       'assignedTo': assignedTo,
       'disposition': disposition,
       'nextAction': nextAction,
+      'consentDetails':consentDetails??{},
       'age': age,
       'dob': dob,
       'gender': gender,
@@ -172,6 +185,7 @@ class Lead {
       'preferredMode': preferredMode,
       'preferredTime': preferredTime,
       'message': message,
+      'sourceDetails':sourceDetails,
       'referralSources': referralSources ?? [],
       'languagePreference': languagePreference ?? [],
     };
@@ -193,6 +207,8 @@ class Lead {
     DateTime? createdAt,
     String? profilePic,
     List<dynamic>? preferences,
+
+    String? country,
     String? notes,
     String? assignedTo,
     String? address,
@@ -210,6 +226,9 @@ class Lead {
     bool? isConsentGiven,
     String? preferredTime,
     String? message,
+    Map<String,dynamic>? consentDetails,
+    Map<String,dynamic>? sourceDetails,
+
     List<dynamic>? referralSources,
   }) {
     return Lead(
@@ -226,9 +245,11 @@ class Lead {
       lastLogin: lastLogin ?? this.lastLogin,
       updatedAt: updatedAt ?? this.updatedAt,
       createdAt: createdAt ?? this.createdAt,
+      country: country??this.country,
       profilePic: profilePic ?? this.profilePic,
       isConsentGiven: isConsentGiven??this.isConsentGiven,
       preferences: preferences ?? this.preferences,
+      consentDetails: consentDetails??this.consentDetails,
       notes: notes ?? this.notes,
       assignedTo: assignedTo ?? this.assignedTo,
       disposition: disposition ?? this.disposition,
@@ -245,6 +266,7 @@ class Lead {
       preferredMode: preferredMode ?? this.preferredMode,
       preferredTime: preferredTime ?? this.preferredTime,
       message: message ?? this.message,
+      sourceDetails: sourceDetails??this.sourceDetails,
       referralSources: referralSources ?? this.referralSources,
     );
   }

@@ -33,7 +33,7 @@ class AnimatedTrustIndicators extends StatelessWidget {
           AnimatedTrustCard(110,"+", "Tutors & Volunteers"),
 
           AnimatedTrustCard(300,"+", "Live Sessions"),
-                    AnimatedTrustCard(2000,"+", "Classes"),
+                    AnimatedTrustCard(2500,"+", "Classes"),
                     AnimatedTrustCard(250,"+", "Students & Mentees"),
                   ],
                 ),
@@ -59,7 +59,7 @@ class AnimatedTrustIndicators extends StatelessWidget {
             AnimatedTrustCard(110,"+", "Tutors & Volunteers"),
 
           AnimatedTrustCard(300,"+", "Live Sessions"),
-          AnimatedTrustCard(2000,"+", "Classes"),
+          AnimatedTrustCard(2500,"+", "Classes"),
           AnimatedTrustCard(250,"+", "Students & Mentees"),
                   ],
                 ),

@@ -28,7 +28,7 @@ class HomepageScreen2 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           NavigationBar2(),
-          AutoScrollTicker(),
+          // AutoScrollTicker(),
           Expanded(
             child: SingleChildScrollView(
               child: Column(

@@ -268,11 +268,11 @@ class UserDashboardScreen extends StatelessWidget {
                                                   BorderRadius.circular(20),
                                                   color: userDashBoardController
                                                       .getStatusColor(
-                                                    "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                    "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "" : userDashBoardController.currentSelectedUser.value.membershipType!}",
 
                                                   )),
                                               child: Text(
-                                                "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.membershipType!}",
                                                 style: TextStyleUtils.mobileheading6
                                                     .copyWith(
                                                     fontWeight: FontWeight.w500,
@@ -415,11 +415,11 @@ class UserDashboardScreen extends StatelessWidget {
                                                                   BorderRadius.circular(20),
                                                                   color: userDashBoardController
                                                                       .getStatusColor(
-                                                                    "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                                    "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "" : userDashBoardController.currentSelectedUser.value.membershipType!}",
 
                                                                   )),
                                                               child: Text(
-                                                                "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                                "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.membershipType!}",
                                                                 style: TextStyleUtils.mobileheading6
                                                                     .copyWith(
                                                                     fontWeight: FontWeight.w500,
@@ -709,11 +709,11 @@ class UserDashboardScreen extends StatelessWidget {
                                                   BorderRadius.circular(20),
                                                   color: userDashBoardController
                                                       .getStatusColor(
-                                                    "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                    "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "" : userDashBoardController.currentSelectedUser.value.membershipType!}",
 
                                                   )),
                                               child: Text(
-                                                "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.membershipType!}",
                                                 style: TextStyleUtils.mobileheading6
                                                     .copyWith(
                                                     fontWeight: FontWeight.w500,
@@ -865,11 +865,11 @@ class UserDashboardScreen extends StatelessWidget {
                                                                             BorderRadius.circular(20),
                                                                             color: userDashBoardController
                                                                                 .getStatusColor(
-                                                                              "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                                              "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "" : userDashBoardController.currentSelectedUser.value.membershipType!}",
 
                                                                             )),
                                                                         child: Text(
-                                                                          "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                                          "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "Membership Not deined" : userDashBoardController.currentSelectedUser.value.membershipType!}",
                                                                           style: TextStyleUtils.mobileheading6
                                                                               .copyWith(
                                                                               fontWeight: FontWeight.w500,

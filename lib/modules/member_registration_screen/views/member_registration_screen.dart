@@ -1548,44 +1548,44 @@ class MemberRegistrationScreen extends StatelessWidget {
                                     text: TextSpan(
                                       style: TextStyleUtils.paragraphSmall,
                                       children: [
-                                         TextSpan(text: 'I agree to the'.tr),
-                                        TextSpan(
-                                          text: ' Terms & Conditions '.tr,
-                                          style: TextStyleUtils.heading6.copyWith(
-                                              color: ColorUtils.HEADER_GREEN
-                                          ),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-
-                                              Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
-
-                                              // Open your Terms page here
-                                              // Example: open a new screen or external link
-                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
-                                            },
-
-
-                                        ),
-                                         TextSpan(text: 'and'.tr),
-                                        TextSpan(
-
-
-                                          text: ' Privacy Policy'.tr,
-                                          style: TextStyleUtils.heading6.copyWith(
-                                              color: ColorUtils.HEADER_GREEN
-                                          ),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-
-                                              Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
-
-                                              // Open your Terms page here
-                                              // Example: open a new screen or external link
-                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
-                                            },
-
-                                        ),
-                                        const TextSpan(text: '.'),
+                                         TextSpan(text:'I understand that my details will be used by ISF only to provide me membership benefits and to keep me informed about its programs. My details will never be shared or used for other purposes, and I can ask ISF to update or delete them anytime.'.tr,style: TextStyleUtils.smallGreyTextStyle),
+                                        // TextSpan(
+                                        //   text: ' Terms & Conditions '.tr,
+                                        //   style: TextStyleUtils.heading6.copyWith(
+                                        //       color: ColorUtils.HEADER_GREEN
+                                        //   ),
+                                        //   recognizer: TapGestureRecognizer()
+                                        //     ..onTap = () {
+                                        //
+                                        //       Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
+                                        //
+                                        //       // Open your Terms page here
+                                        //       // Example: open a new screen or external link
+                                        //       // OR launchUrl(Uri.parse("https://example.com/terms"));
+                                        //     },
+                                        //
+                                        //
+                                        // ),
+                                        //  TextSpan(text: 'and'.tr),
+                                        // TextSpan(
+                                        //
+                                        //
+                                        //   text: ' Privacy Policy'.tr,
+                                        //   style: TextStyleUtils.heading6.copyWith(
+                                        //       color: ColorUtils.HEADER_GREEN
+                                        //   ),
+                                        //   recognizer: TapGestureRecognizer()
+                                        //     ..onTap = () {
+                                        //
+                                        //       Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
+                                        //
+                                        //       // Open your Terms page here
+                                        //       // Example: open a new screen or external link
+                                        //       // OR launchUrl(Uri.parse("https://example.com/terms"));
+                                        //     },
+                                        //
+                                        // ),
+                                        // const TextSpan(text: '.'),
                                       ],
                                     ),
                                   ),
@@ -3067,60 +3067,47 @@ class MemberRegistrationScreen extends StatelessWidget {
 
                             SizedBox(height: 32,),
 
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Obx(() => Checkbox(
-                                  activeColor: ColorUtils.HEADER_GREEN,
-                                  value: memberRegistrationController.agreed.value,
-                                  onChanged: (v) => memberRegistrationController.toggle(v ?? false),
-                                )),
-                                Flexible(
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: TextStyleUtils.paragraphSmall,
-                                      children: [
-                                        const TextSpan(text: 'I agree to the '),
-                                        TextSpan(
-                                          text: 'Terms & Conditions',
-                                          style: TextStyleUtils.heading6.copyWith(
-                                              color: ColorUtils.HEADER_GREEN
-                                          ),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-                                            Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
-
-
-                                              // Open your Terms page here
-                                              // Example: open a new screen or external link
-                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
-                                            },
-
-                                        ),
-                                        const TextSpan(text: ' and '),
-                                        TextSpan(
-                                          text: 'Privacy Policy',
-                                          style: TextStyleUtils.heading6.copyWith(
-                                            color: ColorUtils.HEADER_GREEN
-                                          ),
-                                          recognizer: TapGestureRecognizer()
-                                            ..onTap = () {
-
-                                              Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
-
-                                              // Open your Terms page here
-                                              // Example: open a new screen or external link
-                                              // OR launchUrl(Uri.parse("https://example.com/terms"));
-                                            },
-
-                                        ),
-                                        const TextSpan(text: '.'),
-                                      ],
+                            Container(
+                              padding: EdgeInsets.symmetric(horizontal: 64),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Obx(() => Checkbox(
+                                    activeColor: ColorUtils.HEADER_GREEN,
+                                    value: memberRegistrationController.agreed.value,
+                                    onChanged: (v) => memberRegistrationController.toggle(v ?? false),
+                                  )),
+                                  SizedBox(width: 10,),
+                                  Flexible(
+                                    child: RichText(
+                                      text: TextSpan(
+                                        style: TextStyleUtils.paragraphSmall,
+                                        children: [
+                                           TextSpan(text: 'I understand that my details will be used by ISF only to provide me membership benefits and to keep me informed about its programs. My details will never be shared or used for other purposes, and I can ask ISF to update or delete them anytime.'.tr,style: TextStyleUtils.phoneparagraphSmall),
+                                          // TextSpan(
+                                          //   text: 'Privacy Policy',
+                                          //   style: TextStyleUtils.heading6.copyWith(
+                                          //     color: ColorUtils.HEADER_GREEN
+                                          //   ),
+                                          //   recognizer: TapGestureRecognizer()
+                                          //     ..onTap = () {
+                                          //
+                                          //       Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2FPrivacy%20Policy_Inspiring%20Seniors%20Foundation.pdf?alt=media&token=488a128f-4297-483b-b82e-c8bf4ccfebdd");
+                                          //
+                                          //       // Open your Terms page here
+                                          //       // Example: open a new screen or external link
+                                          //       // OR launchUrl(Uri.parse("https://example.com/terms"));
+                                          //     },
+                                          //
+                                          // ),
+                                          // const TextSpan(text: '.'),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
 
                             Obx(()=>memberRegistrationController.isConsentGiven.value?Container():Text("Thankyou for filling the form , please mark the checkbox to give consent".tr,style: TextStyleUtils.smallGreyTextStyle.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),)),

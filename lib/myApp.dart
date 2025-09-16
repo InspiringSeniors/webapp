@@ -8,9 +8,8 @@ import 'package:inspiringseniorswebapp/modules/about_us_screen/bindings/aboutus_
 import 'package:inspiringseniorswebapp/modules/about_us_screen/views/aboutus_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/bindings/admin_dashboard_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/bindings/tutors_program_bindings.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutors_program_controller.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_porgram_dashboard.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/user_management_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutor_dashboard_controllers/tutors_program_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/user_management_views/user_management_screen.dart';
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/bindings/admin_login_bindings.dart';
 import 'package:inspiringseniorswebapp/modules/admin_login_screen/views/admin_login_screen.dart';
 import 'package:inspiringseniorswebapp/modules/advocacy_and_research/controller/advocacy_bindings.dart';
@@ -268,8 +267,8 @@ class _MyAppState extends State<MyApp> {
             name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
             page: () =>  UserManagementScreen(),
             binding: AdminDashboardBindings(),
-            middlewares:[ AuthMiddleware()
-            ]
+            // middlewares:[ AuthMiddleware()
+            // ]
           ),
 
           GetPage(

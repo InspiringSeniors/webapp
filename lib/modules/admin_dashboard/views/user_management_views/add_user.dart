@@ -3,18 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_text_field.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/lead_management_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/user_management_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_views/lead_management_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/user_management_views/user_management_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../utils/color_utils.dart';
+import '../../../../utils/utility/utils.dart';
 import '../../models/leads_model.dart';
+import '../../models/user_model.dart';
 
-class AddLead extends StatelessWidget {
+class addUser extends StatelessWidget {
 
 
   GlobalKey<FormState> addUserFormKey1 = GlobalKey<FormState>();
   GlobalKey<FormState> editUserFormKey1 = GlobalKey<FormState>();
-  LeadManagementController leadManagementController=Get.find();
+  UserManagementController userManagementController=Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +42,11 @@ class AddLead extends StatelessWidget {
                       children: [
                         GestureDetector(
                             onTap: () {
-                              leadManagementController.selectedModule.value =
-                              "Leads";
+                              userManagementController.selectedModule.value =
+                              "User";
                             },
                             child: Text(
-                              "Lead Management",
+                              "Member Management",
                               style: TextStyleUtils.mobileheading6
                                   .copyWith(fontWeight: FontWeight.w400),
                             )),
@@ -57,7 +61,7 @@ class AddLead extends StatelessWidget {
                           width: 8,
                         ),
                         Text(
-                          leadManagementController.selectedModule.value ==
+                          userManagementController.selectedModule.value ==
                               "Edit User"
                               ? "Edit"
                               : "Add",
@@ -83,7 +87,7 @@ class AddLead extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        leadManagementController.selectedModule.value ==
+                        userManagementController.selectedModule.value ==
                             "Edit User"
                             ? Container()
                             : Container(
@@ -93,7 +97,7 @@ class AddLead extends StatelessWidget {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  leadManagementController
+                                  userManagementController
                                       .selectedAddUserType
                                       .value = "Manual";
                                 },
@@ -101,7 +105,7 @@ class AddLead extends StatelessWidget {
                                   padding: EdgeInsets.symmetric(
                                       vertical: 15, horizontal: 24),
                                   decoration: BoxDecoration(
-                                      border: leadManagementController
+                                      border: userManagementController
                                           .selectedAddUserType
                                           .value ==
                                           "Manual"
@@ -120,7 +124,7 @@ class AddLead extends StatelessWidget {
                                     style: TextStyleUtils.smallHighlighted
                                         .copyWith(
                                         fontWeight: FontWeight.w500,
-                                        color: leadManagementController
+                                        color: userManagementController
                                             .selectedAddUserType
                                             .value ==
                                             "Manual"
@@ -132,7 +136,7 @@ class AddLead extends StatelessWidget {
                               ),
                               GestureDetector(
                                   onTap: () {
-                                    leadManagementController
+                                    userManagementController
                                         .selectedAddUserType
                                         .value = "Bulk";
                                   },
@@ -140,7 +144,7 @@ class AddLead extends StatelessWidget {
                                     padding: EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 24),
                                     decoration: BoxDecoration(
-                                        border: leadManagementController
+                                        border: userManagementController
                                             .selectedAddUserType
                                             .value ==
                                             "Bulk"
@@ -160,7 +164,7 @@ class AddLead extends StatelessWidget {
                                           .smallHighlighted
                                           .copyWith(
                                           fontWeight: FontWeight.w500,
-                                          color: leadManagementController
+                                          color: userManagementController
                                               .selectedAddUserType
                                               .value ==
                                               "Bulk"
@@ -174,12 +178,12 @@ class AddLead extends StatelessWidget {
                           ),
                         ),
                         Obx(() {
-                          if (leadManagementController
+                          if (userManagementController
                               .selectedAddUserType.value ==
                               "Manual") {
                             return Obx(()=>
                                 Form(
-                                  key: leadManagementController
+                                  key: userManagementController
                                       .selectedModule.value ==
                                       "Edit User"
                                       ? editUserFormKey1
@@ -243,20 +247,20 @@ class AddLead extends StatelessWidget {
                                                     child:
                                                     CustomTextFieldV2WithWhite(
                                                       stateHandler:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .nameStateHandler,
                                                       labela:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .labeluserName,
                                                       label: ''.tr,
                                                       controller:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .userNameController,
                                                       inactiveColor:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .inactiveColor,
                                                       validator:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .validatename,
                                                       // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
                                                     ),
@@ -296,8 +300,8 @@ class AddLead extends StatelessWidget {
                                                   Obx(()=>
                                                       Container(
                                                         width: width * 0.34,
-                                                        child: LeadManagementScreen().getNumberField(
-                                                          leadManagementController
+                                                        child: UserManagementScreen().getNumberField(
+                                                          userManagementController
                                                               .isPhoneEnabled,
                                                           Get.context!,),
                                                       ),
@@ -385,12 +389,12 @@ class AddLead extends StatelessWidget {
                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      buildRadioButton(1, "Male".tr,leadManagementController.selectedGenerValue,leadManagementController.selectGender),
+                                                      buildRadioButton(1, "Male".tr,userManagementController.selectedGenerValue,userManagementController.selectGender),
                                                       SizedBox(width: 12,),
-                                                      buildRadioButton(2, "Female".tr,leadManagementController.selectedGenerValue,leadManagementController.selectGender),
+                                                      buildRadioButton(2, "Female".tr,userManagementController.selectedGenerValue,userManagementController.selectGender),
                                                       SizedBox(width: 12,),
 
-                                                      buildRadioButton(3, "Other".tr,leadManagementController.selectedGenerValue,leadManagementController.selectGender),
+                                                      buildRadioButton(3, "Other".tr,userManagementController.selectedGenerValue,userManagementController.selectGender),
 
                                                     ],
                                                   )
@@ -421,19 +425,19 @@ class AddLead extends StatelessWidget {
                                                   width: width * 0.34,
                                                   child: CustomTextFieldV2WithWhite(
                                                     stateHandler:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .emailStateHandler,
-                                                    labela: leadManagementController
+                                                    labela: userManagementController
                                                         .labelemail,
                                                     label: ''.tr,
                                                     controller:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .emailController,
                                                     inactiveColor:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .inactiveColor,
                                                     validator:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .validatemail,
                                                     icon: Icon(
                                                       Icons.email,
@@ -483,10 +487,10 @@ class AddLead extends StatelessWidget {
                                                   child:
                                                   CustomTextFieldV2WithWhite(
                                                     stateHandler:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .dobStateHandler,
 
-                                                    labela: leadManagementController
+                                                    labela: userManagementController
                                                         .labelDob,
                                                     label: ''.tr,
                                                     formatInput:true,
@@ -494,10 +498,10 @@ class AddLead extends StatelessWidget {
                                                       _pickDateTime();
                                                     },
                                                     controller:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .dobController,
                                                     inactiveColor:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .inactiveColor,
 
 
@@ -534,18 +538,18 @@ class AddLead extends StatelessWidget {
                                                   child:
                                                   CustomTextFieldV2WithWhite(
                                                     stateHandler:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .AgeStateHandler,
 
-                                                    labela: leadManagementController
+                                                    labela: userManagementController
                                                         .labelAge,
                                                     label: ''.tr,
 
                                                     controller:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .ageController,
                                                     inactiveColor:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .inactiveColor,
 
 
@@ -606,7 +610,7 @@ class AddLead extends StatelessWidget {
 
 
 
-                                                          controller: leadManagementController.backgroundController,
+                                                          controller: userManagementController.backgroundController,
                                                           maxLines: 4, // Allows long te// xt input
                                                           cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
 
@@ -699,18 +703,18 @@ class AddLead extends StatelessWidget {
                                                           width: width*0.34,
                                                           child: CustomTextFieldV2WithWhite(
                                                             stateHandler:
-                                                            leadManagementController
+                                                            userManagementController
                                                                 .alternativePhoneNumberStatehandler,
 
-                                                            labela: leadManagementController
+                                                            labela: userManagementController
                                                                 .alternatePhoneNumberLabel,
                                                             label: ''.tr,
 
                                                             controller:
-                                                            leadManagementController
+                                                            userManagementController
                                                                 .alternatePhoneNumberController,
                                                             inactiveColor:
-                                                            leadManagementController
+                                                            userManagementController
                                                                 .inactiveColor,
 
 
@@ -766,11 +770,11 @@ class AddLead extends StatelessWidget {
                                                         crossAxisSpacing: 20,
                                                         mainAxisSpacing: 10,
                                                       ),
-                                                      itemCount: leadManagementController.prefferedLanguageOptions.length,
+                                                      itemCount: userManagementController.prefferedLanguageOptions.length,
                                                       shrinkWrap: true,
                                                       physics: NeverScrollableScrollPhysics(), // Keeps the scrolling smooth
                                                       itemBuilder: (context, index) {
-                                                        var item = leadManagementController.prefferedLanguageOptions[index];
+                                                        var item = userManagementController.prefferedLanguageOptions[index];
 
                                                         return Container(
 
@@ -876,19 +880,19 @@ class AddLead extends StatelessWidget {
                                                     child:
                                                     CustomTextFieldV2WithWhite(
                                                       stateHandler:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .pinCodeStateHandler,
-                                                      labela: leadManagementController
+                                                      labela: userManagementController
                                                           .labelPincode,
                                                       label: ''.tr,
                                                       // formatInput:true,
                                                       onTap: () {
                                                       },
                                                       controller:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .countryController,
                                                       inactiveColor:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .inactiveColor,
 
                                                       // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
@@ -926,10 +930,10 @@ class AddLead extends StatelessWidget {
 
                                                     child: DropdownButtonFormField<String>(
 
-                                                      value: leadManagementController.stateOptions.contains(leadManagementController.stateController?.text)
-                                                          ? leadManagementController.stateController?.text
+                                                      value: userManagementController.stateOptions.contains(userManagementController.stateController?.text)
+                                                          ? userManagementController.stateController?.text
                                                           : null,
-                                                      items: leadManagementController.stateOptions.map((String value) {
+                                                      items: userManagementController.stateOptions.map((String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
                                                           child: Text(value),
@@ -937,7 +941,7 @@ class AddLead extends StatelessWidget {
                                                       }).toList(),
                                                       onChanged: (String? newValue) {
 
-                                                        leadManagementController.stateController!.text=newValue!;
+                                                        userManagementController.stateController!.text=newValue!;
 
                                                       },
                                                       decoration: InputDecoration(
@@ -1001,19 +1005,19 @@ class AddLead extends StatelessWidget {
                                                     child:
                                                     CustomTextFieldV2WithWhite(
                                                       stateHandler:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .pinCodeStateHandler,
-                                                      labela: leadManagementController
+                                                      labela: userManagementController
                                                           .labelPincode,
                                                       label: ''.tr,
                                                       formatInput:true,
                                                       onTap: () {
                                                       },
                                                       controller:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .pincodeController,
                                                       inactiveColor:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .inactiveColor,
 
                                                       // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
@@ -1055,18 +1059,18 @@ class AddLead extends StatelessWidget {
                                                     child:
                                                     CustomTextFieldV2WithWhite(
                                                       stateHandler:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .pinCodeStateHandler,
-                                                      labela: leadManagementController
+                                                      labela: userManagementController
                                                           .labelPincode,
                                                       label: ''.tr,
                                                       onTap: () {
                                                       },
                                                       controller:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .areaController,
                                                       inactiveColor:
-                                                      leadManagementController
+                                                      userManagementController
                                                           .inactiveColor,
 
                                                       // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
@@ -1113,17 +1117,17 @@ class AddLead extends StatelessWidget {
                                                 child:
                                                 CustomTextFieldV2WithWhite(
                                                   stateHandler:
-                                                  leadManagementController
+                                                  userManagementController
                                                       .pinCodeStateHandler,
-                                                  labela: leadManagementController
+                                                  labela: userManagementController
                                                       .labelPincode,
                                                   label: ''.tr,
 
                                                   controller:
-                                                  leadManagementController
+                                                  userManagementController
                                                       .addressController,
                                                   inactiveColor:
-                                                  leadManagementController
+                                                  userManagementController
                                                       .inactiveColor,
 
                                                   // icon: Icon(Icons.person,color: ColorUtils.GREY_COLOR_PLACEHOLDER,),
@@ -1162,8 +1166,8 @@ class AddLead extends StatelessWidget {
                                             crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                             children: [
-
                                               SizedBox(height: 16,),
+
                                               Text(
                                                 "1. Areas of Interest".tr,
                                                 style:
@@ -1183,11 +1187,11 @@ class AddLead extends StatelessWidget {
                                                     crossAxisSpacing: 20,
                                                     mainAxisSpacing: 10,
                                                   ),
-                                                  itemCount: leadManagementController.interestOptions.length,
+                                                  itemCount: userManagementController.interestOptions.length,
                                                   shrinkWrap: true,
                                                   physics: NeverScrollableScrollPhysics(), // Keeps the scrolling smooth
                                                   itemBuilder: (context, index) {
-                                                    var item = leadManagementController.interestOptions[index];
+                                                    var item = userManagementController.interestOptions[index];
 
                                                     return Container(
 
@@ -1247,7 +1251,7 @@ class AddLead extends StatelessWidget {
 
 
 
-                                                        controller: leadManagementController.otherInterestOption,
+                                                        controller: userManagementController.otherInterestOption,
                                                         maxLines: 1, // Allows long te// xt input
                                                         cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
 
@@ -1325,11 +1329,11 @@ class AddLead extends StatelessWidget {
                                                     crossAxisSpacing: 20,
                                                     mainAxisSpacing: 10,
                                                   ),
-                                                  itemCount: leadManagementController.opportunityOptions.length,
+                                                  itemCount: userManagementController.opportunityOptions.length,
                                                   shrinkWrap: true,
                                                   physics: NeverScrollableScrollPhysics(), // Keeps the scrolling smooth
                                                   itemBuilder: (context, index) {
-                                                    var item = leadManagementController.opportunityOptions[index];
+                                                    var item = userManagementController.opportunityOptions[index];
 
                                                     return Container(
 
@@ -1389,7 +1393,7 @@ class AddLead extends StatelessWidget {
 
 
 
-                                                        controller: leadManagementController.otherOpportunityOption,
+                                                        controller: userManagementController.otherOpportunityOption,
                                                         maxLines: 1, // Allows long te// xt input
                                                         cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
 
@@ -1467,12 +1471,12 @@ class AddLead extends StatelessWidget {
                                                   crossAxisSpacing: 20,
                                                   mainAxisSpacing: 10,
                                                 ),
-                                                itemCount: leadManagementController.motivationOptions
+                                                itemCount: userManagementController.motivationOptions
                                                     .length,
                                                 shrinkWrap: true,
                                                 physics: NeverScrollableScrollPhysics(), // Keeps the scrolling smooth
                                                 itemBuilder: (context, index) {
-                                                  var item = leadManagementController.motivationOptions[index];
+                                                  var item = userManagementController.motivationOptions[index];
 
                                                   return Container(
 
@@ -1533,7 +1537,7 @@ class AddLead extends StatelessWidget {
 
 
 
-                                                        controller: leadManagementController.otherMotivationOption,
+                                                        controller: userManagementController.otherMotivationOption,
                                                         maxLines: 1, // Allows long te// xt input
                                                         cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
 
@@ -1632,12 +1636,12 @@ class AddLead extends StatelessWidget {
                                                         mainAxisAlignment: MainAxisAlignment.start,
                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                         children: [
-                                                          buildRadioButton(1, "In-Person".tr,leadManagementController.selectedPreferredModeValue,leadManagementController.selectPreferredMode),
+                                                          buildRadioButton(1, "In-Person".tr,userManagementController.selectedPreferredModeValue,userManagementController.selectPreferredMode),
                                                           SizedBox(width: 16,),
-                                                          buildRadioButton(2, "Online".tr,leadManagementController.selectedPreferredModeValue,leadManagementController.selectPreferredMode),
+                                                          buildRadioButton(2, "Online".tr,userManagementController.selectedPreferredModeValue,userManagementController.selectPreferredMode),
                                                           SizedBox(width: 16,),
 
-                                                          buildRadioButton(3, "Hybrid/Both".tr,leadManagementController.selectedPreferredModeValue,leadManagementController.selectPreferredMode),
+                                                          buildRadioButton(3, "Hybrid/Both".tr,userManagementController.selectedPreferredModeValue,userManagementController.selectPreferredMode),
 
                                                         ],
                                                       ),
@@ -1668,14 +1672,14 @@ class AddLead extends StatelessWidget {
                                                     mainAxisAlignment: MainAxisAlignment.start,
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
-                                                      buildRadioButton(1, "1-2 Hours/Week".tr,leadManagementController.selectedPreferredTime,leadManagementController.selectPreferredTimings),
+                                                      buildRadioButton(1, "1-2 Hours/Week".tr,userManagementController.selectedPreferredTime,userManagementController.selectPreferredTimings),
                                                       SizedBox(width: 16,),
-                                                      buildRadioButton(2, "2-4 Hours/Week".tr,leadManagementController.selectedPreferredTime,leadManagementController.selectPreferredTimings),
+                                                      buildRadioButton(2, "2-4 Hours/Week".tr,userManagementController.selectedPreferredTime,userManagementController.selectPreferredTimings),
                                                       SizedBox(width: 16,),
 
-                                                      buildRadioButton(3, "4-6 Hours/Week".tr,leadManagementController.selectedPreferredTime,leadManagementController.selectPreferredTimings),
+                                                      buildRadioButton(3, "4-6 Hours/Week".tr,userManagementController.selectedPreferredTime,userManagementController.selectPreferredTimings),
                                                       SizedBox(width: 16,),
-                                                      buildRadioButton(4, "More than 6 Hours/Week".tr,leadManagementController.selectedPreferredTime,leadManagementController.selectPreferredTimings),
+                                                      buildRadioButton(4, "More than 6 Hours/Week".tr,userManagementController.selectedPreferredTime,userManagementController.selectPreferredTimings),
 
                                                     ],
                                                   ),
@@ -1697,7 +1701,7 @@ class AddLead extends StatelessWidget {
 
 
 
-                                                  controller: leadManagementController.messageController,
+                                                  controller: userManagementController.messageController,
                                                   maxLines: 4, // Allows long te// xt input
                                                   cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
 
@@ -1772,12 +1776,12 @@ class AddLead extends StatelessWidget {
                                                   crossAxisSpacing: 20,
                                                   mainAxisSpacing: 10,
                                                 ),
-                                                itemCount: leadManagementController.referralSourceOptions
+                                                itemCount: userManagementController.referralSourceOptions
                                                     .length,
                                                 shrinkWrap: true,
                                                 physics: NeverScrollableScrollPhysics(), // Keeps the scrolling smooth
                                                 itemBuilder: (context, index) {
-                                                  var item = leadManagementController.referralSourceOptions[index];
+                                                  var item = userManagementController.referralSourceOptions[index];
 
                                                   return Container(
 
@@ -1838,7 +1842,7 @@ class AddLead extends StatelessWidget {
 
 
 
-                                                        controller: leadManagementController.otherRefferarSource,
+                                                        controller: userManagementController.otherRefferarSource,
                                                         maxLines: 1, // Allows long te// xt input
                                                         cursorColor: ColorUtils.GREY_COLOR_PLACEHOLDER,
 
@@ -1907,7 +1911,6 @@ class AddLead extends StatelessWidget {
 
                                         ),
 
-
                                         SizedBox(
                                           height: 20,
                                         ),
@@ -1915,14 +1918,17 @@ class AddLead extends StatelessWidget {
                                         SizedBox(
                                           height: 20,
                                         ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
 
-                                        Text("Account Information", style: TextStyleUtils.heading5,),
+                                        Text("Member Status", style: TextStyleUtils.heading5,),
                                         SizedBox(
                                           height: 20,
                                         ),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                          MainAxisAlignment.start,
                                           crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                           children: [
@@ -1953,17 +1959,17 @@ class AddLead extends StatelessWidget {
 
                                                     child: DropdownButtonFormField<String>(
 
-                                                      value: leadManagementController.roleOptionsForAdd.contains(leadManagementController.currentSelectedUser.value.role)
-                                                          ? leadManagementController.currentSelectedUser.value.role
+                                                      value: userManagementController.roleOptionsForAdd.contains(userManagementController.currentSelectedUser.value.role?.toLowerCase())
+                                                          ? userManagementController.currentSelectedUser.value.role?.toLowerCase()
                                                           :"New",
-                                                      items: leadManagementController.roleOptionsForAdd.map((String value) {
+                                                      items: userManagementController.roleOptionsForAdd.map((String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
                                                           child: Text(value),
                                                         );
                                                       }).toList(),
                                                       onChanged: (String? newValue) {
-                                                        leadManagementController.selectRole(newValue!);
+                                                        userManagementController.selectRole(newValue!);
 
 
                                                       },
@@ -1996,6 +2002,160 @@ class AddLead extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
+                                            // Container(
+                                            //   width: width * 0.16,
+                                            //   child: Column(
+                                            //     mainAxisAlignment:
+                                            //     MainAxisAlignment.start,
+                                            //     crossAxisAlignment:
+                                            //     CrossAxisAlignment.start,
+                                            //     children: [
+                                            //       SizedBox(
+                                            //         height: 10,
+                                            //       ),
+                                            //       Text(
+                                            //         "Disposition",
+                                            //         style: TextStyleUtils
+                                            //             .smallHighlighted
+                                            //             .copyWith(
+                                            //             color: ColorUtils
+                                            //                 .SECONDARY_BLACK),
+                                            //       ),
+                                            //       SizedBox(
+                                            //         height: 5,
+                                            //       ),
+                                            //
+                                            //       Container(
+                                            //         child: Obx(() {
+                                            //           final c = userManagementController;
+                                            //
+                                            //           // Current disposition value in Add/Edit modes
+                                            //           final String? currentDisp = c.selectedModule.value == "Edit User"
+                                            //               ? c.currentSelectedUser.value.disposition
+                                            //               : c.selectedDisposition.value;
+                                            //
+                                            //           final bool locked = c.isDispositionLocked.value;
+                                            //
+                                            //           final String? dropdownValue = locked
+                                            //               ? "Interested"
+                                            //               : (c.dispositionOptionsforAdd.contains(currentDisp) ? currentDisp : null);
+                                            //
+                                            //           return DropdownButtonFormField<String>(
+                                            //             value: dropdownValue,
+                                            //             items: c.dispositionOptionsforAdd.map((String value) {
+                                            //               return DropdownMenuItem<String>(
+                                            //                 value: value,
+                                            //                 child: Text(value),
+                                            //               );
+                                            //             }).toList(),
+                                            //             onChanged: locked
+                                            //                 ? null // disabled when locked
+                                            //                 : (String? newValue) {
+                                            //               if (newValue == null) return;
+                                            //               c.selectDisposition(newValue);
+                                            //             },
+                                            //             decoration: InputDecoration(
+                                            //               // labelText: locked ? 'Disposition (auto-set)' : 'Disposition',
+                                            //               helperText: locked
+                                            //                   ? 'Auto-set to "Interested" because role is not "New".'
+                                            //                   : null,
+                                            //               labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
+                                            //               focusedBorder: OutlineInputBorder(
+                                            //                 borderRadius: BorderRadius.circular(8),
+                                            //                 borderSide: const BorderSide(width: 2, color: ColorUtils.GREY_DOTTED),
+                                            //               ),
+                                            //               enabledBorder: OutlineInputBorder(
+                                            //                 borderSide: const BorderSide(width: 2, color: ColorUtils.GREY_DOTTED),
+                                            //                 borderRadius: BorderRadius.circular(8),
+                                            //               ),
+                                            //               errorBorder: OutlineInputBorder(
+                                            //                 borderSide: const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+                                            //                 borderRadius: BorderRadius.circular(8),
+                                            //               ),
+                                            //               focusedErrorBorder: OutlineInputBorder(
+                                            //                 borderSide: const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
+                                            //                 borderRadius: BorderRadius.circular(8),
+                                            //               ),
+                                            //             ),
+                                            //           );
+                                            //         }),
+                                            //       ),
+                                            //
+                                            //
+                                            //
+                                            //     ],
+                                            //   ),
+                                            // ),
+                                            // Container(
+                                            //   width: width * 0.16,
+                                            //   child: Column(
+                                            //     mainAxisAlignment:
+                                            //     MainAxisAlignment.start,
+                                            //     crossAxisAlignment:
+                                            //     CrossAxisAlignment.start,
+                                            //     children: [
+                                            //       SizedBox(
+                                            //         height: 10,
+                                            //       ),
+                                            //       Text(
+                                            //         "Assigned to",
+                                            //         style: TextStyleUtils
+                                            //             .smallHighlighted
+                                            //             .copyWith(
+                                            //             color: ColorUtils
+                                            //                 .SECONDARY_BLACK),
+                                            //       ),
+                                            //       SizedBox(
+                                            //         height: 5,
+                                            //       ),
+                                            //
+                                            //       Container(
+                                            //
+                                            //         child: DropdownButtonFormField<String>(
+                                            //           value: userManagementController.assignedToOtpions.value.contains(userManagementController.currentSelectedUser.value.assignedTo)
+                                            //               ? userManagementController.currentSelectedUser.value.assignedTo
+                                            //               : null,
+                                            //           items: userManagementController.assignedToOtpions.value.map((String value) {
+                                            //             return DropdownMenuItem<String>(
+                                            //               value: value,
+                                            //               child: Text(value),
+                                            //             );
+                                            //           }).toList(),
+                                            //           onChanged: (String? newValue) {
+                                            //             userManagementController.selectAssignedToForAddEditUser(newValue!);
+                                            //
+                                            //
+                                            //           },
+                                            //           decoration: InputDecoration(
+                                            //             labelText: '',
+                                            //             labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
+                                            //             focusedBorder: OutlineInputBorder(
+                                            //                 borderRadius: BorderRadius.circular(8),
+                                            //                 borderSide: const BorderSide(
+                                            //                     width: 2, color: ColorUtils.GREY_DOTTED)),
+                                            //             enabledBorder: OutlineInputBorder(
+                                            //               borderSide: const BorderSide(
+                                            //                   width: 2, color: ColorUtils.GREY_DOTTED),
+                                            //               borderRadius: BorderRadius.circular(8),
+                                            //             ),
+                                            //             errorBorder: OutlineInputBorder(
+                                            //               borderSide: const BorderSide(
+                                            //                   width: 2, color: ColorUtils.ERROR_RED),
+                                            //               borderRadius: BorderRadius.circular(8),
+                                            //             ),
+                                            //             focusedErrorBorder: OutlineInputBorder(
+                                            //               borderSide: const BorderSide(
+                                            //                   width: 2, color: ColorUtils.ERROR_RED),
+                                            //               borderRadius: BorderRadius.circular(8),
+                                            //             ),
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //
+                                            //     ],
+                                            //   ),
+                                            // ),
+                                            SizedBox(width: 20,),
                                             Container(
                                               width: width * 0.16,
                                               child: Column(
@@ -2008,7 +2168,7 @@ class AddLead extends StatelessWidget {
                                                     height: 10,
                                                   ),
                                                   Text(
-                                                    "Disposition",
+                                                    "Status",
                                                     style: TextStyleUtils
                                                         .smallHighlighted
                                                         .copyWith(
@@ -2018,173 +2178,20 @@ class AddLead extends StatelessWidget {
                                                   SizedBox(
                                                     height: 5,
                                                   ),
-
-                                                  Container(
-                                                    child: Obx(() {
-                                                      final c = leadManagementController;
-
-                                                      // Current disposition value in Add/Edit modes
-                                                      final String? currentDisp = c.selectedModule.value == "Edit User"
-                                                          ? c.currentSelectedUser.value.disposition
-                                                          : c.selectedDisposition.value;
-
-                                                      final bool locked = c.isDispositionLocked.value;
-
-                                                      final String? dropdownValue = locked
-                                                          ? "Interested"
-                                                          : (c.dispositionOptionsforAdd.contains(currentDisp) ? currentDisp : null);
-
-                                                      return DropdownButtonFormField<String>(
-                                                        value: dropdownValue,
-                                                        items: c.dispositionOptionsforAdd.map((String value) {
-                                                          return DropdownMenuItem<String>(
-                                                            value: value,
-                                                            child: Text(value),
-                                                          );
-                                                        }).toList(),
-                                                        onChanged: locked
-                                                            ? null // disabled when locked
-                                                            : (String? newValue) {
-                                                          if (newValue == null) return;
-                                                          c.selectDisposition(newValue);
-                                                        },
-                                                        decoration: InputDecoration(
-                                                          // labelText: locked ? 'Disposition (auto-set)' : 'Disposition',
-                                                          helperText: locked
-                                                              ? 'Auto-set to "Interested" because role is not "New".'
-                                                              : null,
-                                                          labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                          focusedBorder: OutlineInputBorder(
-                                                            borderRadius: BorderRadius.circular(8),
-                                                            borderSide: const BorderSide(width: 2, color: ColorUtils.GREY_DOTTED),
-                                                          ),
-                                                          enabledBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 2, color: ColorUtils.GREY_DOTTED),
-                                                            borderRadius: BorderRadius.circular(8),
-                                                          ),
-                                                          errorBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
-                                                            borderRadius: BorderRadius.circular(8),
-                                                          ),
-                                                          focusedErrorBorder: OutlineInputBorder(
-                                                            borderSide: const BorderSide(width: 2, color: ColorUtils.ERROR_RED),
-                                                            borderRadius: BorderRadius.circular(8),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }),
-                                                  ),
-
-
-
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              width: width * 0.16,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    "Assigned to",
-                                                    style: TextStyleUtils
-                                                        .smallHighlighted
-                                                        .copyWith(
-                                                        color: ColorUtils
-                                                            .SECONDARY_BLACK),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-
                                                   Container(
 
                                                     child: DropdownButtonFormField<String>(
-                                                      value: leadManagementController.assignedToOtpions.value.contains(leadManagementController.currentSelectedUser.value.assignedTo)
-                                                          ? leadManagementController.currentSelectedUser.value.assignedTo
+                                                      value: userManagementController.statusOptionsForAdd.contains(userManagementController.currentSelectedUser.value.status?.toLowerCase())
+                                                          ? userManagementController.currentSelectedUser.value.status?.toLowerCase()
                                                           : null,
-                                                      items: leadManagementController.assignedToOtpions.value.map((String value) {
+                                                      items: userManagementController.statusOptionsForAdd.map((String value) {
                                                         return DropdownMenuItem<String>(
                                                           value: value,
                                                           child: Text(value),
                                                         );
                                                       }).toList(),
                                                       onChanged: (String? newValue) {
-                                                        leadManagementController.selectAssignedToForAddEditUser(newValue!);
-
-
-                                                      },
-                                                      decoration: InputDecoration(
-                                                        labelText: '',
-                                                        labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                        focusedBorder: OutlineInputBorder(
-                                                            borderRadius: BorderRadius.circular(8),
-                                                            borderSide: const BorderSide(
-                                                                width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: const BorderSide(
-                                                              width: 2, color: ColorUtils.GREY_DOTTED),
-                                                          borderRadius: BorderRadius.circular(8),
-                                                        ),
-                                                        errorBorder: OutlineInputBorder(
-                                                          borderSide: const BorderSide(
-                                                              width: 2, color: ColorUtils.ERROR_RED),
-                                                          borderRadius: BorderRadius.circular(8),
-                                                        ),
-                                                        focusedErrorBorder: OutlineInputBorder(
-                                                          borderSide: const BorderSide(
-                                                              width: 2, color: ColorUtils.ERROR_RED),
-                                                          borderRadius: BorderRadius.circular(8),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                            ),
-                                            Container(
-                                              width: width * 0.16,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    "Type",
-                                                    style: TextStyleUtils
-                                                        .smallHighlighted
-                                                        .copyWith(
-                                                        color: ColorUtils
-                                                            .SECONDARY_BLACK),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Container(
-
-                                                    child: DropdownButtonFormField<String>(
-                                                      value: leadManagementController.typeOptionsforAdd.contains(leadManagementController.currentSelectedUser.value.status)
-                                                          ? leadManagementController.currentSelectedUser.value.status
-                                                          : null,
-                                                      items: leadManagementController.typeOptionsforAdd.map((String value) {
-                                                        return DropdownMenuItem<String>(
-                                                          value: value,
-                                                          child: Text(value),
-                                                        );
-                                                      }).toList(),
-                                                      onChanged: (String? newValue) {
-                                                        leadManagementController.selectType(newValue!);
+                                                        userManagementController.selectType(newValue!);
 
 
                                                       },
@@ -2220,15 +2227,80 @@ class AddLead extends StatelessWidget {
                                           ],
                                         ),
 
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Divider(),
+
+
 
                                         SizedBox(
                                           height: 20,
                                         ),
+
+                                        Text("ISF Programs Enrollment", style: TextStyleUtils.heading5,),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+
+                                        Obx(() => GridView.builder(
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+
+                                            crossAxisCount:  3, // Single column for mobile, two for larger screens
+                                            childAspectRatio: 7, // Adjusted aspect ratio for mobile
+                                            crossAxisSpacing: 20,
+                                            mainAxisSpacing: 10,
+                                          ),
+                                          itemCount: userManagementController.programOptions
+                                              .length,
+                                          shrinkWrap: true,
+                                          physics: NeverScrollableScrollPhysics(), // Keeps the scrolling smooth
+                                          itemBuilder: (context, index) {
+                                            var item = userManagementController.programOptions[index];
+
+                                            return Container(
+
+                                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                              decoration: BoxDecoration(
+                                                color: ColorUtils.WHITE_COLOR_BACKGROUND,
+
+                                                borderRadius: BorderRadius.circular(10),
+                                                border: Border.all(color: Colors.grey.shade300),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      item["subject"].toString().tr,
+                                                      style: TextStyleUtils.mobileheading6.copyWith(
+                                                          fontWeight: FontWeight.w500
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Obx(() => Checkbox(
+                                                    value: item["value"]!.value, // GetX state management
+                                                    onChanged: (bool? newValue) {
+
+                                                      item["value"]!.value = newValue!;
+                                                      // print("list is ${studentRegistrationController.activeHealthy.value}");
+
+                                                    },
+                                                    activeColor: ColorUtils.HEADER_GREEN,
+                                                  )),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        )),
+
+
+
                                         Obx(
-                                          ()=>
-                                          leadManagementController.selectedModule.value=="Edit User"?Container():
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                              ()=>
+                                          userManagementController.selectedModule.value=="Edit User"?Container():
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
 
                                             children: [
                                               Text(
@@ -2243,7 +2315,7 @@ class AddLead extends StatelessWidget {
                                               ),
 
                                               TextFormField(
-                                                controller: leadManagementController
+                                                controller: userManagementController
                                                     .nextActionController,
                                                 maxLines: 1, // Allows long te// xt input
                                                 cursorColor:
@@ -2362,57 +2434,57 @@ class AddLead extends StatelessWidget {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
-                                            leadManagementController
+                                            userManagementController
                                                 .selectedModule.value ==
                                                 "Edit User"
                                                 ? GestureDetector(
                                               onTap: () {
                                                 print("Printing user info:\n"
-                                                    "ID: ${leadManagementController.currentSelectedUser.value.id}\n"
-                                                    "First Name: ${leadManagementController.userNameController!.text}\n"
-                                                    "Email: ${leadManagementController.emailController!.text}\n"
-                                                    "Status: ${leadManagementController.currentSelectedUser.value.status}\n"
-                                                    "Role: ${leadManagementController.currentSelectedUser.value.role}\n"
-                                                    "Last Name: ${leadManagementController.lastNameController!.text}\n"
-                                                    "Phone Number: ${leadManagementController.phoneNumberController!.text}\n"
-                                                    "Message: ${leadManagementController.messageController!.text}"
-                                                    "Assi: ${leadManagementController.currentSelectedUser.value.assignedTo}\n"
-                                                    "Depositon: ${leadManagementController.currentSelectedUser.value.disposition}\n");
+                                                    "ID: ${userManagementController.currentSelectedUser.value.id}\n"
+                                                    "First Name: ${userManagementController.userNameController!.text}\n"
+                                                    "Email: ${userManagementController.emailController!.text}\n"
+                                                    "Status: ${userManagementController.currentSelectedUser.value.status}\n"
+                                                    "Role: ${userManagementController.currentSelectedUser.value.role}\n"
+                                                    "Last Name: ${userManagementController.lastNameController!.text}\n"
+                                                    "Phone Number: ${userManagementController.phoneNumberController!.text}\n"
+                                                    "Message: ${userManagementController.messageController!.text}"
+                                                    "Assi: ${userManagementController.currentSelectedUser.value.assignedTo}\n"
+                                                    "Depositon: ${userManagementController.currentSelectedUser.value.disposition}\n");
 
-                                                leadManagementController.updateUserIfChanged(
-                                                    id: leadManagementController
+                                                userManagementController.updateUserIfChanged(
+                                                    id: userManagementController
                                                         .currentSelectedUser
                                                         .value
                                                         .id!,
-                                                    firstName: leadManagementController
+                                                    firstName: userManagementController
                                                         .userNameController!
                                                         .text,
-                                                    email: leadManagementController
+                                                    email: userManagementController
                                                         .emailController!
                                                         .text,
-                                                    status: leadManagementController
+                                                    status: userManagementController
                                                         .currentSelectedUser
                                                         .value
                                                         .status,
-                                                    role: leadManagementController
+                                                    role: userManagementController
                                                         .currentSelectedUser
                                                         .value
                                                         .role,
-                                                    lastName: leadManagementController
+                                                    lastName: userManagementController
                                                         .lastNameController!
                                                         .text,
                                                     phoneNumber:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .phoneNumberController!
                                                         .text,
                                                     assignedTo:
-                                                    leadManagementController
+                                                    userManagementController
                                                         .currentSelectedUser
                                                         .value
                                                         .assignedTo,
-                                                    depostion: leadManagementController.currentSelectedUser.value.disposition,
-                                                    nextAction: leadManagementController.currentSelectedUser.value.nextAction,
-                                                    notes: leadManagementController.messageController!.text,
+                                                    depostion: userManagementController.currentSelectedUser.value.disposition,
+                                                    nextAction: userManagementController.currentSelectedUser.value.nextAction,
+                                                    notes: userManagementController.messageController!.text,
                                                     key: editUserFormKey1);
                                               },
                                               child: Container(
@@ -2442,7 +2514,7 @@ class AddLead extends StatelessWidget {
                                                 : GestureDetector(
                                               onTap: () {
 
-                                                final c = leadManagementController;
+                                                final c = userManagementController;
 
                                                 // 1) Collect multi-selects (with "Other ..." text)
                                                 final List<String> interests = [
@@ -2491,7 +2563,7 @@ class AddLead extends StatelessWidget {
                                                 final String fullName  = [firstName, lastName].where((s) => s.isNotEmpty).join(' ');
 
                                                 // 3) Build Lead from controllers (all trimmed, safe)
-                                                final lead = Lead(
+                                                final lead = User(
                                                   firstName: firstName,
                                                   lastName: lastName,
                                                   name: fullName,
@@ -2499,7 +2571,7 @@ class AddLead extends StatelessWidget {
                                                   phoneNumber: (c.phoneNumberController?.text ?? '').trim(),
 
                                                   // Status/role/assignment/disposition/nextAction
-                                                  status: (c.selectedType.value).toString().trim().isEmpty ? 'Hot' : c.selectedType.value.trim(),
+                                                  status: (c.selectedStatus.value).toString().trim().isEmpty ? 'Hot' : c.selectedStatus.value.trim(),
                                                   role: c.selectedRoleFilterForAddEditUser.value.toString().trim().isEmpty?"New":c.selectedRoleFilterForAddEditUser.value,
                                                   assignedTo: c.selectedAssignedTo.value,
                                                   disposition: (c.selectedDisposition.value).toString().trim().isEmpty ? 'New' : c.selectedDisposition.value.trim(),
@@ -2515,19 +2587,7 @@ class AddLead extends StatelessWidget {
                                                   pincode: (c.pincodeController?.text ?? '').trim(),
                                                   background: (c.backgroundController?.text ?? '').trim(),
                                                   message: (c.messageController?.text ?? '').trim(),
-                                                  isConsentGiven: c.consentDraft.value,
-                                                  sourceDetails: {
-                                                    "source":"AdminDashboard-Offline",
-                                                    "otpDetails":{
-                                                      "otpVerified":false,
-
-                                                    },
-                                                    "mode":"Offline"
-                                                  },
-                                                  consentDetails: {
-                                                    "isConsentGive":false
-
-                                                  },
+                                                  // isConsentGiven: c.consentDraft.value,
 
                                                   // Preferences
                                                   preferredMode: c.selectedPreffredMode.value,
@@ -2566,15 +2626,7 @@ class AddLead extends StatelessWidget {
                                               ),
                                             ),
                                           ],
-                                        ),
-
-                                        Obx(
-                                                ()=>
-                                                  leadManagementController.isConsentNotGiven.value?  Container(child:Text("Consent is not taken, Please take the consent",style:TextStyleUtils.smallHighlighted.copyWith(
-                                                    color: ColorUtils.ERROR_RED
-                                                  ))):Container()
-
-                                        ),
+                                        )
                                       ],
                                     ),
                                   ),
@@ -2589,7 +2641,7 @@ class AddLead extends StatelessWidget {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      leadManagementController
+                                      userManagementController
                                           .pickAndUploadCSV();
                                     },
                                     child: Container(
@@ -2652,7 +2704,7 @@ class AddLead extends StatelessWidget {
                                                 color: ColorUtils.BRAND_COLOR),
                                             GestureDetector(
                                                 onTap: () {
-                                                  leadManagementController
+                                                  userManagementController
                                                       .downloadCsvTemplate();
                                                 },
                                                 child: Text(
@@ -2696,10 +2748,10 @@ class AddLead extends StatelessWidget {
                                               ),
                                               Obx(() {
                                                 final errors =
-                                                    leadManagementController
+                                                    userManagementController
                                                         .csvErrorEntries;
 
-                                                if (leadManagementController
+                                                if (userManagementController
                                                     .isLoading.value)
                                                   return CircularProgressIndicator(
                                                     color: ColorUtils.BRAND_COLOR,
@@ -2721,7 +2773,7 @@ class AddLead extends StatelessWidget {
                                                             style: TextStyleUtils
                                                                 .heading6),
                                                         Text(
-                                                            " Success Entries (${leadManagementController.successEntries.value})",
+                                                            " Success Entries (${userManagementController.successEntries.value})",
                                                             style: TextStyleUtils
                                                                 .heading6
                                                                 .copyWith(
@@ -2869,9 +2921,9 @@ class AddLead extends StatelessWidget {
 
         String formatted = DateFormat('yyyy-MM-dd').format(
             fullDateTime);
-        leadManagementController.dobController!.text = formatted;
+        userManagementController.dobController!.text = formatted;
 
-      leadManagementController.ageController!.text=  leadManagementController.calculateAge(leadManagementController.dobController!.text).toString();
+        userManagementController.ageController!.text=  Utils.calculateAge(userManagementController.dobController!.text).toString();
       }
     }
   }

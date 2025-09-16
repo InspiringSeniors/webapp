@@ -6,12 +6,12 @@ import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/lead_
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_views/add_lead.dart';
 import 'package:inspiringseniorswebapp/utils/utility/utils.dart';
 
-import '../../../common_widgets/custom_search_field.dart';
-import '../../../common_widgets/custom_text_field.dart';
-import '../../../utils/color_utils.dart';
-import '../models/leads_model.dart';
-import '../models/user_model.dart';
-import 'lead_management_views/view_lead.dart';
+import '../../../../common_widgets/custom_search_field.dart';
+import '../../../../common_widgets/custom_text_field.dart';
+import '../../../../utils/color_utils.dart';
+import '../../models/leads_model.dart';
+import '../../models/user_model.dart';
+import 'view_lead.dart';
 
 class LeadManagementScreen extends StatelessWidget {
   LeadManagementController leadManagementController = Get.find();
@@ -158,69 +158,26 @@ class LeadManagementScreen extends StatelessWidget {
                     children: [
 
                       Container(
-                        width: width*0.1,
-
-                       child:
-                       DropdownButtonFormField<String>(
-                          isDense: true,
-                          value: leadManagementController.roleOptions.contains(leadManagementController.selectedRoleFilter.value)
-                              ? leadManagementController.selectedRoleFilter.value
-                              : null,
-                          items: leadManagementController.roleOptions.map((String value) {
-                            return DropdownMenuItem<String>(
-
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            leadManagementController.selectRole(newValue!);
-                          },
-                          decoration: InputDecoration(
-                            labelText: 'Role',
-                            labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                            contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                    width: 2, color: ColorUtils.GREY_DOTTED)),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  width: 2, color: ColorUtils.GREY_DOTTED),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  width: 2, color: ColorUtils.ERROR_RED),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            focusedErrorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  width: 2, color: ColorUtils.ERROR_RED),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
                         width: width*0.082,
 
                         child: DropdownButtonFormField<String>(
                           isDense: true,
-                          value: leadManagementController.typeOptions.contains(leadManagementController.selectedType.value)
+                          value: leadManagementController.conentOptions.contains(leadManagementController.selectedType.value)
                               ? leadManagementController.selectedType.value
                               : null,
-                          items: leadManagementController.typeOptions.map((String value) {
+                          items: leadManagementController.conentOptions.map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(value),
                             );
                           }).toList(),
                           onChanged: (String? newValue) {
-                            leadManagementController.selectType(newValue!);
+
+
+                            leadManagementController.selectConsent(newValue);
                           },
                           decoration: InputDecoration(
-                            labelText: 'Type',
+                            labelText: 'Consent',
                             labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
                             contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
                             focusedBorder: OutlineInputBorder(
@@ -246,7 +203,7 @@ class LeadManagementScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        width: width*0.094,
+                        width: width*0.15,
 
                         child:
                         DropdownButtonFormField<String>(
@@ -291,108 +248,80 @@ class LeadManagementScreen extends StatelessWidget {
                       ),
 
 
-                      GestureDetector(
-                        onTap: () {
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
 
-                          print("butto click");
-                          leadManagementController.selectedModule.value = "Add User";
+                              print("butto click");
+                              leadManagementController.selectedModule.value = "Add User";
 
-                          print("butto click ${leadManagementController.selectedModule.value}");
+                              print("butto click ${leadManagementController.selectedModule.value}");
 
-                          leadManagementController.getUserByIdForAdd();
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 9, horizontal: 12),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: ColorUtils.GREY_DOTTED),
-                              color: ColorUtils.HEADER_GREEN),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Add Lead",
-                                style: TextStyleUtils.mobileheading6.copyWith(
+                              leadManagementController.getUserByIdForAdd();
+                            },
+                            child: Container(
+                              padding:
+                                  EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: ColorUtils.GREY_DOTTED),
+                                  color: ColorUtils.HEADER_GREEN),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Add Lead",
+                                    style: TextStyleUtils.mobileheading6.copyWith(
+                                        color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Icon(
+                                    Icons.add,
+                                    size: 20,
                                     color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                    fontWeight: FontWeight.w500),
+                                  )
+                                ],
                               ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Icon(
-                                Icons.add,
-                                size: 20,
-                                color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                      ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     showDeleteUserDialog(Get.context!, "Multi");
-                      //     leadManagementController.selectedModule.value =
-                      //         "Leads";
-                      //   },
-                      //   child: Container(
-                      //     padding:
-                      //         EdgeInsets.symmetric(vertical: 9, horizontal: 12),
-                      //     decoration: BoxDecoration(
-                      //         borderRadius: BorderRadius.circular(8),
-                      //         border: Border.all(color: ColorUtils.GREY_DOTTED),
-                      //         color: ColorUtils.ORANGE_COLOR_LIGHT_2),
-                      //     child: Row(
-                      //       children: [
-                      //         Text(
-                      //           "Delete ",
-                      //           style: TextStyleUtils.mobileheading6.copyWith(
-                      //               color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                      //               fontWeight: FontWeight.w500),
-                      //         ),
-                      //         SizedBox(
-                      //           width: 4,
-                      //         ),
-                      //         Icon(
-                      //           Icons.delete,
-                      //           size: 20,
-                      //           color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                      //         )
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
-                      GestureDetector(
-                        onTap: () {
-                          leadManagementController.toggleDropdownForAssignedTo(
-                              Get.context!, "Multi");
-                          // showReassigneDialog(Get.context!, "Multi");
-                        },
-                        child: Container(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 9, horizontal: 12),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: ColorUtils.GREY_DOTTED),
-                              color: ColorUtils.BRAND_COLOR),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Re-Assign ",
-                                style: TextStyleUtils.mobileheading6.copyWith(
+                          SizedBox(width: 10,),
+                          GestureDetector(
+                            onTap: () {
+                              leadManagementController.toggleDropdownForAssignedTo(
+                                  Get.context!, "Multi");
+                              // showReassigneDialog(Get.context!, "Multi");
+                            },
+                            child: Container(
+                              padding:
+                                  EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: ColorUtils.GREY_DOTTED),
+                                  color: ColorUtils.BRAND_COLOR),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Re-Assign ",
+                                    style: TextStyleUtils.mobileheading6.copyWith(
+                                        color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Icon(
+                                    Icons.person_add_alt,
+                                    size: 20,
                                     color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                    fontWeight: FontWeight.w500),
+                                  )
+                                ],
                               ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Icon(
-                                Icons.person_add_alt,
-                                size: 20,
-                                color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                              )
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ],
                   ))
@@ -431,9 +360,9 @@ class LeadManagementScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: width * 0.11,
+                    width: width * 0.07,
                     child: Text(
-                      "Interest Area",
+                      "Consent",
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
@@ -447,7 +376,7 @@ class LeadManagementScreen extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    width: width * 0.07,
+                    width: width * 0.11,
                     child: Text(
                       "Disposition ",
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
@@ -592,17 +521,23 @@ class LeadManagementScreen extends StatelessWidget {
                                                           .GREY_COLOR_PLACEHOLDER),
                                             )),
                                         Container(
-                                          width: width * 0.11,
+                                          width: width * 0.07,
+                                          padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10) ,
+                                          decoration: BoxDecoration(
+                                             color:  user.isConsentGiven==true?ColorUtils.HEADER_GREEN:ColorUtils.ERROR_RED,
+                                            borderRadius: BorderRadius.circular(12)
+
+                                          ),
                                           child: Text(
-                                            user.preferences == null ||
-                                                    user.preferences!.length == 0 ||
-                                                    user.preferences == []
-                                                ? "_"
-                                                : user.preferences![0]!,
+                                            user.isConsentGiven == null
+                                                ? "Not Taken"
+                                                : user.isConsentGiven==false?"Not Given":"Given",
+
                                             style: TextStyleUtils.mobileheading6
                                                 .copyWith(
+
                                                     fontWeight: FontWeight.w500,
-                                                    color: ColorUtils.SECONDARY_BLACK,
+                                                    color: ColorUtils.WHITE_COLOR_BACKGROUND,
                                                     fontSize: 11),
                                           ),
                                         ),
@@ -623,7 +558,7 @@ class LeadManagementScreen extends StatelessWidget {
                                         ),
                                         Container(
                                           alignment: Alignment.center,
-                                          width: width * 0.07,
+                                          width: width * 0.11,
                                           child: Text(
                                             user.disposition == "" ||
                                                     user.disposition == null
@@ -724,17 +659,22 @@ class LeadManagementScreen extends StatelessWidget {
                                                     size: 20,
                                                   ),
                                                 ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    showDeleteUserDialog(
-                                                        context, user.id!);
-                                                  },
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    color:
-                                                        ColorUtils.ORANGE_COLOR_DARK,
-                                                    size: 20,
+                                                Obx(()=>
+                                                leadManagementController.currentLoggedInUser.value==null ||leadManagementController.currentLoggedInUser.value.membershipType?.toLowerCase().trim()
+                                                    !="super admin"?Container():
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      showDeleteUserDialog(
+                                                          context, user.id!);
+                                                    },
+                                                    child: Icon(
+                                                      Icons.delete,
+                                                      color:
+                                                          ColorUtils.ORANGE_COLOR_DARK,
+                                                      size: 20,
+                                                    ),
                                                   ),
+
                                                 ),
                                                 GestureDetector(
                                                   onTap: () {

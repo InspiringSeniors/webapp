@@ -575,57 +575,75 @@ class MemberRegistrationController extends GetxController{
           selectedReferralOption.value.add(otherRefferarSource!.text.trim());
         }
 
-       var id=Utils.generateMemberId(userNameController!.text, phoneNumberController!.text);
+
+        var id ;
+
+        var sourceDetails;
+
+        if(isFromRegisterScreen.value==false){
+          id = Utils.generateMemberId(
+              userNameController!.text, phoneNumberController!.text);
+          sourceDetails={
+            "source":"Website-MemberForm",
+            "otpDetails":{
+              "otpVerified":false,
+            },
+            "mode":"Online"
+          };
+        }else {
+
+          print("current user${
+          currentSelectedUser.value.sourceDetails
+          }");
+          id=currentSelectedUser.value.id;
+
+          sourceDetails=currentSelectedUser.value.sourceDetails;
+
+
+        }
+
 
         // Prepare data
-        final leadData = {
-          "id":id,
-          "isFormFilled":true,
-          "firstName":userNameController!.text.trim(),
-          "name": userNameController!.text.trim(),
-          "phoneNumber": phoneNumberController!.text.trim(),
-          "email": emailController!.text.trim(),
-          "age": ageController!.text.trim(),
-          "gender": selectedGender.value,
-          'isConsentGiven':true,
-          "city": cityNameController!.text.trim(),
-          "pincode": pincodeController!.text.trim(),
-          "background": backgroundController!.text.trim(),
-          "interests": selectedInterests.value,
-          "opportunities": selectedOpportunityOptions.value,
-          "motivations": selectedMotivationOptions.value,
-          "preferredMode": selectedPreffredMode.value,
-          "preferredTime": selectedFromTimeFilter.value,
-          "message": messageController!.text.trim(),
-          "referralSources": selectedReferralOption.value,
-          "createdAt": FieldValue.serverTimestamp(),
-          "disposition":"New",
-          "status":"Hot",
+        final lead = Lead(
+          id: id,
+          isFormFilled: true,
+          firstName: userNameController!.text.trim(),
+          name: userNameController!.text.trim(),
+          phoneNumber: phoneNumberController!.text.trim(),
+          email: emailController!.text.trim(),
+          age: ageController!.text.trim(),
+          gender: selectedGender.value,
+          isConsentGiven: true,
+          consentDetails: {
+            "date": FieldValue.serverTimestamp(),
+            "format": "",
+            "isConsentGiven": true,
+            "link": "",
+          },
+          sourceDetails: sourceDetails,
+          city: cityNameController!.text.trim(),
+          pincode: pincodeController!.text.trim(),
+          background: backgroundController!.text.trim(),
+          interests: selectedInterests.value,
+          opportunities: selectedOpportunityOptions.value,
+          motivations: selectedMotivationOptions.value,
+          preferredMode: selectedPreffredMode.value,
+          preferredTime: selectedFromTimeFilter.value,
+          message: messageController!.text.trim(),
+          referralSources: selectedReferralOption.value,
+        );
 
-          "registerDate": FieldValue.serverTimestamp(),
-
-        };
+        await FirebaseFirestore.instance
+            .collection('leads')
+            .doc(id)
+            .set(lead.toMap());
 
         // Save to Firestore
-        await FirebaseFirestore.instance.collection('leads').doc(id).set(leadData);
+        // await FirebaseFirestore.instance.collection('leads').doc(id).set(leadData);
 
         sendWhatsApp(phoneNumberController!.text);
 
         // Print data for verification
-        print("📋 Submitted Form Data:");
-        print("Name: ${leadData['name']}");
-        print("Phone: ${leadData['phone']}");
-        print("Email: ${leadData['email']}");
-        print("Age: ${leadData['age']}");
-        print("Gender: ${leadData['gender']}");
-        print("City: ${leadData['city']}, Pincode: ${leadData['pincode']}");
-        print("Background: ${leadData['background']}");
-        print("Interests: ${leadData['interests']}");
-        print("Opportunities: ${leadData['opportunities']}");
-        print("Motivations: ${leadData['motivations']}");
-        print("Preferred Mode: ${leadData['preferredMode']}, Time: ${leadData['preferredTime']}");
-        print("Suggestions/Message: ${leadData['message']}");
-        print("Referral Sources: ${leadData['referralSources']}");
 
         // Reset the form
         userNameController!.clear();
@@ -668,7 +686,7 @@ class MemberRegistrationController extends GetxController{
       } catch (e) {
         isFormSubmitting.value = false;
 
-        // print("❌ Error while submitting form: $e");
+        print("❌ Error while submitting form: $e");
 
         Get.snackbar(
           "Error",

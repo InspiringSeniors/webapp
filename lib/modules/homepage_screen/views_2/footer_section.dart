@@ -499,23 +499,23 @@ class FooterSection2 extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      // GestureDetector(
+                      //   onTap:(){
+                      //
+                      //     Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
+                      //
+                      //   },
+                      //   child: Text(
+                      //     "Terms & Conditions",
+                      //     style: TextStyleUtils.textStyleh14.copyWith(
+                      //         fontSize: TextSizeDynamicUtils.dHeight12,
+                      //
+                      //         color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                      //   ),
+                      // ),
                       GestureDetector(
                         onTap:(){
-
-                          Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
-
-                        },
-                        child: Text(
-                          "Terms & Conditions",
-                          style: TextStyleUtils.textStyleh14.copyWith(
-                              fontSize: TextSizeDynamicUtils.dHeight12,
-
-                              color: ColorUtils.WHITE_COLOR_BACKGROUND),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap:(){
-                          Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
+                          Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2FPrivacy%20Policy_Inspiring%20Seniors%20Foundation.pdf?alt=media&token=488a128f-4297-483b-b82e-c8bf4ccfebdd");
 
                         },
                         child: Text(
@@ -1132,22 +1132,22 @@ class FooterSection2 extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            GestureDetector(
-                              onTap:(){
-
-                                Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
-
-                              },
-                              child: Text(
-                                "Terms & Conditions",
-                                style: TextStyleUtils.textStyleh14.copyWith(
-                                    color: ColorUtils.WHITE_COLOR_BACKGROUND),
-                              ),
-                            ),
+                            // GestureDetector(
+                            //   onTap:(){
+                            //
+                            //     Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fterms_conditions_01.pdf?alt=media&token=3a77edba-3aef-4906-9a96-b36489c32137");
+                            //
+                            //   },
+                            //   child: Text(
+                            //     "Terms & Conditions",
+                            //     style: TextStyleUtils.textStyleh14.copyWith(
+                            //         color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                            //   ),
+                            // ),
                             SizedBox(width: 20,),
                             GestureDetector(
                               onTap:(){
-                                Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2Fprivacy_policy_01.pdf?alt=media&token=553ce106-8df8-41b7-93a0-c4a0309183d7");
+                                Utils.launchUrlFor("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/certificates%2FPrivacy%20Policy_Inspiring%20Seniors%20Foundation.pdf?alt=media&token=488a128f-4297-483b-b82e-c8bf4ccfebdd");
 
                               },
                               child: Text(

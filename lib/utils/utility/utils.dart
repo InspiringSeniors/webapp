@@ -8,6 +8,8 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 import 'package:url_launcher/url_launcher.dart';
 
+import '../color_utils.dart';
+
 class GlobalKeyConsts {
   static final GlobalKey<NavigatorState> navigatorKey =
       new GlobalKey<NavigatorState>();
@@ -84,6 +86,22 @@ class Validators {
 
 class Utils{
 
+ static int? calculateAge(String dobText) {
+    if (dobText.isEmpty) return null;
+    try {
+      final dob = DateTime.parse(dobText); // expects yyyy-MM-dd
+      final now = DateTime.now();
+      int age = now.year - dob.year;
+      if (now.month < dob.month || (now.month == dob.month && now.day < dob.day)) {
+        age--; // subtract if birthday hasn’t occurred this year
+      }
+      return age;
+    } catch (e) {
+      return null; // invalid dob format
+    }
+  }
+
+
   static String generateMemberId(String fullName, String mobile) {
     // 1. Trim leading/trailing spaces
     fullName = fullName.trim();
@@ -111,6 +129,20 @@ class Utils{
         : cleaned.substring(cleaned.length - 4);    // 6. Append mobile number
     return "$firstFour$lastFour";
   }
+
+
+ static Color getStatusColor(String? status) {
+   switch (status?.toLowerCase()) {
+     case 'active':
+       return ColorUtils.HEADER_GREEN; // Example: Light green
+     case 'pending':
+       return ColorUtils.YELLOW_BRAND_TRANSPARENT; // Example: Yellow
+     case 'locked':
+       return ColorUtils.ORANGE_COLOR; // Example: Light red
+     default:
+       return Colors.white; // Neutral/unknown status
+   }
+ }
 
 
   static openWhatsappForChatSupport() async {

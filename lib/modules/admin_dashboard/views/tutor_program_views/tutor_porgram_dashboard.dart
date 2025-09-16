@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutors_program_controller.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_dashboard_views/classes_view.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_dashboard_views/student_view.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_dashboard_views/tutors_view.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/user_management_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutor_dashboard_controllers/tutors_program_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_program_views/classes_view.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_program_views/student_dashboard_views/student_view.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_program_views/tutor_dashboard_views/tutors_view.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/user_management_views/user_management_screen.dart';
 
-import '../../../utils/color_utils.dart';
+import '../../../../utils/color_utils.dart';
 
 class TutorPorgramDashboard extends StatelessWidget {
   TutorsProgramController tutorsProgramController=Get.find();
@@ -39,7 +39,7 @@ class TutorPorgramDashboard extends StatelessWidget {
                           tutorsProgramController.applyFilter("class");
 
                         },
-                        bgColor: tutorsProgramController.selectedFilter.value == "class"
+                        bgColor: tutorsProgramController.selectedViewForTutorProgram.value == "class"
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
                     headingCards(
@@ -53,7 +53,7 @@ class TutorPorgramDashboard extends StatelessWidget {
                           tutorsProgramController.applyFilter("student");
 
                         },
-                        bgColor: tutorsProgramController.selectedFilter.value ==
+                        bgColor: tutorsProgramController.selectedViewForTutorProgram.value ==
                             "student"
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
@@ -68,7 +68,7 @@ class TutorPorgramDashboard extends StatelessWidget {
                           tutorsProgramController.applyFilter("tutor");
 
                         },
-                        bgColor: tutorsProgramController.selectedFilter.value ==
+                        bgColor: tutorsProgramController.selectedViewForTutorProgram.value ==
                             "tutor"
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
@@ -82,7 +82,7 @@ class TutorPorgramDashboard extends StatelessWidget {
                         ontap: () {
                           tutorsProgramController.applyFilter("school");
                         },
-                        bgColor: tutorsProgramController.selectedFilter.value ==
+                        bgColor: tutorsProgramController.selectedViewForTutorProgram.value ==
                             "school"
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
@@ -93,7 +93,7 @@ class TutorPorgramDashboard extends StatelessWidget {
 
 
       Obx(() {
-        switch (tutorsProgramController.selectedFilter.value) {
+        switch (tutorsProgramController.selectedViewForTutorProgram.value) {
           case "class":
             return ClassesView();
           case "student":

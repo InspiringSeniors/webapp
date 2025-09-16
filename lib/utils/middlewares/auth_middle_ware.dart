@@ -8,13 +8,11 @@ class AuthMiddleware extends GetMiddleware {
     // Replace with your auth check logic
     final isAuthenticated = AuthService.to.isLoggedIn;
 
+
+    print("route is ${route}");
     if (!isAuthenticated && route == '/adminDashboard') {
       return RouteSettings(name: '/adminLogin');
-    } else
-    if (!isAuthenticated && route == '/tutorsDashboard') {
-      return RouteSettings(name: '/adminLogin');
     }
-
     return null; // allow navigation
   }
 }

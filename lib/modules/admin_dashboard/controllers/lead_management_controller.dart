@@ -14,7 +14,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/models/user_model.dart';
-import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_views/lead_management_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../../../utils/color_utils.dart';
@@ -79,9 +79,11 @@ class LeadManagementController extends GetxController{
 
   final List<String> roleOptions = ['All','Member','Volunteer','Tutor','Young Volunteer', 'Donor',];
   final List<String> typeOptions = ['All','Cold', 'Warm', 'Hot',];
+  final List<String> conentOptions = ['All','Given','Not Given'];
+
   final List<String> dispositionOptions = ['All', 'New', 'Follow Up', 'Not Connected','Not Interested Currently','Junk','Interested'];
   // final List<String> assignedToOptions = ['Shurti', 'Praneta', 'Pragati','Khusbhu',];
-  final List<String> roleOptionsForAdd = ['New','Member','Volunteer','Tutor','Young Volunteer', 'Donor',];
+  final List<String> roleOptionsForAdd = ['New','Member',];
   final List<String> typeOptionsforAdd = ['Cold', 'Warm', 'Hot',];
   final List<String> dispositionOptionsforAdd = [ 'New', 'Follow Up', 'Not Connected','Not Interested Currently','Junk','Interested'];
 
@@ -142,6 +144,9 @@ class LeadManagementController extends GetxController{
 
   RxBool showSortDropdownForDisposition = false.obs;
   RxString selectedType = ''.obs;
+  var isConsentNotGiven=false.obs;
+// null => All, true => Given, false => Not Given
+  final RxnBool isConsentGiven = RxnBool(null);
   RxString selectedDisposition = ''.obs;
   RxString selectedAssignedTo = ''.obs;
 
@@ -264,13 +269,18 @@ class LeadManagementController extends GetxController{
   DocumentSnapshot? lastDocument;
   RxBool hasMore = true.obs;
 
+
   var prefferedLanguageOptions = <Map<String, dynamic>>[
     {"subject": "English".tr, "value": false.obs},
     {"subject": "Hindi".tr, "value": false.obs},
     {"subject": "Punjabi".tr, "value": false.obs},
     {"subject": "Marathi".tr, "value": false.obs},
-    {"subject": "Gujarati".tr, "value": false.obs},
+    {"subject": "Bengali".tr, "value": false.obs},
+    {"subject": "Telugu".tr, "value": false.obs},
     {"subject": "Tamil".tr, "value": false.obs},
+    {"subject": "Gujarati".tr, "value": false.obs},
+    {"subject": "Kannada".tr, "value": false.obs},
+    {"subject": "Malayalam".tr, "value": false.obs},
   ].obs;
 
 
@@ -388,18 +398,31 @@ class LeadManagementController extends GetxController{
 
 
   void filterUsersForRole(String query) {
-    searchText.value = query;
+    searchText.value = query.toLowerCase();
 
     filteredUsers.value = users.where((user) {
       final name = "${user.firstName ?? ''} ${user.lastName ?? ''}".toLowerCase();
       final phone = user.phoneNumber ?? '';
-      final statusMatch = selectedStatusFilter.value.isEmpty || user.status?.toLowerCase() == selectedStatusFilter.value.toLowerCase();
-      final roleMatch = selectedRoleFilter.value.isEmpty || user.role?.toLowerCase() == selectedRoleFilter.value.toLowerCase();
 
-      return (name.contains(query.toLowerCase()) || phone.contains(query)) && statusMatch && roleMatch ;
+      // Status filter
+      final statusMatch = selectedStatusFilter.value.isEmpty ||
+          (user.status?.toLowerCase() == selectedStatusFilter.value.toLowerCase());
+
+      // Role filter
+      final roleMatch = selectedRoleFilter.value.isEmpty ||
+          (user.role?.toLowerCase() == selectedRoleFilter.value.toLowerCase());
+
+      // Consent filter: only apply if explicitly set (true/false)
+      final consentFilter = isConsentGiven.value;
+      final consentMatch = consentFilter == null || user.isConsentGiven == consentFilter;
+
+      return (name.contains(query.toLowerCase()) || phone.contains(query)) &&
+          statusMatch &&
+          roleMatch &&
+          consentMatch;
     }).toList();
 
-    // Apply sorting after filtering
+    // Apply sorting after filtering if needed
   }
 
 
@@ -570,6 +593,51 @@ class LeadManagementController extends GetxController{
     }
   }
 
+  void selectConsent(dynamic value) {
+    // Normalize input to bool? (null = All)
+    bool? normalized;
+    if (value is bool) {
+      normalized = value;
+    } else if (value is String) {
+      final v = value.trim().toLowerCase();
+      if (v == 'all' || v == 'none' || v.isEmpty) {
+        normalized = null;           // All
+      } else if (v == 'given' || v == 'true' || v == 'yes') {
+        normalized = true;           // Given
+      } else if (v == 'not given' || v == 'false' || v == 'no') {
+        normalized = false;
+      }
+        else if(v == 'not taken'){
+          normalized=null;
+      }// Not Given
+      else {
+        normalized = null;           // Fallback to All
+      }
+    } else {
+      normalized = null;             // Fallback to All
+    }
+
+    if (selectedModule.value == "Edit User") {
+      // In edit mode, the field is truly boolean, not tri-state.
+      final updatedUser = currentSelectedUser.value.copyWith(
+        isConsentGiven: normalized ?? false,
+      );
+      currentSelectedUser.value = updatedUser;
+      update();
+      return;
+    }
+
+    // In list/filter mode
+    isConsentGiven.value = normalized;      // null/true/false
+    applyConsentFilter(normalized);
+  }
+
+  void applyConsentFilter(bool? value) {
+    // Re-run the main filter with current search text
+    filterUsersForRole(searchText.value ?? "");
+  }
+
+
   void sortUsers(SortField field, SortOrder order) {
     currentSortField.value = field;
     currentSortOrder.value = order;
@@ -604,7 +672,7 @@ class LeadManagementController extends GetxController{
 
   String formatDate(DateTime? date) {
     if (date == null) return 'No date available';
-    return DateFormat('dd-MM-yyyy').format(date);
+    return DateFormat('dd-MM-yyyy HH:mm:ss').format(date);
   }
 
   Color getStatusColor(String? status) {
@@ -772,33 +840,7 @@ class LeadManagementController extends GetxController{
         }
       }
 
-      void _applyMulti({
-        required List<dynamic> modelList,
-        required List<Map<String, dynamic>> options,
-        TextEditingController? otherController,
-      }) {
-        // uncheck all
-        for (final item in options) {
-          final rx = item['value'];
-          if (rx != null) rx.value = false;
-        }
-        final Set<String> selected =
-        modelList.map((e) => e.toString().trim()).where((e) => e.isNotEmpty).toSet();
-        final Set<String> subjects =
-        options.map((e) => (e['subject'] as String).trim()).toSet();
 
-        // check available
-        for (final item in options) {
-          final subj = (item['subject'] as String).trim();
-          if (selected.contains(subj)) item['value'].value = true;
-        }
-
-        // leftovers -> other text
-        if (otherController != null) {
-          final leftovers = selected.difference(subjects).toList()..sort();
-          otherController.text = leftovers.join(', ');
-        }
-      }
 
       // ---------- text controllers ----------
       userNameController?.text      = (lead.firstName ?? '').trim();
@@ -910,6 +952,34 @@ class LeadManagementController extends GetxController{
 
 
 
+  void _applyMulti({
+    required List<dynamic> modelList,
+    required List<Map<String, dynamic>> options,
+    TextEditingController? otherController,
+  }) {
+    // uncheck all
+    for (final item in options) {
+      final rx = item['value'];
+      if (rx != null) rx.value = false;
+    }
+    final Set<String> selected =
+    modelList.map((e) => e.toString().trim()).where((e) => e.isNotEmpty).toSet();
+    final Set<String> subjects =
+    options.map((e) => (e['subject'] as String).trim()).toSet();
+
+    // check available
+    for (final item in options) {
+      final subj = (item['subject'] as String).trim();
+      if (selected.contains(subj)) item['value'].value = true;
+    }
+
+    // leftovers -> other text
+    if (otherController != null) {
+      final leftovers = selected.difference(subjects).toList()..sort();
+      otherController.text = leftovers.join(', ');
+    }
+  }
+
   String? validatemail(String? text) {
     if(text==""){
       return null;
@@ -936,10 +1006,34 @@ class LeadManagementController extends GetxController{
     return null;
   }
 
-  void toggle() {
+  // For Add User form
+  final RxBool consentDraft = false.obs;
 
-    isOn.value = !isOn.value;
+// Read the switch state based on mode (no tri-state; null -> false)
+  bool get consentSwitch {
+    if (selectedModule.value == "Edit User") {
+      return currentSelectedUser.value.isConsentGiven == true;
+    }
+    return consentDraft.value;
   }
+
+// Toggle between true/false only
+  void toggleConsent() {
+    if (selectedModule.value == "Edit User") {
+      final cur = currentSelectedUser.value.isConsentGiven == true;
+      currentSelectedUser.value =
+          currentSelectedUser.value.copyWith(isConsentGiven: !cur);
+      update();
+    } else {
+      consentDraft.value = !consentDraft.value;
+    }
+  }
+
+// When creating a new user from Add User form, save:
+// isConsentGiven: consentDraft.value
+
+
+
 
   Future<void> updateUserIfChanged({
     required String id,
@@ -956,6 +1050,8 @@ class LeadManagementController extends GetxController{
     var key,
   }) async {
     print("called for updation");
+
+
 
     // Helpers
     String? t(String? s) => (s == null || s.trim().isEmpty) ? null : s.trim();
@@ -1133,12 +1229,14 @@ class LeadManagementController extends GetxController{
         firstName: updateData['firstName'] ?? currentSelectedUser.value.firstName,
         lastName:  updateData['lastName']  ?? currentSelectedUser.value.lastName,
         name:      updateData['name']      ?? currentSelectedUser.value.name,
+        consentDetails: updateData['consentDetails']??currentSelectedUser.value.consentDetails,
         email:     updateData['email']     ?? currentSelectedUser.value.email,
         role:      updateData['role']      ?? currentSelectedUser.value.role,
         status:    updateData['status']    ?? currentSelectedUser.value.status,
         assignedTo:updateData['assignedTo']?? currentSelectedUser.value.assignedTo,
         phoneNumber:updateData['phoneNumber'] ?? currentSelectedUser.value.phoneNumber,
         notes:     updateData['notes']     ?? currentSelectedUser.value.notes,
+        sourceDetails:updateData["sourceDetails"]?? currentSelectedUser.value.sourceDetails,
         disposition:updateData['disposition'] ?? currentSelectedUser.value.disposition,
         nextAction:updateData['nextAction']?? currentSelectedUser.value.nextAction,
         updatedAt: DateTime.now(),
@@ -1170,26 +1268,53 @@ class LeadManagementController extends GetxController{
       if (roleCheck != 'new'&&dispositionCheck=="interested") {
         final now = DateTime.now();
 
-        final userData = {
-          "id": id,
-          "firstName": patched.firstName,
-          "lastName": patched.lastName,
-          "email": patched.email,
-          "phoneNumber": patched.phoneNumber,
-          "status": "active",
-          "role": (patched.role ?? 'member'),
-          "registerDate": Timestamp.fromDate(now),
-          "lastLogin": null,
-          "updatedAt": Timestamp.fromDate(now),
-          "password": null,
+        if(currentSelectedUser.value.isConsentGiven==false||currentSelectedUser.value.isConsentGiven==null){
+          isConsentNotGiven.value=true;
+          return;
+
+        }
+
+        final Map<String, dynamic> userData = {
+          'id': id,
+          'firstName': patched.firstName?.trim(),
+          'lastName': patched.lastName?.trim(),
+          'name': patched.firstName,
+          'email': patched.email?.trim(),
+          'phoneNumber': patched.phoneNumber,
+          'status': 'pending',
+          'role': patched.role,
           'isFormFilled':true,
-          "membershipType": "silver",
-          "lastDate": Timestamp.fromDate(now.add(const Duration(days: 365))),
-          "location": null,
-          "profilePic": patched.profilePic,
-          "preferences": patched.preferences ?? [],
-          "notes": patched.notes,
-          "isPasswordSet": false,
+          'isConsentGiven':patched.isConsentGiven,
+          'consentDetails':patched.consentDetails,
+          'sourceDetails':patched.sourceDetails,
+
+          // Timestamps from model if provided, else leave null (Firestore will ignore null)
+          'registerDate': FieldValue.serverTimestamp(),
+          'lastLogin': patched.lastLogin != null ? Timestamp.fromDate(patched.lastLogin!) : null,
+          'updatedAt': FieldValue.serverTimestamp(),
+          'createdAt': FieldValue.serverTimestamp(),
+          'profilePic': patched.profilePic,
+          'preferences': patched.preferences ?? [],
+          'notes': patched.notes,
+          'assignedTo': patched.assignedTo,
+          'disposition': patched.disposition ?? 'New',
+          'nextAction': patched.nextAction,
+          // Extended profile
+          'age': patched.age,
+          'dob': patched.dob,
+          'gender': patched.gender,
+          'city': patched.city,
+          'state': patched.state,
+          'pincode': patched.pincode,
+          'background': patched.background,
+          'interests': patched.interests ?? [],
+          'opportunities': patched.opportunities ?? [],
+          'motivations': patched.motivations ?? [],
+          'preferredMode': patched.preferredMode,
+          'preferredTime': patched.preferredTime,
+          'message': patched.message,
+          'referralSources': patched.referralSources ?? [],
+          'languagePreference': patched.languagePreference ?? [],
         };
 
         final leadDocRef = _firestore.collection('leads').doc(id);
@@ -1314,6 +1439,9 @@ class LeadManagementController extends GetxController{
     final isValid = key.currentState?.validate() ?? false;
     if (!isValid) return;
 
+
+
+
     try {
       // Basic guards
       final fullName = (user.name ?? '${user.firstName ?? ''} ${user.lastName ?? ''}').trim();
@@ -1391,6 +1519,7 @@ class LeadManagementController extends GetxController{
         'preferredMode': user.preferredMode,
         'preferredTime': user.preferredTime,
         'message': user.message,
+        'isConsentGiven':user.isConsentGiven,
         'referralSources': user.referralSources ?? [],
         'languagePreference': user.languagePreference ?? [],
       };
@@ -1398,6 +1527,12 @@ class LeadManagementController extends GetxController{
 
       final roleCheck = user.role?.trim().toLowerCase();
       if (roleCheck != 'new') {
+
+        if(user.isConsentGiven==false||user.isConsentGiven==null){
+          isConsentNotGiven.value=true;
+          return;
+
+        }
         final Map<String, dynamic> leadData = {
           'id': id,
           'firstName': user.firstName?.trim(),
@@ -1408,6 +1543,8 @@ class LeadManagementController extends GetxController{
           'status': 'pending',
           'role': user.role,
           'isFormFilled':true,
+          'isConsentGiven':user.isConsentGiven,
+
           // Timestamps from model if provided, else leave null (Firestore will ignore null)
           'registerDate': FieldValue.serverTimestamp(),
           'lastLogin': user.lastLogin != null ? Timestamp.fromDate(user.lastLogin!) : null,
@@ -1470,49 +1607,51 @@ class LeadManagementController extends GetxController{
           'Please look in Member as role is already assigned',
           snackPosition: SnackPosition.BOTTOM,
         );
-      }else {
-        final Map<String, dynamic> leadData = {
-          'id': id,
-          'firstName': user.firstName?.trim(),
-          'lastName': user.lastName?.trim(),
-          'name': fullName,
-          'email': user.email?.trim(),
-          'phoneNumber': mobile,
-          'status': user.status ?? 'Hot',
-          'role': user.role,
-          'isFormFilled':true,
-          // Timestamps from model if provided, else leave null (Firestore will ignore null)
-          'registerDate': FieldValue.serverTimestamp(),
-          'lastLogin': user.lastLogin != null ? Timestamp.fromDate(user.lastLogin!) : null,
-          'updatedAt': FieldValue.serverTimestamp(),
-          'createdAt': FieldValue.serverTimestamp(),
-          'profilePic': user.profilePic,
-          'preferences': user.preferences ?? [],
-          'notes': user.notes,
-          'assignedTo': user.assignedTo,
-          'disposition': user.disposition ?? 'New',
-          'nextAction': user.nextAction,
-          // Extended profile
-          'age': user.age,
-          'dob': user.dob,
-          'gender': user.gender,
-          'city': user.city,
-          'state': user.state,
-          'pincode': user.pincode,
-          'background': user.background,
-          'interests': user.interests ?? [],
-          'opportunities': user.opportunities ?? [],
-          'motivations': user.motivations ?? [],
-          'preferredMode': user.preferredMode,
-          'preferredTime': user.preferredTime,
-          'message': user.message,
-          'referralSources': user.referralSources ?? [],
-          'languagePreference': user.languagePreference ?? [],
-        };
+      }
+      else {
+        final lead = Lead(
+          id: id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          name: fullName,
+          email: user.email,
+          phoneNumber: mobile,
+          status: user.status,
+          role: user.role,
+          isFormFilled: false,
+          isConsentGiven: user.isConsentGiven,
+          lastLogin: user.lastLogin,
+          profilePic: user.profilePic,
+          preferences: user.preferences,
+          notes: user.notes,
+          assignedTo: user.assignedTo,
+          disposition: user.disposition,
+          nextAction: user.nextAction,
+          age: user.age,
+          dob: user.dob,
+          gender: user.gender,
+          city: user.city,
+          state: user.state,
+          pincode: user.pincode,
+          background: user.background,
+          interests: user.interests,
+          opportunities: user.opportunities,
+          motivations: user.motivations,
+          preferredMode: user.preferredMode,
+          preferredTime: user.preferredTime,
+          message: user.message,
+          sourceDetails: user.sourceDetails,
+          referralSources: user.referralSources,
+          consentDetails: user.consentDetails,
+          languagePreference: user.languagePreference,
+        );
 
-        // Save to Firestore
-        await FirebaseFirestore.instance.collection('leads').doc(id).set(
-            leadData);
+// Save to Firestore
+        await FirebaseFirestore.instance
+            .collection('leads')
+            .doc(id)
+            .set(lead.toMap(), SetOptions(merge: true));
+
         // Add next action if present
 
 
@@ -1628,6 +1767,8 @@ class LeadManagementController extends GetxController{
     messageController?.clear();
     lastNameController?.clear();
 
+    consentDraft.value=false;
+
     // "Other" text inputs
     otherInterestOption?.clear();
     otherOpportunityOption?.clear();
@@ -1656,6 +1797,7 @@ class LeadManagementController extends GetxController{
     selectedAssignedTo.value='';
     selectedRoleFilterForAddEditUser.value='';
     selectedDisposition.value='';
+    isConsentNotGiven.value=false;
 
 
     // Uncheck all checkbox options

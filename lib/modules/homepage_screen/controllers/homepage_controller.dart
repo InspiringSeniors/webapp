@@ -1003,12 +1003,25 @@ class OtpController extends GetxController {
         lastName: lastname,
         phoneNumber: phone,
         status: 'hot',
+
+        sourceDetails: {
+          "source":"Website-RegisterForm",
+          "otpDetails":{
+            "otpVerified":true,
+            "date":FieldValue.serverTimestamp(),
+          },
+          "mode":"Online",
+
+
+
+        },
         role: 'new',
         registerDate: now,
         updatedAt: now,
         message: message,
         preferences: [],
         profilePic: '',
+
       );
 
       await FirebaseFirestore.instance

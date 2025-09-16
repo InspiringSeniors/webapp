@@ -1,20 +1,21 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/common_widgets/custom_text_field.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/lead_management_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/user_management_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_views/lead_management_screen.dart';
 
 import '../../../../utils/color_utils.dart';
-import '../../../../utils/utility/utils.dart';
 
 
 
 
-class viewLead extends StatelessWidget {
+class viewUser extends StatelessWidget {
   final GlobalKey<FormState> nextActionKey = GlobalKey<FormState>();
 
 
-  LeadManagementController leadManagementController=Get.find();
+  UserManagementController userManagementController=Get.find();
   var width = MediaQuery.of(Get.context!).size.width;
   var height = MediaQuery.of(Get.context!).size.height;
   @override
@@ -24,7 +25,7 @@ class viewLead extends StatelessWidget {
       child: Container(
           color: ColorUtils.TRACK_GREY_LIGHT,
           child: Obx(() {
-            if (leadManagementController.isLoading.value) {
+            if (userManagementController.isLoading.value) {
               return Center(child: CircularProgressIndicator());
             }
 
@@ -42,8 +43,8 @@ class viewLead extends StatelessWidget {
                         children: [
                           GestureDetector(
                               onTap: () {
-                                leadManagementController.selectedModule.value =
-                                "Leads";
+                                userManagementController.selectedModule.value =
+                                "User";
                               },
                               child: Text(
                                 "Account Information",
@@ -61,7 +62,7 @@ class viewLead extends StatelessWidget {
                             width: 8,
                           ),
                           Text(
-                            leadManagementController.selectedModule.value ==
+                            userManagementController.selectedModule.value ==
                                 "View User"
                                 ? "View "
                                 : "Edit ",
@@ -104,12 +105,12 @@ class viewLead extends StatelessWidget {
                                         crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         children: [
-                                          leadManagementController
+                                          userManagementController
                                               .currentSelectedUser
                                               .value
                                               .profilePic ==
                                               "" ||
-                                              leadManagementController
+                                              userManagementController
                                                   .currentSelectedUser
                                                   .value
                                                   .profilePic ==
@@ -133,7 +134,7 @@ class viewLead extends StatelessWidget {
                                               shape: BoxShape.circle,
                                             ),
                                             child: Image.network(
-                                              leadManagementController
+                                              userManagementController
                                                   .currentSelectedUser
                                                   .value
                                                   .profilePic!,
@@ -157,15 +158,15 @@ class viewLead extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                    "${leadManagementController.currentSelectedUser.value.firstName == "" || leadManagementController.currentSelectedUser.value.firstName == null ? "" : leadManagementController.currentSelectedUser.value.firstName!} " +
-                                                        "${leadManagementController.currentSelectedUser.value.lastName == "" || leadManagementController.currentSelectedUser.value.lastName == null ? "" : leadManagementController.currentSelectedUser.value.lastName!} ",
+                                                    "${userManagementController.currentSelectedUser.value.firstName == "" || userManagementController.currentSelectedUser.value.firstName == null ? "" : userManagementController.currentSelectedUser.value.firstName!} " +
+                                                        "${userManagementController.currentSelectedUser.value.lastName == "" || userManagementController.currentSelectedUser.value.lastName == null ? "" : userManagementController.currentSelectedUser.value.lastName!} ",
                                                     style: TextStyleUtils
                                                         .heading5),
                                                 SizedBox(
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                    "User Id : ${leadManagementController.currentSelectedUser.value.id == "" ? "" : leadManagementController.currentSelectedUser.value.id!}",
+                                                    "User Id : ${userManagementController.currentSelectedUser.value.id == "" ? "" : userManagementController.currentSelectedUser.value.id}",
                                                     style: TextStyleUtils
                                                         .smallGreyTextStyleHighlighted
                                                         .copyWith(
@@ -176,19 +177,19 @@ class viewLead extends StatelessWidget {
                                                   height: 5,
                                                 ),
                                                 Container(
-                                                    padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10) ,
-                                                    decoration: BoxDecoration(
-                                                        color:  leadManagementController.currentSelectedUser.value.isConsentGiven==true?ColorUtils.HEADER_GREEN:ColorUtils.ERROR_RED,
-                                                        borderRadius: BorderRadius.circular(12)
+                                                  padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10) ,
+                                                  decoration: BoxDecoration(
+                                                      color:  userManagementController.currentSelectedUser.value.isConsentGiven==true?ColorUtils.HEADER_GREEN:ColorUtils.ERROR_RED,
+                                                      borderRadius: BorderRadius.circular(12)
 
-                                                    ),
+                                                  ),
                                                   child: Text(
 
-                                                      "Consent : ${leadManagementController.currentSelectedUser.value.isConsentGiven == null ? "Consent Not Taken" : leadManagementController.currentSelectedUser.value.isConsentGiven==false?"Not Given":"Given"}",
+                                                      "Consent : ${userManagementController.currentSelectedUser.value.isConsentGiven == null ? "Consent Not Taken" : userManagementController.currentSelectedUser.value.isConsentGiven==false?"Not Given":"Given"}",
                                                       style: TextStyleUtils
                                                           .smallGreyTextStyleHighlighted
                                                           .copyWith(
-                                                        color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                                                          color: ColorUtils.WHITE_COLOR_BACKGROUND,
                                                           fontWeight:
                                                           FontWeight
                                                               .w500)),
@@ -207,7 +208,7 @@ class viewLead extends StatelessWidget {
 
 
                                               Text(
-                                                "Last updated : ${(leadManagementController.currentSelectedUser.value.updatedAt == "" || leadManagementController.currentSelectedUser.value.updatedAt == null ? "No Data" : leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.updatedAt))!}",
+                                                "Last updated : ${(userManagementController.currentSelectedUser.value.updatedAt == "" || userManagementController.currentSelectedUser.value.updatedAt == null ? "No Data" : userManagementController.formatDate(userManagementController.currentSelectedUser.value.updatedAt))!}",
                                                 style: TextStyleUtils
                                                     .smallHighlighted.copyWith(
                                                     fontWeight: FontWeight
@@ -215,7 +216,7 @@ class viewLead extends StatelessWidget {
                                               SizedBox(width: 12,),
 
                                               Text(
-                                                "Updated By : ${(leadManagementController.currentSelectedUser.value.updatedBy == "" || leadManagementController.currentSelectedUser.value.updatedBy == null ? "No Data" : leadManagementController.currentSelectedUser.value.updatedBy)}",
+                                                "Updated By : ${(userManagementController.currentSelectedUser.value.updatedBy == "" || userManagementController.currentSelectedUser.value.updatedBy == null ? "No Data" : userManagementController.currentSelectedUser.value.updatedBy)}",
                                                 style: TextStyleUtils
                                                     .smallHighlighted.copyWith(
                                                     fontWeight: FontWeight
@@ -242,14 +243,14 @@ class viewLead extends StatelessWidget {
                                                             borderRadius:
                                                             BorderRadius
                                                                 .circular(20),
-                                                            color: leadManagementController
+                                                            color: userManagementController
                                                                 .getStatusColor(
-                                                                "${leadManagementController.currentSelectedUser.value.status == "" || leadManagementController.currentSelectedUser.value.status == null ? "" : leadManagementController.currentSelectedUser.value.status!}")),
+                                                                "${userManagementController.currentSelectedUser.value.status == "" || userManagementController.currentSelectedUser.value.status == null ? "" : userManagementController.currentSelectedUser.value.status!}")),
                                                         child: Row(
                                                           children: [
 
                                                             Text(
-                                                              "${leadManagementController.currentSelectedUser.value.status == "" || leadManagementController.currentSelectedUser.value.status == null ? "No Status" : leadManagementController.currentSelectedUser.value.status!}",
+                                                              "${userManagementController.currentSelectedUser.value.status == "" || userManagementController.currentSelectedUser.value.status == null ? "No Status" : userManagementController.currentSelectedUser.value.status!}",
                                                               style: TextStyleUtils
                                                                   .smallGreyTextStyleHighlighted
                                                                   .copyWith(
@@ -266,26 +267,26 @@ class viewLead extends StatelessWidget {
                                                 ),
                                                 GestureDetector(
                                                   onTap: () async {
-                                                    leadManagementController
+                                                    userManagementController
                                                         .selectedModule
                                                         .value = "Edit User";
 
-                                                    leadManagementController
+                                                    userManagementController
                                                         .currentSelectedUser
                                                         .value =
-                                                    (await leadManagementController
+                                                    (await userManagementController
                                                         .getUserById(
-                                                        leadManagementController
+                                                        userManagementController
                                                             .currentSelectedUser
                                                             .value
                                                             .id!))!;
 
-                                                    leadManagementController
+                                                    userManagementController
                                                         .originalUser.value =
-                                                        leadManagementController
+                                                        userManagementController
                                                             .currentSelectedUser
                                                             .value;
-                                                    leadManagementController.nextActionController=TextEditingController();
+                                                    userManagementController.nextActionController=TextEditingController();
 
                                                   },
                                                   child: Container(
@@ -357,7 +358,7 @@ class viewLead extends StatelessWidget {
                                             ),
                                             Row(
                                               children: [
-                                                Text("Registration Date : ${(leadManagementController.currentSelectedUser.value.registerDate==""||leadManagementController.currentSelectedUser.value.registerDate==null?"No Data":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.registerDate))!} ",
+                                                Text("Registration Date : ${(userManagementController.currentSelectedUser.value.registerDate==""||userManagementController.currentSelectedUser.value.registerDate==null?"No Data":userManagementController.formatDate(userManagementController.currentSelectedUser.value.registerDate))!} ",
                                                   style: TextStyleUtils
                                                       .smallHighlighted.copyWith(
                                                       fontWeight: FontWeight
@@ -365,7 +366,7 @@ class viewLead extends StatelessWidget {
 
                                                 SizedBox(width: 12,),
 
-                                                Text("Last Active : ${(leadManagementController.currentSelectedUser.value.lastLogin==""||leadManagementController.currentSelectedUser.value.lastLogin==null?"No Data":leadManagementController.formatDate(leadManagementController.currentSelectedUser.value.lastLogin))!} ",
+                                                Text("Last Active : ${(userManagementController.currentSelectedUser.value.lastLogin==""||userManagementController.currentSelectedUser.value.lastLogin==null?"No Data":userManagementController.formatDate(userManagementController.currentSelectedUser.value.lastLogin))!} ",
                                                   style: TextStyleUtils
                                                       .smallHighlighted.copyWith(
                                                       fontWeight: FontWeight
@@ -413,7 +414,7 @@ class viewLead extends StatelessWidget {
                                                   ),
 
                                                   textContainer(
-                                                    leadManagementController.currentSelectedUser.value.firstName
+                                                      userManagementController.currentSelectedUser.value.firstName
                                                   ),
                                                 ],
                                               ),
@@ -437,7 +438,7 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   textContainer(
-                                                    leadManagementController.currentSelectedUser.value.phoneNumber
+                                                      userManagementController.currentSelectedUser.value.phoneNumber
                                                   )
 
 
@@ -487,7 +488,7 @@ class viewLead extends StatelessWidget {
                                                     ),
 
                                                     textContainer(
-                                                        leadManagementController.currentSelectedUser.value.gender
+                                                        userManagementController.currentSelectedUser.value.gender
                                                     ),
 
                                                   ],
@@ -517,7 +518,7 @@ class viewLead extends StatelessWidget {
                                                       height: 5,
                                                     ),
                                                     textContainer(
-                                                        leadManagementController.currentSelectedUser.value.email
+                                                        userManagementController.currentSelectedUser.value.email
                                                     ),
                                                   ],
                                                 ),
@@ -562,7 +563,7 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   textContainer(
-                                                      leadManagementController.currentSelectedUser.value.age
+                                                      userManagementController.currentSelectedUser.value.age
                                                   ),
                                                 ],
                                               ),
@@ -634,7 +635,7 @@ class viewLead extends StatelessWidget {
                                                       height: 5,
                                                     ),
                                                     textContainer(
-                                                        leadManagementController.currentSelectedUser.value.background
+                                                        userManagementController.currentSelectedUser.value.background
                                                     ),
                                                   ],
                                                 ),
@@ -663,7 +664,7 @@ class viewLead extends StatelessWidget {
                                                       height: 5,
                                                     ),
                                                     textContainer(
-                                                        leadManagementController.currentSelectedUser.value.languagePreference==null?"": leadManagementController.currentSelectedUser.value.languagePreference!.join(", ")
+                                                        userManagementController.currentSelectedUser.value.languagePreference==null?"": userManagementController.currentSelectedUser.value.languagePreference!.join(", ")
                                                     ),
                                                   ],
                                                 ),
@@ -727,7 +728,7 @@ class viewLead extends StatelessWidget {
                                                     Container(
                                                       width: width*0.16,
                                                       child: textContainer(
-                                                          leadManagementController.currentSelectedUser.value.country==null?"": leadManagementController.currentSelectedUser.value.country
+                                                          userManagementController.currentSelectedUser.value.country==null?"": userManagementController.currentSelectedUser.value.country
                                                       ),
                                                     ),
                                                   ],
@@ -755,7 +756,7 @@ class viewLead extends StatelessWidget {
                                                   Container(
                                                     width: width*0.16,
                                                     child: textContainer(
-                                                        leadManagementController.currentSelectedUser.value.state==null?"": leadManagementController.currentSelectedUser.value.state
+                                                        userManagementController.currentSelectedUser.value.state==null?"": userManagementController.currentSelectedUser.value.state
                                                     ),
                                                   ),
                                                 ],
@@ -782,7 +783,7 @@ class viewLead extends StatelessWidget {
                                                   Container(
                                                     width: width*0.16,
                                                     child: textContainer(
-                                                        leadManagementController.currentSelectedUser.value.city==null?"": leadManagementController.currentSelectedUser.value.city
+                                                        userManagementController.currentSelectedUser.value.city==null?"": userManagementController.currentSelectedUser.value.city
                                                     ),
                                                   ),
                                                 ],
@@ -809,7 +810,7 @@ class viewLead extends StatelessWidget {
                                                   Container(
                                                     width: width*0.16,
                                                     child: textContainer(
-                                                        leadManagementController.currentSelectedUser.value.pincode==null?"": leadManagementController.currentSelectedUser.value.pincode
+                                                        userManagementController.currentSelectedUser.value.pincode==null?"": userManagementController.currentSelectedUser.value.pincode
                                                     ),
                                                   ),
                                                 ],
@@ -851,7 +852,7 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   textContainer(
-                                                      leadManagementController.currentSelectedUser.value.address
+                                                      userManagementController.currentSelectedUser.value.address
                                                   ),
                                                 ],
                                               ),
@@ -873,6 +874,11 @@ class viewLead extends StatelessWidget {
                             ),
                           ],
                         )),
+                    SizedBox(
+                      height: 28,
+                    ),
+
+                    programsDetails(),
                     SizedBox(
                       height: 28,
                     ),
@@ -913,7 +919,7 @@ class viewLead extends StatelessWidget {
                                               style:
                                               TextStyleUtils.heading5.copyWith(
 
-                                                  // color:ColorUtils.PURPLE_BRAND
+                                                // color:ColorUtils.PURPLE_BRAND
                                               ),
                                             ),
                                           ],
@@ -956,11 +962,11 @@ class viewLead extends StatelessWidget {
                                                   ),
 
                                                   Container(
-                                                    width: width*0.34,
-                                                    child:
-                                                    Text("${buildInterestsText(options: leadManagementController.interestOptions,otherController: leadManagementController.otherInterestOption)}",style: TextStyleUtils.mobileheading6.copyWith(
-                                                    fontWeight: FontWeight.w500
-                                                  ),)
+                                                      width: width*0.34,
+                                                      child:
+                                                      Text("${buildInterestsText(options: userManagementController.interestOptions,otherController: userManagementController.otherInterestOption)}",style: TextStyleUtils.mobileheading6.copyWith(
+                                                          fontWeight: FontWeight.w500
+                                                      ),)
                                                   )
                                                 ],
                                               ),
@@ -984,11 +990,11 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   Container(
-                                                    width: width*0.34,
-                                                    child:
-                                                    Text("${buildInterestsText(options: leadManagementController.opportunityOptions,otherController: leadManagementController.otherOpportunityOption)}",style: TextStyleUtils.mobileheading6.copyWith(
-                                                      fontWeight: FontWeight.w500
-                                                  ),)
+                                                      width: width*0.34,
+                                                      child:
+                                                      Text("${buildInterestsText(options: userManagementController.opportunityOptions,otherController: userManagementController.otherOpportunityOption)}",style: TextStyleUtils.mobileheading6.copyWith(
+                                                          fontWeight: FontWeight.w500
+                                                      ),)
                                                   )
 
 
@@ -1033,11 +1039,11 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   Container(
-                                                    width: width*0.34,
-                                                  child:
-                                                  Text("${buildInterestsText(options: leadManagementController.motivationOptions,otherController: leadManagementController.otherMotivationOption)}",style: TextStyleUtils.mobileheading6.copyWith(
-                                                      fontWeight: FontWeight.w500
-                                                  ),)
+                                                      width: width*0.34,
+                                                      child:
+                                                      Text("${buildInterestsText(options: userManagementController.motivationOptions,otherController: userManagementController.otherMotivationOption)}",style: TextStyleUtils.mobileheading6.copyWith(
+                                                          fontWeight: FontWeight.w500
+                                                      ),)
                                                   )
                                                 ],
                                               ),
@@ -1067,7 +1073,7 @@ class viewLead extends StatelessWidget {
 
                                                     Container(
                                                       width: width*0.34,
-                                                    child:  Text("${buildInterestsText(options: leadManagementController.referralSourceOptions,otherController: leadManagementController.otherRefferarSource)}",style: TextStyleUtils.mobileheading6.copyWith(
+                                                      child:  Text("${buildInterestsText(options: userManagementController.referralSourceOptions,otherController: userManagementController.otherRefferarSource)}",style: TextStyleUtils.mobileheading6.copyWith(
                                                           fontWeight: FontWeight.w500
                                                       ),),
                                                     )
@@ -1115,7 +1121,7 @@ class viewLead extends StatelessWidget {
                                                       height: 5,
                                                     ),
                                                     textContainer(
-                                                      "${leadManagementController.currentSelectedUser.value.preferredTime } Hours/Week"
+                                                        "${userManagementController.currentSelectedUser.value.preferredTime } Hours/Week"
 
                                                     ),
                                                   ],
@@ -1142,7 +1148,7 @@ class viewLead extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   textContainer(
-                                                      leadManagementController.currentSelectedUser.value.preferredMode
+                                                      userManagementController.currentSelectedUser.value.preferredMode
                                                   ),
                                                 ],
                                               ),
@@ -1188,7 +1194,7 @@ class viewLead extends StatelessWidget {
                                                       height: 5,
                                                     ),
                                                     textContainer(
-                                                        leadManagementController.currentSelectedUser.value.message
+                                                        userManagementController.currentSelectedUser.value.message
                                                     ),
                                                   ],
                                                 ),
@@ -1340,12 +1346,12 @@ class viewLead extends StatelessWidget {
                                                               .center,
                                                           children: [
                                                             Text(
-                                                              leadManagementController.currentSelectedUser.value.role ==
+                                                              userManagementController.currentSelectedUser.value.role ==
                                                                   "" ||
-                                                                  leadManagementController.currentSelectedUser.value.role ==
+                                                                  userManagementController.currentSelectedUser.value.role ==
                                                                       null
                                                                   ? "No Role Assigned"
-                                                                  : leadManagementController
+                                                                  : userManagementController
                                                                   .currentSelectedUser
                                                                   .value
                                                                   .role!,
@@ -1379,7 +1385,7 @@ class viewLead extends StatelessWidget {
                                                     .start,
                                                 children: [
                                                   Text(
-                                                    "Assigned To",
+                                                    "Status",
                                                     style: TextStyleUtils
                                                         .smallHighlighted
                                                         .copyWith(
@@ -1416,15 +1422,15 @@ class viewLead extends StatelessWidget {
                                                               .center,
                                                           children: [
                                                             Text(
-                                                              leadManagementController.currentSelectedUser.value.assignedTo ==
+                                                              userManagementController.currentSelectedUser.value.status ==
                                                                   "" ||
-                                                                  leadManagementController.currentSelectedUser.value.assignedTo ==
+                                                                  userManagementController.currentSelectedUser.value.status ==
                                                                       null
                                                                   ? "Not Assigned"
-                                                                  : leadManagementController
+                                                                  : userManagementController
                                                                   .currentSelectedUser
                                                                   .value
-                                                                  .assignedTo!,
+                                                                  .status!,
                                                               style: TextStyleUtils
                                                                   .mobileheading6
                                                                   .copyWith(
@@ -1445,79 +1451,79 @@ class viewLead extends StatelessWidget {
                                             SizedBox(
                                               height: 20,
                                             ),
-                                            Container(
-                                              width: width * 0.2,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .start,
-                                                crossAxisAlignment:
-                                                CrossAxisAlignment
-                                                    .start,
-                                                children: [
-                                                  Text(
-                                                    "Deposition ",
-                                                    style: TextStyleUtils
-                                                        .smallHighlighted
-                                                        .copyWith(
-                                                        color: ColorUtils
-                                                            .SECONDARY_BLACK),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
-                                                  Obx(
-                                                        () => GestureDetector(
-                                                      onTap: () {},
-                                                      child: Container(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                            vertical:
-                                                            9,
-                                                            horizontal:
-                                                            12),
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                8),
-                                                            border: Border.all(
-                                                                color: ColorUtils
-                                                                    .GREY_DOTTED)),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                          children: [
-                                                            Text(
-                                                              leadManagementController.currentSelectedUser.value.disposition ==
-                                                                  "" ||
-                                                                  leadManagementController.currentSelectedUser.value.disposition ==
-                                                                      null
-                                                                  ? "Not Assigned"
-                                                                  : leadManagementController
-                                                                  .currentSelectedUser
-                                                                  .value
-                                                                  .disposition!,
-                                                              style: TextStyleUtils
-                                                                  .mobileheading6
-                                                                  .copyWith(
-                                                                  fontWeight:
-                                                                  FontWeight.w500),
-                                                            ),
-                                                            // Icon(Icons
-                                                            //     .arrow_drop_down_outlined)
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
+                                            // Container(
+                                            //   width: width * 0.2,
+                                            //   child: Column(
+                                            //     mainAxisAlignment:
+                                            //     MainAxisAlignment
+                                            //         .start,
+                                            //     crossAxisAlignment:
+                                            //     CrossAxisAlignment
+                                            //         .start,
+                                            //     children: [
+                                            //       Text(
+                                            //         "Deposition ",
+                                            //         style: TextStyleUtils
+                                            //             .smallHighlighted
+                                            //             .copyWith(
+                                            //             color: ColorUtils
+                                            //                 .SECONDARY_BLACK),
+                                            //       ),
+                                            //       SizedBox(
+                                            //         height: 5,
+                                            //       ),
+                                            //       Obx(
+                                            //             () => GestureDetector(
+                                            //           onTap: () {},
+                                            //           child: Container(
+                                            //             padding: EdgeInsets
+                                            //                 .symmetric(
+                                            //                 vertical:
+                                            //                 9,
+                                            //                 horizontal:
+                                            //                 12),
+                                            //             decoration: BoxDecoration(
+                                            //                 borderRadius:
+                                            //                 BorderRadius
+                                            //                     .circular(
+                                            //                     8),
+                                            //                 border: Border.all(
+                                            //                     color: ColorUtils
+                                            //                         .GREY_DOTTED)),
+                                            //             child: Row(
+                                            //               mainAxisAlignment:
+                                            //               MainAxisAlignment
+                                            //                   .spaceBetween,
+                                            //               crossAxisAlignment:
+                                            //               CrossAxisAlignment
+                                            //                   .center,
+                                            //               children: [
+                                            //                 Text(
+                                            //                   userManagementController.currentSelectedUser.value.disposition ==
+                                            //                       "" ||
+                                            //                       userManagementController.currentSelectedUser.value.disposition ==
+                                            //                           null
+                                            //                       ? "Not Assigned"
+                                            //                       : userManagementController
+                                            //                       .currentSelectedUser
+                                            //                       .value
+                                            //                       .disposition!,
+                                            //                   style: TextStyleUtils
+                                            //                       .mobileheading6
+                                            //                       .copyWith(
+                                            //                       fontWeight:
+                                            //                       FontWeight.w500),
+                                            //                 ),
+                                            //                 // Icon(Icons
+                                            //                 //     .arrow_drop_down_outlined)
+                                            //               ],
+                                            //             ),
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //     ],
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                         SizedBox(height: 12,),
@@ -1578,7 +1584,7 @@ class viewLead extends StatelessWidget {
                                               Container(
                                                 width:width*0.3,
                                                 child: TextFormField(
-                                                  controller: leadManagementController
+                                                  controller: userManagementController
                                                       .nextActionController,
                                                   maxLines: 1, // Allows long te// xt input
                                                   cursorColor:
@@ -1644,11 +1650,11 @@ class viewLead extends StatelessWidget {
                                               SizedBox(width: 10),
                                               GestureDetector(
                                                 onTap: () {
-                                                  leadManagementController.addNextAction(
+                                                  userManagementController.addNextAction(
                                                     key:nextActionKey,
                                                     date: DateTime.now(),
-                                                    actionText: leadManagementController.nextActionController!.text.trim(),
-                                                    userId: leadManagementController.currentSelectedUser.value.id!,
+                                                    actionText: userManagementController.nextActionController!.text.trim(),
+                                                    userId: userManagementController.currentSelectedUser.value.id!,
                                                   );
                                                 },
                                                 child: Container(
@@ -1678,13 +1684,13 @@ class viewLead extends StatelessWidget {
                                   ),
                                   SizedBox(height: 24,),
                                   Obx(() {
-                                    final actions = leadManagementController.flatActionsList.value;
+                                    final actions = userManagementController.flatActionsList.value;
 
                                     if (actions.isEmpty) {
                                       return Center(child: Text("No actions added yet."));
                                     }
 
-                                    if (leadManagementController.isLoading.value) {
+                                    if (userManagementController.isLoading.value) {
                                       return Center(child: CircularProgressIndicator());
                                     }
 
@@ -1722,20 +1728,20 @@ class viewLead extends StatelessWidget {
                     ),
 
                     Container(
-                        width: width * 0.8,
-                        margin:
-                        EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                            border: Border.all(
-                              color: ColorUtils.GREY_DOTTED,
-                              width: 1,
-                            )),
-                    child:  Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 25, horizontal: 25),
-                      child: Column(
+                      width: width * 0.8,
+                      margin:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          border: Border.all(
+                            color: ColorUtils.GREY_DOTTED,
+                            width: 1,
+                          )),
+                      child:  Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 25, horizontal: 25),
+                        child: Column(
                           mainAxisAlignment:
                           MainAxisAlignment.start,
                           crossAxisAlignment:
@@ -1773,15 +1779,15 @@ class viewLead extends StatelessWidget {
                                         .start,
                                     children: [
                                       Text(
-                                        "Lead Source : ${leadManagementController.currentSelectedUser.value.sourceDetails ==
-                                  null|| leadManagementController.currentSelectedUser.value.sourceDetails!.isEmpty
+                                        "Lead Source : ${userManagementController.currentSelectedUser.value.sourceDetails ==
+                                            null|| userManagementController.currentSelectedUser.value.sourceDetails!.isEmpty
 
 
-                                  ? "No Source Details"
-                                          : leadManagementController
-                                          .currentSelectedUser
-                                          .value
-                                          .sourceDetails!["source"]}",
+                                            ? "No Source Details"
+                                            : userManagementController
+                                            .currentSelectedUser
+                                            .value
+                                            .sourceDetails!["source"]}",
                                         style: TextStyleUtils
                                             .smallHighlighted
                                             .copyWith(
@@ -1807,24 +1813,24 @@ class viewLead extends StatelessWidget {
                                         .start,
                                     children: [
                                       Text(
-                                        "Otp Verified : ${leadManagementController.currentSelectedUser.value.sourceDetails ==
-                                            null|| leadManagementController.currentSelectedUser.value.sourceDetails!.isEmpty ||
-                                            leadManagementController.currentSelectedUser.value.sourceDetails!["otpDetails"]==null
+                                        "Otp Verified : ${userManagementController.currentSelectedUser.value.sourceDetails ==
+                                            null|| userManagementController.currentSelectedUser.value.sourceDetails!.isEmpty ||
+                                            userManagementController.currentSelectedUser.value.sourceDetails!["otpDetails"]==null
 
                                             ? "-"
-                                            : leadManagementController
+                                            : userManagementController
                                             .currentSelectedUser
                                             .value
-                                            .sourceDetails!["otpDetails"]["otpVerified"]} on : ${leadManagementController.currentSelectedUser.value.sourceDetails ==
-                                            null|| leadManagementController.currentSelectedUser.value.sourceDetails!.isEmpty||
-                                            leadManagementController.currentSelectedUser.value.sourceDetails!["otpDetails"]==null
-                                        ||                                            leadManagementController.currentSelectedUser.value.sourceDetails!["otpDetails"]["date"]==null
+                                            .sourceDetails!["otpDetails"]["otpVerified"]} on : ${userManagementController.currentSelectedUser.value.sourceDetails ==
+                                            null|| userManagementController.currentSelectedUser.value.sourceDetails!.isEmpty||
+                                            userManagementController.currentSelectedUser.value.sourceDetails!["otpDetails"]==null
+                                            ||                                            userManagementController.currentSelectedUser.value.sourceDetails!["otpDetails"]["date"]==null
 
 
 
 
                                             ? "-"
-                                            :leadManagementController.formatDate(leadManagementController
+                                            :userManagementController.formatDate(userManagementController
                                             .currentSelectedUser
                                             .value
                                             .sourceDetails!["otpDetails"]["date"].toDate())}",
@@ -1850,10 +1856,10 @@ class viewLead extends StatelessWidget {
                                 //         .start,
                                 //     children: [
                                 //       Text(
-                                //         "Mode : ${leadManagementController.currentSelectedUser.value.sourceDetails ==
-                                //             null|| leadManagementController.currentSelectedUser.value.sourceDetails!.isEmpty
+                                //         "Mode : ${userManagementController.currentSelectedUser.value.sourceDetails ==
+                                //             null|| userManagementController.currentSelectedUser.value.sourceDetails!.isEmpty
                                 //             ? "-"
-                                //             : leadManagementController
+                                //             : userManagementController
                                 //             .currentSelectedUser
                                 //             .value
                                 //             .sourceDetails!["mode"]} ",
@@ -1881,232 +1887,232 @@ class viewLead extends StatelessWidget {
 
 
                     Obx(
-                    ()=>
+                            ()=>
 
-                    leadManagementController.currentLoggedInUser.value==null ||leadManagementController.currentLoggedInUser.value.membershipType?.toLowerCase().trim()
-                    !="super admin"?
-                    Container():
+                        userManagementController.currentLoggedInUser.value==null ||userManagementController.currentLoggedInUser.value.membershipType?.toLowerCase().trim()
+                            !="super admin"?
+                        Container():
                         Container(
-                          width: width * 0.8,
-                          margin:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 32),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                              border: Border.all(
-                                color: ColorUtils.GREY_DOTTED,
-                                width: 1,
-                              )),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 25, horizontal: 25),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Administrative Controls",
-                                            style: TextStyleUtils.heading6,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: width,
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 25, horizontal: 25),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        top: BorderSide(
-                                            color: ColorUtils.GREY_DOTTED))),
-                                child: Container(
+                            width: width * 0.8,
+                            margin:
+                            EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(8)),
+                                border: Border.all(
+                                  color: ColorUtils.GREY_DOTTED,
+                                  width: 1,
+                                )),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 25, horizontal: 25),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Account Status",
-                                                style: TextStyleUtils
-                                                    .smallHighlighted
-                                                    .copyWith(
-                                                    color: ColorUtils
-                                                        .SECONDARY_BLACK),
-                                              ),
-                                              SizedBox(
-                                                height: 6,
-                                              ),
-                                              Text(
-                                                "Temporarily disable user access ",
-                                                style: TextStyleUtils
-                                                    .smallHighlighted
-                                                    .copyWith(
-                                                    fontWeight:
-                                                    FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                          Obx(() {
-                                            leadManagementController
-                                                .currentSelectedUser
-                                                .value
-                                                .status ==
-                                                "Locked" ||
-                                                leadManagementController
-                                                    .currentSelectedUser
-                                                    .value
-                                                    .status ==
-                                                    null ||
-                                                leadManagementController
-                                                    .currentSelectedUser
-                                                    .value
-                                                    .status ==
-                                                    ""
-                                                ? leadManagementController
-                                                .isOn.value = false
-                                                : leadManagementController
-                                                .isOn.value = true;
-                                            return GestureDetector(
-
-                                              child: AnimatedContainer(
-                                                duration:
-                                                Duration(milliseconds: 200),
-                                                width: 48,
-                                                height: 24,
-                                                padding: EdgeInsets.all(3),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(30),
-                                                  color: leadManagementController
-                                                      .isOn.value
-                                                      ? Colors.green
-                                                      : Colors.grey.shade300,
-                                                ),
-                                                child: AnimatedAlign(
-                                                  alignment:
-                                                  leadManagementController
-                                                      .isOn.value
-                                                      ? Alignment.centerRight
-                                                      : Alignment.centerLeft,
-                                                  duration:
-                                                  Duration(milliseconds: 200),
-                                                  child: Container(
-                                                    width: 22,
-                                                    height: 22,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          })
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 25,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Delete Account",
-                                                style: TextStyleUtils
-                                                    .smallHighlighted
-                                                    .copyWith(
-                                                    color: ColorUtils
-                                                        .SECONDARY_BLACK),
-                                              ),
-                                              SizedBox(
-                                                height: 6,
-                                              ),
-                                              Text(
-                                                "Permanently delete this user and all user data",
-                                                style: TextStyleUtils
-                                                    .smallHighlighted
-                                                    .copyWith(
-                                                    fontWeight:
-                                                    FontWeight.w500),
-                                              ),
-                                            ],
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              LeadManagementScreen().showDeleteUserDialog(
-                                                  Get.context!,
-                                                  leadManagementController
-                                                      .currentSelectedUser
-                                                      .value
-                                                      .id!);
-                                            },
-                                            child: Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 8, horizontal: 14),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius.circular(10),
-                                                  color: ColorUtils
-                                                      .ORANGE_COLOR_DARK),
-                                              child: Row(
-                                                children: [
-                                                  Icon(
-                                                    Icons.delete,
-                                                    size: 18,
-                                                    color: ColorUtils
-                                                        .WHITE_COLOR_BACKGROUND,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 6,
-                                                  ),
-                                                  Text(
-                                                    "Delete User",
-                                                    style: TextStyleUtils
-                                                        .smallGreyTextStyle
-                                                        .copyWith(
-                                                        color: ColorUtils
-                                                            .WHITE_COLOR_BACKGROUND),
-                                                  ),
-                                                ],
-                                              ),
+                                      Container(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "Administrative Controls",
+                                              style: TextStyleUtils.heading6,
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ),
-                            ],
-                          ))
+                                Container(
+                                  width: width,
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 25, horizontal: 25),
+                                  decoration: BoxDecoration(
+                                      border: Border(
+                                          top: BorderSide(
+                                              color: ColorUtils.GREY_DOTTED))),
+                                  child: Container(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Account Status",
+                                                  style: TextStyleUtils
+                                                      .smallHighlighted
+                                                      .copyWith(
+                                                      color: ColorUtils
+                                                          .SECONDARY_BLACK),
+                                                ),
+                                                SizedBox(
+                                                  height: 6,
+                                                ),
+                                                Text(
+                                                  "Temporarily disable user access ",
+                                                  style: TextStyleUtils
+                                                      .smallHighlighted
+                                                      .copyWith(
+                                                      fontWeight:
+                                                      FontWeight.w500),
+                                                ),
+                                              ],
+                                            ),
+                                            Obx(() {
+                                              userManagementController
+                                                  .currentSelectedUser
+                                                  .value
+                                                  .status ==
+                                                  "Locked" ||
+                                                  userManagementController
+                                                      .currentSelectedUser
+                                                      .value
+                                                      .status ==
+                                                      null ||
+                                                  userManagementController
+                                                      .currentSelectedUser
+                                                      .value
+                                                      .status ==
+                                                      ""
+                                                  ? userManagementController
+                                                  .isOn.value = false
+                                                  : userManagementController
+                                                  .isOn.value = true;
+                                              return GestureDetector(
+
+                                                child: AnimatedContainer(
+                                                  duration:
+                                                  Duration(milliseconds: 200),
+                                                  width: 48,
+                                                  height: 24,
+                                                  padding: EdgeInsets.all(3),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                    BorderRadius.circular(30),
+                                                    color: userManagementController
+                                                        .isOn.value
+                                                        ? Colors.green
+                                                        : Colors.grey.shade300,
+                                                  ),
+                                                  child: AnimatedAlign(
+                                                    alignment:
+                                                    userManagementController
+                                                        .isOn.value
+                                                        ? Alignment.centerRight
+                                                        : Alignment.centerLeft,
+                                                    duration:
+                                                    Duration(milliseconds: 200),
+                                                    child: Container(
+                                                      width: 22,
+                                                      height: 22,
+                                                      decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            })
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 25,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Delete Account",
+                                                  style: TextStyleUtils
+                                                      .smallHighlighted
+                                                      .copyWith(
+                                                      color: ColorUtils
+                                                          .SECONDARY_BLACK),
+                                                ),
+                                                SizedBox(
+                                                  height: 6,
+                                                ),
+                                                Text(
+                                                  "Permanently delete this user and all user data",
+                                                  style: TextStyleUtils
+                                                      .smallHighlighted
+                                                      .copyWith(
+                                                      fontWeight:
+                                                      FontWeight.w500),
+                                                ),
+                                              ],
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                LeadManagementScreen().showDeleteUserDialog(
+                                                    Get.context!,
+                                                    userManagementController
+                                                        .currentSelectedUser
+                                                        .value
+                                                        .id!);
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 8, horizontal: 14),
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                    BorderRadius.circular(10),
+                                                    color: ColorUtils
+                                                        .ORANGE_COLOR_DARK),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.delete,
+                                                      size: 18,
+                                                      color: ColorUtils
+                                                          .WHITE_COLOR_BACKGROUND,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 6,
+                                                    ),
+                                                    Text(
+                                                      "Delete User",
+                                                      style: TextStyleUtils
+                                                          .smallGreyTextStyle
+                                                          .copyWith(
+                                                          color: ColorUtils
+                                                              .WHITE_COLOR_BACKGROUND),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ))
                     ),
                     SizedBox(
                       height: 28,
@@ -2120,13 +2126,7 @@ class viewLead extends StatelessWidget {
 
   }
 
-  String displayStr(String? v) => (v == null || v.trim().isEmpty) ? '—' : v.trim();
 
-  String displayList(List<dynamic>? v) {
-    if (v == null || v.isEmpty) return '—';
-    // Convert everything to string & join
-    return v.map((e) => '$e').join('\n- ');
-  }
 
   /// Builds a single Text-friendly string of interests:
   /// - checked options first (sorted)
@@ -2168,7 +2168,7 @@ class viewLead extends StatelessWidget {
 
 
   Widget textContainer( text) {
-    final display = text==null||text==""
+    final display = text==null||text==''
         ? ''
         : text[0].toUpperCase() + text.substring(1);
 
@@ -2194,3 +2194,110 @@ class viewLead extends StatelessWidget {
   }
 }
 
+
+
+
+
+Widget programsDetails(){
+
+  var width = MediaQuery.of(Get.context!).size.width;
+
+  UserManagementController userManagementController=Get.find();
+
+  return                     Container(
+      width: width * 0.8,
+      margin:
+      EdgeInsets.symmetric(vertical: 0, horizontal: 32),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+          border: Border.all(
+            color: ColorUtils.GREY_DOTTED,
+            width: 1,
+          )),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(
+                vertical: 25, horizontal: 25),
+            child: Column(
+              children: [
+
+
+                Container(
+                  child: Column(
+                    mainAxisAlignment:
+                    MainAxisAlignment.start,
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+
+                          Text(
+                            "ISF Programs".tr,
+                            style:
+                            TextStyleUtils.heading5.copyWith(
+
+                              // color:ColorUtils.PURPLE_BRAND
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Divider(),
+
+                      SizedBox(
+                        height: 10,
+                      ),
+
+                      Obx(() {
+                        // keep only items with value == true
+                        final visible = userManagementController.programOptions
+                            .where((m) => (m['value'] as RxBool).value)
+                            .toList();
+
+                        if (visible.isEmpty) {
+                          return const SizedBox.shrink(); // or Text('No programs selected')
+                        }
+
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(), // if inside a scroll view
+                          itemCount: visible.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 10, // adjust as you like
+                            mainAxisSpacing: 8,
+                            crossAxisSpacing: 8,
+                          ),
+                          itemBuilder: (context, index) {
+                            final item = visible[index];
+                            return Card(
+                              child: Center(
+                                child: Text(item['subject'] as String,style: TextStyleUtils.mobileheading6,),
+                              ),
+                            );
+                          },
+                        );
+                      })
+
+
+
+
+
+
+                    ],
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+        ],
+      ));
+}

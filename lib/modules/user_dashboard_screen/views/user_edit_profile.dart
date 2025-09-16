@@ -507,7 +507,7 @@ class UserEditProfile extends StatelessWidget {
                                                  Text("Membership Type",style: TextStyleUtils.phoneparagraphSmall,),
                                                  SizedBox(height: 4,),
                                                  Text(
-                                                   "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "Not Defined" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                   "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "Not Defined" : userDashBoardController.currentSelectedUser.value.membershipType!}",
                                                    style: TextStyleUtils.phoneparagraphSmall,),
 
 
@@ -1233,7 +1233,7 @@ class UserEditProfile extends StatelessWidget {
                                                   Text("Membership Type",style: TextStyleUtils.phoneparagraphSmall,),
                                                   SizedBox(height: 4,),
                                                   Text(
-                                                    "${userDashBoardController.currentSelectedUser.value.memebershipType == "" || userDashBoardController.currentSelectedUser.value.memebershipType == null ? "Not Defined" : userDashBoardController.currentSelectedUser.value.memebershipType!}",
+                                                    "${userDashBoardController.currentSelectedUser.value.membershipType == "" || userDashBoardController.currentSelectedUser.value.membershipType == null ? "Not Defined" : userDashBoardController.currentSelectedUser.value.membershipType!}",
                                                     style: TextStyleUtils.phoneparagraphSmall,),
 
 
