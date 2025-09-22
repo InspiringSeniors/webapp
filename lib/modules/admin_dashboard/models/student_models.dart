@@ -3,6 +3,9 @@ class StudentDetailModel {
   final String name;
   final String phone;
   final String studentClass;
+
+  String? status;
+  Map<String,dynamic>? consentDetails;
   final Map<String, dynamic> subjects;
   final String school;
   final bool isAssigned;
@@ -10,6 +13,7 @@ class StudentDetailModel {
   final double attendancePercent;
   final Map<String, dynamic> personalInfo;
   final List<String> interests;
+  List<String>? classIdsAssigned;
   final List<Map<String, dynamic>> timingsAvailable;
   final Map<String, dynamic> guardianDetails;
   final List<Map<String, dynamic>> classHistory;
@@ -23,6 +27,8 @@ class StudentDetailModel {
     this.studentClass = '',
     this.subjects = const {},
     this.school = '',
+    this.status,
+    this.consentDetails,
     this.isAssigned = false,
     this.assignedTutors = const {},
     this.attendancePercent = 0.0,
@@ -31,6 +37,7 @@ class StudentDetailModel {
     this.timingsAvailable = const [],
     this.guardianDetails = const {},
     this.classHistory = const [],
+    this.classIdsAssigned,
     this.notesReports = const [],
     this.profilePic=''
   });
@@ -49,6 +56,8 @@ class StudentDetailModel {
               (k, v) => MapEntry(k, List<String>.from(v)),
         ),
       ),
+      consentDetails: data['consentDetails']==null?{}:data['consentDetails'],
+      status: data['status']==null?'':data['status'],
       attendancePercent:data['attendancePercent']==null?0.0: _toDouble(data['attendancePercent']),
       personalInfo:data['personalInfo']==null?{} :Map<String, dynamic>.from(data['personalInfo'] ?? {}),
       interests: data["interests"]==null?[]:List<String>.from(data['interests'] ?? []),
@@ -79,7 +88,51 @@ class StudentDetailModel {
   }
 }
 
-class StudentListItem {
+
+class TutorLite {
+  final String id;
+  final String name;
+  final String phone;
+  /// e.g., "Mon 5–6 PM"
+  final String? scheduleText;
+
+  const TutorLite({
+    required this.id,
+    required this.name,
+    required this.phone,
+    this.scheduleText,
+  });
+
+  /// Flexible mapper: handles multiple possible field names.
+  factory TutorLite.fromMap(String id, Map<String, dynamic> data) {
+    // Try common keys you might be using in your DB
+    final name = (data['fullName'] ?? data['name'] ?? '').toString().trim();
+    final phone = (data['phone'] ?? data['mobile'] ?? '').toString().trim();
+
+    // Prefer a ready-made scheduleText if present, else build from parts.
+    final rawSchedule = (data['scheduleText'] ?? '').toString().trim();
+    String? scheduleText = rawSchedule.isNotEmpty ? rawSchedule : null;
+
+    if (scheduleText == null) {
+      final day = (data['scheduledDay'] ?? data['scheduleDay'] ?? '').toString().trim();
+      final time = (data['scheduledTime'] ?? data['scheduleTime'] ?? '').toString().trim();
+      if (day.isNotEmpty && time.isNotEmpty) {
+        scheduleText = '$day $time'; // e.g., "Mon 5–6 PM"
+      } else if (time.isNotEmpty) {
+        scheduleText = time;
+      } else if (day.isNotEmpty) {
+        scheduleText = day;
+      }
+    }
+
+    return TutorLite(
+      id: id,
+      name: name.isEmpty ? '—' : name,
+      phone: phone.isEmpty ? '—' : phone,
+      scheduleText: scheduleText,
+    );
+  }
+}class StudentListItem {
   final String id;
   final String name;
   final String phone;

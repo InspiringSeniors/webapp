@@ -323,14 +323,14 @@ class UserManagementController extends GetxController
     await fetchUsersWithPagination(page: 0);
     fetchUsers();
 
+
+    // moveAllUsersToLeadsAtomicBatch();
    var args= Get.arguments;
    // print(args[0]);
 
     currentLoggedInUser.value=args[0];
 
     print("user is${currentLoggedInUser.value.id}");
-    //
-    //
 
     // updateUserStatusCounts();
   }
@@ -650,7 +650,7 @@ class UserManagementController extends GetxController
         if (trimmedQuery.isNumeric) {
           final cleanPhone = trimmedQuery.replaceAll(RegExp(r'\s+|-'), '');
           queryRef = queryRef
-              .orderBy('searchPhone')
+              .orderBy('phoneNumber')
               .startAt([cleanPhone])
               .endAt([cleanPhone + '\uf8ff']);
         } else {
@@ -692,7 +692,11 @@ class UserManagementController extends GetxController
           filteredUsers.clear();
         }
       }
+      isLoading.value = false;
+
     } catch (e) {
+      isLoading.value = false;
+
       print("Pagination Error: $e");
     } finally {
       isLoading.value = false;
@@ -1953,6 +1957,126 @@ class UserManagementController extends GetxController
       print('Failed to send password email. ${response.body}');
     }
   }
+
+
+  final _db = FirebaseFirestore.instance;
+
+  /// Builds the lead data from a user map (enforcing your defaults)
+  Map<String, dynamic> _buildLeadDataFromUser({
+    required String userId,
+    required Map<String, dynamic> u,
+  }) {
+    void putIfPresent(Map<String, dynamic> t, String k, dynamic v) {
+      if (v == null) return;
+      if (v is String && v.trim().isEmpty) return;
+      t[k] = v;
+    }
+
+    final lead = <String, dynamic>{};
+
+    // Identity
+    putIfPresent(lead, 'firstName', u['firstName']);
+    putIfPresent(lead, 'lastName',  u['lastName']);
+    putIfPresent(lead, 'name',      u['name']);
+    putIfPresent(lead, 'email',     u['email']);
+    putIfPresent(lead, 'phoneNumber', u['phoneNumber']);
+
+    // Status/assignees
+    putIfPresent(lead, 'status', u['status']);
+    putIfPresent(lead, 'assignedTo', u['assignedTo']);
+    putIfPresent(lead, 'updatedBy', u['updatedBy']);
+
+    // Location
+    putIfPresent(lead, 'address', u['address']);
+    putIfPresent(lead, 'country', u['country']);
+    putIfPresent(lead, 'city',    u['city']);
+    putIfPresent(lead, 'state',   u['state']);
+    putIfPresent(lead, 'pincode', u['pincode']);
+
+    // Demographics
+    putIfPresent(lead, 'age',     u['age']);
+    putIfPresent(lead, 'dob',     u['dob']); // string for Lead
+    putIfPresent(lead, 'gender',  u['gender']);
+    putIfPresent(lead, 'background', u['background']);
+    putIfPresent(lead, 'profilePic', u['profilePic']);
+
+    // Arrays
+    if (u['preferences'] != null)        lead['preferences']        = List<dynamic>.from(u['preferences']);
+    if (u['interests'] != null)          lead['interests']          = List<dynamic>.from(u['interests']);
+    if (u['opportunities'] != null)      lead['opportunities']      = List<dynamic>.from(u['opportunities']);
+    if (u['motivations'] != null)        lead['motivations']        = List<dynamic>.from(u['motivations']);
+    if (u['languagePreference'] != null) lead['languagePreference'] = List<dynamic>.from(u['languagePreference']);
+    if (u['referralSources'] != null)    lead['referralSources']    = List<dynamic>.from(u['referralSources']);
+
+    // Misc
+    putIfPresent(lead, 'preferredMode', u['preferredMode']);
+    putIfPresent(lead, 'preferredTime', u['preferredTime']);
+    putIfPresent(lead, 'message',       u['message']);
+    if (u['sourceDetails'] != null)     lead['sourceDetails'] = u['sourceDetails'];
+
+    // Timestamps (keep as Timestamp)
+    if (u['registerDate'] != null) lead['registerDate'] = u['registerDate'];
+    if (u['lastLogin'] != null)    lead['lastLogin']    = u['lastLogin'];
+    if (u['updatedAt'] != null)    lead['updatedAt']    = u['updatedAt'];
+    if (u['createdAt'] != null)    lead['createdAt']    = u['createdAt'];
+
+    // Notes
+    putIfPresent(lead, 'notes', u['notes']);
+
+    // Enforced defaults
+    lead['role']            = 'new';
+    lead['isFormFilled']    = false;
+    lead['isConsentGiven']  = false;
+    lead['disposition']     = 'new';
+    lead['consentDetails']  = {};   // fresh empty object
+    lead['nextAction']      = null; // optional
+
+    return lead;
+  }
+
+  /// Moves ALL users to leads atomically in batches:
+  /// - set lead (merge or overwrite) AND delete user in one batch
+  /// - same doc ID in `leads` to prevent duplication
+  Future<void> moveAllUsersToLeadsAtomicBatch({
+    int usersPerBatch = 200, // 200 users -> ~400 writes per batch
+    bool mergeLead = true,   // true = preserve existing lead fields you don't send
+  }) async {
+    QueryDocumentSnapshot<Map<String, dynamic>>? last;
+    while (true) {
+      var q = _db
+          .collection('users')
+          .orderBy(FieldPath.documentId)
+          .limit(usersPerBatch);
+      if (last != null) q = q.startAfterDocument(last);
+
+      final snap = await q.get();
+      if (snap.docs.isEmpty) break;
+
+      final batch = _db.batch();
+
+      for (final doc in snap.docs) {
+        final userId = doc.id;
+        final userData = doc.data();
+
+        final leadRef = _db.collection('leads').doc(userId);
+        final leadData = _buildLeadDataFromUser(userId: userId, u: userData);
+
+        // 1) Write lead
+        if (mergeLead) {
+          batch.set(leadRef, leadData, SetOptions(merge: true));
+        } else {
+          batch.set(leadRef, leadData); // overwrite
+        }
+
+        // 2) Delete user
+        batch.delete(_db.collection('users').doc(userId));
+      }
+
+      await batch.commit(); // atomic per batch
+      last = snap.docs.last;
+    }
+  }
+
 
 
 

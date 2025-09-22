@@ -148,7 +148,12 @@ class LeadManagementScreen extends StatelessWidget {
                           hintText: 'Search by name , number ',
                           height: 45,
                           onchanged: (val) {
-                            leadManagementController.filterUsers(val);
+
+
+
+
+                            leadManagementController.fetchUsersWithPagination(page: 0,searchQuery: val);
+                            // leadManagementController.filterUsers(val);
                             print(
                                 "seach is ${leadManagementController.filteredUsers.value.length}");
                           })),
@@ -339,7 +344,7 @@ class LeadManagementScreen extends StatelessWidget {
                     width: 30,
                   ),
                   Container(
-                    width: width * 0.08,
+                    width: width * 0.1,
                     child: Text(
                       "Name",
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
@@ -352,13 +357,13 @@ class LeadManagementScreen extends StatelessWidget {
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
-                  Container(
-                    width: width * 0.06,
-                    child: Text(
-                      "Role",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
+                  // Container(
+                  //   width: width * 0.06,
+                  //   child: Text(
+                  //     "Role",
+                  //     style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                  //   ),
+                  // ),
                   Container(
                     width: width * 0.07,
                     child: Text(
@@ -368,7 +373,7 @@ class LeadManagementScreen extends StatelessWidget {
                   ),
                   Container(
                     alignment: Alignment.center,
-                    width: width * 0.07,
+                    width: width * 0.11,
                     child: Text(
                       "Assigned to",
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
@@ -382,14 +387,14 @@ class LeadManagementScreen extends StatelessWidget {
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: width * 0.05,
-                    child: Text(
-                      "Type ",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
+                  // Container(
+                  //   alignment: Alignment.center,
+                  //   width: width * 0.05,
+                  //   child: Text(
+                  //     "Type ",
+                  //     style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                  //   ),
+                  // ),
                   Container(
                     alignment: Alignment.center,
                     width: width * 0.08,
@@ -480,7 +485,7 @@ class LeadManagementScreen extends StatelessWidget {
                                           );
                                         }),
                                         Container(
-                                          width: width * 0.085,
+                                          width: width * 0.1,
                                           child: Row(
                                             children: [
                                               Text(
@@ -508,18 +513,18 @@ class LeadManagementScreen extends StatelessWidget {
                                                         .GREY_COLOR_PLACEHOLDER),
                                           ),
                                         ),
-                                        Container(
-                                            width: width * 0.06,
-                                            child: Text(
-                                              user.role == "" || user.role == null
-                                                  ? "_"
-                                                  : user.role!,
-                                              style: TextStyleUtils.mobileheading6
-                                                  .copyWith(
-                                                      fontWeight: FontWeight.w500,
-                                                      color: ColorUtils
-                                                          .GREY_COLOR_PLACEHOLDER),
-                                            )),
+                                        // Container(
+                                        //     width: width * 0.06,
+                                        //     child: Text(
+                                        //       user.role == "" || user.role == null
+                                        //           ? "_"
+                                        //           : user.role!,
+                                        //       style: TextStyleUtils.mobileheading6
+                                        //           .copyWith(
+                                        //               fontWeight: FontWeight.w500,
+                                        //               color: ColorUtils
+                                        //                   .GREY_COLOR_PLACEHOLDER),
+                                        //     )),
                                         Container(
                                           width: width * 0.07,
                                           padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10) ,
@@ -543,7 +548,7 @@ class LeadManagementScreen extends StatelessWidget {
                                         ),
                                         Container(
                                           alignment: Alignment.center,
-                                          width: width * 0.07,
+                                          width: width * 0.12,
                                           child: Text(
                                             user.assignedTo == "" ||
                                                     user.assignedTo == null
@@ -571,20 +576,20 @@ class LeadManagementScreen extends StatelessWidget {
                                                         .GREY_COLOR_PLACEHOLDER),
                                           ),
                                         ),
-                                        Container(
-                                          alignment: Alignment.center,
-                                          width: width * 0.05,
-                                          child: Text(
-                                            user.status == "" || user.status == null
-                                                ? "_"
-                                                : user.status!,
-                                            style: TextStyleUtils.mobileheading6
-                                                .copyWith(
-                                                    fontWeight: FontWeight.w500,
-                                                    color: ColorUtils
-                                                        .GREY_COLOR_PLACEHOLDER),
-                                          ),
-                                        ),
+                                        // Container(
+                                        //   alignment: Alignment.center,
+                                        //   width: width * 0.05,
+                                        //   child: Text(
+                                        //     user.status == "" || user.status == null
+                                        //         ? "_"
+                                        //         : user.status!,
+                                        //     style: TextStyleUtils.mobileheading6
+                                        //         .copyWith(
+                                        //             fontWeight: FontWeight.w500,
+                                        //             color: ColorUtils
+                                        //                 .GREY_COLOR_PLACEHOLDER),
+                                        //   ),
+                                        // ),
                                         Container(
                                           alignment: Alignment.center,
                                           width: width * 0.08,

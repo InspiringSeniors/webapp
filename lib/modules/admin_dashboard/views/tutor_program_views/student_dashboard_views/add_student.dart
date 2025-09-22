@@ -502,207 +502,6 @@ class AddStudent extends StatelessWidget {
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //   MainAxisAlignment.spaceBetween,
-                                    //   crossAxisAlignment:
-                                    //   CrossAxisAlignment.start,
-                                    //   children: [
-                                    //     Column(
-                                    //       mainAxisAlignment:
-                                    //       MainAxisAlignment.start,
-                                    //       crossAxisAlignment:
-                                    //       CrossAxisAlignment.start,
-                                    //       children: [
-                                    //         Text(
-                                    //           "Profile Pic",
-                                    //           style: TextStyleUtils
-                                    //               .smallHighlighted
-                                    //               .copyWith(
-                                    //               color: ColorUtils
-                                    //                   .SECONDARY_BLACK),
-                                    //         ),
-                                    //         SizedBox(
-                                    //           height: 10,
-                                    //         ),
-                                    //         Obx(() {
-                                    //           if (studentsDashboardController
-                                    //               .currentView.value ==
-                                    //               "Add Student") {
-                                    //             return studentsDashboardController
-                                    //                 .isLoading.value
-                                    //                 ? Container(
-                                    //               child:
-                                    //               CircularProgressIndicator(),
-                                    //             )
-                                    //                 : Row(
-                                    //               children: [
-                                    //                 studentsDashboardController.newuserProfilePic
-                                    //                     .value ==
-                                    //                     "" ||
-                                    //                     studentsDashboardController
-                                    //                         .newuserProfilePic
-                                    //                         .value ==
-                                    //                         null
-                                    //                     ? Container(
-                                    //                   padding:
-                                    //                   EdgeInsets
-                                    //                       .all(
-                                    //                       30),
-                                    //                   decoration: BoxDecoration(
-                                    //                       shape: BoxShape
-                                    //                           .circle,
-                                    //                       color: ColorUtils
-                                    //                           .GREY_DOTTED),
-                                    //                   child: Icon(
-                                    //                     Icons
-                                    //                         .person,
-                                    //                     color: ColorUtils
-                                    //                         .GREY_COLOR_PLACEHOLDER,
-                                    //                     size: 30,
-                                    //                   ),
-                                    //                 )
-                                    //                     : Container(
-                                    //                   clipBehavior:
-                                    //                   Clip.hardEdge,
-                                    //                   height: 100,
-                                    //                   decoration:
-                                    //                   BoxDecoration(
-                                    //                     shape: BoxShape
-                                    //                         .circle,
-                                    //                   ),
-                                    //                   child: Image
-                                    //                       .network(
-                                    //                       "${studentsDashboardController.newuserProfilePic.value}"),
-                                    //                 ),
-                                    //                 SizedBox(
-                                    //                   width: 24,
-                                    //                 ),
-                                    //                 GestureDetector(
-                                    //                   onTap: () async {
-                                    //                     // await studentsDashboardController
-                                    //                     //     .handleProfileImageUpload(
-                                    //                     //     "");
-                                    //                   },
-                                    //                   child: Container(
-                                    //                     padding:
-                                    //                     EdgeInsets
-                                    //                         .all(10),
-                                    //                     decoration: BoxDecoration(
-                                    //                         borderRadius:
-                                    //                         BorderRadius
-                                    //                             .circular(
-                                    //                             10),
-                                    //                         color: ColorUtils
-                                    //                             .BRAND_COLOR_LIGHT_2),
-                                    //                     child: Text(
-                                    //                       "Upload Photo",
-                                    //                       style: TextStyleUtils
-                                    //                           .smallGreyTextStyle.copyWith(
-                                    //                           color: ColorUtils.WHITE_COLOR_BACKGROUND
-                                    //                       ),
-                                    //                     ),
-                                    //                   ),
-                                    //                 ),
-                                    //               ],
-                                    //             );
-                                    //           } else {
-                                    //             return studentsDashboardController
-                                    //                 .isLoading.value
-                                    //                 ? Container(
-                                    //               child:
-                                    //               CircularProgressIndicator(),
-                                    //             )
-                                    //                 : Row(
-                                    //               children: [
-                                    //                 studentsDashboardController
-                                    //                     .currentSelectedUser
-                                    //                     .value
-                                    //                     .profilePic ==
-                                    //                     "" ||
-                                    //                     studentsDashboardController
-                                    //                         .currentSelectedUser
-                                    //                         .value
-                                    //                         .profilePic ==
-                                    //                         null
-                                    //                     ? Container(
-                                    //                   padding:
-                                    //                   EdgeInsets
-                                    //                       .all(
-                                    //                       30),
-                                    //                   decoration: BoxDecoration(
-                                    //                       shape: BoxShape
-                                    //                           .circle,
-                                    //                       color: ColorUtils
-                                    //                           .GREY_DOTTED),
-                                    //                   child: Icon(
-                                    //                     Icons
-                                    //                         .person,
-                                    //                     color: ColorUtils
-                                    //                         .GREY_COLOR_PLACEHOLDER,
-                                    //                     size: 30,
-                                    //                   ),
-                                    //                 )
-                                    //                     : Container(
-                                    //                   clipBehavior:
-                                    //                   Clip.hardEdge,
-                                    //                   height: 100,
-                                    //                   decoration:
-                                    //                   BoxDecoration(
-                                    //                     shape: BoxShape
-                                    //                         .circle,
-                                    //                   ),
-                                    //                   child: Image
-                                    //                       .network(
-                                    //                       "${studentsDashboardController.currentSelectedUser.value.profilePic}"),
-                                    //                 ),
-                                    //                 SizedBox(
-                                    //                   width: 24,
-                                    //                 ),
-                                    //                 GestureDetector(
-                                    //                   onTap: () async {
-                                    //                     studentsDashboardController
-                                    //                         .currentView
-                                    //                         .value ==
-                                    //                         "Edit Student"
-                                    //                         ? await studentsDashboardController.handleProfileImageUpload(
-                                    //                         studentsDashboardController
-                                    //                             .currentSelectedUser
-                                    //                             .value
-                                    //                             .id!)
-                                    //                         : await studentsDashboardController
-                                    //                         .handleProfileImageUpload(
-                                    //                         "");
-                                    //                   },
-                                    //                   child: Container(
-                                    //                     padding:
-                                    //                     EdgeInsets
-                                    //                         .all(10),
-                                    //                     decoration: BoxDecoration(
-                                    //                         borderRadius:
-                                    //                         BorderRadius
-                                    //                             .circular(
-                                    //                             10),
-                                    //                         color: ColorUtils
-                                    //                             .BRAND_COLOR_LIGHT_2),
-                                    //                     child: Text(
-                                    //                       "Upload Photo",
-                                    //                       style: TextStyleUtils
-                                    //                           .smallGreyTextStyle.copyWith(color: ColorUtils.WHITE_COLOR_BACKGROUND),
-                                    //                     ),
-                                    //                   ),
-                                    //                 ),
-                                    //               ],
-                                    //             );
-                                    //           }
-                                    //         }),
-                                    //       ],
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 20,
-                                    // ),
 
 
                                     Container(
@@ -988,7 +787,7 @@ class AddStudent extends StatelessWidget {
                                                   ),
                                                 ),
                                                 SizedBox(height:32),
-                                                Obx(()=>
+
                                                     Container(
                                                       child: Row(
                                                         mainAxisAlignment:
@@ -1017,56 +816,107 @@ class AddStudent extends StatelessWidget {
                                                               SizedBox(
                                                                 height: 5,
                                                               ),
-                                                              Container(
-                                                                width: width*0.34,
+                                                              Obx(
+                                                                () {
+                                                                    final sel = studentsDashboardController
+                                                                        .selectedFromTimeFilter
+                                                                        .value;
 
-                                                                child:
-                                                                DropdownButtonFormField<String>(
-                                                                  validator: studentsDashboardController.validateEmpty,
-                                                                  isDense: true,
-                                                                  value: studentsDashboardController.timeOptions.contains(studentsDashboardController.selectedFromTimeFilter.value)
-                                                                      ? studentsDashboardController.selectedFromTimeFilter.value
-                                                                      : null,
-                                                                  items: studentsDashboardController.timeOptions.map((var value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value["timeValue"],
-                                                                      child: Text(value["showTime"].toString()),
-                                                                    );
-                                                                  }).toList(),
-                                                                  onChanged: (String? newValue) {
-                                                                    studentsDashboardController.selectedFromTimeFilter.value=newValue!;
+// ensure `value` is a timeValue only if it exists in the options' timeValue list
+                                                                    final bool exists = studentsDashboardController
+                                                                        .timeOptions
+                                                                        .any((
+                                                                        opt) =>
+                                                                    opt['timeValue'] ==
+                                                                        sel);
+                                                                  return  Container(
+                                                                      width: width *
+                                                                          0.34,
 
-                                                                    // studentRegistrationController.getToTimeOptions( studentRegistrationController.selectedFromTimeFilter.value!);
-                                                                  },
-                                                                  decoration: InputDecoration(
-                                                                    filled: true,
-                                                                    focusColor:ColorUtils.WHITE_COLOR_BACKGROUND ,
-                                                                    fillColor: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                                                    // labelText: 'Class',
-                                                                    labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                                    contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
-                                                                    focusedBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(8),
-                                                                        borderSide: const BorderSide(
-                                                                            width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                                    enabledBorder: OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
-                                                                          width: 2, color: ColorUtils.GREY_DOTTED),
-                                                                      borderRadius: BorderRadius.circular(8),
-                                                                    ),
-                                                                    errorBorder: OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
-                                                                          width: 2, color: ColorUtils.ERROR_RED),
-                                                                      borderRadius: BorderRadius.circular(8),
-                                                                    ),
-                                                                    focusedErrorBorder: OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
-                                                                          width: 2, color: ColorUtils.ERROR_RED),
-                                                                      borderRadius: BorderRadius.circular(8),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
+                                                                      child:
+                                                                      DropdownButtonFormField<
+                                                                          String>(
+                                                                        validator: studentsDashboardController
+                                                                            .validateEmpty,
+                                                                        isDense: studentsDashboardController.forGetx.value,
+                                                                        value: exists?sel:null,
+                                                                        items: studentsDashboardController
+                                                                            .timeOptions.value
+                                                                            .map((
+                                                                            var value) {
+                                                                          return DropdownMenuItem<
+                                                                              String>(
+                                                                            value: value["timeValue"],
+                                                                            child: Text(
+                                                                                value["showTime"]
+                                                                                    .toString()),
+                                                                          );
+                                                                        })
+                                                                            .toList(),
+                                                                        onChanged: (
+                                                                            String? newValue) {
+                                                                          studentsDashboardController
+                                                                              .selectedFromTimeFilter
+                                                                              .value =
+                                                                          newValue!;
+
+                                                                          // studentRegistrationController.getToTimeOptions( studentRegistrationController.selectedFromTimeFilter.value!);
+                                                                        },
+                                                                        decoration: InputDecoration(
+                                                                          filled: true,
+                                                                          focusColor: ColorUtils
+                                                                              .WHITE_COLOR_BACKGROUND,
+                                                                          fillColor: ColorUtils
+                                                                              .WHITE_COLOR_BACKGROUND,
+                                                                          // labelText: 'Class',
+                                                                          labelStyle: TextStyle(
+                                                                              color: ColorUtils
+                                                                                  .SECONDARY_BLACK),
+                                                                          contentPadding: EdgeInsets
+                                                                              .symmetric(
+                                                                              vertical: 2,
+                                                                              horizontal: 6),
+                                                                          // <-- adjust this
+                                                                          focusedBorder: OutlineInputBorder(
+                                                                              borderRadius: BorderRadius
+                                                                                  .circular(
+                                                                                  8),
+                                                                              borderSide: const BorderSide(
+                                                                                  width: 2,
+                                                                                  color: ColorUtils
+                                                                                      .GREY_DOTTED)),
+                                                                          enabledBorder: OutlineInputBorder(
+                                                                            borderSide: const BorderSide(
+                                                                                width: 2,
+                                                                                color: ColorUtils
+                                                                                    .GREY_DOTTED),
+                                                                            borderRadius: BorderRadius
+                                                                                .circular(
+                                                                                8),
+                                                                          ),
+                                                                          errorBorder: OutlineInputBorder(
+                                                                            borderSide: const BorderSide(
+                                                                                width: 2,
+                                                                                color: ColorUtils
+                                                                                    .ERROR_RED),
+                                                                            borderRadius: BorderRadius
+                                                                                .circular(
+                                                                                8),
+                                                                          ),
+                                                                          focusedErrorBorder: OutlineInputBorder(
+                                                                            borderSide: const BorderSide(
+                                                                                width: 2,
+                                                                                color: ColorUtils
+                                                                                    .ERROR_RED),
+                                                                            borderRadius: BorderRadius
+                                                                                .circular(
+                                                                                8),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                    ;
+                                                                  } ),
                                                             ],
                                                           ),
                                                           Column(
@@ -1088,63 +938,117 @@ class AddStudent extends StatelessWidget {
                                                               SizedBox(
                                                                 height: 5,
                                                               ),
-                                                              Container(
-                                                                width: width*0.34,
+                                                              Obx(() {
 
-                                                                child:
-                                                                DropdownButtonFormField<String>(
-                                                                  validator: studentsDashboardController.validateEmpty,
+                                                                studentsDashboardController
+                                                                    .selectedToTimeFilter
+                                                                    .value;
+                                                                final sel = studentsDashboardController
+                                                                    .selectedToTimeFilter
+                                                                    .value;
 
-                                                                  isDense: true,
-                                                                  value: studentsDashboardController.timeOptions.contains(studentsDashboardController.selectedToTimeFilter.value)
-                                                                      ? studentsDashboardController.selectedToTimeFilter.value
-                                                                      : null,
-                                                                  items: studentsDashboardController.timeOptions.map((var value) {
-                                                                    return DropdownMenuItem<String>(
-                                                                      value: value["timeValue"],
-                                                                      child: Text(value["showTime"].toString()),
-                                                                    );
-                                                                  }).toList(),
-                                                                  onChanged: (String? newValue) {
-                                                                    studentsDashboardController.selectedToTimeFilter.value=newValue!;
-                                                                    // studentRegistrationController.updateClassFilter(newValue!);
-                                                                  },
-                                                                  decoration: InputDecoration(
-                                                                    filled: true,
-                                                                    focusColor:ColorUtils.WHITE_COLOR_BACKGROUND ,
-                                                                    fillColor: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                                                    // labelText: 'Class',
-                                                                    labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                                                    contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
-                                                                    focusedBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(8),
-                                                                        borderSide: const BorderSide(
-                                                                            width: 2, color: ColorUtils.GREY_DOTTED)),
-                                                                    enabledBorder: OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
-                                                                          width: 2, color: ColorUtils.GREY_DOTTED),
-                                                                      borderRadius: BorderRadius.circular(8),
+// ensure `value` is a timeValue only if it exists in the options' timeValue list
+                                                                 var exists = studentsDashboardController
+                                                                    .timeOptions
+                                                                    .any((
+                                                                    opt) =>
+                                                                opt['timeValue'] ==
+                                                                    sel).obs;
+                                                                return
+                                                                  Container(
+                                                                    width: width *
+                                                                        0.34,
+
+                                                                    child:
+                                                                    DropdownButtonFormField<
+                                                                        String>(
+                                                                      validator: studentsDashboardController
+                                                                          .validateEmpty,
+
+                                                                      isDense: true,
+                                                                      value: exists.value?sel:null,
+                                                                      items: studentsDashboardController
+                                                                          .timeOptions.value
+                                                                          .map((
+                                                                          var value) {
+                                                                        return DropdownMenuItem<
+                                                                            String>(
+                                                                          value: value["timeValue"],
+                                                                          child: Text(
+                                                                              value["showTime"]
+                                                                                  .toString()),
+                                                                        );
+                                                                      })
+                                                                          .toList(),
+                                                                      onChanged: (
+                                                                          String? newValue) {
+                                                                        studentsDashboardController
+                                                                            .selectedToTimeFilter
+                                                                            .value =
+                                                                        newValue!;
+                                                                        // studentRegistrationController.updateClassFilter(newValue!);
+                                                                      },
+                                                                      decoration: InputDecoration(
+                                                                        filled: true,
+                                                                        focusColor: ColorUtils
+                                                                            .WHITE_COLOR_BACKGROUND,
+                                                                        fillColor: ColorUtils
+                                                                            .WHITE_COLOR_BACKGROUND,
+                                                                        // labelText: 'Class',
+                                                                        labelStyle: TextStyle(
+                                                                            color: ColorUtils
+                                                                                .SECONDARY_BLACK),
+                                                                        contentPadding: EdgeInsets
+                                                                            .symmetric(
+                                                                            vertical: 2,
+                                                                            horizontal: 6),
+                                                                        // <-- adjust this
+                                                                        focusedBorder: OutlineInputBorder(
+                                                                            borderRadius: BorderRadius
+                                                                                .circular(
+                                                                                8),
+                                                                            borderSide: const BorderSide(
+                                                                                width: 2,
+                                                                                color: ColorUtils
+                                                                                    .GREY_DOTTED)),
+                                                                        enabledBorder: OutlineInputBorder(
+                                                                          borderSide: const BorderSide(
+                                                                              width: 2,
+                                                                              color: ColorUtils
+                                                                                  .GREY_DOTTED),
+                                                                          borderRadius: BorderRadius
+                                                                              .circular(
+                                                                              8),
+                                                                        ),
+                                                                        errorBorder: OutlineInputBorder(
+                                                                          borderSide: const BorderSide(
+                                                                              width: 2,
+                                                                              color: ColorUtils
+                                                                                  .ERROR_RED),
+                                                                          borderRadius: BorderRadius
+                                                                              .circular(
+                                                                              8),
+                                                                        ),
+                                                                        focusedErrorBorder: OutlineInputBorder(
+                                                                          borderSide: const BorderSide(
+                                                                              width: 2,
+                                                                              color: ColorUtils
+                                                                                  .ERROR_RED),
+                                                                          borderRadius: BorderRadius
+                                                                              .circular(
+                                                                              8),
+                                                                        ),
+                                                                      ),
                                                                     ),
-                                                                    errorBorder: OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
-                                                                          width: 2, color: ColorUtils.ERROR_RED),
-                                                                      borderRadius: BorderRadius.circular(8),
-                                                                    ),
-                                                                    focusedErrorBorder: OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
-                                                                          width: 2, color: ColorUtils.ERROR_RED),
-                                                                      borderRadius: BorderRadius.circular(8),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
+                                                                  )
+                                                                ;} ),
                                                             ],
                                                           ),
 
                                                         ],
                                                       ),
                                                     ),
-                                                ),
+
 
 
 
@@ -1237,6 +1141,11 @@ class AddStudent extends StatelessWidget {
                                         studentsDashboardController.currentView.value ==
                                             "Edit Student"
                                             ? GestureDetector(
+                                          onTap: ()async{
+
+                                           await studentsDashboardController.updateStudent(formKey: editUserFormKey, studentId: studentsDashboardController.currentSelectedStudent.value.id);
+
+                                          },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 8,
@@ -1263,6 +1172,7 @@ class AddStudent extends StatelessWidget {
                                         )
                                             : GestureDetector(
                                           onTap: () {
+                                            studentsDashboardController.submitForm(addUserFormKey);
                                           },
                                           child: Container(
                                             padding: EdgeInsets.symmetric(

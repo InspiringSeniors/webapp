@@ -1436,6 +1436,7 @@ class EditTutor extends StatelessWidget {
                               onTap: () {
 
                                 tutorsDashBoardController.isAddStudent.value=true;
+                                tutorsDashBoardController.setTutor(tutor);
 
 
                               },
@@ -1648,38 +1649,25 @@ class EditTutor extends StatelessWidget {
                                           child: Container(
                                             margin: EdgeInsets.only(right: 12),
                                             child: Obx(() {
-                                              return DropdownButtonFormField<
-                                                  String>(
+                                              return DropdownButtonFormField<String>(
                                                 isDense: true,
-                                                value: tutorsDashBoardController
-                                                    .selectedTimeFilter.value,
-                                                items: tutorsDashBoardController
-                                                    .timeFilterOptions.map((
-                                                    String value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
+                                                value: tutorsDashBoardController.selectedTimeFilter.value,
+                                                items: tutorsDashBoardController.timeFilterOptions.map((String value) {
+                                                  return DropdownMenuItem<String>(
                                                     value: value,
                                                     child: Text(value),
                                                   );
                                                 }).toList(),
                                                 onChanged: (String? newValue) {
                                                   if (newValue != null) {
-                                                    tutorsDashBoardController
-                                                        .updateTimeFilter(
-                                                        newValue);
+                                                    tutorsDashBoardController.updateTimeFilter(newValue);
                                                   }
                                                 },
                                                 decoration: InputDecoration(
                                                   labelText: 'Time Slot',
-                                                  labelStyle: TextStyle(
-                                                      color: ColorUtils
-                                                          .SECONDARY_BLACK),
-                                                  contentPadding: EdgeInsets
-                                                      .symmetric(vertical: 2,
-                                                      horizontal: 6),
-                                                  border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius
-                                                          .circular(8)),
+                                                  labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
+                                                  contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6),
+                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                                                 ),
                                               );
                                             }),

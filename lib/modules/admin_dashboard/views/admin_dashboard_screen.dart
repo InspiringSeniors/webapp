@@ -577,16 +577,16 @@ class AdminDashboardScreen extends StatelessWidget {
                                                       ),
                                                       SizedBox(width: 10,),
 
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          showDeleteUserDialog(
-                                                              context, user.id!);
-                                                        },
-                                                        child: Icon(Icons.delete,
-                                                          color: ColorUtils
-                                                              .ORANGE_COLOR_DARK,
-                                                          size: 20,),
-                                                      )
+                                                      // GestureDetector(
+                                                      //   onTap: () {
+                                                      //     showDeleteUserDialog(
+                                                      //         context, user.id!);
+                                                      //   },
+                                                      //   child: Icon(Icons.delete,
+                                                      //     color: ColorUtils
+                                                      //         .ORANGE_COLOR_DARK,
+                                                      //     size: 20,),
+                                                      // )
 
 
                                                     ],
@@ -915,16 +915,16 @@ class AdminDashboardScreen extends StatelessWidget {
                                                       ),
                                                       SizedBox(width: 10,),
 
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          showDeleteUserDialog(
-                                                              context, user.id!);
-                                                        },
-                                                        child: Icon(Icons.delete,
-                                                          color: ColorUtils
-                                                              .ORANGE_COLOR_DARK,
-                                                          size: 20,),
-                                                      )
+                                                      // GestureDetector(
+                                                      //   onTap: () {
+                                                      //     showDeleteUserDialog(
+                                                      //         context, user.id!);
+                                                      //   },
+                                                      //   child: Icon(Icons.delete,
+                                                      //     color: ColorUtils
+                                                      //         .ORANGE_COLOR_DARK,
+                                                      //     size: 20,),
+                                                      // )
 
 
                                                     ],

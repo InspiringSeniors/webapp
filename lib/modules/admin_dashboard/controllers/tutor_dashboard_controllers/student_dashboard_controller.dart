@@ -95,6 +95,7 @@ class StudentsDashboardController extends  GetxController{
 
   var selectedValue=2.obs;
   var selectedGenerValue=0.obs;
+  var selectedGender="".obs;
 
   var isGenderSelected=true.obs;
   var isSubjectSelected=true.obs;
@@ -111,10 +112,11 @@ class StudentsDashboardController extends  GetxController{
   //   '10'
   // ];
 
-  GlobalKey<FormState> studentRegisterFormKey = GlobalKey<FormState>();
 
   var selectedInterests=<String>[].obs;
 
+
+  var forGetx=true.obs;
   var timeOptions = [
     {'showTime': '8:00 AM', 'timeValue': '08:00'},
     {'showTime': '9:00 AM', 'timeValue': '09:00'},
@@ -199,18 +201,21 @@ class StudentsDashboardController extends  GetxController{
       case 1:
         selectedGenerValue.value=value;
 
+        selectedGender.value="Male";
 
         break;
 
       case 2:
         selectedGenerValue.value=value;
 
+        selectedGender.value="Female";
 
         break;
 
       case 3:
         selectedGenerValue.value=value;
 
+        selectedGender.value="Prefer not to say";
 
         break;
 
@@ -282,8 +287,8 @@ class StudentsDashboardController extends  GetxController{
 
 
 
-  void submitForm() {
-    var isValidated = studentRegisterFormKey.currentState!.validate();
+  void submitForm(var key) async{
+    var isValidated = key.currentState!.validate();
 
     print("object ${selectedFromTimeFilter.value}  ${selectedToTimeFilter.value}");
     // Validate gender selection
@@ -291,6 +296,8 @@ class StudentsDashboardController extends  GetxController{
       isGenderSelected.value = false;
       return;
     }
+
+
 
     selectedSubjects.value = subjectOptions
         .where((item) => item['value'].value == true)
@@ -337,6 +344,7 @@ class StudentsDashboardController extends  GetxController{
           personalInfo: {
             'dob': studentAgeController!.text.trim(),
             'address': "",
+            'gender':selectedGender.value
           },
           interests: selectedInterests.toList(),
           timingsAvailable: timings,
@@ -379,6 +387,12 @@ class StudentsDashboardController extends  GetxController{
               "✅ Success", "Student uploaded successfully",snackPosition: SnackPosition.BOTTOM);
         });
 
+        resetFormFields();
+
+
+        fetchStudents();
+        currentView.value="all";
+
 
 
       } catch (e) {
@@ -414,6 +428,8 @@ class StudentsDashboardController extends  GetxController{
       return DateTime.now().toIso8601String();
     }
   }
+
+
 
 
 
@@ -1034,50 +1050,278 @@ class StudentsDashboardController extends  GetxController{
     notesReports: [],
   ).obs;
   //per user
-  Future<StudentDetailModel?> getStudentById(String studentId) async {
-    // try {
+  /// Helper: convert stored ISO time ("HH:mm") or full ISO to your UI display ("hh:mm a")
+  String isoToDisplayTime(String? input) {
+    if (input == null || input.trim().isEmpty) return '';
+    final s = input.trim();
 
-    isLoading.value=true;
-
-    print("student id ${studentId}");
-    final doc = await FirebaseFirestore.instance
-        .collection('students')
-        .doc(studentId)
-        .get();
-
-    if (doc.exists) {
-      print("doc is ${doc.data()}");
-
-      currentSelectedStudent.value= StudentDetailModel.fromMap(doc.id, doc.data()!);
-
-
-      print("current s ${currentSelectedStudent.value.name}");
-
-      userNameController!.text=currentSelectedStudent.value.guardianDetails["name"];
-
-      phoneNumberController!.text=currentSelectedStudent.value.phone;
-
-      studentuserNameController!.text=currentSelectedStudent.value.name;
-
-      // selectedGenerValue.value=currentSelectedStudent.value.
-
-      isLoading.value=false;
-
-      return StudentDetailModel.fromMap(doc.id, doc.data()!);
-
-    } else {
-      isLoading.value=false;
-
-      return null;
+    // 1) "HH:mm" or "H:mm" -> normalize to HH:mm
+    final hhmm = RegExp(r'^(\d{1,2}):([0-5]\d)$');
+    final m1 = hhmm.firstMatch(s);
+    if (m1 != null) {
+      final h = int.parse(m1.group(1)!);
+      final m = int.parse(m1.group(2)!);
+      final hh = h.clamp(0, 23).toString().padLeft(2, '0');
+      final mm = m.toString().padLeft(2, '0');
+      return '$hh:$mm';
     }
-    // } catch (e) {
-    isLoading.value=false;
 
-    print('Error fetching student by ID: $e');
-    return null;
-    // }
+    // 2) "h:mm AM/PM" -> convert to HH:mm
+    final ampm = RegExp(r'^\s*(\d{1,2}):([0-5]\d)\s*([AaPp][Mm])\s*$');
+    final m2 = ampm.firstMatch(s);
+    if (m2 != null) {
+      var h = int.parse(m2.group(1)!);
+      final m = int.parse(m2.group(2)!);
+      final ap = m2.group(3)!.toLowerCase(); // "am" / "pm"
+      h = h % 12 + (ap == 'pm' ? 12 : 0);    // 12am -> 0, 12pm -> 12
+      final hh = h.toString().padLeft(2, '0');
+      final mm = m.toString().padLeft(2, '0');
+      return '$hh:$mm';
+    }
+
+    // 3) ISO 8601 -> HH:mm (local time)
+    try {
+      final dt = DateTime.parse(s).toLocal();
+      final hh = dt.hour.toString().padLeft(2, '0');
+      final mm = dt.minute.toString().padLeft(2, '0');
+      return '$hh:$mm';
+    } catch (_) {
+      // Fallback: return raw string if nothing matched
+      return s;
+    }
   }
 
+  /// Call this after reading Firestore to set up the UI
+  void _hydrateFormFromStudent(StudentDetailModel s) {
+    // Text controllers
+    userNameController?.text        = (s.guardianDetails['name'] as String?)?.trim() ?? '';
+    phoneNumberController?.text     = (s.guardianDetails['phone'] as String?)?.trim() ?? s.phone;
+    studentuserNameController?.text = s.name.trim();
+    schoolNameController?.text      = s.school.trim();
+
+
+    selectedGender.value=(s.personalInfo['gender'] as String?)?.trim() ?? '';
+
+    studentAgeController?.text=(s.personalInfo['dob'] as String?)?.trim() ?? '';
+
+    // Class
+    selectedClassFilter.value = (s.studentClass ?? '').trim();
+
+    selectedGenerValue.value           = (() {
+      final g = selectedGender.value.toLowerCase();
+      if (g == 'male' || g == 'm') return 1;
+      if (g == 'female' || g == 'f') return 2;
+      if (g == 'other' || g == 'o') return 3;
+      return 0;
+    })();
+    // Subjects (toggle chips + selectedSubjects list)
+    selectedSubjects.clear();
+    final Map<String, dynamic> subjMap = (s.subjects ?? {});
+    final existingSubjects = subjMap.keys.toSet();
+
+    // Reset all chips to false first
+    for (final item in subjectOptions) {
+      final rx = item['value'];
+      if (rx is RxBool) rx.value = false;
+    }
+    // Turn on the ones present in the model
+    for (final item in subjectOptions) {
+      final name = (item['subject'] as String?) ?? '';
+      if (name.isNotEmpty && existingSubjects.contains(name)) {
+        final rx = item['value'];
+        if (rx is RxBool) rx.value = true;
+      }
+    }
+    selectedSubjects.addAll(existingSubjects);
+    isSubjectSelected.value = selectedSubjects.isNotEmpty;
+
+    // Interests
+    selectedInterests
+      ..clear()
+      ..addAll((s.interests ?? []).whereType<String>());
+
+    // Timings (take the first availability row; adjust if your UI supports multiple)
+    if ((s.timingsAvailable ?? []).isNotEmpty) {
+      print("check for timing");
+      final t0 = s.timingsAvailable![0];
+      final startIso = t0['start'] as String?;
+      final endIso   = t0['end'] as String?;
+      
+      print("hey ${startIso}  end ${endIso} ");
+      selectedFromTimeFilter.value = isoToDisplayTime(startIso).trim();
+      selectedToTimeFilter.value   = isoToDisplayTime(endIso);
+
+      print("chec ${selectedFromTimeFilter}");
+    } else {
+      selectedFromTimeFilter.value = '';
+      selectedToTimeFilter.value   = '';
+    }
+
+    // Any optional internal state you keep
+    // e.g., address field controller (if you have one)
+    // addressController?.text = address;
+
+    // Clear any submission state
+    isFormSubmitting.value = false;
+  }
+
+  String normalizeToTimeValue(String input) {
+    // If it's already a timeValue, keep it
+    final isAlreadyValue = timeOptions.any((e) => e['timeValue'] == input);
+    if (isAlreadyValue) return input;
+
+    // If it's a showTime, convert to timeValue
+    final match = timeOptions.firstWhere(
+          (e) => e['showTime'] == input,
+      orElse: () => const {'timeValue': ''},
+    );
+    return match['timeValue'] ?? '';
+  }
+
+  /// Fetch + hydrate form
+  Future<StudentDetailModel?> getStudentById(String studentId) async {
+    isLoading.value = true;
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('students')
+          .doc(studentId)
+          .get();
+
+      if (!doc.exists) {
+        isLoading.value = false;
+        return null;
+      }
+
+      final data = doc.data()!;
+      final student = StudentDetailModel.fromMap(doc.id, data);
+
+      currentSelectedStudent.value = student;
+
+
+      await loadMappedTutorsDetails(currentSelectedStudent.value.assignedTutors);
+      _hydrateFormFromStudent(student);
+
+      isLoading.value = false;
+      return student;
+    } catch (e) {
+      isLoading.value = false;
+      // Log and show a gentle error
+      debugPrint('Error fetching student by ID: $e');
+      Get.snackbar(
+        'Error',
+        'Could not load student details. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+      );
+      return null;
+    }
+  }
+
+  /// RxMap or plain Map depending on your state mgmt
+  /// final RxMap<String, Map<String, dynamic>> tutorById = <String, Map<String, dynamic>>{}.obs;
+  final Map<String, Map<String, dynamic>> tutorById = {};
+
+  /// assignedTutors: { tutorId: [subjectA, subjectB, ...] }
+  Future<void> loadMappedTutorsDetails(Map<String, List<String>> assignedTutors) async {
+    // 1) Collect all tutorIds
+    final ids = assignedTutors.keys.toSet();
+
+    if (ids.isEmpty) {
+      tutorById.clear();
+      return;
+    }
+
+    // 2) Chunk IDs for whereIn (max 10)
+    const chunkSize = 10;
+    final list = ids.toList();
+    final chunks = <List<String>>[];
+    for (var i = 0; i < list.length; i += chunkSize) {
+      chunks.add(list.sublist(i, (i + chunkSize > list.length) ? list.length : i + chunkSize));
+    }
+
+    // 3) Fetch & accumulate
+    final Map<String, Map<String, dynamic>> result = {};
+    for (final chunk in chunks) {
+      final snap = await FirebaseFirestore.instance
+          .collection('tutors')
+          .where(FieldPath.documentId, whereIn: chunk)
+          .get();
+
+      for (final doc in snap.docs) {
+        // Expected fields (flexible):
+        // fullName / name : String
+        // phone / mobile  : String
+        // scheduleText or (scheduledDay + scheduledTime)
+        result[doc.id] = doc.data();
+      }
+    }
+
+    // 4) Publish
+    tutorById
+      ..clear()
+      ..addAll(result);
+  }
+  Future<TutorLite?> getTutorById(String tutorId) async {
+    isLoading.value = true;
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('tutors')
+          .doc(tutorId)
+          .get();
+
+      if (!doc.exists) return null;
+
+      final data = doc.data();
+      if (data == null) return null;
+
+      // Map to TutorLite
+      return TutorLite.fromMap(doc.id, data);
+    } catch (e, st) {
+      debugPrint('Error fetching tutor by ID: $e\n$st');
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+  /// Call after a successful submit
+  void resetFormFields() {
+    // Reset the FormState (validators, autovalidate fields, etc.)
+
+    // Text controllers
+    studentuserNameController?.clear();
+    userNameController?.clear();
+    phoneNumberController?.clear();
+    studentAgeController?.clear();
+    schoolNameController?.clear();
+
+    // Core selections
+    selectedClassFilter.value = '';
+    selectedGenerValue.value = 0;        // 0 = unselected (matches your validation)
+    isGenderSelected.value = true;        // clear any error state
+
+    // Subjects
+    selectedSubjects.clear();
+    for (final item in subjectOptions) {
+      final rx = item['value'];
+      if (rx is RxBool) rx.value = false;
+    }
+    isSubjectSelected.value = true;       // clear any error state
+
+    // Interests
+    selectedInterests.clear();
+
+    // Timings (set to empty or your preferred defaults)
+    selectedFromTimeFilter.value = '';
+    selectedToTimeFilter.value = '';
+
+    // Any other toggles/flags
+    isFormSubmitting.value = false;
+  }
   var students = <StudentListItem>[].obs;
 
   var isLoading = false.obs;
@@ -1085,17 +1329,121 @@ class StudentsDashboardController extends  GetxController{
   Future<User?> getUserByIdForAdd() async {
     try {
 
-      emailController = TextEditingController();
-      phoneNumberController=TextEditingController();
-      lastNameController=TextEditingController();
-      userNameController=TextEditingController();
-      currentSelectedUser.value=StudentDetailModel();
+      resetFormFields();
 
     } catch (e) {
       isLoading.value=false;
 
       print("Error fetching user: $e");
       return null;
+    }
+  }
+
+
+  Future<void> updateStudent({
+    required GlobalKey<FormState> formKey,
+    required String studentId,
+  }) async {
+    final isValidated = formKey.currentState!.validate();
+
+    // Validate gender
+    if (selectedGenerValue.value == 0) {
+      isGenderSelected.value = false;
+      return;
+    }
+
+    // Collect selected subjects
+    selectedSubjects.value = subjectOptions
+        .where((item) => item['value'].value == true)
+        .map((item) => item['subject'] as String)
+        .toList();
+
+    if (selectedSubjects.isEmpty) {
+      isSubjectSelected.value = false;
+      return;
+    }
+
+    if (!isValidated) return;
+
+    isFormSubmitting.value = true;
+    try {
+      // Build subjects map: { "Math": {"assigned": false}, ... }
+      final Map<String, dynamic> subjectMap = {
+        for (final s in selectedSubjects) s: {'assigned': false}
+      };
+
+      // Single “All” availability (keep same structure as create)
+      final List<Map<String, dynamic>> timings = [
+        {
+          'day': "All",
+          'start': parseTimeToIso(selectedFromTimeFilter.value), // expects "HH:mm"
+          'end'  : parseTimeToIso(selectedToTimeFilter.value),   // expects "HH:mm"
+        }
+      ];
+
+      // Everything you saved during create, now for update:
+      final Map<String, dynamic> updateMap = {
+        'name': studentuserNameController!.text.trim(),
+        'phone': phoneNumberController!.text.trim(),
+        'class': selectedClassFilter.value.trim(),
+        'subjects': subjectMap,
+        'school': schoolNameController!.text.trim(),
+
+        // keep these aligned with your create payload
+        'isAssigned': false,                 // you set false on create
+        'assignedTutors': <String, dynamic>{}, // you set {} on create
+
+        'attendancePercent': 0.0,            // you set 0.0 on create
+        'personalInfo': {
+          'dob': studentAgeController!.text.trim(),
+          'address': "",
+          'gender': selectedGender.value,
+        },
+        'interests': selectedInterests.toList(),
+        'timingsAvailable': timings,
+        'guardianDetails': {
+          'name': userNameController!.text.trim(),
+          'phone': phoneNumberController!.text.trim(),
+        },
+        'classHistory': <dynamic>[],         // you set [] on create
+        'notesReports': <dynamic>[],         // you set [] on create
+      };
+
+      // ⚠️ If you do NOT want to wipe existing assignedTutors / classHistory / notesReports
+      // comment those keys out above, or use merge logic per field.
+
+      await FirebaseFirestore.instance
+          .collection('students')
+          .doc(studentId)
+          .update(updateMap);
+
+      isFormSubmitting.value = false;
+
+      Get.snackbar(
+        "✅ Success",
+        "Student updated successfully",
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+      );
+
+      // Refresh + reset, same as after create
+      resetFormFields();
+      await fetchStudents();
+      currentView.value = "all";
+    } catch (e) {
+      isFormSubmitting.value = false;
+      Get.snackbar(
+        "Error",
+        "Something went wrong: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+      );
     }
   }
 
@@ -1338,6 +1686,10 @@ class StudentsDashboardController extends  GetxController{
       }
     });
   }
+
+
+  bool existsInOptions(String hhmm, List<Map<String, String>> options) =>
+      options.any((o) => o['showTime'] == hhmm);
 
   void downloadCsvTemplate() {
     final csvContent = [

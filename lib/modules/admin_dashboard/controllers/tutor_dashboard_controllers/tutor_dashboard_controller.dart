@@ -1337,7 +1337,7 @@ class TutorsDashBoardController extends GetxController{
     final studentRef = FirebaseFirestore.instance.collection('students').doc(studentId);
 
     try {
-      // --- 1) Read -> modify -> write tutor.studentsMapped (array of maps)
+      // --- 1) TUTOR SIDE: read -> modify -> write (studentsMapped array of maps)
       final tutorSnap = await tutorRef.get();
       if (tutorSnap.exists) {
         final tutorData = (tutorSnap.data() as Map<String, dynamic>?) ?? {};
@@ -1348,8 +1348,7 @@ class TutorsDashBoardController extends GetxController{
         final idx = arr.indexWhere((m) => m.containsKey(studentId));
         if (idx != -1) {
           final List<String> current =
-          List<String>.from((arr[idx][studentId] as List?) ?? <String>[]);
-
+          List<String>.from((arr[idx][studentId] as List?) ?? const <String>[]);
           // remove selected subjects
           current.removeWhere((s) => subjectsToRemove.contains(s));
 
@@ -1357,36 +1356,42 @@ class TutorsDashBoardController extends GetxController{
             // remove the whole map if no subjects remain for this student
             arr.removeAt(idx);
           } else {
-            arr[idx] = {
-              ...arr[idx],
-              studentId: current,
-            };
+            arr[idx] = {...arr[idx], studentId: current};
           }
 
           await tutorRef.update({'studentsMapped': arr});
         }
       }
 
-      // --- 2) Update student side
+      // --- 2) STUDENT SIDE: remove subjects from assignedTutors.<tutorId>
+      // and flip per-subject flags to false
       await studentRef.update({
         'assignedTutors.$tutorId': FieldValue.arrayRemove(subjectsToRemove),
-        // flip per-subject assigned flags to false
         for (final sub in subjectsToRemove) 'subjects.$sub.assigned': false,
       });
 
-      // --- 3) If no assignments left across tutors, set isAssigned = false
+      // --- 3) Clean up empty tutor entry & recompute isAssigned
       final stSnap = await studentRef.get();
       final st = (stSnap.data() as Map<String, dynamic>?) ?? {};
       final Map<String, dynamic> assignedTutors =
       Map<String, dynamic>.from(st['assignedTutors'] ?? {});
+
+      // If tutor's list is now empty, delete that key
+      final List<String> listForTutor =
+      List<String>.from((assignedTutors[tutorId] as List?) ?? const <String>[]);
+      if (assignedTutors.containsKey(tutorId) && listForTutor.isEmpty) {
+        await studentRef.update({'assignedTutors.$tutorId': FieldValue.delete()});
+        assignedTutors.remove(tutorId); // keep local copy in sync for next step
+      }
+
+      // Recompute isAssigned across remaining tutors
       final hasAnyAssignments =
       assignedTutors.values.any((v) => v is List && v.isNotEmpty);
 
-      if (!hasAnyAssignments) {
-        await studentRef.update({'isAssigned': false});
-      }
+      // If needed, update isAssigned (true/false). You asked to mark false when none left.
+      await studentRef.update({'isAssigned': hasAnyAssignments});
 
-      // --- 4) Refresh local cache/UI as needed
+      // --- 4) (Optional) Refresh local cache/UI
       final t = currentSelectedTutor.value;
       if (t != null) {
         await loadMappedStudentsDetails(t); // your existing method
@@ -1395,7 +1400,7 @@ class TutorsDashBoardController extends GetxController{
       Get.back();
       Get.snackbar(
         "Success",
-        "Selected Subject Removed",
+        "Selected subject(s) removed",
         snackPosition: SnackPosition.BOTTOM,
         margin: EdgeInsets.symmetric(
           vertical: MediaQuery.of(Get.context!).size.height * 0.1,

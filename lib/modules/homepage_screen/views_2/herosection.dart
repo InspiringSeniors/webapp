@@ -248,7 +248,11 @@ class HeroCarouselWidget extends StatelessWidget {
 
                   options: CarouselOptions(
                     viewportFraction: 1.0,
-                    // autoPlay: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(
+                        seconds: 8
+                    ),
+
                     height: height * 0.88,
                     onPageChanged: (index, _) =>
                     controller.current.value = index,

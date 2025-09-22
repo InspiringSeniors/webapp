@@ -611,7 +611,7 @@ class UserManagementScreen extends StatelessWidget {
                 
                           return ListView.builder(
                             shrinkWrap: true,
-                            itemCount: userController.filteredUsers.length,
+                            itemCount: userController.filteredUsers.value.length,
                             itemBuilder: (context, index) {
                               User user = userController.filteredUsers.value[index];
                               return Obx(() {

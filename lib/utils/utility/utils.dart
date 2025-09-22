@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:ui';
@@ -102,6 +103,37 @@ class Utils{
   }
 
 
+  static Future<void> updateAllLeadIds() async {
+   final leadsRef = FirebaseFirestore.instance.collection('leads');
+
+   try {
+     final snapshot = await leadsRef.get();
+
+     WriteBatch batch = FirebaseFirestore.instance.batch();
+
+     for (final doc in snapshot.docs) {
+       final data = doc.data();
+       final fullName = (data['firstName'] ?? '').toString();
+       final mobile = (data['phoneNumber'] ?? '').toString();
+
+       if (fullName.isEmpty || mobile.isEmpty) {
+         print('Skipping ${doc.id} - Missing name or mobile');
+         continue;
+       }
+
+       final memberId = generateMemberId(fullName, mobile);
+
+       batch.update(doc.reference, {'memberId': memberId});
+     }
+
+     await batch.commit();
+     print('✅ All lead memberIds updated successfully!');
+   } catch (e, st) {
+     print('❌ Error updating memberIds: $e');
+     print(st);
+   }
+ }
+
   static String generateMemberId(String fullName, String mobile) {
     // 1. Trim leading/trailing spaces
     fullName = fullName.trim();
@@ -145,7 +177,58 @@ class Utils{
  }
 
 
-  static openWhatsappForChatSupport() async {
+ /// Parse many possible DOB shapes into a DateTime
+ DateTime? _parseDob(dynamic dob) {
+   if (dob == null) return null;
+
+   if (dob is DateTime) return dob;
+   if (dob is Timestamp) return dob.toDate();
+   if (dob is int) {
+     // treat as milliseconds since epoch
+     return DateTime.fromMillisecondsSinceEpoch(dob);
+   }
+   if (dob is String) {
+     final s = dob.trim();
+     if (s.isEmpty) return null;
+
+     // 1) Try ISO-8601 or "yyyy-MM-dd"
+     try {
+       return DateTime.parse(s);
+     } catch (_) {}
+
+     // 2) Try dd/MM/yyyy or dd-MM-yyyy or dd.MM.yyyy
+     final dmY = RegExp(r'^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$');
+     final m = dmY.firstMatch(s);
+     if (m != null) {
+       var d = int.parse(m.group(1)!);
+       var mo = int.parse(m.group(2)!);
+       var y = int.parse(m.group(3)!);
+       if (y < 100) y += (y >= 30 ? 1900 : 2000); // handle 2-digit year
+       return DateTime(y, mo, d);
+     }
+   }
+   return null;
+ }
+
+ /// Return "—" if unknown, else age in full years
+ String ageFromDob(dynamic dob) {
+   final birth = _parseDob(dob);
+   if (birth == null) return "—";
+
+   final today = DateTime.now();
+   var years = today.year - birth.year;
+   final hadBirthdayThisYear =
+       (today.month > birth.month) ||
+           (today.month == birth.month && today.day >= birth.day);
+   if (!hadBirthdayThisYear) years--;
+
+   // sanity check
+   if (years < 0 || years > 120) return "—";
+   return years.toString();
+ }
+
+
+ static openWhatsappForChatSupport() async {
     String urle =
         "https://wa.me/919315274243/?text=Hi!%20I'm%20interested%20to%20know%20more.";
     var encodedShareURL =

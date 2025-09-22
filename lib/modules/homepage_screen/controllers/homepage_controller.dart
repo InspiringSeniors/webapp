@@ -312,7 +312,7 @@ class HomepageController extends GetxController {
   final slides = [
     {
       'title': 'Empowering Seniors to Live Their Best Lives',
-      'subtitle': 'Join our community of seniors and discover new opportunities for healthy, active and productive lives.',
+      'subtitle': 'Join our community of seniors and discover new opportunities for healthy, active and productive ageing.',
       // 'image': 'assets/images/homepage_banner_ai.png',
       'image': 'assets/images/who_we_are_2.png',
 

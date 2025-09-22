@@ -269,6 +269,8 @@ class LeadManagementController extends GetxController{
   DocumentSnapshot? lastDocument;
   RxBool hasMore = true.obs;
 
+  var currentConsentFilter = RxnBool(null);
+
 
   var prefferedLanguageOptions = <Map<String, dynamic>>[
     {"subject": "English".tr, "value": false.obs},
@@ -317,10 +319,13 @@ class LeadManagementController extends GetxController{
   void onInit() async{
     // TODO: implement onInit
 
-    await fetchUsersWithPagination(0);
+
+    // Utils.updateAllLeadIds();
+    await fetchUsersWithPagination(page: 0);
 
     await fetchUsers();
   await  loadAdminUsers();
+    // updateLeadNamesForAll();
 
   print(assignedToOtpions.value);
   }
@@ -328,19 +333,19 @@ class LeadManagementController extends GetxController{
 
   void applyStatusFilter(String status) {
     selectedStatusFilter.value = status;
-    filterUsersForRole(searchText.value); // Reapply search + filters
+    fetchUsersWithPagination(page:0,statusFilter:selectedStatusFilter.value  ); // Reapply search + filters
   }
 
   void applyRoleFilter(String role) {
     selectedRoleFilter.value = role;
-    filterUsersForRole(searchText.value); // Reapply search + filters
+    fetchUsersWithPagination(page:0,roleFilter:selectedRoleFilter.value  ); // Reapply search + filters
   }
 
   void applyDispositionFilter(String role) {
 
     selectedStatusFilter.value=role;
     selectedDispositionFilter.value = role;
-    filterUsersForDisposition(searchText.value); // Reapply search + filters
+    fetchUsersWithPagination(page:0,dispositionFilter:selectedDispositionFilter.value  ); // Reapply search + filters
 
   }
 
@@ -633,8 +638,11 @@ class LeadManagementController extends GetxController{
   }
 
   void applyConsentFilter(bool? value) {
+
+
+    value==null? currentConsentFilter.value=null: currentConsentFilter.value=value;
     // Re-run the main filter with current search text
-    filterUsersForRole(searchText.value ?? "");
+    fetchUsersWithPagination(page:0,consent: currentConsentFilter.value );
   }
 
 
@@ -1337,7 +1345,7 @@ class LeadManagementController extends GetxController{
         await leadDocRef.delete();
       }
 
-      await fetchUsersWithPagination(0);
+      await fetchUsersWithPagination(page: 0);
       await fetchUsers();
       selectedModule.value = roleCheck == 'converted' ? "Users" : "Leads";
       update();
@@ -1376,61 +1384,106 @@ class LeadManagementController extends GetxController{
   final List<QueryDocumentSnapshot> pageStartDocs = []; // Keep track of page starts
 
 
-  Future<void> fetchUsersWithPagination(int page) async {
+  Future<void> fetchUsersWithPagination({
+    required int page,
+    String statusFilter = '',
+    String roleFilter = '',
+    bool? consent, // ✅ made nullable to apply only when passed
+    String dispositionFilter = '',
+    String searchQuery = '',
+  }) async {
     try {
       isLoading.value = true;
-      Query query = _firestore
-          .collection('leads')
-          .orderBy('registerDate', descending: true)
-          .limit(10);
 
-      // Add startAfter logic for pages > 0
-      if (page > 0 && pageStartDocs.length >= page) {
-        query = query.startAfterDocument(pageStartDocs[page - 1]);
+      Query queryRef = _firestore.collection('leads');
+
+      // 🔹 Filters
+      if (roleFilter.isNotEmpty) {
+        queryRef = queryRef.where('role', isEqualTo: roleFilter);
+      }
+      if (statusFilter.isNotEmpty) {
+        queryRef = queryRef.where('status', isEqualTo: statusFilter);
+      }
+      if (dispositionFilter.isNotEmpty) {
+        queryRef = queryRef.where('disposition', isEqualTo: dispositionFilter);
+      }
+      if (consent != null) {
+        // ✅ Filter by isConsentGiven field
+        queryRef = queryRef.where('isConsentGiven', isEqualTo: consent);
       }
 
-      QuerySnapshot snapshot = await query.get();
+      final trimmed = searchQuery.trim();
 
+      if (trimmed.isNotEmpty) {
+        // 🔹 Search (phone vs name)
+        final isNumeric = RegExp(r'^\s*[\d\-\s]+\s*$').hasMatch(trimmed);
+        if (isNumeric) {
+          final cleanPhone = trimmed.replaceAll(RegExp(r'\s+|-'), '');
+          queryRef = queryRef
+              .orderBy('phoneNumber')
+              .startAt([cleanPhone])
+              .endAt([cleanPhone + '\uf8ff']);
+        } else {
+          final name = trimmed.toLowerCase();
+          queryRef = queryRef
+              .orderBy('searchName')
+              .startAt([name])
+              .endAt([name + '\uf8ff']);
+        }
+      } else {
+        // 🔹 Always sort by registration date (newest first)
+        queryRef = queryRef
+            .orderBy('registerDate', descending: true)
+            .orderBy(FieldPath.documentId);
+      }
+
+      // 🔹 Pagination cursors
+      if (page == 0) {
+        pageStartDocs.clear(); // reset if fresh query
+      } else if (page > 0 && pageStartDocs.length >= page) {
+        queryRef = queryRef.startAfterDocument(pageStartDocs[page - 1]);
+      }
+
+      queryRef = queryRef.limit(pageSize);
+
+      // 🔹 Fetch results
+      final snapshot = await queryRef.get();
 
       if (snapshot.docs.isNotEmpty) {
-        final newUsers = snapshot.docs
-            .map((doc) => Lead.fromMap(doc.id, doc.data() as Map<String, dynamic>))
+        final newLeads = snapshot.docs
+            .map((d) => Lead.fromMap(d.id, d.data() as Map<String, dynamic>))
             .toList();
 
         if (pageStartDocs.length <= page) {
           pageStartDocs.add(snapshot.docs.last);
+        } else {
+          pageStartDocs[page] = snapshot.docs.last;
         }
-        isLoading.value = false;
 
-        print("check ");
-        filteredUsers.value=newUsers;
-
+        filteredUsers.value = newLeads;
         currentPage.value = page;
-        fetchUsers();
-        updateUserStatusCounts();
-
-        hasMore.value = newUsers.length == pageSize;
+        hasMore.value = newLeads.length == pageSize;
       } else {
+        if (page == 0) filteredUsers.clear();
         hasMore.value = false;
       }
     } catch (e) {
-      isLoading.value = false;
-
-      print("Pagination Error: $e");
+      print("Leads Pagination Error: $e");
     } finally {
       isLoading.value = false;
     }
   }
 
+
   void nextPage() {
     if (hasMore.value) {
-      fetchUsersWithPagination(currentPage.value + 1);
+      fetchUsersWithPagination(page:currentPage.value + 1,consent: currentConsentFilter.value);
     }
   }
 
   void previousPage() {
     if (currentPage.value > 0) {
-      fetchUsersWithPagination(currentPage.value - 1);
+      fetchUsersWithPagination(page:currentPage.value - 1,consent: currentConsentFilter.value);
     }
   }
 
@@ -1542,7 +1595,7 @@ class LeadManagementController extends GetxController{
           'phoneNumber': mobile,
           'status': 'pending',
           'role': user.role,
-          'isFormFilled':true,
+          'isFormFilled':false,
           'isConsentGiven':user.isConsentGiven,
 
           // Timestamps from model if provided, else leave null (Firestore will ignore null)
@@ -1638,6 +1691,8 @@ class LeadManagementController extends GetxController{
           opportunities: user.opportunities,
           motivations: user.motivations,
           preferredMode: user.preferredMode,
+          registerDate:  DateTime.timestamp(),
+          updatedAt: DateTime.timestamp(),
           preferredTime: user.preferredTime,
           message: user.message,
           sourceDetails: user.sourceDetails,
@@ -1687,7 +1742,7 @@ class LeadManagementController extends GetxController{
 
           await fetchNextActions(id);
         }
-        await fetchUsersWithPagination(0);
+        await fetchUsersWithPagination(page:0);
 
         Get.snackbar(
           duration: Duration(seconds: 5),
@@ -1827,6 +1882,42 @@ class LeadManagementController extends GetxController{
   }
 
 
+
+  Future<void> updateLeadNamesForAll() async {
+    final firestore = FirebaseFirestore.instance;
+
+    try {
+      final snapshot = await firestore.collection('leads').get();
+
+      print("🔎 Found ${snapshot.docs.length} leads to update...");
+
+      int updatedCount = 0;
+
+      for (final doc in snapshot.docs) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        final firstName = (data['firstName'] ?? '').toString().trim();
+        final lastName = (data['lastName'] ?? '').toString().trim();
+
+        // Combine into single display name
+        final fullName = [firstName, lastName].where((p) => p.isNotEmpty).join(' ').trim();
+
+        await firestore.collection('leads').doc(doc.id).update({
+          'name': fullName,
+          'searchName': fullName.toLowerCase(), // optional for search indexing
+        });
+
+        updatedCount++;
+        print("✅ Updated: $fullName (Doc ID: ${doc.id})");
+      }
+
+      print("🎉 Completed updating names for $updatedCount leads.");
+    } catch (e) {
+      print("❌ Error while updating leads: $e");
+    }
+  }
+
+
   Future<void> sendPasswordEmail(String email, String password) async {
 
 
@@ -1897,7 +1988,7 @@ class LeadManagementController extends GetxController{
     try {
       await _firestore.collection('leads').doc(userId).delete();
       await fetchUsers();
-      await fetchUsersWithPagination(0);
+      await fetchUsersWithPagination(page:0);
       Get.snackbar(
           duration: Duration(seconds: 5),
 
@@ -2022,7 +2113,7 @@ class LeadManagementController extends GetxController{
               "reason": "Firestore error: $e"
             });
           }finally{
-            fetchUsersWithPagination(0);
+            fetchUsersWithPagination(page:0);
             fetchUsers();
 
           }
@@ -2197,7 +2288,7 @@ class LeadManagementController extends GetxController{
         print("printing all ids${id}");
         await FirebaseFirestore.instance.collection('leads').doc(id).delete();
       }
-      fetchUsersWithPagination(0);
+      fetchUsersWithPagination(page:0);
 
       clearSelectedUsers();
       Get.snackbar(
@@ -2248,7 +2339,7 @@ class LeadManagementController extends GetxController{
         });
 
       }
-      fetchUsersWithPagination(0);
+      fetchUsersWithPagination(page:0);
 
       clearSelectedUsers();
       Get.back();

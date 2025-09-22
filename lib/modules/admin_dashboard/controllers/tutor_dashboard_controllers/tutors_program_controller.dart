@@ -29,7 +29,7 @@ class TutorsProgramController extends GetxController{
   var totalScheduledClasses=0.obs;
   var totalSchools=0.obs;
 
-  var selectedViewForTutorProgram="tutor".obs;
+  var selectedViewForTutorProgram="student".obs;
 
 
   var isLoading=false.obs;

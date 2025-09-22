@@ -482,226 +482,230 @@ class MemberRegistrationController extends GetxController{
   void submitForm() async {
     var isValidated = studentRegisterFormKey.currentState!.validate();
 
+    // Gender validation
     if (selectedGenerValue.value == 0) {
       isGenderSelected.value = false;
       return;
-    }else{
+    } else {
       isGenderSelected.value = true;
-
     }
 
+    // Consent validation
     if (agreed.value == false) {
       isConsentGiven.value = false;
       return;
-    }else{
-      isConsentGiven.value=true;
+    } else {
+      isConsentGiven.value = true;
     }
 
-    if (isValidated) {
-      isFormSubmitting.value = true;
+    if (!isValidated) return;
 
+    isFormSubmitting.value = true;
 
+    try {
+      print("value of registered screen ${isFromRegisterScreen.value}");
 
+      // -----------------------------
+      // 1) Pre-checks (when NOT from register screen)
+      // -----------------------------
+      String? id;
+      dynamic sourceDetails;
 
-      print("value of registered scren ${isFromRegisterScreen.value}");
-      if(isFromRegisterScreen.value==false) {
+      if (isFromRegisterScreen.value == false) {
+        // Check existing lead by phone
         final existingLeads = await FirebaseFirestore.instance
             .collection('leads')
-            .where('phoneNumber', isEqualTo: phoneNumberController!.text)
+            .where('phoneNumber', isEqualTo: phoneNumberController!.text.trim())
             .limit(1)
             .get();
 
         if (existingLeads.docs.isNotEmpty) {
-          isFormSubmitting.value = false;
-          _showUserAlreadyExists();
-          return;
+          final leadDoc = existingLeads.docs.first;
+          final leadData = leadDoc.data() as Map<String, dynamic>;
+          final alreadyFilled = (leadData['isFormFilled'] == true);
+
+          if (alreadyFilled) {
+            // ❌ Already filled: block
+            isFormSubmitting.value = false;
+            _showUserAlreadyExists(); // or show a custom "Form already filled" dialog/snackbar
+            return;
+          } else {
+            // ✅ Exists but not filled: allow, reuse same ID + preserve sourceDetails if any
+            id = leadDoc.id;
+            sourceDetails = leadData['sourceDetails'] ??
+                {
+                  "source": "Website-MemberForm",
+                  "otpDetails": {"otpVerified": false},
+                  "mode": "Online",
+                };
+          }
+        } else {
+          // No lead exists: generate new ID + default sourceDetails
+          id = Utils.generateMemberId(
+            userNameController!.text,
+            phoneNumberController!.text,
+          );
+          sourceDetails = {
+            "source": "Website-MemberForm",
+            "otpDetails": {"otpVerified": false},
+            "mode": "Online",
+          };
         }
 
+        // Optional: Keep existing user check
         final existingUser = await FirebaseFirestore.instance
             .collection('users')
-            .where('phoneNumber', isEqualTo: phoneNumberController!.text)
+            .where('phoneNumber', isEqualTo: phoneNumberController!.text.trim())
             .limit(1)
             .get();
 
         if (existingUser.docs.isNotEmpty) {
           isFormSubmitting.value = false;
-
           _showUserAlreadyExists();
-
           return;
-
         }
-
+      } else {
+        // Coming from register screen: reuse current selected user's id & sourceDetails
+        id = currentSelectedUser.value.id;
+        sourceDetails = currentSelectedUser.value.sourceDetails;
+        print("current user sourceDetails => ${currentSelectedUser.value.sourceDetails}");
       }
 
-      try {
-        // Collect selected interests
-        selectedInterests.value = interestOptions
-            .where((item) => item['value'].value == true)
-            .map((item) => item['subject'])
-            .toList();
+      // -----------------------------
+      // 2) Collect selections
+      // -----------------------------
+      selectedInterests.value = interestOptions
+          .where((item) => item['value'].value == true)
+          .map((item) => item['subject'])
+          .toList();
 
-        if (otherInterestOption!.text.trim().isNotEmpty) {
-          selectedInterests.value.add(otherInterestOption!.text.trim());
-        }
-
-        // Collect selected opportunities
-        selectedOpportunityOptions.value = opportunityOptions
-            .where((item) => item['value'].value == true)
-            .map((item) => item['subject'])
-            .toList();
-
-        if (otherOpportunityOption!.text.trim().isNotEmpty) {
-          selectedOpportunityOptions.value.add(otherOpportunityOption!.text.trim());
-        }
-
-        // Collect selected motivations
-        selectedMotivationOptions.value = motivationOptions
-            .where((item) => item['value'].value == true)
-            .map((item) => item['subject'])
-            .toList();
-
-        if (otherMotivationOption!.text.trim().isNotEmpty) {
-          selectedMotivationOptions.value.add(otherMotivationOption!.text.trim());
-        }
-
-        // Collect selected referral sources
-        selectedReferralOption.value = referralSourceOptions
-            .where((item) => item['value'].value == true)
-            .map((item) => item['subject'])
-            .toList();
-
-        if (otherRefferarSource!.text.trim().isNotEmpty) {
-          selectedReferralOption.value.add(otherRefferarSource!.text.trim());
-        }
-
-
-        var id ;
-
-        var sourceDetails;
-
-        if(isFromRegisterScreen.value==false){
-          id = Utils.generateMemberId(
-              userNameController!.text, phoneNumberController!.text);
-          sourceDetails={
-            "source":"Website-MemberForm",
-            "otpDetails":{
-              "otpVerified":false,
-            },
-            "mode":"Online"
-          };
-        }else {
-
-          print("current user${
-          currentSelectedUser.value.sourceDetails
-          }");
-          id=currentSelectedUser.value.id;
-
-          sourceDetails=currentSelectedUser.value.sourceDetails;
-
-
-        }
-
-
-        // Prepare data
-        final lead = Lead(
-          id: id,
-          isFormFilled: true,
-          firstName: userNameController!.text.trim(),
-          name: userNameController!.text.trim(),
-          phoneNumber: phoneNumberController!.text.trim(),
-          email: emailController!.text.trim(),
-          age: ageController!.text.trim(),
-          gender: selectedGender.value,
-          isConsentGiven: true,
-          consentDetails: {
-            "date": FieldValue.serverTimestamp(),
-            "format": "",
-            "isConsentGiven": true,
-            "link": "",
-          },
-          sourceDetails: sourceDetails,
-          city: cityNameController!.text.trim(),
-          pincode: pincodeController!.text.trim(),
-          background: backgroundController!.text.trim(),
-          interests: selectedInterests.value,
-          opportunities: selectedOpportunityOptions.value,
-          motivations: selectedMotivationOptions.value,
-          preferredMode: selectedPreffredMode.value,
-          preferredTime: selectedFromTimeFilter.value,
-          message: messageController!.text.trim(),
-          referralSources: selectedReferralOption.value,
-        );
-
-        await FirebaseFirestore.instance
-            .collection('leads')
-            .doc(id)
-            .set(lead.toMap());
-
-        // Save to Firestore
-        // await FirebaseFirestore.instance.collection('leads').doc(id).set(leadData);
-
-        sendWhatsApp(phoneNumberController!.text);
-
-        // Print data for verification
-
-        // Reset the form
-        userNameController!.clear();
-        phoneNumberController!.clear();
-        emailController!.clear();
-        ageController!.clear();
-        cityNameController!.clear();
-        pincodeController!.clear();
-        backgroundController!.clear();
-        messageController!.clear();
-        otherInterestOption!.clear();
-        otherOpportunityOption!.clear();
-        otherMotivationOption!.clear();
-        otherRefferarSource!.clear();
-
-        selectedGender.value = '';
-        selectedGenerValue.value = 0;
-        selectedPreferredModeValue.value=0;
-
-        isGenderSelected.value = true;
-
-        selectedPreffredMode.value = '';
-        selectedFromTimeFilter.value = '';
-
-        isFromRegisterScreen.value=false;
-        // Uncheck all options
-        for (var item in interestOptions) item['value'].value = false;
-        for (var item in opportunityOptions) item['value'].value = false;
-        for (var item in motivationOptions) item['value'].value = false;
-        for (var item in referralSourceOptions) item['value'].value = false;
-
-
-        // Show success snackbar
-
-        Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
-
-        _showThankYouDialogFinal();
-
-        isFormSubmitting.value = false;
-      } catch (e) {
-        isFormSubmitting.value = false;
-
-        print("❌ Error while submitting form: $e");
-
-        Get.snackbar(
-          "Error",
-          "Something went wrong",
-          duration: Duration(seconds: 5),
-
-          backgroundColor: Colors.red.shade600,
-          colorText: Colors.white,
-          margin: EdgeInsets.symmetric(
-            vertical: MediaQuery.of(Get.context!).size.height * 0.1,
-            horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
-          ),
-          snackPosition: SnackPosition.BOTTOM,
-        );
+      if (otherInterestOption!.text.trim().isNotEmpty) {
+        selectedInterests.value.add(otherInterestOption!.text.trim());
       }
+
+      selectedOpportunityOptions.value = opportunityOptions
+          .where((item) => item['value'].value == true)
+          .map((item) => item['subject'])
+          .toList();
+
+      if (otherOpportunityOption!.text.trim().isNotEmpty) {
+        selectedOpportunityOptions.value.add(otherOpportunityOption!.text.trim());
+      }
+
+      selectedMotivationOptions.value = motivationOptions
+          .where((item) => item['value'].value == true)
+          .map((item) => item['subject'])
+          .toList();
+
+      if (otherMotivationOption!.text.trim().isNotEmpty) {
+        selectedMotivationOptions.value.add(otherMotivationOption!.text.trim());
+      }
+
+      selectedReferralOption.value = referralSourceOptions
+          .where((item) => item['value'].value == true)
+          .map((item) => item['subject'])
+          .toList();
+
+      if (otherRefferarSource!.text.trim().isNotEmpty) {
+        selectedReferralOption.value.add(otherRefferarSource!.text.trim());
+      }
+
+      // -----------------------------
+      // 3) Prepare & Save Lead
+      // -----------------------------
+      final lead = Lead(
+        id: id,
+        isFormFilled: true, // marking as filled now
+        firstName: userNameController!.text.trim(),
+        name: userNameController!.text.trim(),
+        phoneNumber: phoneNumberController!.text.trim(),
+        email: emailController!.text.trim(),
+        age: ageController!.text.trim(),
+        gender: selectedGender.value,
+        isConsentGiven: true,
+        consentDetails: {
+          "date": FieldValue.serverTimestamp(),
+          "format": "",
+          "isConsentGiven": true,
+          "link": "",
+        },
+        sourceDetails: sourceDetails,
+
+        city: cityNameController!.text.trim(),
+        pincode: pincodeController!.text.trim(),
+        background: backgroundController!.text.trim(),
+        interests: selectedInterests.value,
+        opportunities: selectedOpportunityOptions.value,
+        motivations: selectedMotivationOptions.value,
+        preferredMode: selectedPreffredMode.value,
+        preferredTime: selectedFromTimeFilter.value,
+        registerDate: DateTime.timestamp(),
+        updatedAt: DateTime.timestamp(),
+        message: messageController!.text.trim(),
+        referralSources: selectedReferralOption.value,
+      );
+
+      await FirebaseFirestore.instance
+          .collection('leads')
+          .doc(id)
+          .set(lead.toMap(), SetOptions(merge: true)); // merge keeps any previous partial data
+
+      // -----------------------------
+      // 4) Post actions
+      // -----------------------------
+      sendWhatsApp(phoneNumberController!.text);
+
+      // Reset the form
+      userNameController!.clear();
+      phoneNumberController!.clear();
+      emailController!.clear();
+      ageController!.clear();
+      cityNameController!.clear();
+      pincodeController!.clear();
+      backgroundController!.clear();
+      messageController!.clear();
+      otherInterestOption!.clear();
+      otherOpportunityOption!.clear();
+      otherMotivationOption!.clear();
+      otherRefferarSource!.clear();
+
+      selectedGender.value = '';
+      selectedGenerValue.value = 0;
+      selectedPreferredModeValue.value = 0;
+      isGenderSelected.value = true;
+
+      selectedPreffredMode.value = '';
+      selectedFromTimeFilter.value = '';
+
+      isFromRegisterScreen.value = false;
+
+      // Uncheck all options
+      for (var item in interestOptions) item['value'].value = false;
+      for (var item in opportunityOptions) item['value'].value = false;
+      for (var item in motivationOptions) item['value'].value = false;
+      for (var item in referralSourceOptions) item['value'].value = false;
+
+      // Navigate + Thank you
+      Get.offAllNamed(RoutingNames.HOME_PAGE_SCREEN);
+      _showThankYouDialogFinal();
+
+      isFormSubmitting.value = false;
+    } catch (e) {
+      isFormSubmitting.value = false;
+      print("❌ Error while submitting form: $e");
+
+      Get.snackbar(
+        "Error",
+        "Something went wrong",
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.red.shade600,
+        colorText: Colors.white,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
   DateTime now = DateTime.now();

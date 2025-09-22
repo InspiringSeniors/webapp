@@ -168,6 +168,7 @@ class Lead {
       'preferences': preferences ?? [],
       'address':address,
       'notes': notes,
+      'searchName':name!.toLowerCase(),
       'assignedTo': assignedTo,
       'disposition': disposition,
       'nextAction': nextAction,
