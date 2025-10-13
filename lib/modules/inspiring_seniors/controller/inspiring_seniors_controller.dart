@@ -164,6 +164,23 @@ var winnerData = {
       '✅  Sushma Batra (70+): 12,331/day',
       '🌟  Special: Swaran Singh & Hardeep Vilkhu',
     ],
+  'Jashn-e-Talent':[
+    '🎖  1st: Amita Malhotra',
+    '🎖  2nd: N. R. Radhakrishnan ',
+    '🎖  3rd: Rajkumar Raj & Ranjana Raj',
+    'Special Recognition Awards',
+    ' - Gyanesh Sharma – Yoga Maestro Award\n'
+    ' - Hardeep Vilkhu – Rhythm of Punjab Award\n'
+    ' - Jagdish Khemani – Soulful Voice Award\n'
+    ' - Prabha Gupta – Words of Wisdom Award\n'
+    ' - Sanjay Sharma – Harmony in Strings Award\n'
+    ' - Sameer Das – Melodic Spirit Award\n'
+    ' - Sheela Bisht – Grace in Motion Award\n'
+    ' - Shweta Singh – Colors of Imagination Award\n'
+    ' - Vishnu Sharma – Melody Maker Award'
+
+
+  ]
   }.obs;
 
   final RxString selectedCategory = 'Gaata Rahe Mera Dil – Season 1'.obs;

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,8 +9,11 @@ class AboutUsController extends GetxController{
 
   var isHoverRegistered=false.obs;
 
+  final db = FirebaseFirestore.instance;
+
   var faqList=[].obs;
 
+  var isLoading=false.obs;
   var teamPersonSelectedIndex=0.obs;
   var advisorPersonSelectedIndex=0.obs;
 
@@ -18,7 +22,7 @@ class AboutUsController extends GetxController{
   var advisoryBoardList=[].obs;
 
   @override
-  void onInit() {
+  void onInit()async {
     // TODO: implement onInit
     super.onInit();
 
@@ -49,56 +53,107 @@ class AboutUsController extends GetxController{
       }
     ];
 
-    advisoryBoardList.value=[
-      {
-        "name":"Dr. Vinod Kumar",
-        "desc":"Pioneer in Geriatric Medicine | Public Health Expert | Award-Winning Educator",
-        "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2Fmrvinodji_9_11zon.png?alt=media&token=62a19300-f45a-43ee-820a-f6bb34e40660",
-        "bio":
-            "Dr. Vinod Kumar is a trailblazer in geriatric medicine, having established this discipline at AIIMS, New Delhi, in the 1980s. A former Professor of Medicine and Head of the Geriatric Clinic, he has advanced healthcare, education, research and policy for ageing populations. Recipient of numerous awards, including the Vayoshrestha Samman from Government of India, Dr. Kumar has three books to his credit, published 250+ papers, and mentored a large number of postgraduate medical students including about a hundred of them even after his formal retirement. As a WHO Advisor and consultant to multiple governments, he has contributed to shaping global policies on ageing and continues to make significant contributions to senior citizens' health and well-being through his lectures, blogs and social media."
-        ,"linkedInUrl":""
+//     advisoryBoardList.value=[
+//       {
+//         "name":"Dr. Vinod Kumar",
+//         "desc":"Pioneer in Geriatric Medicine | Public Health Expert | Award-Winning Educator",
+//         "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2Fmrvinodji_9_11zon.png?alt=media&token=62a19300-f45a-43ee-820a-f6bb34e40660",
+//         "bio":
+//             "Dr. Vinod Kumar is a trailblazer in geriatric medicine, having established this discipline at AIIMS, New Delhi, in the 1980s. A former Professor of Medicine and Head of the Geriatric Clinic, he has advanced healthcare, education, research and policy for ageing populations. Recipient of numerous awards, including the Vayoshrestha Samman from Government of India, Dr. Kumar has three books to his credit, published 250+ papers, and mentored a large number of postgraduate medical students including about a hundred of them even after his formal retirement. As a WHO Advisor and consultant to multiple governments, he has contributed to shaping global policies on ageing and continues to make significant contributions to senior citizens' health and well-being through his lectures, blogs and social media."
+//         ,"linkedInUrl":""
+//
+//       },
+//
+//       {
+//         "name":"Prof Ramesh G",
+//         "desc":"Public Policy Expert | Startup Mentor | Smart City Advisor",
+//         "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2Fmrrameshg_8_11zon.png?alt=media&token=4438fd12-f555-411d-8fba-c870c9a86d75",
+//         "bio":
+// "Prof. Ramesh G, a former Professor at IIM Bangalore, is a leading public policy expert with over 18 years of academic and advisory experience. As Director of the Niti School of Public Policy & Leadership, he is shaping a national-level institution for balanced policy education. With a decade of experience mentoring startups and advising on India’s Smart City mission, he has championed sustainable, tech-enabled solutions. Prof. Ramesh mentors early-stage ventures at STPI and IIT Kanpur and specializes in finance, infrastructure, and social innovation, driving transformative impact across India's entrepreneurial and public policy ecosystems."
+//         ,"linkedInUrl":"https://www.linkedin.com/in/proframesh/"
+//
+//       },
+//       {
+//         "name":"Dr Nachiket Mor",
+//         "desc":"Public Policy Expert | Healthcare Leader | Educator | Strategic Board Member",
+//         "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2Fmrnachiketmor_7_11zon.png?alt=media&token=b3bf8860-ebeb-4b71-a68e-c6ebad394a90",
+//         "bio":"Nachiket is an economist by training with an interest in health systems, public policy, and financial services. He is a visiting scientist at the Banyan Academy of Leadership in Mental Health, a visiting faculty member at ISB, and an independent board member of, among others, Narayana Hrudayalaya and Swasth Digital Health Foundation. He has previously worked as the Deputy Managing Director of ICICI Bank and the India Country Director of the Bill & Melinda Gates Foundation. He has also served on the Boards of, among others, RBI, NABARD, Wipro, Azim Premji Foundation, Cipla, and CRISIL"
+//         ,"linkedInUrl":"https://www.linkedin.com/in/nachiketmor/"
+//
+//       },
+//
+//       {
+//         "name":"Mr Mayank Bathwal",
+//         "desc":"CEO | Health Insurance Innovator | Finance Strategist",
+//         "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2FmrMayank_6_11zon.png?alt=media&token=38757908-49db-442e-b00b-31e34a9a1cc7",
+//         "bio":
+//             "Mayank Bathwal is the Chief Executive Officer of Aditya Birla Health Insurance Company Limited (ABHICL), a key venture of the USD 66 billion Aditya Birla Group. Since 2015, he has spearheaded ABHICL’s growth, establishing it as a leading player in India’s health insurance market. Under his leadership, the company introduced a differentiated health first business model, leveraging digital opportunities to deliver innovative health insurance solutions.A seasoned finance professional, Mayank previously held leadership roles at Aditya Birla Sun Life Insurance and Sun Life Indonesia. As a Chartered Accountant, Cost Accountant, Company Secretary and an alumni of Harvard Executive Education, he brings over two decades of strategic expertise in insurance and corporate finance."
+//         ,"linkedInUrl":"https://www.linkedin.com/in/mayankbathwal/",
+//
+//
+//       },
+//
+//       {
+//         "name":"Mr Layak Singh",
+//         "desc":"Tech Entrepreneur | Insurtech Innovator | Business Strategist",
+//         "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2FmrLayak_5_11zon.png?alt=media&token=2e18e986-1a4f-4d4b-9979-0912add52ab5",
+//         "bio":"Layak Singh is the Head of SaaS Business at Artivatic.ai, an AI-driven insurtech and healthtech platform under the RenewBuy Group. With over a decade of experience, he specializes in driving digital transformation, creating innovative insurance solutions, and streamlining claims, underwriting, and fraud detection processes. As the Founder and former CEO of Artivatic, he played a pivotal role in its growth and successful acquisition.An IIT Kharagpur graduate, Layak is passionate about leveraging AI to build scalable, tech-enabled solutions for businesses and end users. He continues to drive innovation in insurtech, healthtech, and embedded financial services."
+//         ,"linkedInUrl":"https://www.linkedin.com/in/layaksingh/"
+//
+//       },
+//
+//       {
+//         "name":"Mr Niranjan Parab",
+//         "desc":"Cofounder & Director Haelthtech | Ex CXO Prudential Financial | Ex MetLife",
+//         "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2FNiranjan%20Parab.jpeg?alt=media&token=10679954-bef8-4f1b-b2e7-d27f949e3b84",
+//         "bio":"Niranjan Parab has over two decades of leadership experience in the insurance industry, including senior executive roles with Prudential Financial at its Asia headquarters in Singapore and in markets such as Malaysia. His current focus is on building innovation and investment bridges between India and Australia, particularly in deep-tech sectors such as medtech, spacetech and cleantech to drive impact in India. Niranjan is an active investor in technology firms across insurtech, biotech and engineering sectors.",
+//         "linkedInUrl":"https://www.linkedin.com/in/niranjan-parab/"
+//
+//       }
+//
+//     ];
 
-      },
-
-      {
-        "name":"Prof Ramesh G",
-        "desc":"Public Policy Expert | Startup Mentor | Smart City Advisor",
-        "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2Fmrrameshg_8_11zon.png?alt=media&token=4438fd12-f555-411d-8fba-c870c9a86d75",
-        "bio":
-"Prof. Ramesh G, a former Professor at IIM Bangalore, is a leading public policy expert with over 18 years of academic and advisory experience. As Director of the Niti School of Public Policy & Leadership, he is shaping a national-level institution for balanced policy education. With a decade of experience mentoring startups and advising on India’s Smart City mission, he has championed sustainable, tech-enabled solutions. Prof. Ramesh mentors early-stage ventures at STPI and IIT Kanpur and specializes in finance, infrastructure, and social innovation, driving transformative impact across India's entrepreneurial and public policy ecosystems."
-        ,"linkedInUrl":"https://www.linkedin.com/in/proframesh/"
-
-      },
-      {
-        "name":"Dr Nachiket Mor",
-        "desc":"Public Policy Expert | Healthcare Leader | Educator | Strategic Board Member",
-        "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2Fmrnachiketmor_7_11zon.png?alt=media&token=b3bf8860-ebeb-4b71-a68e-c6ebad394a90",
-        "bio":"Nachiket is an economist by training with an interest in health systems, public policy, and financial services. He is a visiting scientist at the Banyan Academy of Leadership in Mental Health, a visiting faculty member at ISB, and an independent board member of, among others, Narayana Hrudayalaya and Swasth Digital Health Foundation. He has previously worked as the Deputy Managing Director of ICICI Bank and the India Country Director of the Bill & Melinda Gates Foundation. He has also served on the Boards of, among others, RBI, NABARD, Wipro, Azim Premji Foundation, Cipla, and CRISIL"
-        ,"linkedInUrl":"https://www.linkedin.com/in/nachiketmor/"
-
-      },
-
-      {
-        "name":"Mr Mayank Bathwal",
-        "desc":"CEO | Health Insurance Innovator | Finance Strategist",
-        "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2FmrMayank_6_11zon.png?alt=media&token=38757908-49db-442e-b00b-31e34a9a1cc7",
-        "bio":
-            "Mayank Bathwal is the Chief Executive Officer of Aditya Birla Health Insurance Company Limited (ABHICL), a key venture of the USD 66 billion Aditya Birla Group. Since 2015, he has spearheaded ABHICL’s growth, establishing it as a leading player in India’s health insurance market. Under his leadership, the company introduced a differentiated health first business model, leveraging digital opportunities to deliver innovative health insurance solutions.A seasoned finance professional, Mayank previously held leadership roles at Aditya Birla Sun Life Insurance and Sun Life Indonesia. As a Chartered Accountant, Cost Accountant, Company Secretary and an alumni of Harvard Executive Education, he brings over two decades of strategic expertise in insurance and corporate finance."
-        ,"linkedInUrl":"https://www.linkedin.com/in/mayankbathwal/"
-
-      },
-
-      {
-        "name":"Mr Layak Singh",
-        "desc":"Tech Entrepreneur | Insurtech Innovator | Business Strategist",
-        "imageUrl":"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/profile_uploaded%2FmrLayak_5_11zon.png?alt=media&token=2e18e986-1a4f-4d4b-9979-0912add52ab5",
-        "bio":"Layak Singh is the Head of SaaS Business at Artivatic.ai, an AI-driven insurtech and healthtech platform under the RenewBuy Group. With over a decade of experience, he specializes in driving digital transformation, creating innovative insurance solutions, and streamlining claims, underwriting, and fraud detection processes. As the Founder and former CEO of Artivatic, he played a pivotal role in its growth and successful acquisition.An IIT Kharagpur graduate, Layak is passionate about leveraging AI to build scalable, tech-enabled solutions for businesses and end users. He continues to drive innovation in insurtech, healthtech, and embedded financial services."
-        ,"linkedInUrl":"https://www.linkedin.com/in/layaksingh/"
-
-      },
+    await getAdvisoryList();
 
 
-    ];
 
   }
+
+  Future<List<Map<String, dynamic>>> getAdvisoryList() async {
+
+    isLoading.value = true;
+    try {
+      final snap = await db.collection('advisory_board').orderBy('orderIndex').get();
+      final data = snap.docs.map((d) => d.data()).toList();
+      advisoryBoardList.value.assignAll(data);
+      return data;
+    } catch (e) {
+      return [];
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+  Future<void> uploadData() async {
+    final FirebaseFirestore db = FirebaseFirestore.instance;
+
+    WriteBatch batch = db.batch();
+
+    // upload team list
+    for (var member in teamList.value) {
+      final id = member['name'].toString().replaceAll(' ', '_').toLowerCase();
+      batch.set(db.collection('team').doc(id), member);
+    }
+
+    // upload advisory board list
+    for (var advisor in advisoryBoardList.value) {
+      final id = advisor['name'].toString().replaceAll(' ', '_').toLowerCase();
+      batch.set(db.collection('advisory_board').doc(id), advisor);
+    }
+
+    await batch.commit();
+    print('Upload complete.');
+  }
+
 }

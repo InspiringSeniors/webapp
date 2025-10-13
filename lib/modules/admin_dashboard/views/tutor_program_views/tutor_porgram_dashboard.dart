@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutor_dashboard_controllers/student_dashboard_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutor_dashboard_controllers/tutor_dashboard_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutor_dashboard_controllers/tutors_program_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_program_views/classes_view.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/tutor_program_views/student_dashboard_views/student_view.dart';
@@ -36,7 +38,7 @@ class TutorPorgramDashboard extends StatelessWidget {
                         color: ColorUtils.HEADER_GREEN_TRANSPARENT_50,
                         iconColor: ColorUtils.HEADER_GREEN_DARKER,
                         ontap: () {
-                          tutorsProgramController.applyFilter("class");
+                          tutorsProgramController.changeTutorProgramView("class");
 
                         },
                         bgColor: tutorsProgramController.selectedViewForTutorProgram.value == "class"
@@ -49,8 +51,12 @@ class TutorPorgramDashboard extends StatelessWidget {
                         icon: Icons.groups,
                         color: ColorUtils.HEADER_GREEN_TRANSPARENT_50,
                         iconColor: ColorUtils.HEADER_GREEN_DARKER,
-                        ontap: () {
-                          tutorsProgramController.applyFilter("student");
+                        ontap: ()async {
+                          StudentsDashboardController tutorController=Get.find();
+
+                          // await  tutorController.fetchStudentsWithPagination(page: 0);
+                          await tutorController.fetchStudents();
+                          tutorsProgramController.changeTutorProgramView("student");
 
                         },
                         bgColor: tutorsProgramController.selectedViewForTutorProgram.value ==
@@ -64,8 +70,12 @@ class TutorPorgramDashboard extends StatelessWidget {
                         icon: Icons.pending_actions_outlined,
                         color: ColorUtils.YELLOW_BRAND_LIGHT,
                         iconColor: ColorUtils.YELLOW_BRAND,
-                        ontap: () {
-                          tutorsProgramController.applyFilter("tutor");
+                        ontap: () async{
+                          TutorsDashBoardController tutorController=Get.find();
+
+                         await  tutorController.fetchTutorsWithPagination(page: 0);
+                          await tutorController.fetchTutors();
+                          tutorsProgramController.changeTutorProgramView("tutor");
 
                         },
                         bgColor: tutorsProgramController.selectedViewForTutorProgram.value ==
@@ -80,7 +90,7 @@ class TutorPorgramDashboard extends StatelessWidget {
                         color: ColorUtils.ORANGE_COLOR_LIGHT,
                         iconColor: ColorUtils.ORANGE_COLOR,
                         ontap: () {
-                          tutorsProgramController.applyFilter("school");
+                          tutorsProgramController.changeTutorProgramView("school");
                         },
                         bgColor: tutorsProgramController.selectedViewForTutorProgram.value ==
                             "school"

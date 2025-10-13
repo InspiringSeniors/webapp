@@ -36,7 +36,7 @@ class OurStorySection extends StatelessWidget {
                       title: 'Who We Are',
                       imageUrl: 'assets/images/who_we_are.jpeg',
                       description:
-                      'We are a non-profit start-up focussed on healthy and productive ageing of senior citizens. We empower seniors to thrive, inspire, and contribute rather than simply exist. We believe longevity should be a gift, and not a challenge.\n\nWith the right awareness, opportunities, and interventions, we endeavour to turn India’s silver population c into a golden asset for the society and nation.'
+                      'We are a non-profit start-up focussed on healthy and productive ageing of senior citizens. We empower seniors to thrive, inspire, and contribute rather than simply exist. We believe longevity should be a gift, and not a challenge.\n\nWith the right awareness, opportunities, and interventions, we endeavour to turn India’s silver population into a golden asset for the society and nation.'
                   ),
                   SizedBox(width: 12,),
                   _storyCard(
@@ -89,7 +89,7 @@ class OurStorySection extends StatelessWidget {
                     title: 'Who We Are',
                     imageUrl: 'assets/images/who_we_are.jpeg',
                     description:
-                    'We are a non-profit start-up focussed on healthy and productive ageing of senior citizens. We empower seniors to thrive, inspire, and contribute rather than simply exist. We believe longevity should be a gift, and not a challenge.\n\nWith the right awareness, opportunities, and interventions, we endeavour to turn India’s silver population c into a golden asset for the society and nation.'
+                    'We are a non-profit start-up focussed on healthy and productive ageing of senior citizens. We empower seniors to thrive, inspire, and contribute rather than simply exist. We believe longevity should be a gift, and not a challenge.\n\nWith the right awareness, opportunities, and interventions, we endeavour to turn India’s silver population into a golden asset for the society and nation.'
                 ),
                 _storyCard(
                     title: 'What We Do',

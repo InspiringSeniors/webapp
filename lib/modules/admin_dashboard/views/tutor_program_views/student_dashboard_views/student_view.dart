@@ -50,6 +50,7 @@ class StudentView extends StatelessWidget {
       Expanded(
 
       child: Container(
+        height: height,
         child: Column(
           children: [
 
@@ -71,10 +72,10 @@ class StudentView extends StatelessWidget {
                       margin: EdgeInsets.only(right: 16),
                       width: width * 0.24,
                       child: CustomSearchFieldV2(
-                          hintText: 'Search by name, tutor name, number ',
+                          hintText: 'Search by name, number ',
                           height: 45,
                           onchanged: (val) {
-                            studentsDashboardController.updateSearchQuery(val);
+                            studentsDashboardController.fetchStudentsWithPagination(page: 0,search: val);
                             // leadManagementController.filterUsers(val);
                             // print(
                             //     "seach is ${leadManagementController.filteredUsers.value.length}");
@@ -84,141 +85,149 @@ class StudentView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
 
-                          Container(
-                            width: width*0.082,
+                          Row(
+                            children: [
+                              Container(
+                                width: width*0.082,
 
-                            child:
-                            DropdownButtonFormField<String>(
-                              isDense: true,
-                              value: studentsDashboardController.classOptions.contains(studentsDashboardController.selectedClassFilter.value)
-                                  ? studentsDashboardController.selectedClassFilter.value
-                                  : null,
-                              items: studentsDashboardController.classOptions.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                studentsDashboardController.updateClassFilter(newValue!);
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Class',
-                                labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(
-                                        width: 2, color: ColorUtils.GREY_DOTTED)),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.GREY_DOTTED),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.ERROR_RED),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.ERROR_RED),
-                                  borderRadius: BorderRadius.circular(8),
+                                child:
+                                DropdownButtonFormField<String>(
+                                  isDense: true,
+                                  value: studentsDashboardController.classOptions.contains(studentsDashboardController.selectedClassFilter.value)
+                                      ? studentsDashboardController.selectedClassFilter.value
+                                      : null,
+                                  items: studentsDashboardController.classOptions.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    studentsDashboardController.updateClassFilter(newValue!);
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Class',
+                                    labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: const BorderSide(
+                                            width: 2, color: ColorUtils.GREY_DOTTED)),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.GREY_DOTTED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.ERROR_RED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.ERROR_RED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Container(
-                            width: width*0.082,
+                              SizedBox(width: 12,),
+                              Container(
+                                width: width*0.1,
 
-                            child: DropdownButtonFormField<String>(
-                              isDense: true,
-                              value: studentsDashboardController.subjectOptions.contains(studentsDashboardController.selectedSubjectFilter.value)
-                                  ? studentsDashboardController.selectedSubjectFilter.value
-                                  : null,
-                              items: studentsDashboardController.subjectOptions.map((var value) {
-                                return DropdownMenuItem<String>(
-                                  value: value["subject"],
-                                  child: Text(value["subject"]),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                studentsDashboardController.updateSubjectFilter(newValue!);
+                                child: DropdownButtonFormField<String>(
+                                  isDense: true,
+                                  value: studentsDashboardController.subjectOptionsFilter.contains(studentsDashboardController.selectedSubjectFilter.value)
+                                      ? studentsDashboardController.selectedSubjectFilter.value
+                                      : null,
+                                  items: studentsDashboardController.subjectOptionsFilter.map((var value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
 
-                                // tutorsProgramController.selectType(newValue!);
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Subject',
-                                labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(
-                                        width: 2, color: ColorUtils.GREY_DOTTED)),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.GREY_DOTTED),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.ERROR_RED),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.ERROR_RED),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: width*0.09,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    studentsDashboardController.updateSubjectFilter(newValue!);
 
-                            child: DropdownButtonFormField<String>(
-
-                              isDense: true,
-                              value: studentsDashboardController.statusOptions.contains(studentsDashboardController.selectedStatusFilter.value)
-                                  ? studentsDashboardController.selectedStatusFilter.value
-                                  : null,
-                              items: studentsDashboardController.statusOptions.map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                              onChanged: (String? newValue) {
-                                studentsDashboardController.updateStatusFilter(newValue!);
-
-                                // tutorsProgramController.selectType(newValue!);
-                              },
-                              decoration: InputDecoration(
-                                labelText: 'Status',
-                                labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
-                                contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
-                                focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                    borderSide: const BorderSide(
-                                        width: 2, color: ColorUtils.GREY_DOTTED)),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.GREY_DOTTED),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.ERROR_RED),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: const BorderSide(
-                                      width: 2, color: ColorUtils.ERROR_RED),
-                                  borderRadius: BorderRadius.circular(8),
+                                    // tutorsProgramController.selectType(newValue!);
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Subject',
+                                    labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: const BorderSide(
+                                            width: 2, color: ColorUtils.GREY_DOTTED)),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.GREY_DOTTED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.ERROR_RED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.ERROR_RED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              SizedBox(width: 12,),
+
+                              Container(
+                                width: width*0.09,
+
+                                child: DropdownButtonFormField<String>(
+
+                                  isDense: true,
+                                  value: studentsDashboardController.statusOptions.contains(studentsDashboardController.selectedStatusFilter.value)
+                                      ? studentsDashboardController.selectedStatusFilter.value
+                                      : null,
+                                  items: studentsDashboardController.statusOptions.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? newValue) {
+                                    studentsDashboardController.updateStatusFilter(newValue!);
+
+                                    // tutorsProgramController.selectType(newValue!);
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Status',
+                                    labelStyle: TextStyle(color: ColorUtils.SECONDARY_BLACK),
+                                    contentPadding: EdgeInsets.symmetric(vertical: 2, horizontal: 6), // <-- adjust this
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: const BorderSide(
+                                            width: 2, color: ColorUtils.GREY_DOTTED)),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.GREY_DOTTED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    errorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.ERROR_RED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    focusedErrorBorder: OutlineInputBorder(
+                                      borderSide: const BorderSide(
+                                          width: 2, color: ColorUtils.ERROR_RED),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
 
 
@@ -256,39 +265,39 @@ class StudentView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              // leadManagementController.toggleDropdownForAssignedTo(
-                              //     Get.context!, "Multi");
-                              // showReassigneDialog(Get.context!, "Multi");
-                            },
-                            child: Container(
-                              padding:
-                              EdgeInsets.symmetric(vertical: 9, horizontal: 12),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: ColorUtils.GREY_DOTTED),
-                                  color: ColorUtils.BRAND_COLOR),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Re-Assign ",
-                                    style: TextStyleUtils.mobileheading6.copyWith(
-                                        color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Icon(
-                                    Icons.person_add_alt,
-                                    size: 20,
-                                    color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     // leadManagementController.toggleDropdownForAssignedTo(
+                          //     //     Get.context!, "Multi");
+                          //     // showReassigneDialog(Get.context!, "Multi");
+                          //   },
+                          //   child: Container(
+                          //     padding:
+                          //     EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                          //     decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(8),
+                          //         border: Border.all(color: ColorUtils.GREY_DOTTED),
+                          //         color: ColorUtils.BRAND_COLOR),
+                          //     child: Row(
+                          //       children: [
+                          //         Text(
+                          //           "Re-Assign ",
+                          //           style: TextStyleUtils.mobileheading6.copyWith(
+                          //               color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                          //               fontWeight: FontWeight.w500),
+                          //         ),
+                          //         SizedBox(
+                          //           width: 4,
+                          //         ),
+                          //         Icon(
+                          //           Icons.person_add_alt,
+                          //           size: 20,
+                          //           color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                          //         )
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ))
                 ],
@@ -299,77 +308,87 @@ class StudentView extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: 30,
-                  ),
-                  Container(
-                    width: width * 0.08,
-                    child: Text(
-                      "Name",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.11,
-                    child: Text(
-                      "Contact ",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.05,
-                    child: Text(
-                      textAlign: TextAlign.start,
-                      "Class",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
-                  Container(
-                    width: width * 0.08,
-                    child: Text(
-                      "Subject",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: width * 0.07,
-                    child: Text(
-                      "Institution",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: width * 0.06,
-                    child: Text(
-                      "Status ",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.center,
-                      // width: width * 0.13,
-                      child: Text(
-                        "Assigned to ",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
+
+                  Row(
+                    children: [
+                      Container(
+                        alignment: Alignment.centerLeft,
+
+                        width: width * 0.08,
+                        child: Text(
+                          "Name",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
                       ),
-                    ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+
+                        width: width * 0.11,
+                        child: Text(
+                          "Contact ",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+
+                        width: width * 0.03,
+                        child: Text(
+                          textAlign: TextAlign.start,
+                          "Class",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+
+                        width: width * 0.12,
+                        child: Text(
+                          "Subject",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: width * 0.09,
+                        child: Text(
+                          "Institution",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: width * 0.08,
+                        child: Text(
+                          "Status ",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
+                      ),
+                      Container(
+                        width: width * 0.07,
+
+                        alignment: Alignment.centerLeft,
+                        // width: width * 0.13,
+                        child: Text(
+                          "Assigned to ",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        width: width * 0.06,
+                        child: Text(
+                          "Attendace %",
+                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                        ),
+                      ),
+                    ],
                   ),
                   Container(
-                    alignment: Alignment.center,
-                    width: width * 0.05,
-                    child: Text(
-                      "Attendace %",
-                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    width: width * 0.08,
+                    alignment: Alignment.centerLeft,
+                    width: width * 0.06,
                     child: Text(
                       "Actions",
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
@@ -382,6 +401,7 @@ class StudentView extends StatelessWidget {
             Expanded(
                 child: SingleChildScrollView(
                   child: Container(
+                    height: height,
                     margin: EdgeInsets.symmetric(vertical: 5, horizontal: 32),
                     child: Column(
                       children: [
@@ -414,106 +434,119 @@ class StudentView extends StatelessWidget {
                                 ),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(width: 20,),
-                                    Container(
-                                      width: width * 0.08,
-                                      child: Text(
-                                        student.name,
-                                        textAlign: TextAlign.left,
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: width * 0.11,
-                                      child: Text(
-                                        student.phone,
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: width * 0.05,
-                                      child: Text(
-                                        student.studentClass,
-                                        textAlign: TextAlign.start,
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: width * 0.08,
-                                      child: Text(
-                                        student.subjects.isNotEmpty ? student.subjects.keys.join(", ") : '-',
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: width * 0.07,
-                                      alignment: Alignment.topRight,
-                                      child: Text(
-                                        student.school,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: width * 0.06,
-                                      child: Text(
-                                        textAlign: TextAlign.center,
+                                    Row(
+                                      children: [
+                                        Container(
+                                          alignment: Alignment.centerLeft,
 
-
-
-                                        student.isAssigned ? 'Assigned' : 'Unassigned',
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          tutorNames.isNotEmpty ? tutorNames.join(", ") : '-',
-                                          style: TextStyleUtils.mobileheading6.copyWith(
-                                            fontWeight: FontWeight.w500,
-                                            color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                          width: width * 0.08,
+                                          child: Text(
+                                            student.name,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: width * 0.05,
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '${student.attendancePercent.toStringAsFixed(1)}%',
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+
+                                          width: width * 0.11,
+                                          child: Text(
+                                            student.phone,
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+
+                                          width: width * 0.03,
+                                          child: Text(
+                                            student.studentClass,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.centerLeft,
+
+                                          width: width * 0.12,
+                                          child: Text(
+                                            student.subjects.isNotEmpty ? student.subjects.keys.join(", ") : '-',
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+
+                                          width: width * 0.09,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            student.school,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: width * 0.08,
+                                          alignment: Alignment.centerLeft,
+
+                                          child: Text(
+
+
+
+                                            student.status,
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: width * 0.07,
+
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            tutorNames.isNotEmpty ? tutorNames.join(", ") : '-',
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: width * 0.06,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            '${student.attendancePercent.toStringAsFixed(1)}%',
+                                            style: TextStyleUtils.mobileheading6.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     Container(
-                                      width: width * 0.08,
+                                      width:width*0.06,
                                       child: Row(
                                         crossAxisAlignment: CrossAxisAlignment.end,
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           GestureDetector(
                                             onTap: ()
@@ -523,20 +556,20 @@ class StudentView extends StatelessWidget {
 
                                               studentsDashboardController.currentView.value="view student";
 
-                                              print("user is ${studentsDashboardController.currentSelectedUser.value.name}");
 
 
 
                                         },
                                             child: Icon(Icons.remove_red_eye_outlined, color: ColorUtils.HEADER_GREEN, size: 20),
                                           ),
+                                          SizedBox(width: 12,),
                                           GestureDetector(
                                             onTap: () async{
 
                                               (await studentsDashboardController
                                                   .getStudentById(student.id))!;
-                                              
-                                              
+
+
                                               studentsDashboardController.currentView
                                                 .value = "Edit Student";
 
@@ -546,14 +579,14 @@ class StudentView extends StatelessWidget {
                                             },
                                             child: Icon(Icons.edit, color: ColorUtils.HEADER_GREEN, size: 20),
                                           ),
-                                          GestureDetector(
-                                            onTap: () => studentsDashboardController.deleteStudent(student.id),
-                                            child: Icon(Icons.delete, color: ColorUtils.ORANGE_COLOR_DARK, size: 20),
-                                          ),
-                                          GestureDetector(
-                                            // onTap: () => studentsDashboardController.deleteStudent(student.id),
-                                            child: Icon(Icons.person_add_alt_1, color: ColorUtils.BRAND_COLOR, size: 20),
-                                          )
+                                          // GestureDetector(
+                                          //   onTap: () => studentsDashboardController.deleteStudent(student.id),
+                                          //   child: Icon(Icons.delete, color: ColorUtils.ORANGE_COLOR_DARK, size: 20),
+                                          // ),
+                                          // GestureDetector(
+                                          //   // onTap: () => studentsDashboardController.deleteStudent(student.id),
+                                          //   child: Icon(Icons.person_add_alt_1, color: ColorUtils.BRAND_COLOR, size: 20),
+                                          // )
                                         ],
                                       ),
                                     ),
@@ -568,6 +601,85 @@ class StudentView extends StatelessWidget {
                   ),
                 ),
               ),
+            studentsDashboardController.students.value.length>10?
+            Container(
+              height: height * 0.07,
+              margin: EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("Showing ${studentsDashboardController.studentCurrentPage.value+1} to ${(studentsDashboardController.studentCurrentPage.value+1)*10} of ${studentsDashboardController.students.value.length}",style: TextStyleUtils.paragraphSmall,),
+
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          studentsDashboardController.previousPage();
+                        },
+                        child: Container(
+                          padding:
+                          EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: ColorUtils.GREY_DOTTED),
+                              color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.navigate_before,
+                                size: 20,
+                                color: ColorUtils.SECONDARY_BLACK,
+                              ),
+                              Text(
+                                "Previous",
+                                style: TextStyleUtils.paragraphSmall,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            studentsDashboardController.nextPage();
+                          },
+                          child: Container(
+                            padding:
+                            EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: ColorUtils.GREY_DOTTED),
+                                color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Next",
+                                  style: TextStyleUtils.paragraphSmall,
+                                ),
+                                Icon(
+                                  Icons.navigate_next,
+                                  size: 20,
+                                  color: ColorUtils.SECONDARY_BLACK,
+                                )
+                              ],
+                            ),
+                          ))
+                    ],
+                  ),
+
+
+                ],
+              ),
+            ):Container()
 
           ],
 

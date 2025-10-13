@@ -16,7 +16,9 @@ import 'package:get/get.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/tutor_dashboard_controllers/tutors_program_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/models/tutors_model.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/models/user_model.dart';
+import 'package:inspiringseniorswebapp/modules/admin_login_screen/model/team_model.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../utils/color_utils.dart';
 import '../../../utils/utility/utils.dart';
@@ -111,7 +113,10 @@ class UserManagementController extends GetxController
   RxBool hasMore = true.obs;
 
 
-  var selectedModule="Tutors".obs;
+  var selectedModule="Leads".obs;
+
+  var selectedSection="Leads".obs;
+
   RxBool showSortDropdownForDisposition = false.obs;
 
   var selectedAddUserType="Manual".obs;
@@ -187,7 +192,7 @@ class UserManagementController extends GetxController
   final List<String> dispositionOptions = ['All', 'New', 'Follow Up', 'Not Connected','Not Interested Currently','Junk','Interested'];
   // final List<String> assignedToOptions = ['Shurti', 'Praneta', 'Pragati','Khusbhu',];
   final List<String> roleOptionsForAdd = ['New','member','volunteer','tutor','young volunteer', 'donor',];
-  final List<String> statusOptionsForAdd = ['active', 'pending', 'locked',];
+  final List<String> statusOptionsForAdd = ['active', 'on hold', 'withdrawn',];
   final List<String> dispositionOptionsforAdd = [ 'New', 'Follow Up', 'Not Connected','Not Interested Currently','Junk','Interested'];
 
 
@@ -310,29 +315,47 @@ class UserManagementController extends GetxController
   var csvErrorEntries = <Map<String, dynamic>>[].obs;
   var successEntries = 0.obs;
 
-  Rx<User> currentLoggedInUser=User().obs;
+  Rx<TeamModel> currentLoggedInUser=TeamModel().obs;
 
 
 
   @override
   void onInit() async{
-    Get.put(TutorsProgramController());
-    // TODO: implement onInit
     super.onInit();
-   // await  updateUsersSearchFields();
     await fetchUsersWithPagination(page: 0);
     fetchUsers();
 
 
-    // moveAllUsersToLeadsAtomicBatch();
-   var args= Get.arguments;
-   // print(args[0]);
 
-    currentLoggedInUser.value=args[0];
 
-    print("user is${currentLoggedInUser.value.id}");
 
-    // updateUserStatusCounts();
+    try {
+
+      // 1) Try SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final cached = prefs.getString('user');
+
+      if (cached != null && cached.isNotEmpty) {
+        final Map<String, dynamic> m = jsonDecode(cached);
+        // Ensure your toMapForString() includes "id"
+        final String id = (m['id'] as String?) ?? '';
+        currentLoggedInUser.value = TeamModel.fromMap(id, m);
+      } else {
+        // 2) Fallback to Get.arguments only if nothing cached
+        final args = Get.arguments;
+        if (args is List && args.isNotEmpty && args[0] is TeamModel) {
+          currentLoggedInUser.value = args[0] as TeamModel;
+          // write-through to cache for next boot
+
+        }
+      }
+
+      if (currentLoggedInUser.value != null) {
+        debugPrint('user is ${currentLoggedInUser.value.name}');
+      }
+    }catch(e){
+
+    }
   }
 
 
@@ -585,6 +608,8 @@ class UserManagementController extends GetxController
   }
 
 
+
+
   var currentPage = 0.obs;
   final List<QueryDocumentSnapshot> pageStartDocs = []; // Keep track of page starts
 
@@ -778,9 +803,9 @@ class UserManagementController extends GetxController
     switch (status?.toLowerCase()) {
       case 'active':
         return ColorUtils.HEADER_GREEN_TRANSPARENT_50; // Example: Light green
-      case 'pending':
+      case 'on hold':
         return ColorUtils.YELLOW_BRAND_TRANSPARENT; // Example: Yellow
-      case 'locked':
+      case 'withdrawn':
         return ColorUtils.ORANGE_COLOR; // Example: Light red
       default:
         return Colors.white; // Neutral/unknown status
@@ -828,9 +853,10 @@ class UserManagementController extends GetxController
 
   void updateUserStatusCounts() {
     activeUserCount.value = users.where((u) => u.status?.toLowerCase() == 'active').length;
-    pendingUserCount.value = users.where((u) => u.status?.toLowerCase() == 'pending').length;
-    lockedUserCount.value = users.where((u) => u.status?.toLowerCase() == 'locked').length;
+    pendingUserCount.value = users.where((u) => u.status?.toLowerCase() == 'on hold').length;
+    lockedUserCount.value = users.where((u) => u.status?.toLowerCase() == 'withdrawn').length;
   }
+
 
 
   void sortUsers(SortField field, SortOrder order) {
@@ -1063,6 +1089,31 @@ class UserManagementController extends GetxController
   }
 
 
+
+
+
+  Future<void> renameUserDoc({
+    required String oldId,
+    required String newId,
+    String collection = 'users',
+  }) async {
+    final fs = FirebaseFirestore.instance;
+    final oldRef = fs.collection(collection).doc(oldId);
+    final newRef = fs.collection(collection).doc(newId);
+
+    // 1) Read old doc
+    final snap = await oldRef.get();
+    if (!snap.exists) throw Exception('Old doc not found');
+
+    // 2) Create new doc (copy data, optionally keep oldId)
+    final data = Map<String, dynamic>.from(snap.data()!);
+    data['oldDocId'] = oldId; // optional audit
+    await newRef.set(data, SetOptions(merge: false));
+
+
+    // 4) Delete old doc
+    await oldRef.delete();
+  }
 
 
 
@@ -1437,9 +1488,10 @@ class UserManagementController extends GetxController
     }
     if (updateData.containsKey('firstName') || updateData.containsKey('lastName')) {
       final newFirst = (updateData['firstName'] ?? original.firstName ?? '').toString().trim();
-      final newLast  = (updateData['lastName']  ?? original.lastName  ?? '').toString().trim();
-      final newName  = [newFirst, newLast].where((s) => s.isNotEmpty).join(' ');
-      updateData['name'] = newName;
+      updateData['name'] = newFirst;
+      updateData['searchName'] = newFirst.toString().toLowerCase();
+
+      updateData['id']=await Utils.generateMemberId(newFirst,phoneNumber!);
     }
 
     // Simple scalars
@@ -1495,6 +1547,8 @@ class UserManagementController extends GetxController
     }
 
     updateData['updatedAt'] = FieldValue.serverTimestamp();
+    updateData['updatedBy'] = currentLoggedInUser.value.id;
+
 
     try {
       isLoading.value = true;
@@ -2157,6 +2211,7 @@ class UserManagementController extends GetxController
 
         final action = {
           'text': actionText,
+          'updatedBy':currentLoggedInUser.value.id,
           'time': now.toIso8601String(), // Used for sorting and formatted time
           'date': formattedDate,         // Human-readable date if needed
         };
@@ -2207,6 +2262,7 @@ class UserManagementController extends GetxController
         if (data['text'] != null && data['time'] != null && data['date'] != null) {
           tempList.add({
             'text': data['text'],
+            'updatedBy':data['updatedBy'],
             'time': data['time'],
             'date': data['date'],
           });
@@ -2570,6 +2626,4 @@ class UserManagementController extends GetxController
 
 }
 
-extension StringUtils on String {
-  bool get isNumeric => RegExp(r'^\d+$').hasMatch(this.trim());
-}
+

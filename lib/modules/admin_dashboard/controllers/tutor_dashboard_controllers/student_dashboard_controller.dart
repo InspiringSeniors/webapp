@@ -6,6 +6,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/admin_dashboard_controller.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/user_management_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import 'package:intl/intl.dart';
 
@@ -23,14 +25,11 @@ class StudentsDashboardController extends  GetxController{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<String> classOptions = [
     'All',
-    '3',
-    '4',
-    '5',
+
     '6',
     '7',
     '8',
     '9',
-    '10'
   ];
 
   // final List<String> subjectOptions = [
@@ -45,7 +44,7 @@ class StudentsDashboardController extends  GetxController{
     'All',
     'Assigned',
     'Unassigned',
-    'Removed',
+    'Dropout',
   ];
 
 
@@ -88,7 +87,6 @@ class StudentsDashboardController extends  GetxController{
   Rx<bool> isPhoneEnabled = true.obs;
 
   var labelphoneNumber=false.obs;
-  // TextEditingController? messageController = TextEditingController();
   // TextEditingController? nextActionController = TextEditingController();
 
   Rx<Color> inactiveColor = ColorUtils.BRAND_COLOR.obs;
@@ -133,7 +131,6 @@ class StudentsDashboardController extends  GetxController{
     {'showTime': '8:00 PM', 'timeValue': '20:00'},
   ].obs;
 
-  var currentSelectedUser=StudentDetailModel().obs;
 
   var csvErrorEntries = <Map<String, dynamic>>[].obs;
   var successEntries = 0.obs;
@@ -149,6 +146,16 @@ class StudentsDashboardController extends  GetxController{
   //   return timeOptions.value.sublist(fromIndex + 1);
   // }
 
+  final List<String> subjectOptionsFilter= [
+    'All',
+    'English',
+    'Math',
+    'Science',
+    'Hindi',
+    'Sanskrit',
+    'Social Studies'
+
+  ];
 
   var subjectOptions = <Map<String, dynamic>>[
     {"subject": "English".tr, "value": false.obs},
@@ -310,16 +317,19 @@ class StudentsDashboardController extends  GetxController{
       return;
     }
 
+    UserManagementController userManagementController=Get.find();
     if (isValidated) {
 
       isFormSubmitting.value=true;
       try {
         // Generate random ID
-        String newStudentId = 'sid${DateTime.now().millisecondsSinceEpoch}';
+        String newStudentId = Utils.generateStudentId(studentuserNameController!.text.trim(), phoneNumberController!.text.trim());
 
         Map<String, dynamic> subjectMap = {
           for (var subject in selectedSubjects) subject: {'assigned': false}
         };
+        List<String> subjectsList = List<String>.from(selectedSubjects);
+
 
 
         List<Map<String, dynamic>> timings = [
@@ -341,6 +351,7 @@ class StudentsDashboardController extends  GetxController{
           isAssigned: false,
           assignedTutors: {},
           attendancePercent: 0.0,
+          notes: messageController!.text,
           personalInfo: {
             'dob': studentAgeController!.text.trim(),
             'address': "",
@@ -353,8 +364,16 @@ class StudentsDashboardController extends  GetxController{
             'phone': phoneNumberController!.text.trim(),
             // 'relation': guardianRelationController.text.trim(),
           },
+          registerDate: DateTime.timestamp(),
+          updatedAt:DateTime.timestamp(),
+
+
+          updatedBy: userManagementController.currentLoggedInUser.value==null?"":userManagementController.currentLoggedInUser.value.id,
+          createdBy: userManagementController.currentLoggedInUser.value==null?"":userManagementController.currentLoggedInUser.value.id,
           classHistory: [],
           notesReports: [],
+          subjectsList: subjectsList,
+
         );
 
         // Save to Firestore or add to your list
@@ -376,6 +395,16 @@ class StudentsDashboardController extends  GetxController{
           'guardianDetails': newStudent.guardianDetails,
           'classHistory': newStudent.classHistory,
           'notesReports': newStudent.notesReports,
+          'registerDate':newStudent.registerDate,
+          'updatedAt':newStudent.updatedAt,
+          'updatedBy': newStudent.updatedBy,
+          'createdBy': newStudent.createdBy,
+          'searchName':newStudent.name.toLowerCase(),
+          'notes':newStudent.notes,
+          'status':'Unassigned',
+          'subjectsList': newStudent.subjectsList,
+
+
         })
             .then((_) {
           // Show success message or navigate
@@ -390,7 +419,8 @@ class StudentsDashboardController extends  GetxController{
         resetFormFields();
 
 
-        fetchStudents();
+       await  fetchStudents();
+        await fetchStudentsWithPagination(page: 0);
         currentView.value="all";
 
 
@@ -439,7 +469,8 @@ class StudentsDashboardController extends  GetxController{
   void onInit()async {
     // await uploadSampleStudentData();
     // TODO: implement onInit
-    fetchStudents();
+    await fetchStudentsWithPagination(page: 0);
+    await fetchStudents();
 
   }
 
@@ -1037,6 +1068,7 @@ class StudentsDashboardController extends  GetxController{
     phone: '',
     studentClass: '',
     subjects: {},
+    status: '',
 
     school: '',
     isAssigned: false,
@@ -1048,6 +1080,7 @@ class StudentsDashboardController extends  GetxController{
     guardianDetails: {},
     classHistory: [],
     notesReports: [],
+    registerDate: DateTime.timestamp(),
   ).obs;
   //per user
   /// Helper: convert stored ISO time ("HH:mm") or full ISO to your UI display ("hh:mm a")
@@ -1178,6 +1211,20 @@ class StudentsDashboardController extends  GetxController{
     return match['timeValue'] ?? '';
   }
 
+   Color getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'assigned':
+        return ColorUtils.HEADER_GREEN; // Example: Light green
+      case 'unassigned':
+        return ColorUtils.YELLOW_BRAND; // Example: Yellow
+      case 'dropout':
+        return ColorUtils.ORANGE_COLOR; // Example: Light red
+      default:
+        return ColorUtils.YELLOW_BRAND; // Example: Yellow
+    }
+  }
+
+
   /// Fetch + hydrate form
   Future<StudentDetailModel?> getStudentById(String studentId) async {
     isLoading.value = true;
@@ -1195,7 +1242,10 @@ class StudentsDashboardController extends  GetxController{
       final data = doc.data()!;
       final student = StudentDetailModel.fromMap(doc.id, data);
 
+
       currentSelectedStudent.value = student;
+
+      print("status ${student.registerDate}");
 
 
       await loadMappedTutorsDetails(currentSelectedStudent.value.assignedTutors);
@@ -1220,6 +1270,25 @@ class StudentsDashboardController extends  GetxController{
     }
   }
 
+  Future<void> addSubjectsListForExistingUsers() async {
+    final firestore = FirebaseFirestore.instance;
+
+    final snapshot = await firestore.collection('students').get();
+
+    for (final doc in snapshot.docs) {
+      final data = doc.data();
+
+      final subjects = data['subjects'] as Map<String, dynamic>? ?? {};
+      final subjectsList = subjects.keys.toList();
+
+      // Update the document with subjectsList (keeping subjects untouched)
+      await doc.reference.update({
+        'subjectsList': subjectsList,
+      });
+
+      print('Updated ${doc.id} with subjectsList: $subjectsList');
+    }
+  }
   /// RxMap or plain Map depending on your state mgmt
   /// final RxMap<String, Map<String, dynamic>> tutorById = <String, Map<String, dynamic>>{}.obs;
   final Map<String, Map<String, dynamic>> tutorById = {};
@@ -1362,6 +1431,8 @@ class StudentsDashboardController extends  GetxController{
       isSubjectSelected.value = false;
       return;
     }
+    UserManagementController userManagementController=Get.find();
+
 
     if (!isValidated) return;
 
@@ -1371,7 +1442,11 @@ class StudentsDashboardController extends  GetxController{
       final Map<String, dynamic> subjectMap = {
         for (final s in selectedSubjects) s: {'assigned': false}
       };
+      List<String> subjectsList = List<String>.from(selectedSubjects);
 
+
+
+      print("user id ${userManagementController.currentLoggedInUser.value.id}");
       // Single “All” availability (keep same structure as create)
       final List<Map<String, dynamic>> timings = [
         {
@@ -1393,7 +1468,8 @@ class StudentsDashboardController extends  GetxController{
         'isAssigned': false,                 // you set false on create
         'assignedTutors': <String, dynamic>{}, // you set {} on create
 
-        'attendancePercent': 0.0,            // you set 0.0 on create
+        'attendancePercent': 0.0,
+        'notes':messageController!.text,// you set 0.0 on create
         'personalInfo': {
           'dob': studentAgeController!.text.trim(),
           'address': "",
@@ -1405,8 +1481,13 @@ class StudentsDashboardController extends  GetxController{
           'name': userNameController!.text.trim(),
           'phone': phoneNumberController!.text.trim(),
         },
+        'updatedAt':DateTime.timestamp(),
+        'updatedBy': userManagementController.currentLoggedInUser.value==null?"":userManagementController.currentLoggedInUser.value.id,
         'classHistory': <dynamic>[],         // you set [] on create
-        'notesReports': <dynamic>[],         // you set [] on create
+        'notesReports': <dynamic>[],
+
+        'subjectsList': subjectsList,
+// you set [] on create
       };
 
       // ⚠️ If you do NOT want to wipe existing assignedTutors / classHistory / notesReports
@@ -1432,6 +1513,7 @@ class StudentsDashboardController extends  GetxController{
       // Refresh + reset, same as after create
       resetFormFields();
       await fetchStudents();
+      await fetchStudentsWithPagination(page: 0);
       currentView.value = "all";
     } catch (e) {
       isFormSubmitting.value = false;
@@ -1462,7 +1544,7 @@ class StudentsDashboardController extends  GetxController{
       }).toList();
 
       // Initially show all
-      filteredStudents.value = students;
+      // filteredStudents.value = students;
     } catch (e) {
       print('Error fetching students: $e');
     } finally {
@@ -1470,7 +1552,120 @@ class StudentsDashboardController extends  GetxController{
     }
   }
 
+  // Paging state (add if not present)
+  final List<DocumentSnapshot> studentPageStartDocs = [];
+  final RxInt studentCurrentPage = 0.obs;
+  final RxBool studentHasMore = false.obs;
 
+// Page size (reuse your existing pageSize if defined)
+   int pageSize = 10;
+
+  Future<void> fetchStudentsWithPagination({
+    required int page,
+    String classFilter = '',     // e.g., "6"
+    String subjectFilter = '',   // e.g., "Maths"
+    String statusFilter = '',    // "Assigned" | "Unassigned" | "All"
+    String search = '',          // NEW: name or phone search
+  }) async {
+    try {
+      isLoading.value = true;
+
+      Query queryRef = FirebaseFirestore.instance.collection('students');
+
+      // ---- Filters ----
+      if (statusFilter.isNotEmpty && statusFilter != 'All') {
+        final bool assigned = statusFilter == 'Assigned';
+        queryRef = queryRef.where('status', isEqualTo: statusFilter);
+      }
+
+      if (subjectFilter.isNotEmpty && subjectFilter != 'All') {
+        queryRef = queryRef.where('subjectsList', arrayContains: subjectFilter);
+      }
+
+      if (classFilter.isNotEmpty && classFilter != 'All') {
+        queryRef = queryRef.where('class', isEqualTo: classFilter);
+      }
+
+      // ---- Search (name or phone) ----
+      if (search.isNotEmpty) {
+        final String searchLower = search.toLowerCase();
+
+        // Option 1: If searching numbers only, try phone field
+        if (RegExp(r'^[0-9]+$').hasMatch(searchLower)) {
+          queryRef = queryRef
+              .orderBy('phone')
+              .startAt([searchLower])
+              .endAt(['$searchLower\uf8ff']);
+        } else {
+          // For names, use pre-stored searchName (lowercased version of name)
+          queryRef = queryRef
+              .orderBy('searchName')
+              .startAt([searchLower])
+              .endAt(['$searchLower\uf8ff']);
+        }
+      } else {
+        // Stable ordering for pagination
+        queryRef = queryRef
+            .orderBy('registerDate', descending: true)
+            .orderBy(FieldPath.documentId);
+      }
+
+      queryRef = queryRef.limit(pageSize);
+
+      // ---- Pagination cursor ----
+      if (page == 0) {
+        studentPageStartDocs.clear();
+      } else if (page > 0 && studentPageStartDocs.length >= page) {
+        queryRef = queryRef.startAfterDocument(studentPageStartDocs[page - 1]);
+      }
+
+      // ---- Fetch ----
+      final snapshot = await queryRef.get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final newStudents = snapshot.docs
+            .map((d) =>
+            StudentListItem.fromMap(d.id, d.data() as Map<String, dynamic>))
+            .toList();
+
+        if (studentPageStartDocs.length <= page) {
+          studentPageStartDocs.add(snapshot.docs.last);
+        } else {
+          studentPageStartDocs[page] = snapshot.docs.last;
+        }
+
+        // students.value = newStudents;
+        filteredStudents.value = newStudents;
+
+        studentCurrentPage.value = page;
+        studentHasMore.value = newStudents.length == pageSize;
+      } else {
+        if (page == 0) {
+          students.clear();
+          filteredStudents.clear();
+        }
+        studentHasMore.value = false;
+      }
+    } catch (e) {
+      print('Students Pagination Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
+
+  void nextPage() {
+    if (studentHasMore.value) {
+      fetchStudentsWithPagination(page:studentCurrentPage.value + 1);
+    }
+  }
+
+  void previousPage() {
+    if (studentCurrentPage.value > 0) {
+      fetchStudentsWithPagination(page:studentCurrentPage.value - 1,);
+    }
+  }
   var filteredStudents = <StudentListItem>[].obs;
   var tutorIdNameMap = <String, String>{}.obs;
 
@@ -1532,19 +1727,24 @@ class StudentsDashboardController extends  GetxController{
 
 
   void applyFilters() {
+    final wantedClass   = selectedClassFilter.value.trim().toLowerCase();
+    final wantedSubject = selectedSubjectFilter.value.trim().toLowerCase();
+    final wantedStatus  = selectedStatusFilter.value.trim().toLowerCase();
+
     filteredStudents.value = students.where((student) {
+      // ---- Class filter ----
       final classOnly = student.studentClass.replaceAll(RegExp(r'[A-Z]'), '');
+      final matchesClass = wantedClass.isEmpty || wantedClass == 'all' || classOnly == wantedClass;
 
-      final matchesClass =
-          selectedClassFilter.value == 'All' || selectedClassFilter.value.isEmpty || classOnly == selectedClassFilter.value;
+      // ---- Subject filter ----
+      final subjectKeys = student.subjects.keys.map((k) => k.toLowerCase()).toList();
+      final matchesSubject = wantedSubject.isEmpty || wantedSubject == 'all' || subjectKeys.contains(wantedSubject);
 
-      final matchesSubject = selectedSubjectFilter.value == 'All' || selectedSubjectFilter.value.isEmpty ||
-          student.subjects.entries.any((subj) =>
-          subj.toString().toLowerCase() == selectedSubjectFilter.value.toLowerCase());
-
-      final matchesStatus = selectedStatusFilter.value == 'All' || selectedStatusFilter.value.isEmpty ||
-          (selectedStatusFilter.value == "Assigned" && student.isAssigned) ||
-          (selectedStatusFilter.value == "Unassigned" && !student.isAssigned);
+      // ---- Status filter ----
+      final matchesStatus =
+          wantedStatus.isEmpty || wantedStatus == 'all' ||
+              (wantedStatus == 'assigned' && student.isAssigned) ||
+              (wantedStatus == 'unassigned' && !student.isAssigned);
 
       return matchesClass && matchesSubject && matchesStatus;
     }).toList();
@@ -1552,17 +1752,23 @@ class StudentsDashboardController extends  GetxController{
 
   void updateClassFilter(String value) {
     selectedClassFilter.value = value;
-    applyFilters();
+
+    fetchStudentsWithPagination(page: 0,classFilter:value );
+    // applyFilters();
   }
 
   void updateSubjectFilter(String value) {
     selectedSubjectFilter.value = value;
-    applyFilters();
+    fetchStudentsWithPagination(page: 0,subjectFilter:value );
+
+    // applyFilters();
   }
 
   void updateStatusFilter(String value) {
     selectedStatusFilter.value = value;
-    applyFilters();
+    fetchStudentsWithPagination(page: 0,statusFilter:value );
+
+    // applyFilters();
   }
 
 

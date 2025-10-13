@@ -27,6 +27,11 @@ class InspiringTutorsController extends GetxController{
   Rx<Color> inactiveColor = ColorUtils.BRAND_COLOR.obs;
 
   final List<Widget> onboardingList = <Widget>[
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'Oemu0SLKHow',
+    ),
     CarouselBuilderScreenV2.screen1(
       Get.context!,
       '8lGEZZA-mck',

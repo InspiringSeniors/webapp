@@ -165,7 +165,7 @@ class viewLead extends StatelessWidget {
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                    "User Id : ${leadManagementController.currentSelectedUser.value.id == "" ? "" : leadManagementController.currentSelectedUser.value.id!}",
+                                                    "Member Id : ${leadManagementController.currentSelectedUser.value.id == "" ? "" : leadManagementController.currentSelectedUser.value.id!}",
                                                     style: TextStyleUtils
                                                         .smallGreyTextStyleHighlighted
                                                         .copyWith(

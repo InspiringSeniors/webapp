@@ -67,27 +67,28 @@ class LeadManagementScreen extends StatelessWidget {
                         color: ColorUtils.HEADER_GREEN_TRANSPARENT_50,
                         iconColor: ColorUtils.HEADER_GREEN_DARKER,
                         ontap: () {
-                          leadManagementController.applyStatusFilter("");
+
+                          leadManagementController.applyTopStatusFilter("");
                         },
                         bgColor: leadManagementController
-                                    .selectedStatusFilter.value ==
+                                    .selectedTopFilter.value ==
                                 ""
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
                     headingCards(
                         width: width,
-                        heading: "Hot Leads",
+                        heading: "Form Filled",
                         subheading:
                             "${leadManagementController.hotLeads.value}",
                         icon: Icons.pending_actions_outlined,
                         color: ColorUtils.YELLOW_BRAND_LIGHT,
                         iconColor: ColorUtils.YELLOW_BRAND,
                         ontap: () {
-                          leadManagementController.applyStatusFilter("hot");
+                          leadManagementController.applyFormFilledFilter();
                         },
                         bgColor: leadManagementController
-                                    .selectedStatusFilter.value ==
-                                "hot"
+                                    .selectedTopFilter.value ==
+                                "formfilled"
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
                     headingCards(
@@ -99,11 +100,11 @@ class LeadManagementScreen extends StatelessWidget {
                         color: ColorUtils.ORANGE_COLOR_LIGHT,
                         iconColor: ColorUtils.ORANGE_COLOR,
                         ontap: () {
-                          leadManagementController.applyDispositionFilter("lost");
+                          leadManagementController.applyDispositionFilter("junk");
                         },
                         bgColor: leadManagementController
-                                    .selectedStatusFilter.value ==
-                                "lost"
+                                    .selectedTopFilter.value ==
+                                "junk"
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
                     headingCards(
@@ -116,11 +117,11 @@ class LeadManagementScreen extends StatelessWidget {
                         iconColor: ColorUtils.HEADER_GREEN_DARKER,
                         ontap: () {
                           leadManagementController
-                              .applyDispositionFilter("New");
+                              .applyDispositionFilter("new");
                         },
                         bgColor: leadManagementController
-                                    .selectedStatusFilter.value ==
-                                "New"
+                                    .selectedTopFilter.value ==
+                                "new"
                             ? ColorUtils.YELLOW_BRAND_TRANSPARENT
                             : Colors.white),
                   ],
@@ -340,50 +341,66 @@ class LeadManagementScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 30,
-                  ),
+
                   Container(
-                    width: width * 0.1,
+                    width: width * 0.12,
+                    alignment: Alignment.centerLeft,
                     child: Text(
                       "Name",
+                      textAlign: TextAlign.left,
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
                   Container(
                     width: width * 0.11,
+                    alignment: Alignment.centerLeft,
+
                     child: Text(
                       "Contact ",
+                      textAlign: TextAlign.left,
+
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
-                  // Container(
-                  //   width: width * 0.06,
-                  //   child: Text(
-                  //     "Role",
-                  //     style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                  //   ),
-                  // ),
+                  Container(
+                    width: width * 0.06,
+                    alignment: Alignment.centerLeft,
+
+                    child: Text(
+                      "IsFormFilled",
+                      textAlign: TextAlign.left,
+
+                      style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                    ),
+                  ),
                   Container(
                     width: width * 0.07,
+                    alignment: Alignment.centerLeft,
+
                     child: Text(
                       "Consent",
+                      textAlign: TextAlign.left,
+
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.centerLeft,
                     width: width * 0.11,
                     child: Text(
                       "Assigned to",
+                      textAlign: TextAlign.left,
+
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.centerLeft,
                     width: width * 0.11,
                     child: Text(
                       "Disposition ",
+                      textAlign: TextAlign.left,
+
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
@@ -396,18 +413,22 @@ class LeadManagementScreen extends StatelessWidget {
                   //   ),
                   // ),
                   Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.centerLeft,
                     width: width * 0.08,
                     child: Text(
                       "Next Action",
+                      textAlign: TextAlign.left,
+
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
+                    alignment: Alignment.centerLeft,
                     width: width * 0.08,
                     child: Text(
                       "Actions",
+                      textAlign: TextAlign.left,
+
                       style: TextStyleUtils.smallGreyTextStyleHighlighted,
                     ),
                   ),
@@ -485,24 +506,26 @@ class LeadManagementScreen extends StatelessWidget {
                                           );
                                         }),
                                         Container(
+                                          alignment: Alignment.centerLeft,
                                           width: width * 0.1,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                "${user.firstName == "" ? "" : user.firstName!} " +
-                                                    "${user.lastName == "" || user.lastName == null ? "" : user.lastName!}",
-                                                style: TextStyleUtils.mobileheading6
-                                                    .copyWith(
-                                                        fontWeight: FontWeight.w500,
-                                                        color: ColorUtils
-                                                            .GREY_COLOR_PLACEHOLDER),
-                                              ),
-                                            ],
+                                          child: Text(
+                                            textAlign: TextAlign.left,
+
+                                            overflow: TextOverflow.ellipsis,
+                                            "${user.firstName == "" ? "" : user.firstName!} " +
+                                                "${user.lastName == "" || user.lastName == null ? "" : user.lastName!}",
+                                            style: TextStyleUtils.mobileheading6
+                                                .copyWith(
+                                                    fontWeight: FontWeight.w500,
+                                                    color: ColorUtils
+                                                        .GREY_COLOR_PLACEHOLDER),
                                           ),
                                         ),
                                         Container(
                                           width: width * 0.11,
                                           child: Text(
+                                            textAlign: TextAlign.left,
+
                                             user.phoneNumber == ""
                                                 ? ""
                                                 : user.phoneNumber!,
@@ -513,43 +536,56 @@ class LeadManagementScreen extends StatelessWidget {
                                                         .GREY_COLOR_PLACEHOLDER),
                                           ),
                                         ),
-                                        // Container(
-                                        //     width: width * 0.06,
-                                        //     child: Text(
-                                        //       user.role == "" || user.role == null
-                                        //           ? "_"
-                                        //           : user.role!,
-                                        //       style: TextStyleUtils.mobileheading6
-                                        //           .copyWith(
-                                        //               fontWeight: FontWeight.w500,
-                                        //               color: ColorUtils
-                                        //                   .GREY_COLOR_PLACEHOLDER),
-                                        //     )),
+
+
                                         Container(
+
+                                          alignment: Alignment.centerLeft,
+                                          width: width * 0.06,
+                                            child:   Icon(
+                                              user.isFormFilled == null|| user.isFormFilled == false?  Icons.cancel:Icons.check_circle ,
+                                              size: 16,
+                                              color:  user.isFormFilled == null|| user.isFormFilled == false?  Colors.red:Colors.green ,
+                                            ),
+                                        ),
+                                        Container(
+
                                           width: width * 0.07,
-                                          padding: EdgeInsets.symmetric(vertical: 4,horizontal: 10) ,
-                                          decoration: BoxDecoration(
-                                             color:  user.isConsentGiven==true?ColorUtils.HEADER_GREEN:ColorUtils.ERROR_RED,
-                                            borderRadius: BorderRadius.circular(12)
+                                          
+                                          alignment: Alignment.centerLeft,
+                                          
 
-                                          ),
-                                          child: Text(
-                                            user.isConsentGiven == null
-                                                ? "Not Taken"
-                                                : user.isConsentGiven==false?"Not Given":"Given",
 
-                                            style: TextStyleUtils.mobileheading6
-                                                .copyWith(
+                                          child: Container(
+                                            width: width*0.04,
+                                            padding: EdgeInsets.symmetric(vertical: 4,horizontal: 5) ,
+                                            decoration: BoxDecoration(
+                                                color:  user.isConsentGiven==true?ColorUtils.HEADER_GREEN:ColorUtils.ERROR_RED,
+                                                borderRadius: BorderRadius.circular(12)
 
-                                                    fontWeight: FontWeight.w500,
-                                                    color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                                                    fontSize: 11),
+                                            ),
+                                            child: Text(
+                                              textAlign: TextAlign.left,
+                                            
+                                              user.isConsentGiven == null
+                                                  ? "Not Taken"
+                                                  : user.isConsentGiven==false?"Not Given":"Given",
+                                            
+                                              style: TextStyleUtils.smallGreyTextStyle
+                                                  .copyWith(
+                                            
+                                                      fontWeight: FontWeight.w500,
+                                                      color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                                                      fontSize: 10),
+                                            ),
                                           ),
                                         ),
                                         Container(
-                                          alignment: Alignment.center,
-                                          width: width * 0.12,
+                                          alignment: Alignment.centerLeft,
+                                          width: width * 0.11,
                                           child: Text(
+                                            textAlign: TextAlign.left,
+
                                             user.assignedTo == "" ||
                                                     user.assignedTo == null
                                                 ? "No data"
@@ -562,9 +598,11 @@ class LeadManagementScreen extends StatelessWidget {
                                           ),
                                         ),
                                         Container(
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                           width: width * 0.11,
                                           child: Text(
+                                            textAlign: TextAlign.left,
+
                                             user.disposition == "" ||
                                                     user.disposition == null
                                                 ? "_"
@@ -591,9 +629,11 @@ class LeadManagementScreen extends StatelessWidget {
                                         //   ),
                                         // ),
                                         Container(
-                                          alignment: Alignment.center,
+                                          alignment: Alignment.centerLeft,
                                           width: width * 0.08,
                                           child: Text(
+                                            textAlign: TextAlign.left,
+
                                             user.nextAction == "" ||
                                                     user.nextAction == null
                                                 ? "_"
@@ -607,10 +647,9 @@ class LeadManagementScreen extends StatelessWidget {
                                         ),
                                         Container(
                                             alignment: Alignment.center,
-                                            width: width * 0.08,
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment.start,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
@@ -638,6 +677,7 @@ class LeadManagementScreen extends StatelessWidget {
                                                     size: 20,
                                                   ),
                                                 ),
+                                                SizedBox(width: 12,),
                                                 GestureDetector(
                                                   onTap: () async {
                                                     leadManagementController
@@ -664,40 +704,44 @@ class LeadManagementScreen extends StatelessWidget {
                                                     size: 20,
                                                   ),
                                                 ),
+
+                                                // GestureDetector(
+                                                //   onTap: () {
+                                                //
+                                                //     leadManagementController.selectedUserIds.value=<String>{};
+                                                //
+                                                //     leadManagementController.selectedUserIds.add(user.id!);
+                                                //     leadManagementController
+                                                //         .toggleDropdownForAssignedTo(
+                                                //             Get.context!, "single");
+                                                //   },
+                                                //   child: Icon(
+                                                //     Icons.person_add_alt_1,
+                                                //     color:
+                                                //         ColorUtils.ORANGE_COLOR_DARK,
+                                                //     size: 20,
+                                                //   ),
+                                                // ),
                                                 Obx(()=>
                                                 leadManagementController.currentLoggedInUser.value==null ||leadManagementController.currentLoggedInUser.value.membershipType?.toLowerCase().trim()
-                                                    !="super admin"?Container():
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      showDeleteUserDialog(
-                                                          context, user.id!);
-                                                    },
-                                                    child: Icon(
-                                                      Icons.delete,
-                                                      color:
-                                                          ColorUtils.ORANGE_COLOR_DARK,
-                                                      size: 20,
-                                                    ),
-                                                  ),
-
-                                                ),
+                                                    !="super admin"?Container(
+                                                  width: 0,
+                                                  height: 0,
+                                                ):
                                                 GestureDetector(
                                                   onTap: () {
-                
-                                                    leadManagementController.selectedUserIds.value=<String>{};
-                
-                                                    leadManagementController.selectedUserIds.add(user.id!);
-                                                    leadManagementController
-                                                        .toggleDropdownForAssignedTo(
-                                                            Get.context!, "single");
+                                                    showDeleteUserDialog(
+                                                        context, user.id!);
                                                   },
                                                   child: Icon(
-                                                    Icons.person_add_alt_1,
+                                                    Icons.delete,
                                                     color:
-                                                        ColorUtils.ORANGE_COLOR_DARK,
+                                                    ColorUtils.ORANGE_COLOR_DARK,
                                                     size: 20,
                                                   ),
-                                                )
+                                                ),
+
+                                                ),
                                               ],
                                             )),
                                       ],

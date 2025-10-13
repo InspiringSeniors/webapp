@@ -298,12 +298,21 @@ class addUser extends StatelessWidget {
                                                     height: 5,
                                                   ),
                                                   Obx(()=>
-                                                      Container(
+
+                                                     userManagementController.selectedModule.value=="Edit User"?
+                                                    Container(
+                                                    width: width * 0.34,
+                                                    child: MemberManagementScreen().getNumberField(
+                                                      userManagementController
+                                                          .isPhoneEnabled,
+                                                      Get.context!,true),
+                                                  )
+                                                         :Container(
                                                         width: width * 0.34,
-                                                        child: UserManagementScreen().getNumberField(
+                                                        child: MemberManagementScreen().getNumberField(
                                                           userManagementController
                                                               .isPhoneEnabled,
-                                                          Get.context!,),
+                                                          Get.context!,false),
                                                       ),
                                                   ),
                                                 ],

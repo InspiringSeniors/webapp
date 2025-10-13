@@ -25,24 +25,17 @@ class TutorsDashBoardController extends GetxController{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final List<String> classOptions = [
     'All',
-    '3',
-    '4',
-    '5',
     '6',
     '7',
     '8',
     '9',
-    '10'
   ];
   final List<String> classOptionsForEdit= [
-    '3',
-    '4',
-    '5',
+
     '6',
     '7',
     '8',
     '9',
-    '10'
   ];
 
   final List<String> dayOptions = [
@@ -61,6 +54,9 @@ class TutorsDashBoardController extends GetxController{
     'Math',
     'Science',
     'Hindi',
+    'Sanskrit',
+    'Social Studies'
+
   ];
 
   final List<String> subjectOptionsforEdit = [
@@ -68,24 +64,26 @@ class TutorsDashBoardController extends GetxController{
     'Math',
     'Science',
     'Hindi',
-    'Sanskrit'
+    'Sanskrit',
+    'Social Studies'
   ];
 
   final List<String> statusOptions = [
     'All',
     'Active',
-    'Inactive',
-    'Removed',
+    'On Hold',
+    'Withdrawn',
   ];
 
 
 
   final List<String> stageOptions = [
-    'Induction',
-    'Onboarding in Progress',
-    'Onboarding Complete',
-    'Students assigned',
-    'Classes scheduled'
+    'Orientation',
+    'Student Mapping',
+    'Onboarding',
+    'Classes scheduled',
+    "Temporarily Unavailable",
+    'Not Interested',
   ];
 
 
@@ -152,7 +150,9 @@ class TutorsDashBoardController extends GetxController{
     // TODO: implement onInit
     // await uploadTutorsToFirestore(tutorsDemoList);
 
-    fetchTutors();
+    await fetchTutors();
+
+   await  fetchTutorsWithPagination(page: 0);
   }
   var tutorsDemoList=
   [
@@ -700,17 +700,23 @@ class TutorsDashBoardController extends GetxController{
 
   void updateClassFilter(String value) {
     selectedClassFilter.value = value;
-    applyFilters();
+
+    fetchTutorsWithPagination(page: 0,classFilter: selectedClassFilter.value);
+    // applyFilters();
   }
 
   void updateSubjectFilter(String value) {
     selectedSubjectFilter.value = value;
-    applyFilters();
+    fetchTutorsWithPagination(page: 0,subjectFilter: selectedSubjectFilter.value);
+
+    // applyFilters();
   }
 
   void updateStatusFilter(String value) {
     selectedStatusFilter.value = value;
-    applyFilters();
+    fetchTutorsWithPagination(page: 0,statusFilter: selectedStatusFilter.value);
+
+    // applyFilters();
   }
 
   void updateSearchQueryForTutors(String query) {
@@ -769,14 +775,107 @@ class TutorsDashBoardController extends GetxController{
       }).toList();
 
       print("tutors ${tutors.length}");
-      // Initially show all
-      filteredTutors.value = tutors;
     } catch (e) {
       print('Error fetching tutors: $e');
     } finally {
       isLoading.value = false;
     }
   }
+
+  var tutorCurrentPage = 0.obs;
+  final List<QueryDocumentSnapshot> tutorPageStartDocs = [];
+  var tutorHasMore=false.obs;
+  var pageSize=10;
+
+  Future<void> fetchTutorsWithPagination({
+    required int page,
+    String classFilter = '',
+    String subjectFilter = '',
+    String statusFilter = '',
+    String search = '', // NEW: name/phone search
+  }) async {
+    try {
+      isLoading.value = true;
+
+      Query queryRef = FirebaseFirestore.instance.collection('tutors');
+
+      // ---- Filters ----
+      if (statusFilter.isNotEmpty && statusFilter != 'All') {
+        queryRef = queryRef.where('status', isEqualTo: statusFilter);
+      }
+      if (subjectFilter.isNotEmpty && subjectFilter != 'All') {
+        queryRef = queryRef.where('subjects', arrayContains: subjectFilter);
+      }
+      if (classFilter.isNotEmpty && classFilter != 'All') {
+        queryRef = queryRef.where('classes', arrayContains: classFilter);
+      }
+
+      // ---- Search (prefix) ----
+      final trimmedQuery = search.trim();
+
+      // 🔹 Dynamic search detection
+      if (trimmedQuery.isNotEmpty) {
+        if (trimmedQuery.isNumeric) {
+          final cleanPhone = trimmedQuery.replaceAll(RegExp(r'\s+|-'), '');
+          queryRef = queryRef
+              .orderBy('phoneNumber')
+              .startAt([cleanPhone])
+              .endAt([cleanPhone + '\uf8ff']);
+        } else {
+          final name = trimmedQuery.toLowerCase();
+          queryRef = queryRef
+              .orderBy('searchName')
+              .startAt([name])
+              .endAt([name + '\uf8ff']);
+        }
+      } else {
+        // default pagination order when not searching
+        queryRef = queryRef
+            .orderBy('registerDate', descending: true)
+            .orderBy(FieldPath.documentId);
+      }
+
+      // ---- Pagination cursor ----
+      queryRef = queryRef.limit(pageSize);
+      if (page == 0) {
+        tutorPageStartDocs.clear();
+      } else if (page > 0 && tutorPageStartDocs.length >= page) {
+        queryRef = queryRef.startAfterDocument(tutorPageStartDocs[page - 1]);
+      }
+
+      // ---- Fetch ----
+      final snapshot = await queryRef.get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final newTutors = snapshot.docs
+            .map((d) => Tutor.fromMap(id: d.id, d.data() as Map<String, dynamic>))
+            .toList();
+
+        if (tutorPageStartDocs.length <= page) {
+          tutorPageStartDocs.add(snapshot.docs.last);
+        } else {
+          tutorPageStartDocs[page] = snapshot.docs.last;
+        }
+
+        // tutors.value = newTutors;
+        filteredTutors.value = newTutors;
+        tutorCurrentPage.value = page;
+        tutorHasMore.value = newTutors.length == pageSize;
+      } else {
+        if (page == 0) {
+          tutors.clear();
+          filteredTutors.clear();
+        }
+        tutorHasMore.value = false;
+      }
+    } catch (e) {
+      print('Tutors Pagination Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+
   final RxMap<String, String> studentIdNameMap = <String, String>{}.obs;
 
 
@@ -1016,6 +1115,7 @@ class TutorsDashBoardController extends GetxController{
           tx.update(studentRef, {
             'assignedTutors.$tutorId': FieldValue.arrayUnion([subject]),
             'isAssigned': true,
+            'status':'Assigned',
             'subjects.$subject.assigned': true,
           });
 
@@ -1102,11 +1202,23 @@ class TutorsDashBoardController extends GetxController{
       return;
     }
 
-    // Use a LinkedHashSet to keep insertion order while removing duplicates
-    final formatted = slots.map(formatSlot).toSet().toList();
+    // Formatter without day
+    String formatSlotWithoutDay(Slots s) {
+      final t = DateFormat.jm(); // h:mm a
+      return '${t.format(s.from!)} - ${t.format(s.to!)}';
+    }
+
+    // Deduplicate while preserving order
+    final seen = <String>{};
+    final formatted = <String>[];
+    for (final slot in slots) {
+      final f = formatSlotWithoutDay(slot);
+      if (seen.add(f)) formatted.add(f);
+    }
 
     timeFilterOptions.value = ['All', ...formatted];
   }
+
 
 
 
@@ -1124,44 +1236,133 @@ class TutorsDashBoardController extends GetxController{
   }
 
 
-  bool matchesSelectedTime(List<Map<String, dynamic>> studentSlots) {
-    if (selectedTimeFilter.value == 'All') return true;
 
-    try {
-      final parts = selectedTimeFilter.value.split(' - ');
-      final selectedStartTime = DateFormat.jm().parse(parts[0]);
-      final selectedEndTime = DateFormat.jm().parse(parts[1]);
 
-      for (final slot in studentSlots) {
-        final studentStart = DateTime.parse(slot['start']!);
-        final studentEnd = DateTime.parse(slot['end']!);
+  bool matchesSelectedTime(
+      dynamic studentSlots, // List<Map<String, dynamic>> or List<dynamic>
+      String selectedTimeFilterValue,
+      ) {
+    // 1) "All" short-circuit
+    if (selectedTimeFilterValue.trim().toLowerCase() == 'all') return true;
 
-        // Extract only time portion from student slot
-        final studentStartTime = TimeOfDay.fromDateTime(studentStart);
-        final studentEndTime = TimeOfDay.fromDateTime(studentEnd);
-
-        final selectedStart = TimeOfDay.fromDateTime(selectedStartTime);
-        final selectedEnd = TimeOfDay.fromDateTime(selectedEndTime);
-
-        // Convert TimeOfDay to minutes since midnight for easy comparison
-        int toMinutes(TimeOfDay t) => t.hour * 60 + t.minute;
-
-        final selStartMin = toMinutes(selectedStart);
-        final selEndMin = toMinutes(selectedEnd);
-        final stuStartMin = toMinutes(studentStartTime);
-        final stuEndMin = toMinutes(studentEndTime);
-
-        // Check overlap
-        final overlap = selStartMin < stuEndMin && selEndMin > stuStartMin;
-
-        if (overlap) return true;
-      }
-    } catch (e) {
-      print('Error parsing selectedTimeFilter: $e');
+    // 2) Parse "h:mm a - h:mm a"
+    final _range = _parseSelectedRange(selectedTimeFilterValue);
+    if (_range == null) {
+      debugPrint('matchesSelectedTime: Bad selectedTimeFilter "$selectedTimeFilterValue"');
+      return false;
     }
+    final selStart = _range.$1;
+    final selEnd = _range.$2;
 
+    // 3) Normalize student slots to list
+    final slots = (studentSlots is List) ? studentSlots : const [];
+
+    // 4) Check overlap against any student slot
+    for (final raw in slots) {
+      if (raw is Map) {
+        final startStr = raw['start']?.toString();
+        final endStr   = raw['end']?.toString();
+        if (startStr == null || endStr == null) continue;
+
+        final startDt = DateTime.tryParse(startStr);
+        final endDt   = DateTime.tryParse(endStr);
+        if (startDt == null || endDt == null) continue;
+
+        final stuStart = _toMinutes(TimeOfDay.fromDateTime(startDt));
+        final stuEnd   = _toMinutes(TimeOfDay.fromDateTime(endDt));
+
+        if (_rangesOverlap(selStart, selEnd, stuStart, stuEnd)) return true;
+      }
+    }
     return false;
   }
+
+  (int, int)? _parseSelectedRange(String s) {
+    try {
+      // Expected: "10:00 AM - 12:30 PM"
+      final parts = s.split('-');
+      if (parts.length != 2) return null;
+      final left = parts[0].trim();
+      final right = parts[1].trim();
+
+      final fmt = DateFormat.jm(); // h:mm a
+      final start = fmt.parse(left);
+      final end   = fmt.parse(right);
+
+      final startMin = _toMinutes(TimeOfDay.fromDateTime(start));
+      final endMin   = _toMinutes(TimeOfDay.fromDateTime(end));
+      return (startMin, endMin);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  int _toMinutes(TimeOfDay t) => t.hour * 60 + t.minute;
+
+  /// Overlap for ranges in minutes [0,1440), robust to wrap past midnight.
+  /// If end < start, it’s treated as wrapping (e.g., 10:00 PM - 1:00 AM).
+  bool _rangesOverlap(int aStart, int aEnd, int bStart, int bEnd) {
+    List<(int,int)> expand(int s, int e) {
+      if (e >= s) return [(s, e)];
+      // wrap: split into [s, 1440) and [0, e]
+      return [(s, 1440), (0, e)];
+    }
+
+    bool overlap1D((int,int) r1, (int,int) r2) {
+      final (x1, x2) = r1;
+      final (y1, y2) = r2;
+      return x1 < y2 && x2 > y1; // open interval overlap
+    }
+
+    final a = expand(aStart, aEnd);
+    final b = expand(bStart, bEnd);
+    for (final ra in a) {
+      for (final rb in b) {
+        if (overlap1D(ra, rb)) return true;
+      }
+    }
+    return false;
+  }
+
+
+  // bool matchesSelectedTime(List<Map<String, dynamic>> studentSlots) {
+  //   if (selectedTimeFilter.value == 'All') return true;
+  //
+  //   try {
+  //     final parts = selectedTimeFilter.value.split(' - ');
+  //     final selectedStartTime = DateFormat.jm().parse(parts[0]);
+  //     final selectedEndTime = DateFormat.jm().parse(parts[1]);
+  //
+  //     for (final slot in studentSlots) {
+  //       final studentStart = DateTime.parse(slot['start']!);
+  //       final studentEnd = DateTime.parse(slot['end']!);
+  //
+  //       // Extract only time portion from student slot
+  //       final studentStartTime = TimeOfDay.fromDateTime(studentStart);
+  //       final studentEndTime = TimeOfDay.fromDateTime(studentEnd);
+  //
+  //       final selectedStart = TimeOfDay.fromDateTime(selectedStartTime);
+  //       final selectedEnd = TimeOfDay.fromDateTime(selectedEndTime);
+  //
+  //       // Convert TimeOfDay to minutes since midnight for easy comparison
+  //       int toMinutes(TimeOfDay t) => t.hour * 60 + t.minute;
+  //
+  //       final selStartMin = toMinutes(selectedStart);
+  //       final selEndMin = toMinutes(selectedEnd);
+  //       final stuStartMin = toMinutes(studentStartTime);
+  //       final stuEndMin = toMinutes(studentEndTime);
+  //
+  //       // Check overlap
+  //       final overlap = selStartMin < stuEndMin && selEndMin > stuStartMin;
+  //
+  //       if (overlap) return true;
+  //     }
+  //   } catch (e) {
+  //     print('Error parsing selectedTimeFilter: $e');
+  //   }
+  //
+  //   return false;
+  // }
   void applyFiltersForStudents() {
     final filtered = subjectStudents.where((student) {
       // Class Filter
@@ -1172,7 +1373,9 @@ class TutorsDashBoardController extends GetxController{
               selectedClassFilterForStudents.value.toLowerCase();
 
       // Time Overlap
-      final matchesTime = matchesSelectedTime(student.timingsAvailable);
+      final matchesTime = matchesSelectedTime(student.timingsAvailable,selectedTimeFilter.value);
+
+      print("selected filter ${selectedTimeFilter}");
 // School filter
       final matchesSchool = schoolSearchQuery.value.isEmpty ||
           student.school.toLowerCase().contains(schoolSearchQuery.value.toLowerCase());
@@ -1326,6 +1529,18 @@ class TutorsDashBoardController extends GetxController{
   }
 
 
+  void nextPage() {
+    if (tutorHasMore.value) {
+      fetchTutorsWithPagination(page:tutorCurrentPage.value + 1);
+    }
+  }
+
+  void previousPage() {
+    if (tutorCurrentPage.value > 0) {
+      fetchTutorsWithPagination(page:tutorCurrentPage.value - 1,);
+    }
+  }
+
   Future<void> removeSubjectsForStudent({
     required String tutorId,
     required String studentId,
@@ -1388,8 +1603,14 @@ class TutorsDashBoardController extends GetxController{
       final hasAnyAssignments =
       assignedTutors.values.any((v) => v is List && v.isNotEmpty);
 
+      var status=hasAnyAssignments?'Assigned':'Unassigned';
+
       // If needed, update isAssigned (true/false). You asked to mark false when none left.
-      await studentRef.update({'isAssigned': hasAnyAssignments});
+      await studentRef.update(
+          {'isAssigned': hasAnyAssignments,
+            'status':status
+          }
+      );
 
       // --- 4) (Optional) Refresh local cache/UI
       final t = currentSelectedTutor.value;

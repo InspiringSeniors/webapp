@@ -62,7 +62,7 @@ class AdminDashboardScreen extends StatelessWidget {
                                 ontap: () {
                               adminDashBoardController.selectedModule.value="Leads";
 
-                              adminDashBoardController.fetchUsersWithPagination(0);
+                              adminDashBoardController.fetchLeadsWithPagination(page: 0);
 
                                 },
                                 bgColor: adminDashBoardController
@@ -72,7 +72,7 @@ class AdminDashboardScreen extends StatelessWidget {
                                     .YELLOW_BRAND_TRANSPARENT
                                     : Colors.white),
                             headingCards(width: width,
-                                heading: "Pending Users",
+                                heading: "On Hold Users",
                                 subheading: "${adminDashBoardController
                                     .pendingUsers.value}",
                                 icon: Icons.person,

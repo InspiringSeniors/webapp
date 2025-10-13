@@ -14,6 +14,7 @@ import '../../../utils/color_utils.dart';
 import '../../../utils/routes/routes.dart';
 import '../../../utils/utility/utils.dart';
 import '../../admin_dashboard/models/user_model.dart';
+import '../model/team_model.dart';
 
 class AdminLoginController extends GetxController{
   RxBool emailStateHandler = false.obs;
@@ -100,7 +101,7 @@ class AdminLoginController extends GetxController{
        if (userJson == null) return null;
 
        final Map<String, dynamic> userMap = jsonDecode(userJson);
-      var user=  User.fromJson(userMap);
+      var user=  TeamModel.fromJson(userMap);
        Get.offAllNamed(RoutingNames.ADMIN_DASHBOARD_SCREEN,arguments: [
          user
        ]);
@@ -118,7 +119,6 @@ class AdminLoginController extends GetxController{
   }
   resendOTP() {
 
-    print("clicking to resend");
 
       isResendVisible.value = false;
       startTime();
@@ -150,7 +150,7 @@ class AdminLoginController extends GetxController{
         OTPColor.value=false;
         isOtpVerified.value=true;
         final snapshot = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('isf_team')
             .where('email', isEqualTo: emailController!.text!)
             .limit(1)
             .get();
@@ -159,7 +159,7 @@ class AdminLoginController extends GetxController{
 
          print("docs is ${doc.data()}");
 
-         var user = User.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+         var user = TeamModel.fromMap(doc.id, doc.data() as Map<String, dynamic>);
 
          SharedPreferences sharedPreferences= await SharedPreferences.getInstance();
         final userJson = jsonEncode(user.toMapForString());
@@ -179,7 +179,6 @@ class AdminLoginController extends GetxController{
 
     // await isUser == true ? OTPColor.value = false : OTPColor.value = true;
     // await isUser == true? isOtpVerified.value=true:isOtpVerified.value=false;
-    print("object${isOtpVerified.value}");
 
 
 
@@ -201,7 +200,7 @@ class AdminLoginController extends GetxController{
           var inputPassword = passwordController!.text.trim();
 
           final snapshot = await FirebaseFirestore.instance
-              .collection('users')
+              .collection('isf_team')
               .where('email', isEqualTo: inputEmail)
               .limit(1)
               .get();
@@ -267,7 +266,7 @@ class AdminLoginController extends GetxController{
 
       try {
         final snapshot = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('isf_team')
             .where('email', isEqualTo: inputEmail)
             .limit(1)
             .get();
@@ -279,13 +278,13 @@ class AdminLoginController extends GetxController{
 
           // 🔒 Update user status to locked
           await FirebaseFirestore.instance
-              .collection('users')
+              .collection('isf_team')
               .doc(docId)
               .update({'status': 'locked'});
 
           // ✅ Notify all super admins via email
           final superAdminsSnapshot = await FirebaseFirestore.instance
-              .collection('users')
+              .collection('isf_team')
               .where('role', isEqualTo: 'super admin')
               .get();
 
@@ -334,7 +333,7 @@ class AdminLoginController extends GetxController{
       try {
         // Step 1: Find the user document by email
         final snapshot = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('isf_team')
             .where('email', isEqualTo: email)
             .limit(1)
             .get();
@@ -349,7 +348,7 @@ class AdminLoginController extends GetxController{
 
         // Step 3: Update password
         await FirebaseFirestore.instance
-            .collection('users')
+            .collection('isf_team')
             .doc(docId)
             .update({'password': newPassword, 'isPasswordSet': true});
 
@@ -382,7 +381,7 @@ class AdminLoginController extends GetxController{
       try {
 
         final snapshot = await FirebaseFirestore.instance
-            .collection('users')
+            .collection('isf_team')
             .where('email', isEqualTo: email)
             .limit(1)
             .get();
@@ -397,7 +396,7 @@ class AdminLoginController extends GetxController{
 
         // Step 2: Get document ID
         final doc = snapshot.docs.first;
-        var user = User.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+        var user = TeamModel.fromMap(doc.id, doc.data() as Map<String, dynamic>);
 
         print(user.role);
 
@@ -411,7 +410,7 @@ class AdminLoginController extends GetxController{
         }
 
         await FirebaseFirestore.instance
-            .collection('users')
+            .collection('isf_team')
             .doc(user.id)
             .set(
           user.toMap()
@@ -576,10 +575,6 @@ class AdminLoginController extends GetxController{
             },
           }),
         );
-        print('Sending OTP to: ${email.value}, OTP: ${generatedOtp.value}');
-
-
-        print("respinse is ${response.statusCode}  ${response.body}");
 
 
         if (response.statusCode == 200) {
@@ -641,10 +636,6 @@ class AdminLoginController extends GetxController{
             },
           }),
         );
-        print('Sending OTP to: ${email.value}, OTP: ${generatedOtp.value}');
-
-
-        print("respinse is ${response.statusCode}  ${response.body}");
 
 
         if (response.statusCode == 200) {
@@ -702,11 +693,6 @@ class AdminLoginController extends GetxController{
             },
           }),
         );
-        print('Sending OTP to: ${email.value}, OTP: ${generatedOtp.value}');
-
-
-        print("respinse is ${response.statusCode}  ${response.body}");
-
 
         if (response.statusCode == 200) {
           isLoading.value = false;

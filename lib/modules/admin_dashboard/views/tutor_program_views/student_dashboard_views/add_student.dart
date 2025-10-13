@@ -1069,7 +1069,7 @@ class AddStudent extends StatelessWidget {
 
                                     Text(
                                       "Notes",
-                                      style: TextStyleUtils.smallHighlighted
+                                      style: TextStyleUtils.mobileheading6
                                           .copyWith(
                                           color:
                                           ColorUtils.SECONDARY_BLACK),
@@ -1135,67 +1135,6 @@ class AddStudent extends StatelessWidget {
                                     SizedBox(
                                       height: 20,
                                     ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        studentsDashboardController.currentView.value ==
-                                            "Edit Student"
-                                            ? GestureDetector(
-                                          onTap: ()async{
-
-                                           await studentsDashboardController.updateStudent(formKey: editUserFormKey, studentId: studentsDashboardController.currentSelectedStudent.value.id);
-
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 8,
-                                                horizontal: 14),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(
-                                                    10),
-                                                color: ColorUtils
-                                                    .HEADER_GREEN),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "Save Changes",
-                                                  style: TextStyleUtils
-                                                      .smallGreyTextStyle
-                                                      .copyWith(
-                                                      color: ColorUtils
-                                                          .WHITE_COLOR_BACKGROUND),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                            : GestureDetector(
-                                          onTap: () {
-                                            studentsDashboardController.submitForm(addUserFormKey);
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 10,
-                                                horizontal: 12),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                BorderRadius.circular(
-                                                    10),
-                                                color: ColorUtils
-                                                    .HEADER_GREEN),
-                                            child: Text(
-                                              "Add Student",
-                                              style: TextStyleUtils
-                                                  .smallGreyTextStyle
-                                                  .copyWith(
-                                                  color: ColorUtils
-                                                      .WHITE_COLOR_BACKGROUND),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
                                   ],
                                 ),
                               ),
@@ -1373,8 +1312,79 @@ class AddStudent extends StatelessWidget {
                             );
                           }
                         }),
+
+
                       ],
                     )),
+
+                SizedBox(height:32 ,),
+                Container(
+                  width: width * 0.8,
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 32),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      studentsDashboardController.currentView.value ==
+                          "Edit Student"
+                          ? GestureDetector(
+                        onTap: ()async{
+
+                          await studentsDashboardController.updateStudent(formKey: editUserFormKey, studentId: studentsDashboardController.currentSelectedStudent.value.id);
+
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8,
+                              horizontal: 14),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(
+                                  10),
+                              color: ColorUtils
+                                  .HEADER_GREEN),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Save Changes",
+                                style: TextStyleUtils
+                                    .smallGreyTextStyle
+                                    .copyWith(
+                                    color: ColorUtils
+                                        .WHITE_COLOR_BACKGROUND),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                          : GestureDetector(
+                        onTap: () {
+                          studentsDashboardController.submitForm(addUserFormKey);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 12),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(
+                                  10),
+                              color: ColorUtils
+                                  .HEADER_GREEN),
+                          child: Text(
+                            "Add Student",
+                            style: TextStyleUtils
+                                .smallGreyTextStyle
+                                .copyWith(
+                                color: ColorUtils
+                                    .WHITE_COLOR_BACKGROUND),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height:32 ,),
               ]),
         ),
       ),

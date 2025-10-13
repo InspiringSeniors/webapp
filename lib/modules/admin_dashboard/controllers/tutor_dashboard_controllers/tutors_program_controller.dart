@@ -47,7 +47,7 @@ class TutorsProgramController extends GetxController{
   }
 
 
-  void applyFilter(String status) {
+  void changeTutorProgramView(String status) {
     selectedViewForTutorProgram.value = status;
   }
 

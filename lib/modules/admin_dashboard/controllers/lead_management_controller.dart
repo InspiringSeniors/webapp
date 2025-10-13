@@ -13,8 +13,10 @@ import 'package:csv/csv.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:inspiringseniorswebapp/modules/admin_dashboard/controllers/user_management_controller.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/models/user_model.dart';
 import 'package:inspiringseniorswebapp/modules/admin_dashboard/views/lead_management_views/lead_management_screen.dart';
+import 'package:inspiringseniorswebapp/modules/admin_login_screen/model/team_model.dart';
 import 'package:intl/intl.dart';
 
 import '../../../utils/color_utils.dart';
@@ -63,6 +65,9 @@ class LeadManagementController extends GetxController{
   var isLoading = false.obs;
 
   RxString selectedStatusFilter = ''.obs;
+
+  RxString selectedTopFilter = ''.obs;
+
   var selectedPreffredMode="".obs;
 
   RxString selectedRoleFilter = ''.obs;
@@ -258,7 +263,6 @@ class LeadManagementController extends GetxController{
   ].obs;
 
 
-  Rx<User> currentLoggedInUser=User().obs;
 
   var totalLeads=0.obs;
   var hotLeads=0.obs;
@@ -307,6 +311,9 @@ class LeadManagementController extends GetxController{
 
   final selectedPreferredLanguages = <String>[].obs;
 
+  Rx<TeamModel> currentLoggedInUser=TeamModel().obs;
+
+
   var interestOptions = <Map<String, dynamic>>[
     {"subject": "Awareness about healthy ageing and managing ailments".tr, "value": false.obs},
     {"subject": "Yoga, exercise, staying active and fit".tr, "value": false.obs},
@@ -320,21 +327,35 @@ class LeadManagementController extends GetxController{
     // TODO: implement onInit
 
 
-    // Utils.updateAllLeadIds();
     await fetchUsersWithPagination(page: 0);
-
     await fetchUsers();
-  await  loadAdminUsers();
-    // updateLeadNamesForAll();
+    await  loadAdminUsers();
 
-  print(assignedToOtpions.value);
+    UserManagementController userManagementController=Get.find();
+
+    currentLoggedInUser.value=userManagementController.currentLoggedInUser.value;
+
   }
 
+
+  void applyFormFilledFilter() {
+    selectedTopFilter.value="formfilled";
+    fetchUsersWithPagination(page:0,isFormFilled:true  ); // Reapply search + filters
+  }
 
   void applyStatusFilter(String status) {
     selectedStatusFilter.value = status;
     fetchUsersWithPagination(page:0,statusFilter:selectedStatusFilter.value  ); // Reapply search + filters
   }
+
+
+  void applyTopStatusFilter(String status) {
+    selectedTopFilter.value="";
+
+    selectedStatusFilter.value = status;
+    fetchUsersWithPagination(page:0,statusFilter:selectedStatusFilter.value  ); // Reapply search + filters
+  }
+
 
   void applyRoleFilter(String role) {
     selectedRoleFilter.value = role;
@@ -343,6 +364,7 @@ class LeadManagementController extends GetxController{
 
   void applyDispositionFilter(String role) {
 
+    selectedTopFilter.value=role;
     selectedStatusFilter.value=role;
     selectedDispositionFilter.value = role;
     fetchUsersWithPagination(page:0,dispositionFilter:selectedDispositionFilter.value  ); // Reapply search + filters
@@ -851,6 +873,8 @@ class LeadManagementController extends GetxController{
 
 
       // ---------- text controllers ----------
+      final fullName = [lead.firstName ?? '',lead.lastName?? ''].where((p) => p!.isNotEmpty).join(' ').trim();
+
       userNameController?.text      = (lead.firstName ?? '').trim();
       lastNameController?.text      = (lead.lastName ?? '').trim();
       emailController?.text         = (lead.email ?? '').trim();
@@ -958,6 +982,33 @@ class LeadManagementController extends GetxController{
     }
   }
 
+
+
+
+  Future<void> updateLeadNamesSimple() async {
+    final fs = FirebaseFirestore.instance;
+
+    try {
+      final snap = await fs.collection('students').get();
+
+      for (final doc in snap.docs) {
+        final data = doc.data() as Map<String, dynamic>? ?? {};
+        final first = (data['firstName'] ?? '').toString().trim();
+        final last  = (data['lastName']  ?? '').toString().trim();
+
+        final merged = [first, last].where((s) => s.isNotEmpty).join(' ');
+
+        await doc.reference.update({
+          'firstName': merged,
+          'lastName': '',
+        });
+      }
+
+      print('All leads updated.');
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
 
   void _applyMulti({
@@ -1227,6 +1278,12 @@ class LeadManagementController extends GetxController{
 
     updateData['updatedAt'] = FieldValue.serverTimestamp();
 
+    print("user is ${currentLoggedInUser.value.id}");
+    updateData['updatedBy'] = currentLoggedInUser.value.id;
+
+
+
+
     try {
       isLoading.value = true;
 
@@ -1282,14 +1339,22 @@ class LeadManagementController extends GetxController{
 
         }
 
+
+        var newUserId=Utils.generateMemberId(patched.firstName!.trim()!, patched.phoneNumber!);
+
+
+        print("last name${patched.lastName}");
+        var fullName = [patched.firstName].where((p) => p!.isNotEmpty).join(' ').trim();
+
         final Map<String, dynamic> userData = {
-          'id': id,
+          'id': newUserId,
           'firstName': patched.firstName?.trim(),
           'lastName': patched.lastName?.trim(),
-          'name': patched.firstName,
+          'name': fullName,
+          'searchName':fullName.toLowerCase(),
           'email': patched.email?.trim(),
           'phoneNumber': patched.phoneNumber,
-          'status': 'pending',
+          'status': 'active',
           'role': patched.role,
           'isFormFilled':true,
           'isConsentGiven':patched.isConsentGiven,
@@ -1307,6 +1372,7 @@ class LeadManagementController extends GetxController{
           'assignedTo': patched.assignedTo,
           'disposition': patched.disposition ?? 'New',
           'nextAction': patched.nextAction,
+          'updatedBy':currentLoggedInUser.value.id,
           // Extended profile
           'age': patched.age,
           'dob': patched.dob,
@@ -1326,7 +1392,7 @@ class LeadManagementController extends GetxController{
         };
 
         final leadDocRef = _firestore.collection('leads').doc(id);
-        final userDocRef = _firestore.collection('users').doc(id);
+        final userDocRef = _firestore.collection('users').doc(newUserId);
 
         await userDocRef.set(userData);
 
@@ -1388,6 +1454,7 @@ class LeadManagementController extends GetxController{
     required int page,
     String statusFilter = '',
     String roleFilter = '',
+    bool? isFormFilled,
     bool? consent, // ✅ made nullable to apply only when passed
     String dispositionFilter = '',
     String searchQuery = '',
@@ -1410,6 +1477,10 @@ class LeadManagementController extends GetxController{
       if (consent != null) {
         // ✅ Filter by isConsentGiven field
         queryRef = queryRef.where('isConsentGiven', isEqualTo: consent);
+      }
+      if (isFormFilled != null) {
+        // ✅ Filter by isConsentGiven field
+        queryRef = queryRef.where('isFormFilled', isEqualTo: isFormFilled);
       }
 
       final trimmed = searchQuery.trim();
@@ -1491,8 +1562,6 @@ class LeadManagementController extends GetxController{
   Future<void> addUser(Lead user, GlobalKey<FormState> key) async {
     final isValid = key.currentState?.validate() ?? false;
     if (!isValid) return;
-
-
 
 
     try {
@@ -1887,7 +1956,7 @@ class LeadManagementController extends GetxController{
     final firestore = FirebaseFirestore.instance;
 
     try {
-      final snapshot = await firestore.collection('leads').get();
+      final snapshot = await firestore.collection('students').get();
 
       print("🔎 Found ${snapshot.docs.length} leads to update...");
 
@@ -1896,19 +1965,24 @@ class LeadManagementController extends GetxController{
       for (final doc in snapshot.docs) {
         final data = doc.data() as Map<String, dynamic>;
 
-        final firstName = (data['firstName'] ?? '').toString().trim();
-        final lastName = (data['lastName'] ?? '').toString().trim();
+        final firstName = (data['name'] ?? '').toString().trim();
+
+        // final status=data['status']==null?'Unassigned':data['status'];
+        // final lastName = (data['lastName'] ?? '').toString().trim();
 
         // Combine into single display name
-        final fullName = [firstName, lastName].where((p) => p.isNotEmpty).join(' ').trim();
+        // final fullName = [firstName, lastName].where((p) => p.isNotEmpty).join(' ').trim();
 
-        await firestore.collection('leads').doc(doc.id).update({
-          'name': fullName,
-          'searchName': fullName.toLowerCase(), // optional for search indexing
+        await firestore.collection('students').doc(doc.id).update({
+          'name': firstName,
+          // 'status':status,
+
+
+          // 'searchName': firstName.toLowerCase(), // optional for search indexing
         });
 
         updatedCount++;
-        print("✅ Updated: $fullName (Doc ID: ${doc.id})");
+        print("✅ Updated: $firstName (Doc ID: ${doc.id})");
       }
 
       print("🎉 Completed updating names for $updatedCount leads.");
@@ -2247,8 +2321,8 @@ class LeadManagementController extends GetxController{
 
   void updateUserStatusCounts() {
     totalLeads.value=users.length;
-    hotLeads.value = users.where((u) => u.status?.toLowerCase() == 'hot').length;
-    lostLeads.value = users.where((u) => u.disposition?.toLowerCase() == 'lost').length;
+    hotLeads.value = users.where((u) => u.isFormFilled == true).length;
+    lostLeads.value = users.where((u) => u.disposition?.toLowerCase() == 'junk').length;
     notConnectedLeads.value = users.where((u) => u.disposition?.toLowerCase() == 'new').length;
   }
 
@@ -2323,7 +2397,7 @@ class LeadManagementController extends GetxController{
 
             margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
-            "Error", "Please select users to delete",snackPosition: SnackPosition.BOTTOM);
+            "Error", "Please select users to re-assign",snackPosition: SnackPosition.BOTTOM);
 
         return;
       }
@@ -2349,7 +2423,7 @@ class LeadManagementController extends GetxController{
 
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
-          "Success", "Selected users deleted successfully",snackPosition: SnackPosition.BOTTOM);
+          "Success", "Selected users assigned successfully",snackPosition: SnackPosition.BOTTOM);
       await fetchUsers();
     } catch (e) {
       Get.snackbar(
@@ -2357,28 +2431,58 @@ class LeadManagementController extends GetxController{
 
           margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
-          "Error", "Failed to delete users: $e",snackPosition: SnackPosition.BOTTOM);
+          "Error", "Failed to re-assign users: $e",snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-  Future<List<User>> getAdminUsers() async {
+  Future<List<TeamModel>> getAdminUsers() async {
     try {
       final querySnapshot = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('isf_team')
           .where('role', isEqualTo: 'admin')
           .get();
 
       return querySnapshot.docs.map((doc) {
-        return User.fromMap(doc.id, doc.data());
+        return TeamModel.fromMap(doc.id, doc.data());
       }).toList();
+
     } catch (e) {
       print('❌ Error fetching admin users: $e');
       return [];
     }
   }
 
+  Future<void> addAdminsToISFTeam() async {
+    try {
+      final querySnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .where('role', isEqualTo: 'admin')
+          .get();
+
+      final batch = FirebaseFirestore.instance.batch();
+      final isfTeamRef = FirebaseFirestore.instance.collection('isf_team');
+
+      for (var doc in querySnapshot.docs) {
+        final adminData = doc.data();
+        final newDocRef = isfTeamRef.doc(doc.id);
+
+        batch.set(newDocRef, {
+          'userId': doc.id,
+          ...adminData,
+          'addedAt': FieldValue.serverTimestamp(),
+        });
+      }
+
+      await batch.commit();
+      print('✅ Admin users added to isf_team successfully');
+    } catch (e) {
+      print('❌ Error adding admins to isf_team: $e');
+    }
+  }
+
+
   loadAdminUsers()async{
-    List<User> admins = await getAdminUsers();
+    List<TeamModel> admins = await getAdminUsers();
 
     for (var admin in admins) {
       assignedToOtpions.value.add(admin.firstName!);

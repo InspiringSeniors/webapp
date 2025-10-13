@@ -6,6 +6,8 @@ import 'package:inspiringseniorswebapp/common_widgets/custom_login_registration_
 import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homepage_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 
+import '../../../utils/utility/utils.dart';
+
 class AutoScrollTicker extends StatefulWidget {
   @override
   _AutoScrollTickerState createState() => _AutoScrollTickerState();
@@ -67,17 +69,53 @@ class _AutoScrollTickerState extends State<AutoScrollTicker> {
         itemBuilder: (context, index) {
           return Container(
             alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 64),
-            child: Text(
-                homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["heading"]!,
-              style: TextStyle(
-                color: ColorUtils.WHITE_COLOR_BACKGROUND,
-                fontSize: TextSizeDynamicUtils.dHeight14,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.5,
-                fontFamily: "Inter",
+            padding: EdgeInsets.symmetric(horizontal: 64),
 
-              )
+
+            child: GestureDetector(
+              onTap: (){
+
+
+
+                print("object ${homepageController.upcomingEvents.value}");
+                homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["image"]==null|| homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["image"]==""?
+                homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["url"]==null|| homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["url"]==""? null:Utils.launchUrlFor( homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["url"]):
+
+
+                showModalBottomSheet(
+                  useSafeArea: true,
+                  clipBehavior: Clip.hardEdge,
+                  context: Get.context!,
+                  isScrollControlled: true,
+                  backgroundColor: ColorUtils.GREY_DOTTED,
+                  builder: (context) => Container(
+
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: CachedNetworkImage(imageUrl:
+                    homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["image"]!,
+                      fit: BoxFit.contain,),
+
+                  ),
+                );
+              },
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["heading"]!,
+                      style: TextStyleUtils.heading6.copyWith(
+                        color: Colors.white, // Ensure high contrast
+                        // fontWeight: FontWeight.w600
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(Icons.open_in_new, color: Colors.white, size: 16),
+                  ],
+                ),
+              ),
             ),
           );
         },
@@ -105,9 +143,18 @@ class _AutoScrollTickerState extends State<AutoScrollTicker> {
           itemBuilder: (context, index) {
             return Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 64),
+              padding: EdgeInsets.symmetric(horizontal: 64),
+
+
               child: GestureDetector(
                 onTap: (){
+
+
+
+                  print("object ${homepageController.upcomingEvents.value}");
+                  homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["image"]==null|| homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["image"]==""?
+                  homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["url"]==null|| homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["url"]==""? null:Utils.launchUrlFor( homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["url"]):
+
 
                   showModalBottomSheet(
                     useSafeArea: true,
@@ -125,11 +172,22 @@ class _AutoScrollTickerState extends State<AutoScrollTicker> {
                     ),
                   );
                 },
-                child: Text(
-                  homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["heading"]!,
-                  style: TextStyleUtils.heading6.copyWith(
-                    color: Colors.white, // Ensure high contrast
-                    // fontWeight: FontWeight.w600
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        homepageController.upcomingEvents.value[index % homepageController.upcomingEvents.value.length]["heading"]!,
+                        style: TextStyleUtils.heading6.copyWith(
+                          color: Colors.white, // Ensure high contrast
+                          // fontWeight: FontWeight.w600
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Icons.open_in_new, color: Colors.white, size: 16),
+                    ],
                   ),
                 ),
               ),

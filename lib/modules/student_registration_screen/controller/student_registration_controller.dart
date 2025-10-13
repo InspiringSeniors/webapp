@@ -59,12 +59,10 @@ class StudentRegistrationController extends GetxController{
 
 
   final List<String> classOptions = [
-    '5',
     '6',
     '7',
     '8',
     '9',
-    '10'
   ];
 
   GlobalKey<FormState> studentRegisterFormKey = GlobalKey<FormState>();
@@ -274,11 +272,13 @@ class StudentRegistrationController extends GetxController{
       isFormSubmitting.value=true;
       try {
         // Generate random ID
-        String newStudentId = 'sid${DateTime.now().millisecondsSinceEpoch}';
+        String newStudentId = Utils.generateStudentId(studentuserNameController!.text.trim(), phoneNumberController!.text.trim());
 
         Map<String, dynamic> subjectMap = {
           for (var subject in selectedSubjects) subject: {'assigned': false}
         };
+
+        List<String> subjectsList = List<String>.from(selectedSubjects);
 
 
         List<Map<String, dynamic>> timings = [
@@ -314,6 +314,18 @@ class StudentRegistrationController extends GetxController{
           },
           classHistory: [],
           notesReports: [],
+          registerDate: DateTime.timestamp(),
+          updatedAt:DateTime.timestamp(),
+
+          consentDetails: {
+            "isConsentGiven":true,
+            "date":DateTime.timestamp(),
+            "link":"",
+            "format":"",
+            "signature":signatureeController!.text
+          },
+          subjectsList: subjectsList,
+
         );
 
         // Save to Firestore or add to your list
@@ -335,6 +347,17 @@ class StudentRegistrationController extends GetxController{
           'guardianDetails': newStudent.guardianDetails,
           'classHistory': newStudent.classHistory,
           'notesReports': newStudent.notesReports,
+          'registerDate':newStudent.registerDate,
+          'updatedAt':newStudent.updatedAt,
+          'updatedBy': newStudent.updatedBy,
+          'createdBy': newStudent.createdBy,
+          'consentDetails':newStudent.consentDetails,
+          'searchName':newStudent.name.toLowerCase(),
+          'status':'Unassigned',
+          'subjectsList': newStudent.subjectsList,
+
+
+
         })
             .then((_) {
           // Show success message or navigate
@@ -344,6 +367,8 @@ class StudentRegistrationController extends GetxController{
               margin: EdgeInsets.symmetric(vertical: MediaQuery.of(Get.context!).size.height*0.1,horizontal: MediaQuery.of(Get.context!).size.width*0.25),
 
               "✅ Success", "Student uploaded successfully",snackPosition: SnackPosition.BOTTOM);
+
+          resetFormFields();
         });
 
 
@@ -380,6 +405,40 @@ class StudentRegistrationController extends GetxController{
       print("error in converting datetime: $e");
       return DateTime.now().toIso8601String();
     }
+  }
+
+  void resetFormFields() {
+    // Reset the FormState (validators, autovalidate fields, etc.)
+
+    // Text controllers
+    studentuserNameController?.clear();
+    userNameController?.clear();
+    phoneNumberController?.clear();
+    studentAgeController?.clear();
+    schoolNameController?.clear();
+    signatureeController?.clear();
+    // Core selections
+    selectedClassFilter.value = '';
+    selectedGenerValue.value = 0;        // 0 = unselected (matches your validation)
+    isGenderSelected.value = true;        // clear any error state
+
+    // Subjects
+    selectedSubjects.clear();
+    for (final item in subjectOptions) {
+      final rx = item['value'];
+      if (rx is RxBool) rx.value = false;
+    }
+    isSubjectSelected.value = true;       // clear any error state
+
+    // Interests
+    selectedInterests.clear();
+
+    // Timings (set to empty or your preferred defaults)
+    selectedFromTimeFilter.value = '';
+    selectedToTimeFilter.value = '';
+
+    // Any other toggles/flags
+    isFormSubmitting.value = false;
   }
 
 

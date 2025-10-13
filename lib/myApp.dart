@@ -265,10 +265,15 @@ class _MyAppState extends State<MyApp> {
 
           GetPage(
             name: RoutingNames.ADMIN_DASHBOARD_SCREEN,
-            page: () =>  UserManagementScreen(),
+            page: () =>  MemberManagementScreen(),
             binding: AdminDashboardBindings(),
-            // middlewares:[ AuthMiddleware()
-            // ]
+
+
+
+            middlewares:[
+                AuthMiddleware()
+
+            ]
           ),
 
           GetPage(
@@ -293,17 +298,15 @@ class _MyAppState extends State<MyApp> {
               binding: UserDashBoardBindings(),
               middlewares:[
               UserAuthMiddleware()
-        ]
-
+              ]
           ),
           GetPage(
               name: RoutingNames.USER_RESET_PASS,
               page: () =>  UserResetPass(),
               binding: UserDashBoardBindings()
               ,middlewares:[
-            UserAuthMiddleware()
+                UserAuthMiddleware()
           ]
-
           ),
 
           GetPage(
@@ -364,6 +367,7 @@ class _MyAppState extends State<MyApp> {
               binding: MemberRegistrationBindings()
           ),
 
-        ]);
+        ]
+    );
   }
 }

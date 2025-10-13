@@ -130,12 +130,108 @@ class AdminDashBoardController extends GetxController{
   }
 
 
+
+  Future<void> fetchLeadsWithPagination({
+    required int page,
+    String statusFilter = '',
+    String roleFilter = '',
+    bool? isFormFilled,
+    bool? consent, // ✅ made nullable to apply only when passed
+    String dispositionFilter = '',
+    String searchQuery = '',
+  }) async {
+    try {
+      isLoading.value = true;
+
+      Query queryRef = _firestore.collection('leads');
+
+      // 🔹 Filters
+      if (roleFilter.isNotEmpty) {
+        queryRef = queryRef.where('role', isEqualTo: roleFilter);
+      }
+      if (statusFilter.isNotEmpty) {
+        queryRef = queryRef.where('status', isEqualTo: statusFilter);
+      }
+      if (dispositionFilter.isNotEmpty) {
+        queryRef = queryRef.where('disposition', isEqualTo: dispositionFilter);
+      }
+      if (consent != null) {
+        // ✅ Filter by isConsentGiven field
+        queryRef = queryRef.where('isConsentGiven', isEqualTo: consent);
+      }
+      if (isFormFilled != null) {
+        // ✅ Filter by isConsentGiven field
+        queryRef = queryRef.where('isFormFilled', isEqualTo: isFormFilled);
+      }
+
+      final trimmed = searchQuery.trim();
+
+      if (trimmed.isNotEmpty) {
+        // 🔹 Search (phone vs name)
+        final isNumeric = RegExp(r'^\s*[\d\-\s]+\s*$').hasMatch(trimmed);
+        if (isNumeric) {
+          final cleanPhone = trimmed.replaceAll(RegExp(r'\s+|-'), '');
+          queryRef = queryRef
+              .orderBy('phoneNumber')
+              .startAt([cleanPhone])
+              .endAt([cleanPhone + '\uf8ff']);
+        } else {
+          final name = trimmed.toLowerCase();
+          queryRef = queryRef
+              .orderBy('searchName')
+              .startAt([name])
+              .endAt([name + '\uf8ff']);
+        }
+      } else {
+        // 🔹 Always sort by registration date (newest first)
+        queryRef = queryRef
+            .orderBy('registerDate', descending: true)
+            .orderBy(FieldPath.documentId);
+      }
+
+      // 🔹 Pagination cursors
+      if (page == 0) {
+        pageStartDocs.clear(); // reset if fresh query
+      } else if (page > 0 && pageStartDocs.length >= page) {
+        queryRef = queryRef.startAfterDocument(pageStartDocs[page - 1]);
+      }
+
+      queryRef = queryRef.limit(pageSize);
+
+      // 🔹 Fetch results
+      final snapshot = await queryRef.get();
+
+      if (snapshot.docs.isNotEmpty) {
+        final newLeads = snapshot.docs
+            .map((d) => Lead.fromMap(d.id, d.data() as Map<String, dynamic>))
+            .toList();
+
+        if (pageStartDocs.length <= page) {
+          pageStartDocs.add(snapshot.docs.last);
+        } else {
+          pageStartDocs[page] = snapshot.docs.last;
+        }
+
+        filteredLeads.value = newLeads;
+        currentPage.value = page;
+        hasMore.value = newLeads.length == pageSize;
+      } else {
+        if (page == 0) filteredUsers.clear();
+        hasMore.value = false;
+      }
+    } catch (e) {
+      print("Leads Pagination Error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   void updateUserStatusCountsLeads() {
     openLeads.value = leads.where((u) => u.disposition?.toLowerCase() == 'new').length;
   }
 
   void updateUserStatusCountsUsers() {
-    pendingUsers.value = users.where((u) => u.status?.toLowerCase() == 'pending').length;
+    pendingUsers.value = users.where((u) => u.status?.toLowerCase() == 'on hold').length;
   }
 
 
@@ -148,7 +244,7 @@ class AdminDashBoardController extends GetxController{
         return User.fromMap(doc.id, doc.data() as Map<String, dynamic>);
       }).toList();
 
-      users.value=        users.where((u) => u.status?.toLowerCase() == 'pending').toList();
+      users.value=        users.where((u) => u.status?.toLowerCase() == 'on hold').toList();
 
 
       // filteredUsers.value=users;
@@ -220,7 +316,7 @@ class AdminDashBoardController extends GetxController{
 
 
           filteredUsers.value =
-              users.where((u) => u.status?.toLowerCase() == 'pending').toList();
+              users.where((u) => u.status?.toLowerCase() == 'on hold').toList();
           currentPage.value = page;
 
           updateUserStatusCountsUsers();

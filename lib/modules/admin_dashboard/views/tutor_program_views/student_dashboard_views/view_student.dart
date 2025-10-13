@@ -77,7 +77,7 @@ class ViewStudent extends StatelessWidget {
                               GestureDetector(
                                 onTap: () async {
 
-                                  studentsDashboardController.currentView.value="edit student";
+                                  studentsDashboardController.currentView.value="Edit Student";
 
 
 
@@ -144,48 +144,30 @@ class ViewStudent extends StatelessWidget {
                                     ),
                                   ),
 
+                                  Obx(()=>
+                                     Row(
+                                      children: [
 
-                                  Row(
-                                    children: [
-                                      Text("Status : ",
 
-                                        style: TextStyleUtils.mobileheading6.copyWith(
-                                            color: ColorUtils.SECONDARY_BLACK
-                                        ),),
+                                        Text(
+                                          "Last updated : ${(studentsDashboardController.currentSelectedStudent.value.updatedAt == "" || studentsDashboardController.currentSelectedStudent.value.updatedAt == null ? "No Data" : Utils.formatDateWithSeconds(studentsDashboardController.currentSelectedStudent.value.updatedAt))!}",
+                                          style: TextStyleUtils
+                                              .smallHighlighted.copyWith(
+                                              fontWeight: FontWeight
+                                                  .w500),),
+                                        SizedBox(width: 12,),
 
-                                      Container(
-                                          alignment: Alignment.center,
-                                          child: Container(
-                                              padding:
-                                              EdgeInsets.symmetric(
-                                                  vertical: 6,
-                                                  horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  borderRadius:
-                                                  BorderRadius
-                                                      .circular(20),
-                                                  color: Utils
-                                                      .getStatusColor(
-                                                      "${studentsDashboardController.currentSelectedStudent.value.status == "" || studentsDashboardController.currentSelectedStudent.value.status == null ? "" : studentsDashboardController.currentSelectedStudent.value.status!}")),
-                                              child: Row(
-                                                children: [
-
-                                                  Text(
-                                                    "${studentsDashboardController.currentSelectedStudent.value.status == "" || studentsDashboardController.currentSelectedStudent.value.status == null ? "No Status" : studentsDashboardController.currentSelectedStudent.value.status!}",
-                                                    style: TextStyleUtils
-                                                        .smallGreyTextStyleHighlighted
-                                                        .copyWith(
-                                                        fontWeight:
-                                                        FontWeight
-                                                            .w500,
-                                                        color: ColorUtils
-                                                            .WHITE_COLOR_BACKGROUND),
-                                                  ),
-                                                ],
-                                              ))),
-
-                                    ],
+                                        Text(
+                                          "Updated By : ${(studentsDashboardController.currentSelectedStudent.value.updatedBy == "" || studentsDashboardController.currentSelectedStudent.value.updatedBy == null ? "No Data" : studentsDashboardController.currentSelectedStudent.value.updatedBy)}",
+                                          style: TextStyleUtils
+                                              .smallHighlighted.copyWith(
+                                              fontWeight: FontWeight
+                                                  .w500),),
+                                      ],
+                                    ),
                                   ),
+
+
 
 
                                 ],
@@ -195,17 +177,8 @@ class ViewStudent extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Member Id : ${studentsDashboardController.currentSelectedStudent.value.id}",
-                                        style: TextStyleUtils.smallHighlighted,),
-                                      SizedBox(height: 8,),
-                                      Text("Consent : ${studentsDashboardController.currentSelectedStudent.value.consentDetails==null||studentsDashboardController.currentSelectedStudent.value.consentDetails!["isConsentGiven"]==null?"-":studentsDashboardController.currentSelectedStudent.value.consentDetails!["isGonsentGiven"]}",
-                                        style: TextStyleUtils.smallHighlighted,)
-                                    ],
-                                  ),
+                                  Text("Student Id : ${studentsDashboardController.currentSelectedStudent.value.id}",
+                                    style: TextStyleUtils.smallHighlighted,),
                                   Obx(
                                         ()=> Row(
                                       children: [
@@ -221,6 +194,75 @@ class ViewStudent extends StatelessWidget {
 
                                 ],
                               ),
+                              SizedBox(height: 10,),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    padding:  EdgeInsets.symmetric(
+                                        vertical: 6,
+                                        horizontal: 10),
+                                    decoration: BoxDecoration(
+                                        color:  studentsDashboardController.currentSelectedStudent.value.consentDetails!=null&&studentsDashboardController.currentSelectedStudent.value.consentDetails!["isConsentGiven"]==true?ColorUtils.HEADER_GREEN:ColorUtils.ERROR_RED,
+                                        borderRadius: BorderRadius.circular(12)
+
+                                    ),
+                                    child: Text(
+
+                                        "Consent : "
+                                            "${studentsDashboardController.currentSelectedStudent.value.consentDetails == null ?
+                                        "Consent Not Taken" :
+                                        studentsDashboardController.currentSelectedStudent.value.consentDetails!["isConsentGiven"]==true
+                                            ?"Given":
+                                        "Not Given"
+                                        }",
+                                        style: TextStyleUtils
+                                            .smallGreyTextStyleHighlighted
+                                            .copyWith(
+                                            color: ColorUtils.WHITE_COLOR_BACKGROUND,
+                                            fontWeight:
+                                            FontWeight
+                                                .w500)),
+                                  ),
+
+                                  Obx(
+                                        ()=>Container(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                            padding:
+                                            EdgeInsets.symmetric(
+                                                vertical: 6,
+                                                horizontal: 10),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                BorderRadius
+                                                    .circular(20),
+                                                color: studentsDashboardController
+                                                    .getStatusColor(
+                                                    "${studentsDashboardController.currentSelectedStudent.value.status == "" || studentsDashboardController.currentSelectedStudent.value.status == null ? "" : studentsDashboardController.currentSelectedStudent.value.status!}")),
+                                            child: Text(
+                                              "Status : ${studentsDashboardController.currentSelectedStudent.value.status == "" || studentsDashboardController.currentSelectedStudent.value.status == null ? "No Status" : studentsDashboardController.currentSelectedStudent.value.status!}",
+                                              style: TextStyleUtils
+                                                  .smallGreyTextStyleHighlighted
+                                                  .copyWith(
+                                                  fontWeight:
+                                                  FontWeight
+                                                      .w500,
+                                                  color: ColorUtils
+                                                      .WHITE_COLOR_BACKGROUND),
+                                            ))),
+                                  ),
+
+
+
+
+
+                                ],
+                              ),
+
+
+
 
 
                               SizedBox(height: 24,),
@@ -230,10 +272,48 @@ class ViewStudent extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Basic Information".tr,
+                                        style:
+                                        TextStyleUtils.heading5.copyWith(
+
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Obx(()=> Row(
+                                      children: [
+                                        Text("Registration Date : ${(studentsDashboardController.currentSelectedStudent.value.registerDate==""||studentsDashboardController.currentSelectedStudent.value.registerDate==null?"No Data":Utils.formatDateWithSeconds(studentsDashboardController.currentSelectedStudent.value.registerDate))!} ",
+                                          style: TextStyleUtils
+                                              .smallHighlighted.copyWith(
+                                              fontWeight: FontWeight
+                                                  .w500),),
+
+                                        SizedBox(width: 12,),
+
+                                        Text("Last Active : ${(studentsDashboardController.currentSelectedStudent.value.lastLogin==""||studentsDashboardController.currentSelectedStudent.value.lastLogin==null?"No Data":Utils.formatDateWithSeconds(studentsDashboardController.currentSelectedStudent.value.lastLogin))!} ",
+                                          style: TextStyleUtils
+                                              .smallHighlighted.copyWith(
+                                              fontWeight: FontWeight
+                                                  .w500),),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 24,),
+
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   TextHeadings("Gender", "${studentsDashboardController.currentSelectedStudent.value.personalInfo["gender"]==null?"-":studentsDashboardController.currentSelectedStudent.value.personalInfo["gender"]}"),
                                   TextHeadings("Age", "${studentsDashboardController.currentSelectedStudent.value.personalInfo["dob"]==null?"-":Utils.calculateAge(studentsDashboardController.currentSelectedStudent.value.personalInfo["dob"])}"),
                                   TextHeadings("Class", "${studentsDashboardController.currentSelectedStudent.value.studentClass==null?"-":studentsDashboardController.currentSelectedStudent.value.studentClass}"),
-                                  TextHeadings("School", "${studentsDashboardController.currentSelectedStudent.value.school==null?"-":studentsDashboardController.currentSelectedStudent.value.school}"),
+                                  TextHeadings("School Name", "${studentsDashboardController.currentSelectedStudent.value.school==null?"-":studentsDashboardController.currentSelectedStudent.value.school}"),
 
 
                                 ],
@@ -526,12 +606,36 @@ class ViewStudent extends StatelessWidget {
 
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Consent",style: TextStyleUtils.mobileheading6,),
 
-                                  SizedBox(width: 24,),
-                                  Text("${studentsDashboardController.currentSelectedStudent.value.consentDetails==null||studentsDashboardController.currentSelectedStudent.value.consentDetails!.isEmpty?"No details":studentsDashboardController.currentSelectedStudent.value.consentDetails!["isConsentGiven"]} on ${studentsDashboardController.currentSelectedStudent.value.consentDetails==null||studentsDashboardController.currentSelectedStudent.value.consentDetails!.isEmpty?"No details":studentsDashboardController.currentSelectedStudent.value.consentDetails!["date"]}",style: TextStyleUtils.mobileheading6,)
+
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Notes",style: TextStyleUtils.mobileheading6,),
+
+                                      SizedBox(width: 24,),
+
+                                      Text("${studentsDashboardController.currentSelectedStudent.value.notes==""?"-":studentsDashboardController.currentSelectedStudent.value.notes}",style: TextStyleUtils.smallHighlighted,)
+
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Consent : ",style: TextStyleUtils.mobileheading6,),
+                                      Text("${studentsDashboardController.currentSelectedStudent.value.consentDetails==null
+                                          ||
+                                          studentsDashboardController.currentSelectedStudent.value.consentDetails!.isEmpty?
+                                      "N":
+                                      studentsDashboardController.currentSelectedStudent.value.consentDetails!["isConsentGiven"]==true?"Y":"N"} on ${studentsDashboardController.currentSelectedStudent.value.consentDetails==null||studentsDashboardController.currentSelectedStudent.value.consentDetails!.isEmpty?"_":Utils.formatDateWithSeconds(Utils.toDate(studentsDashboardController.currentSelectedStudent.value.consentDetails!["date"]))}",style: TextStyleUtils.mobileheading6,)
+
+                                    ],
+                                  ),
+
 
                                 ],
                               )
@@ -542,6 +646,7 @@ class ViewStudent extends StatelessWidget {
                           ),
                         ),
 
+                        SizedBox(height: 32,),
 
                       ],
                     ),
@@ -554,6 +659,8 @@ class ViewStudent extends StatelessWidget {
 
   Widget TextHeadings(heading , subheading){
     return Container(
+      width: MediaQuery.of(Get.context!).size.width*0.16,
+
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -602,7 +709,6 @@ class ViewStudent extends StatelessWidget {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${index + 1}. ", style: TextStyleUtils.phoneparagraphSmall),
               Expanded(
                 child: Text(subjectName, style: TextStyleUtils.phoneparagraphSmall),
               ),

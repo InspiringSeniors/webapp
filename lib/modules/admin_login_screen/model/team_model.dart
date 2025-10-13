@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'leads_model.dart';
-
-class User {
+class TeamModel {
   String? id;
 
   // Identity
@@ -69,7 +67,7 @@ class User {
   Map<String,dynamic>? consentDetails;
   Map<String,dynamic>? sourceDetails;
 
-  User({
+  TeamModel({
     this.id,
     this.firstName,
     this.lastName,
@@ -120,58 +118,154 @@ class User {
 
   // ---------- Firestore mappers ----------
 
-  factory User.fromMap(String id, Map<String, dynamic> map) {
+  factory TeamModel.fromMap(String id, Map<String, dynamic> map) {
     DateTime? _ts(dynamic v) => v is Timestamp ? v.toDate() : null;
 
-    return User(
-      id: map["id"],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      name: map['name'],
-      email: map['email'],
-      phoneNumber: map['phoneNumber'],
-      status: map['status'],
-      role: map['role'],
+    return TeamModel(
+        id: map["id"],
+        firstName: map['firstName'],
+        lastName: map['lastName'],
+        name: map['name'],
+        email: map['email'],
+        phoneNumber: map['phoneNumber'],
+        status: map['status'],
+        role: map['role'],
 
 
-      registerDate: _ts(map['registerDate']),
-      lastLogin: _ts(map['lastLogin']),
-      updatedAt: _ts(map['updatedAt']),
-      createdAt: _ts(map['createdAt']),
-      password: map['password'],
-      isPasswordSet: map['isPasswordSet'],
-      membershipType: map['membershipType'], // fixed key
-      lastDate: _ts(map['lastDate']),
-      location: map['location'],
-      address: map['address'],
-      country:map['country'],
-      city: map['city'],
-      state: map['state'],
-      pincode: map['pincode'],
-      age: map['age'],
-      dob: map['dob'], // stored as string in Lead; keep consistent here
-      gender: map['gender'],
-      background: map['background'],
-      profilePic: map['profilePic'],
-      preferences: List<dynamic>.from(map['preferences'] ?? []),
-      interests: List<dynamic>.from(map['interests'] ?? []),
-      opportunities: List<dynamic>.from(map['opportunities'] ?? []),
-      motivations: List<dynamic>.from(map['motivations'] ?? []),
-      languagePreference: List<dynamic>.from(map['languagePreference'] ?? []),
-      referralSources: List<dynamic>.from(map['referralSources'] ?? []),
-      programsEnrolled:List<dynamic>.from(map['programsEnrolled'] ?? []),
-      notes: map['notes'],
-      assignedTo: map['assignedTo'],
-      disposition: map['disposition'],
-      nextAction: map['nextAction'],
-      preferredMode: map['preferredMode'],
-      preferredTime: map['preferredTime'],
-      message: map['message'],
-      isFormFilled: map['isFormFilled'],
-      isConsentGiven: map['isConsentGiven'],
-      updatedBy: map['updatedBy'],
-      consentDetails: map['consentDetails'],
-      sourceDetails: map['sourceDetails']
+        registerDate: _ts(map['registerDate']),
+        lastLogin: _ts(map['lastLogin']),
+        updatedAt: _ts(map['updatedAt']),
+        createdAt: _ts(map['createdAt']),
+        password: map['password'],
+        isPasswordSet: map['isPasswordSet'],
+        membershipType: map['membershipType'], // fixed key
+        lastDate: _ts(map['lastDate']),
+        location: map['location'],
+        address: map['address'],
+        country:map['country'],
+        city: map['city'],
+        state: map['state'],
+        pincode: map['pincode'],
+        age: map['age'],
+        dob: map['dob'], // stored as string in Lead; keep consistent here
+        gender: map['gender'],
+        background: map['background'],
+        profilePic: map['profilePic'],
+        preferences: List<dynamic>.from(map['preferences'] ?? []),
+        interests: List<dynamic>.from(map['interests'] ?? []),
+        opportunities: List<dynamic>.from(map['opportunities'] ?? []),
+        motivations: List<dynamic>.from(map['motivations'] ?? []),
+        languagePreference: List<dynamic>.from(map['languagePreference'] ?? []),
+        referralSources: List<dynamic>.from(map['referralSources'] ?? []),
+        programsEnrolled:List<dynamic>.from(map['programsEnrolled'] ?? []),
+        notes: map['notes'],
+        assignedTo: map['assignedTo'],
+        disposition: map['disposition'],
+        nextAction: map['nextAction'],
+        preferredMode: map['preferredMode'],
+        preferredTime: map['preferredTime'],
+        message: map['message'],
+        isFormFilled: map['isFormFilled'],
+        isConsentGiven: map['isConsentGiven'],
+        updatedBy: map['updatedBy'],
+        consentDetails: map['consentDetails'],
+        sourceDetails: map['sourceDetails']
+    );
+  }
+
+
+  TeamModel copyWith({
+    String? id,
+    String? firstName,
+    String? lastName,
+    String? name,
+    String? email,
+    String? phoneNumber,
+    String? status,
+    String? role,
+    DateTime? registerDate,
+    DateTime? lastLogin,
+    DateTime? updatedAt,
+    DateTime? createdAt,
+    String? password,
+    bool? isPasswordSet,
+    String? membershipType,
+    DateTime? lastDate,
+    String? location,
+    String? address,
+    String? city,
+    String? state,
+    String? pincode,
+    String? age,
+    String? dob,
+    String? gender,
+    String? background,
+    String? profilePic,
+    List<dynamic>? preferences,
+    List<dynamic>? interests,
+    List<dynamic>? opportunities,
+    List<dynamic>? motivations,
+    List<dynamic>? languagePreference,
+    List<dynamic>? referralSources,
+    List<dynamic>? programsEnrolled,
+
+    String? notes,
+    String? assignedTo,
+    String? country,
+    String? disposition,
+    String? nextAction,
+    String? preferredMode,
+    String? preferredTime,
+    String? message,
+    bool? isFormFilled,
+    bool? isConsentGiven,
+    String? updatedBy,
+  }) {
+    return TeamModel(
+      id: id ?? this.id,
+      firstName: firstName ?? this.firstName,
+      lastName: lastName ?? this.lastName,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      status: status ?? this.status,
+      role: role ?? this.role,
+      registerDate: registerDate ?? this.registerDate,
+      lastLogin: lastLogin ?? this.lastLogin,
+      updatedAt: updatedAt ?? this.updatedAt,
+      createdAt: createdAt ?? this.createdAt,
+      password: password ?? this.password,
+      isPasswordSet: isPasswordSet ?? this.isPasswordSet,
+      membershipType: membershipType ?? this.membershipType,
+      programsEnrolled:programsEnrolled??this.programsEnrolled,
+      lastDate: lastDate ?? this.lastDate,
+      location: location ?? this.location,
+      address: address ?? this.address,
+      city: city ?? this.city,
+      state: state ?? this.state,
+      pincode: pincode ?? this.pincode,
+      age: age ?? this.age,
+      dob: dob ?? this.dob,
+      gender: gender ?? this.gender,
+      background: background ?? this.background,
+      profilePic: profilePic ?? this.profilePic,
+      preferences: preferences ?? this.preferences,
+      interests: interests ?? this.interests,
+      opportunities: opportunities ?? this.opportunities,
+      motivations: motivations ?? this.motivations,
+      country:country??this.country,
+      languagePreference: languagePreference ?? this.languagePreference,
+      referralSources: referralSources ?? this.referralSources,
+      notes: notes ?? this.notes,
+      assignedTo: assignedTo ?? this.assignedTo,
+      disposition: disposition ?? this.disposition,
+      nextAction: nextAction ?? this.nextAction,
+      preferredMode: preferredMode ?? this.preferredMode,
+      preferredTime: preferredTime ?? this.preferredTime,
+      message: message ?? this.message,
+      isFormFilled: isFormFilled ?? this.isFormFilled,
+      isConsentGiven: isConsentGiven ?? this.isConsentGiven,
+      updatedBy: updatedBy ?? this.updatedBy,
     );
   }
 
@@ -230,170 +324,13 @@ class User {
 
   // ---------- Lead → User converter ----------
 
-  /// Create a User from a Lead. You can override fields via [overrides].
-  factory User.fromLead(Lead lead, {Map<String, dynamic>? overrides}) {
-    // Prefer lead.name if present; else compose from first/last
-    final fullName = lead.name ??
-        [lead.firstName, lead.lastName].where((e) => (e ?? '').isNotEmpty).join(' ').trim();
 
-    final u = User(
-      id: lead.id, // you may want to create a new doc id instead
-      firstName: lead.firstName,
-      lastName: lead.lastName,
-      name: fullName.isEmpty ? null : fullName,
-      email: lead.email,
-      phoneNumber: lead.phoneNumber,
-      status: lead.status ?? 'active', // default
-      role: lead.role ?? 'member',     // default
-      registerDate: lead.registerDate ?? DateTime.now(),
-      lastLogin: lead.lastLogin,
-      updatedAt: lead.updatedAt,
-      createdAt: lead.createdAt ?? DateTime.now(),
-      password: null,
-      isPasswordSet: false,
-      membershipType: null,
-      lastDate: null,
-      location: lead.city != null && lead.state != null
-          ? '${lead.city}, ${lead.state}'
-          : (lead.city ?? lead.state),
-      address: lead.address,
-      city: lead.city,
-      state: lead.state,
-      pincode: lead.pincode,
-      age: lead.age,
-      dob: lead.dob,
-      gender: lead.gender,
-      background: lead.background,
-      profilePic: lead.profilePic,
-      preferences: (lead.preferences ?? []).toList(),
-      interests: (lead.interests ?? []).toList(),
-      opportunities: (lead.opportunities ?? []).toList(),
-      motivations: (lead.motivations ?? []).toList(),
-      languagePreference: (lead.languagePreference ?? []).toList(),
-      referralSources: (lead.referralSources ?? []).toList(),
-      notes: lead.notes,
-      assignedTo: lead.assignedTo,
-      disposition: lead.disposition,
-      nextAction: lead.nextAction,
-      preferredMode: lead.preferredMode,
-      preferredTime: lead.preferredTime,
-      message: lead.message,
-      isFormFilled: lead.isFormFilled ?? false,
-      isConsentGiven: lead.isConsentGiven ?? false,
-      updatedBy: lead.updatedBy,
-      consentDetails: lead.consentDetails,
-      sourceDetails: lead.sourceDetails
-    );
-
-    if (overrides == null || overrides.isEmpty) return u;
-
-    // Apply any overrides provided (e.g., role: 'member', membershipType: 'free', etc.)
-    final m = u.toMap()..addAll(overrides);
-    return User.fromMap(u.id ?? '', m);
-  }
-
-  // ---------- Utilities ----------
-
-  User copyWith({
-    String? id,
-    String? firstName,
-    String? lastName,
-    String? name,
-    String? email,
-    String? phoneNumber,
-    String? status,
-    String? role,
-    DateTime? registerDate,
-    DateTime? lastLogin,
-    DateTime? updatedAt,
-    DateTime? createdAt,
-    String? password,
-    bool? isPasswordSet,
-    String? membershipType,
-    DateTime? lastDate,
-    String? location,
-    String? address,
-    String? city,
-    String? state,
-    String? pincode,
-    String? age,
-    String? dob,
-    String? gender,
-    String? background,
-    String? profilePic,
-    List<dynamic>? preferences,
-    List<dynamic>? interests,
-    List<dynamic>? opportunities,
-    List<dynamic>? motivations,
-    List<dynamic>? languagePreference,
-    List<dynamic>? referralSources,
-    List<dynamic>? programsEnrolled,
-
-    String? notes,
-    String? assignedTo,
-    String? country,
-    String? disposition,
-    String? nextAction,
-    String? preferredMode,
-    String? preferredTime,
-    String? message,
-    bool? isFormFilled,
-    bool? isConsentGiven,
-    String? updatedBy,
-  }) {
-    return User(
-      id: id ?? this.id,
-      firstName: firstName ?? this.firstName,
-      lastName: lastName ?? this.lastName,
-      name: name ?? this.name,
-      email: email ?? this.email,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
-      status: status ?? this.status,
-      role: role ?? this.role,
-      registerDate: registerDate ?? this.registerDate,
-      lastLogin: lastLogin ?? this.lastLogin,
-      updatedAt: updatedAt ?? this.updatedAt,
-      createdAt: createdAt ?? this.createdAt,
-      password: password ?? this.password,
-      isPasswordSet: isPasswordSet ?? this.isPasswordSet,
-      membershipType: membershipType ?? this.membershipType,
-      programsEnrolled:programsEnrolled??this.programsEnrolled,
-      lastDate: lastDate ?? this.lastDate,
-      location: location ?? this.location,
-      address: address ?? this.address,
-      city: city ?? this.city,
-      state: state ?? this.state,
-      pincode: pincode ?? this.pincode,
-      age: age ?? this.age,
-      dob: dob ?? this.dob,
-      gender: gender ?? this.gender,
-      background: background ?? this.background,
-      profilePic: profilePic ?? this.profilePic,
-      preferences: preferences ?? this.preferences,
-      interests: interests ?? this.interests,
-      opportunities: opportunities ?? this.opportunities,
-      motivations: motivations ?? this.motivations,
-      country:country??this.country,
-      languagePreference: languagePreference ?? this.languagePreference,
-      referralSources: referralSources ?? this.referralSources,
-      notes: notes ?? this.notes,
-      assignedTo: assignedTo ?? this.assignedTo,
-      disposition: disposition ?? this.disposition,
-      nextAction: nextAction ?? this.nextAction,
-      preferredMode: preferredMode ?? this.preferredMode,
-      preferredTime: preferredTime ?? this.preferredTime,
-      message: message ?? this.message,
-      isFormFilled: isFormFilled ?? this.isFormFilled,
-      isConsentGiven: isConsentGiven ?? this.isConsentGiven,
-      updatedBy: updatedBy ?? this.updatedBy,
-    );
-  }
 
 
   /// 🔥 Convert JSON (from REST, local store, etc.) to User
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory TeamModel.fromJson(Map<String, dynamic> json) {
     try {
-      return User(
+      return TeamModel(
         id: json['id']?.toString(),
         firstName: json['firstName']?.toString(),
         lastName: json['lastName']?.toString(),
@@ -440,7 +377,7 @@ class User {
       );
     } catch (e, stack) {
       print("❌ Error parsing User.fromJson: $e\n$stack");
-      return User(); // return empty user instead of crashing
+      return TeamModel(); // return empty user instead of crashing
     }
   }
   static DateTime? _toDateTimeSafe(dynamic value) {

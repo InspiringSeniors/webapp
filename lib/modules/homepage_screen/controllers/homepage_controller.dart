@@ -240,7 +240,7 @@ class HomepageController extends GetxController {
 
   var isEventsLoading=false.obs;
 
-  Future<void> fetchUpcomingEvents() async {
+  Future<void>fetchUpcomingEvents() async {
 
 
     try {
@@ -251,6 +251,7 @@ class HomepageController extends GetxController {
         return {
           'heading': data['heading'],
           'image': data['image'],
+          'url':data['url']
 
         };
       }).toList();

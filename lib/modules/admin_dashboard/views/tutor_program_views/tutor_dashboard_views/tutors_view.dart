@@ -69,7 +69,7 @@ class TutorsView extends StatelessWidget {
                             hintText: 'Search by name, number ',
                             height: 45,
                             onchanged: (val) {
-                              tutorsDashBoardController.updateSearchQueryForTutors(val);
+                              tutorsDashBoardController.fetchTutorsWithPagination(page: 0,search: val);
                               // leadManagementController.filterUsers(val);
                               // print(
                               //     "seach is ${leadManagementController.filteredUsers.value.length}");
@@ -127,7 +127,7 @@ class TutorsView extends StatelessWidget {
                                 ),
                                 SizedBox(width: 12,),
                                 Container(
-                                  width: width*0.082,
+                                  width: width*0.1,
 
                                   child: DropdownButtonFormField<String>(
                                     isDense: true,
@@ -300,76 +300,85 @@ class TutorsView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: 30,
-                    ),
-                    Container(
-                      width: width * 0.08,
-                      child: Text(
-                        "Name",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                      ),
-                    ),
-                    Container(
-                      width: width * 0.11,
-                      child: Text(
-                        "Contact ",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                      ),
-                    ),
-                    Container(
-                      width: width * 0.05,
-                      child: Text(
-                        textAlign: TextAlign.start,
-                        "Classes",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                      ),
-                    ),
-                    Container(
-                      width: width * 0.08,
-                      child: Text(
-                        "Subjects",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: width * 0.07,
-                      child: Text(
-                        "Availabilty Slots ",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      width: width * 0.06,
-                      child: Text(
-                        "Status ",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        // width: width * 0.13,
-                        child: Text(
-                          "Assigned to ",
-                          style: TextStyleUtils.smallGreyTextStyleHighlighted,
+
+                    Row(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+
+                          width: width * 0.08,
+                          child: Text(
+                            "Name",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
                         ),
-                      ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+
+                          width: width * 0.11,
+                          child: Text(
+                            "Contact ",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+
+                          width: width * 0.05,
+                          child: Text(
+                            textAlign: TextAlign.start,
+                            "Classes",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+
+                          width: width * 0.08,
+                          child: Text(
+                            "Subjects",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
+                        ),
+                        Container(
+                          width: width * 0.13,
+
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Availabilty Slots ",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: width * 0.06,
+                          child: Text(
+                            "Status ",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: width * 0.07,
+                          child: Text(
+                            "Assigned to ",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
+                        ),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          width: width * 0.05,
+                          child: Text(
+                            "Classes Assigned",
+                            style: TextStyleUtils.smallGreyTextStyleHighlighted,
+                          ),
+                        ),
+                      ],
                     ),
                     Container(
-                      alignment: Alignment.center,
-                      width: width * 0.05,
-                      child: Text(
-                        "Classes Assigned",
-                        style: TextStyleUtils.smallGreyTextStyleHighlighted,
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
+                      alignment: Alignment.centerLeft,
                       width: width * 0.08,
                       child: Text(
                         "Actions",
@@ -400,8 +409,8 @@ class TutorsView extends StatelessWidget {
                             itemBuilder: (context, index) {
                               final tutor = tutorsDashBoardController.filteredTutors.value[index];
 
-                              final fullName = '${tutor.firstName} ${tutor.lastName}';
-                              final contact = '${tutor.phoneNumber}\n${tutor.email==null?'':tutor.email}';
+                              final fullName = '${tutor.firstName} ${tutor.lastName==null?"":tutor.lastName}';
+                              final contact = '${tutor.phoneNumber}';
                               final subjects = tutor.subjects.join(', ');
                               final classes = tutor.classes.join(', ');
                               final slots = (tutor.availabilitySlots?.isNotEmpty ?? false)
@@ -432,49 +441,68 @@ class TutorsView extends StatelessWidget {
                                   border: Border.all(color: ColorUtils.GREY_DOTTED),
                                 ),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SizedBox(width: 20),
-                                    Container(width: width * 0.08, child: Text(fullName, style: TextStyleUtils.mobileheading6.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                    ),)),
-                                    Container(width: width * 0.11, child: Text(contact, style: TextStyleUtils.mobileheading6.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                    ),)),
-                                    Container(width: width * 0.05, child: Text(classes, style: TextStyleUtils.mobileheading6.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                    ),)),
-                                    Container(width: width * 0.08, child: Text(subjects, style: TextStyleUtils.mobileheading6.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                    ),)),
-                                    Container(width: width * 0.07, alignment: Alignment.center, child: Text(slots, style: TextStyleUtils.mobileheading6.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                    ),)),
-                                    Container(width: width * 0.06, alignment: Alignment.center, child: Text(status!, style: TextStyleUtils.mobileheading6.copyWith(
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                    ),)),
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        child: Text("${assignedTo}" , style: TextStyleUtils.mobileheading6.copyWith(
+                                    Row(
+                                      children: [
+                                        Container(
+                                            alignment: Alignment.centerLeft,
+
+                                            width: width * 0.08, child: Text(fullName, style: TextStyleUtils.mobileheading6.copyWith(
                                           fontWeight: FontWeight.w500,
                                           color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                        ),),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: width * 0.07,
-                                      alignment: Alignment.center,
-                                      child: Text(assignedClasses!=0 ? "${assignedClasses.toString()}" : '-', style: TextStyleUtils.mobileheading6.copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        color: ColorUtils.GREY_COLOR_PLACEHOLDER,
-                                      ),),
+                                        ),)),
+                                        Container(
+                                            alignment: Alignment.centerLeft,
+
+                                            width: width * 0.11, child: Text(contact, style: TextStyleUtils.mobileheading6.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                        ),)),
+                                        Container(
+                                            alignment: Alignment.centerLeft,
+
+                                            width: width * 0.05, child: Text(classes, style: TextStyleUtils.mobileheading6.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                        ),)),
+                                        Container(
+                                            alignment: Alignment.centerLeft,
+
+                                            width: width * 0.08, child: Text(subjects, style: TextStyleUtils.mobileheading6.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                        ),)),
+                                        Container(
+                                            alignment: Alignment.centerLeft,
+
+                                            width: width * 0.13, child: Text(slots, style: TextStyleUtils.mobileheading6.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                        ),)),
+                                        Container(width: width * 0.06, alignment: Alignment.centerLeft, child: Text(status!, style: TextStyleUtils.mobileheading6.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                        ),)),
+                                        Container(
+                                          width: width * 0.07,
+
+                                          alignment: Alignment.centerLeft,
+                                          child: Text("${assignedTo}" , style: TextStyleUtils.mobileheading6.copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                          ),),
+                                        ),
+                                        Container(
+                                          width: width * 0.07,
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(assignedClasses!=0 ? "${assignedClasses.toString()}" : '-', style: TextStyleUtils.mobileheading6.copyWith(
+                                            fontWeight: FontWeight.w500,
+                                            color: ColorUtils.GREY_COLOR_PLACEHOLDER,
+                                          ),),
+                                        ),
+                                      ],
                                     ),
                                     Container(
                                       width: width * 0.08,
@@ -531,7 +559,87 @@ class TutorsView extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
+
+              tutorsDashBoardController.tutors.value.length>10?
+              Container(
+                height: height * 0.07,
+                margin: EdgeInsets.symmetric(horizontal: 24),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Showing ${tutorsDashBoardController.tutorCurrentPage.value+1} to ${(tutorsDashBoardController.tutorCurrentPage.value+1)*10} of ${tutorsDashBoardController.tutors.value.length}",style: TextStyleUtils.paragraphSmall,),
+
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            tutorsDashBoardController.previousPage();
+                          },
+                          child: Container(
+                            padding:
+                            EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: ColorUtils.GREY_DOTTED),
+                                color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.navigate_before,
+                                  size: 20,
+                                  color: ColorUtils.SECONDARY_BLACK,
+                                ),
+                                Text(
+                                  "Previous",
+                                  style: TextStyleUtils.paragraphSmall,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              tutorsDashBoardController.nextPage();
+                            },
+                            child: Container(
+                              padding:
+                              EdgeInsets.symmetric(vertical: 9, horizontal: 12),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: ColorUtils.GREY_DOTTED),
+                                  color: ColorUtils.WHITE_COLOR_BACKGROUND),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Next",
+                                    style: TextStyleUtils.paragraphSmall,
+                                  ),
+                                  Icon(
+                                    Icons.navigate_next,
+                                    size: 20,
+                                    color: ColorUtils.SECONDARY_BLACK,
+                                  )
+                                ],
+                              ),
+                            ))
+                      ],
+                    ),
+
+
+                  ],
+                ),
+              ):Container()
 
 
             ],
@@ -681,22 +789,24 @@ class TutorsView extends StatelessWidget {
                             fontWeight: FontWeight.w500
                           ),),
 
-                          Text(
-                            (tutor.availabilitySlots?.isNotEmpty ?? false)
-                                ? tutor.availabilitySlots!
-                                .map((slot) {
-                              final day = slot.day ?? '';
-                              final start = slot.from; // DateTime?
-                              final end = slot.to;     // DateTime?
-                              final timeFormat = DateFormat.jm();
+                          Expanded(
+                            child: Text(
+                              (tutor.availabilitySlots?.isNotEmpty ?? false)
+                                  ? tutor.availabilitySlots!
+                                  .map((slot) {
+                                final day = slot.day ?? '';
+                                final start = slot.from; // DateTime?
+                                final end = slot.to;     // DateTime?
+                                final timeFormat = DateFormat.jm();
 
-                              if (start == null || end == null) return day; // fallback if times missing
+                                if (start == null || end == null) return day; // fallback if times missing
 
-                              return '$day: ${timeFormat.format(start)} - ${timeFormat.format(end)}';
-                            })
-                                .join(', ')
-                                : 'No availability set',
-                            style: TextStyleUtils.heading6,
+                                return '$day: ${timeFormat.format(start)} - ${timeFormat.format(end)}';
+                              })
+                                  .join(', ')
+                                  : 'No availability set',
+                              style: TextStyleUtils.heading6,
+                            ),
                           )
 
                         ],

@@ -250,10 +250,11 @@ class ViewTutor extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextHeadings("City/Area", "${tutorsDashBoardController.currentSelectedTutor.value.city}"),
-                                TextHeadings("Address", "${tutorsDashBoardController.currentSelectedTutor.value.address}"),
+                                TextHeadings("Communication Address", "${tutorsDashBoardController.currentSelectedTutor.value.address}"),
                                 TextHeadings("State", "${tutorsDashBoardController.currentSelectedTutor.value.state}"),
                                 TextHeadings("Pincode", "${tutorsDashBoardController.currentSelectedTutor.value.pincode}"),
 
+                                Container(width: 200,)
                               ],
                             ),
 
@@ -263,9 +264,9 @@ class ViewTutor extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                TextHeadings("Professional & Educational Background", "${tutorsDashBoardController.currentSelectedTutor.value.background}"),
-                                SizedBox(width: 24,),
-                                TextHeadings("Languages Known", "${tutorsDashBoardController.currentSelectedTutor.value.languagePreference.toString()
+                                TextHeadings("Educational & Professional Background in Brief", "${tutorsDashBoardController.currentSelectedTutor.value.background}"),
+                                SizedBox(width: width*0.02,),
+                                TextHeadings("Languages Known", "${tutorsDashBoardController.currentSelectedTutor.value.languagePreference==null?"-":tutorsDashBoardController.currentSelectedTutor.value.languagePreference!.join(", ")
                                 }"),
 
 
@@ -300,7 +301,7 @@ class ViewTutor extends StatelessWidget {
                                     Text("Tutor Stage:",
                                       style: TextStyleUtils.mobileheading6,),
                                     Text(
-                                        " ${tutorsDashBoardController.currentSelectedTutor.value.stage==""?"-":tutorsDashBoardController.currentSelectedTutor.value.stage}",
+                                        " ${tutorsDashBoardController.currentSelectedTutor.value.stage==""||tutorsDashBoardController.currentSelectedTutor.value.stage==null?"-":tutorsDashBoardController.currentSelectedTutor.value.stage}",
                                       style: TextStyleUtils.phoneparagraphSmall,),
                                   ],
                                 ),
@@ -330,7 +331,7 @@ class ViewTutor extends StatelessWidget {
                                           const Text("—")
                                         else
                                           Container(
-                                            width: width*0.15,
+                                            width: width*0.1,
                                             // height: 100,
                                             child: ListView.builder(scrollDirection:Axis.vertical,
                                                 shrinkWrap: true,
@@ -341,13 +342,13 @@ class ViewTutor extends StatelessWidget {
                                                   var slot=tutorsDashBoardController.currentSelectedTutor.value.subjects![item];
                                                   return Container(
                                                     padding: EdgeInsets.symmetric(vertical: 10),
-                                                    child: Text("${item+1} -  ${slot}",style: TextStyleUtils.phoneparagraphSmall,),
+                                                    child: Text("${slot}",style: TextStyleUtils.phoneparagraphSmall,),
                                                   );
                                                 }
                                                ),
                                           ),
 
-                                        SizedBox(width: 64,),
+                                        SizedBox(width: 16,),
 
 
                                         if (tutorsDashBoardController.currentSelectedTutor.value.classes==null||tutorsDashBoardController.currentSelectedTutor.value.classes!.isEmpty)
@@ -355,7 +356,7 @@ class ViewTutor extends StatelessWidget {
 
                                         else
                                           Container(
-                                            width: width*0.15,
+                                            width: width*0.1,
 
                                             // height: 100,
                                             child: ListView.builder(
@@ -369,7 +370,7 @@ class ViewTutor extends StatelessWidget {
                                                   return Container(
                                                     padding: EdgeInsets.symmetric(vertical: 10),
 
-                                                    child: Text("${item+1} - Class ${slot}",style: TextStyleUtils.phoneparagraphSmall,),
+                                                    child: Text("Class ${slot}",style: TextStyleUtils.phoneparagraphSmall,),
                                                   );
                                                 }),
                                           )
@@ -470,11 +471,11 @@ class ViewTutor extends StatelessWidget {
                                     "Class", style: TextStyleUtils.mobileheading6,),),
                                 Container(
                                   width: width * 0.15,
-                                  child: Text("Gaurdian Name",
+                                  child: Text("Gaurdian Name & Relation",
                                     style: TextStyleUtils.mobileheading6,),),
                                 Container(
                                     width: width * 0.15,
-                                    child: Text("Gaurdian Number",
+                                    child: Text("Gaurdian Number Number",
                                       style: TextStyleUtils.mobileheading6,)),
 
                               ],),
@@ -530,7 +531,7 @@ class ViewTutor extends StatelessWidget {
                                           ),
                                           Container(
                                             width: width * 0.1,
-                                            child: Text("${subjects}",style: TextStyleUtils.phoneparagraphSmall,),
+                                            child: Text("${subjects.join(", ")}",style: TextStyleUtils.phoneparagraphSmall,),
 
                                           ),
                                           Container(
@@ -553,13 +554,16 @@ class ViewTutor extends StatelessWidget {
                                       ),
                                     );
                                   }),
-                            )
+                            ),
 
+                            SizedBox(width: 32,),
 
                           ],
                         ),
                       ),
                       // Personal Info Section
+
+                      SizedBox(height: 32,),
 
 
                     ],
@@ -573,15 +577,22 @@ class ViewTutor extends StatelessWidget {
 
   Widget TextHeadings(heading , subheading){
     return Container(
+      width: 200,
       child: Column(
+
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(heading,style: TextStyleUtils.mobileheading6.copyWith(
+          Text(
+            textAlign: TextAlign.start,
+            heading,style: TextStyleUtils.mobileheading6.copyWith(
             color: ColorUtils.SECONDARY_BLACK
           ),),
           SizedBox(height: 8,),
-          Text(subheading==""||subheading==null?"-":subheading,style: TextStyleUtils.paragraphSmall,)
+          Text(
+            textAlign: TextAlign.start,
+
+            subheading==""||subheading==null||subheading=="null"?"-":subheading,style: TextStyleUtils.paragraphSmall,)
           
           
         ],

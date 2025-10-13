@@ -11,6 +11,7 @@ import 'package:inspiringseniorswebapp/modules/homepage_screen/controllers/homep
 import 'package:inspiringseniorswebapp/modules/wellness_chaupal_screen/controller/wellness_chaupal_controller.dart';
 import 'package:inspiringseniorswebapp/utils/color_utils.dart';
 import 'package:inspiringseniorswebapp/utils/services/scroll_service.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -169,6 +170,8 @@ class AboutUsScreen extends StatelessWidget {
                           children: [
 
                             Container(
+                              key: _keys[AboutSection.advisory],
+
                               padding: EdgeInsets.symmetric(horizontal: isMobile?16:width,vertical: TextSizeDynamicUtils.dHeight28),
 
                               color:ColorUtils.BACKGROUND_COLOR,
@@ -181,57 +184,69 @@ class AboutUsScreen extends StatelessWidget {
                                   ),textAlign: TextAlign.center,),
                                   SizedBox(height: TextSizeDynamicUtils.dHeight28,),
 
-                                  Container(
-                                    width: width*0.9,
 
-                                    child:
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[0]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[0]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=0;
-                                        }),
-                                        ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[1]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[1]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=1;
-                                        }),
+                              Obx(()=>aboutUsController.isLoading.value?Shimmer.fromColors(
+                                child: Container(height: 40,),
+                                baseColor: ColorUtils.BACKGROUND_COLOR,
+                                highlightColor: ColorUtils.BACKGROUND_COLOR,
 
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                              ):
+                                  Column(
+                                    children: [
+                                      Container(
+                                        width: width*0.9,
 
-                                  Container(
-                                    width: width*0.9,
-                                    child:
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                      children: [
+                                        child:
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[0]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[0]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=0;
+                                            }),
+                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[1]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[1]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=1;
+                                            }),
 
-                                        ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[2]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[2]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=2;
-                                        }),
-                                        ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[3]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[3]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=3;
-                                        }),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: TextSizeDynamicUtils.dHeight28,),
 
+                                      Container(
+                                        width: width*0.9,
+                                        child:
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
 
-
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(height: TextSizeDynamicUtils.dHeight28,),
-                                  Container(
-                                    width: width*0.8,
-                                    child:
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-
-                                        ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[4]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[4]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=4;
-                                        }),
+                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[2]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[2]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=2;
+                                            }),
+                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[3]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[3]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=3;
+                                            }),
 
 
-                                      ],
-                                    ),
-                                  ),
 
-                                                         _buildCarousel(aboutUsController.advisoryBoardList.value)
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: TextSizeDynamicUtils.dHeight28,),
+                                      Container(
+                                        width: width*0.8,
+                                        child:
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+
+                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[4]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[4]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=4;
+                                            }),
+
+
+                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[5]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[5]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=5;
+                                            }),
+                                          ],
+                                        ),
+                                      ),
+                                      _buildCarousel(aboutUsController.advisoryBoardList.value),
+                                    ],
+                                  ))
 
 
 
@@ -241,6 +256,8 @@ class AboutUsScreen extends StatelessWidget {
                             SizedBox(height: TextSizeDynamicUtils.dHeight48,),
 
                             Container(
+                              key: _keys[AboutSection.team],
+
                               margin: EdgeInsets.symmetric(
                                   horizontal: 16
                               ),
@@ -329,50 +346,59 @@ class AboutUsScreen extends StatelessWidget {
                                         ),),
                                         SizedBox(height: 64,),
 
-                                        Container(
-                                          width: width*0.4,
-                                          child:
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[0]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[0]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=0;
-                                              }),
-                                              ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[1]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[1]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=1;
-                                              }),
 
-                                              ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[2]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[2]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=2;
-                                              }),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: 60,),
-                                    Container(
-                                      width: width*0.4,
-                                      child:
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        Obx(()=>aboutUsController.isLoading.value?CircularProgressIndicator(color: ColorUtils.BRAND_COLOR,):Column(
                                           children: [
+                                            Container(
+                                              width: width*0.4,
+                                              child:
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[0]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[0]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=0;
+                                                  }),
+                                                  ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[1]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[1]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=1;
+                                                  }),
 
-                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[3]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[3]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=3;
-                                            }),
+                                                  ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[2]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[2]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=2;
+                                                  }),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 60,),
+                                            Container(
+                                                width: width*0.4,
+                                                child:
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
 
-                                            ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[4]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[4]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=4;
-                                            }),
+                                                    ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[3]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[3]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=3;
+                                                    }),
 
+                                                    ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[4]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[4]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=4;
+                                                    }),
+
+                                                    ImageContainerForTeam.screen1(imageurl: aboutUsController.advisoryBoardList.value[5]["imageUrl"],desc: "",name: aboutUsController.advisoryBoardList.value[5]["name"],context: Get.context!,onTap: (){ aboutUsController.advisorPersonSelectedIndex.value=5;
+                                                    }),
+
+                                                  ],
+                                                )
+                                            ),
                                           ],
-                                        )
-                                    )
+                                        ))
+
 
                                       ],
                                     ),
                                   ),
                                   SizedBox(width: 50,),
-
-
-                                  Expanded(
+                                  Obx(()=>aboutUsController.isLoading.value?Expanded(child: Shimmer.fromColors(child: Container(
+                                    height: height*0.4,
+                                  ), baseColor: ColorUtils.BACKGROUND_COLOR, highlightColor: ColorUtils.BACKGROUND_COLOR)): Expanded(
                                     child: Obx(()=>
                                         FounderCard(imageUrl:aboutUsController.advisoryBoardList.value[aboutUsController.advisorPersonSelectedIndex.value]["imageUrl"], name: aboutUsController.advisoryBoardList.value[aboutUsController.advisorPersonSelectedIndex.value]["name"], title: aboutUsController.advisoryBoardList.value[aboutUsController.advisorPersonSelectedIndex.value]["desc"], bio: aboutUsController.advisoryBoardList.value[aboutUsController.advisorPersonSelectedIndex.value]["bio"], linkedInUrl: aboutUsController.advisoryBoardList.value[aboutUsController.advisorPersonSelectedIndex.value]["linkedInUrl"],)),
-                                  ),
+                                  )),
                                 ],
                               ),
                             ),
@@ -623,7 +649,7 @@ class AboutUsScreen extends StatelessWidget {
                   child: Text(
                     person["bio"],
                     style: TextStyleUtils.phoneparagraphSmall,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.justify,
                     maxLines: 8,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -1060,10 +1086,12 @@ class FounderCardTeam extends StatelessWidget {
 
           Container(
             width: MediaQuery.of(context).size.width*0.4,
+            padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+            color: ColorUtils.WHITE_COLOR_BACKGROUND,
             child: Text(
 
                 bio,
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.justify,
 
                 style:TextStyleUtils.paragraphSmall
             ),
@@ -1186,10 +1214,13 @@ class FounderCard extends StatelessWidget {
 
           Container(
             width: MediaQuery.of(context).size.width*0.4,
+            padding: EdgeInsets.symmetric(horizontal: 16,vertical: 16),
+            color: ColorUtils.BACKGROUND_COLOR,
             child: Text(
 
               bio,
-              textAlign: TextAlign.center,
+                textAlign: TextAlign.justify,
+
 
               style:TextStyleUtils.paragraphSmall
             ),

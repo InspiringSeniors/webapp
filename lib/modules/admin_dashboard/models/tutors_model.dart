@@ -350,6 +350,7 @@ extension TutorPersistence on Tutor {
       'lastName': lastName,
       'name': name,
 
+      'searchName':name!.toLowerCase(),
       // contacts
       'email': email,
       'phoneNumber': phoneNumber,
@@ -398,6 +399,8 @@ extension TutorPersistence on Tutor {
       if (firstName != null) 'firstName': firstName,
       if (lastName != null) 'lastName': lastName,
       if (name != null) 'name': name,
+      if (name != null) 'searchName':name!.toLowerCase(),
+
 
       // contacts
       if (email != null) 'email': email,

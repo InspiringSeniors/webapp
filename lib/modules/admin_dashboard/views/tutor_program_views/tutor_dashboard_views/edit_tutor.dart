@@ -144,7 +144,7 @@ class EditTutor extends StatelessWidget {
                         Text("Member Id : ${tutorsDashBoardController.currentSelectedTutor.value.id}",
                           style: TextStyleUtils.smallHighlighted,),
                         Obx(
-                          ()=> Row(
+                              ()=> Row(
                             children: [
                               Text("Student Mapped : ${tutorsDashBoardController.currentSelectedTutor.value.studentsMapped==null||tutorsDashBoardController.currentSelectedTutor.value.studentsMapped==[]?0:tutorsDashBoardController.currentSelectedTutor.value.studentsMapped!.length}",
                                 style: TextStyleUtils.mobileheading6.copyWith(
@@ -172,7 +172,7 @@ class EditTutor extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextHeadings("Phone Number", "${tutorsDashBoardController.currentSelectedTutor.value.phoneNumber}"),
-                        TextHeadings("Email Id", "${tutorsDashBoardController.currentSelectedTutor.value.email}"),
+                        TextHeadings("Email Id", "${tutorsDashBoardController.currentSelectedTutor.value.email==null?"":tutorsDashBoardController.currentSelectedTutor.value.email}"),
                         TextHeadings("DOB", "${tutorsDashBoardController.currentSelectedTutor.value.dob}"),
                         TextHeadings("Age", "${tutorsDashBoardController.currentSelectedTutor.value.age}"),
                         TextHeadings("Gender", "${tutorsDashBoardController.currentSelectedTutor.value.gender}"),
@@ -186,23 +186,25 @@ class EditTutor extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextHeadings("City/Area", "${tutorsDashBoardController.currentSelectedTutor.value.city}"),
-                        TextHeadings("Address", "${tutorsDashBoardController.currentSelectedTutor.value.address}"),
+                        TextHeadings("Communication Address", "${tutorsDashBoardController.currentSelectedTutor.value.address}"),
                         TextHeadings("State", "${tutorsDashBoardController.currentSelectedTutor.value.state}"),
                         TextHeadings("Pincode", "${tutorsDashBoardController.currentSelectedTutor.value.pincode}"),
 
+                        Container(width: 200,)
                       ],
                     ),
+
                     SizedBox(height: 24,),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextHeadings("Professional & Educational Background", "${tutorsDashBoardController.currentSelectedTutor.value.background}"),
-                        SizedBox(width: 24,),
-                        SizedBox(width: 24,),
-                        TextHeadings("Languages Known", "${tutorsDashBoardController.currentSelectedTutor.value.languagePreference.toString()
+                        TextHeadings("Educational & Professional Background in Brief", "${tutorsDashBoardController.currentSelectedTutor.value.background}"),
+                        SizedBox(width: width*0.02,),
+                        TextHeadings("Languages Known", "${tutorsDashBoardController.currentSelectedTutor.value.languagePreference==null?"-":tutorsDashBoardController.currentSelectedTutor.value.languagePreference!.join(", ")
                         }"),
+
 
                       ],
                     ),
@@ -609,7 +611,7 @@ class EditTutor extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("Day",style: TextStyleUtils.mobileheading6,),
@@ -667,7 +669,7 @@ class EditTutor extends StatelessWidget {
                                       SizedBox(height: 10,),
 
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("Day",style: TextStyleUtils.mobileheading6,),
@@ -724,7 +726,7 @@ class EditTutor extends StatelessWidget {
                                       SizedBox(height: 10,),
 
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("Day",style: TextStyleUtils.mobileheading6,),
@@ -787,7 +789,7 @@ class EditTutor extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("From",style: TextStyleUtils.mobileheading6,),
@@ -862,7 +864,7 @@ class EditTutor extends StatelessWidget {
                                       SizedBox(height: 10,),
 
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("From",style: TextStyleUtils.mobileheading6,),
@@ -935,7 +937,7 @@ class EditTutor extends StatelessWidget {
                                       SizedBox(height: 10,),
 
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("From",style: TextStyleUtils.mobileheading6,),
@@ -1015,7 +1017,7 @@ class EditTutor extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("To",style: TextStyleUtils.mobileheading6,),
@@ -1088,7 +1090,7 @@ class EditTutor extends StatelessWidget {
                                       SizedBox(height: 10,),
 
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("To",style: TextStyleUtils.mobileheading6,),
@@ -1161,7 +1163,7 @@ class EditTutor extends StatelessWidget {
                                       SizedBox(height: 10,),
 
                                       Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
                                           Text("To",style: TextStyleUtils.mobileheading6,),
@@ -1245,7 +1247,7 @@ class EditTutor extends StatelessWidget {
                     ),
                     SizedBox(height: 12,),
 
-                    Text("Note : Choose up to ")
+                    Text("Note: Choose up to 3 combinations of Subject and Class. Choose maximum 3 slots per week in Time Availability.")
 
 
 
@@ -1323,11 +1325,11 @@ class EditTutor extends StatelessWidget {
                                         "Class", style: TextStyleUtils.mobileheading6,),),
                                     Container(
                                       width: width * 0.1,
-                                      child: Text("Gaurdian Name",
+                                      child: Text("Gaurdian Name & Relation",
                                         style: TextStyleUtils.mobileheading6,),),
                                     Container(
                                         width: width * 0.15,
-                                        child: Text("Gaurdian Number",
+                                        child: Text("Gaurdian Phone Number",
                                           style: TextStyleUtils.mobileheading6,)),
                                     Container(
                                       width: width*0.12,
@@ -1376,7 +1378,7 @@ class EditTutor extends StatelessWidget {
                                               ),
                                               Container(
                                                 width: width * 0.1,
-                                                child: Text("${subjects}",style: TextStyleUtils.phoneparagraphSmall,),
+                                                child: Text("${subjects.join(',')}",style: TextStyleUtils.phoneparagraphSmall,),
 
                                               ),
                                               Container(
@@ -1917,15 +1919,22 @@ class EditTutor extends StatelessWidget {
 
   Widget TextHeadings(heading , subheading){
     return Container(
+      width: 200,
       child: Column(
+
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(heading,style: TextStyleUtils.mobileheading6.copyWith(
+          Text(
+            textAlign: TextAlign.start,
+            heading,style: TextStyleUtils.mobileheading6.copyWith(
               color: ColorUtils.SECONDARY_BLACK
           ),),
           SizedBox(height: 8,),
-          Text(subheading==""||subheading==null?"-":subheading,style: TextStyleUtils.paragraphSmall,)
+          Text(
+            textAlign: TextAlign.start,
+
+            subheading==""||subheading==null||subheading=="null"?"-":subheading,style: TextStyleUtils.paragraphSmall,)
 
 
         ],
@@ -1954,10 +1963,10 @@ class EditTutor extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                   Text(
                     "Select subjects to remove",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                    style: TextStyleUtils.mobileheading6),
+
                   const SizedBox(height: 12),
 
                   // Checkboxes (multi-select)

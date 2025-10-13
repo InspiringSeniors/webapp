@@ -85,6 +85,9 @@ class Validators {
 }
 
 
+extension StringUtils on String {
+  bool get isNumeric => RegExp(r'^\d+$').hasMatch(this.trim());
+}
 class Utils{
 
  static int? calculateAge(String dobText) {
@@ -134,33 +137,84 @@ class Utils{
    }
  }
 
+
   static String generateMemberId(String fullName, String mobile) {
+
+   print("called to updatye");
     // 1. Trim leading/trailing spaces
     fullName = fullName.trim();
 
-    // 2. Get first name (till first space)
-    String firstName = fullName.split(" ").first;
+    // 2. Remove special characters (keep only alphabets)
+    String cleanedName = fullName.replaceAll(RegExp(r'[^a-zA-Z]'), "");
 
-    // 3. Remove special characters like "."
-    firstName = firstName.replaceAll(RegExp(r'[^a-zA-Z]'), "");
-
-    // 4. If length < 4, prepend "O" until it reaches 4
-    while (firstName.length < 4) {
-      firstName = "O" + firstName;
+    // 3. If length < 4, prepend "O" until it reaches 4
+    while (cleanedName.length < 4) {
+      cleanedName = "O$cleanedName";
     }
 
-    // 5. Take only first 4 letters, convert to lowercase
-    String firstFour = firstName.substring(0, 4).toLowerCase();
+    // 4. Take only first 4 letters, convert to lowercase
+    String firstFour = cleanedName.substring(0, 4).toLowerCase();
 
-// Keep digits only
-    final cleaned = mobile.replaceAll(RegExp(r'\D'), '');
+    // 5. Keep digits only from mobile number
+    final cleanedMobile = mobile.replaceAll(RegExp(r'\D'), '');
 
-// Last 4 digits (or fewer if shorter)
-    final String lastFour = cleaned.length <= 4
-        ? cleaned
-        : cleaned.substring(cleaned.length - 4);    // 6. Append mobile number
+    // 6. Take last 4 digits (or fewer if shorter)
+    final lastFour = cleanedMobile.length <= 4
+        ? cleanedMobile
+        : cleanedMobile.substring(cleanedMobile.length - 4);
+
+    print("new id ${firstFour}${lastFour}");
     return "$firstFour$lastFour";
   }
+
+
+ static String formatDateWithSeconds(DateTime? date) {
+   if (date == null) return 'No date available';
+   return DateFormat('dd-MM-yyyy HH:mm:ss').format(date);
+ }
+
+ static DateTime? toDate(dynamic value) {
+
+   print("date value ${value}");
+   if (value == null) return null;
+   if (value is DateTime) return value;
+   if (value is String) return DateTime.tryParse(value);
+   if (value is Timestamp) return value.toDate();
+   if (value is int) {
+     // Firestore Timestamp (millisecondsSinceEpoch)
+     return DateTime.fromMillisecondsSinceEpoch(value);
+   }
+   return null;
+ }
+
+ static String generateStudentId(String fullName, String mobile) {
+
+   print("called to updatye");
+   // 1. Trim leading/trailing spaces
+   fullName = fullName.trim();
+
+   // 2. Remove special characters (keep only alphabets)
+   String cleanedName = fullName.replaceAll(RegExp(r'[^a-zA-Z]'), "");
+
+   // 3. If length < 4, prepend "O" until it reaches 4
+   while (cleanedName.length < 4) {
+     cleanedName = "O$cleanedName";
+   }
+
+   // 4. Take only first 4 letters, convert to lowercase
+   String firstFour = cleanedName.substring(0, 4).toLowerCase();
+
+   // 5. Keep digits only from mobile number
+   final cleanedMobile = mobile.replaceAll(RegExp(r'\D'), '');
+
+   // 6. Take last 4 digits (or fewer if shorter)
+   final lastFour = cleanedMobile.length <= 4
+       ? cleanedMobile
+       : cleanedMobile.substring(cleanedMobile.length - 4);
+
+   print("new id ${firstFour}${lastFour}");
+   return "$firstFour${lastFour}_s";
+ }
 
 
  static Color getStatusColor(String? status) {

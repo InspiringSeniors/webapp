@@ -166,7 +166,7 @@ class viewUser extends StatelessWidget {
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                    "User Id : ${userManagementController.currentSelectedUser.value.id == "" ? "" : userManagementController.currentSelectedUser.value.id}",
+                                                    "Member Id : ${userManagementController.currentSelectedUser.value.id == "" ? "" : userManagementController.currentSelectedUser.value.id}",
                                                     style: TextStyleUtils
                                                         .smallGreyTextStyleHighlighted
                                                         .copyWith(
@@ -1279,7 +1279,7 @@ class viewUser extends StatelessWidget {
                                         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              "Account Information",
+                                              "Member Status",
                                               style:
                                               TextStyleUtils.heading6,
                                             ),
@@ -1708,7 +1708,10 @@ class viewUser extends StatelessWidget {
                                         return Card(
                                           margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                           child: ListTile(
-                                            title: Text(text ?? '',style: TextStyleUtils.heading6,),
+
+                                            leading: Container(
+                                              width:MediaQuery.of(Get.context!).size.width*0.5,
+                                                child: Text(text ?? '',style: TextStyleUtils.smallHighlighted,)),
 
                                             trailing: Text("${updatedBy} on ${date}",style: TextStyleUtils.mobileheading6,),
                                           ),
@@ -2094,7 +2097,7 @@ class viewUser extends StatelessWidget {
                                                       width: 6,
                                                     ),
                                                     Text(
-                                                      "Delete User",
+                                                      "Delete Member",
                                                       style: TextStyleUtils
                                                           .smallGreyTextStyle
                                                           .copyWith(

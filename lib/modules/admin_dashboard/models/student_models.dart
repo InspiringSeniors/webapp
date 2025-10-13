@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class StudentDetailModel {
   final String id;
   final String name;
@@ -5,8 +7,13 @@ class StudentDetailModel {
   final String studentClass;
 
   String? status;
-  Map<String,dynamic>? consentDetails;
+  String? notes;
+  String profilePic;
+
+  Map<String, dynamic>? consentDetails;
   final Map<String, dynamic> subjects;
+  List<dynamic>? subjectsList;
+
   final String school;
   final bool isAssigned;
   final Map<String, List<String>> assignedTutors;
@@ -18,7 +25,14 @@ class StudentDetailModel {
   final Map<String, dynamic> guardianDetails;
   final List<Map<String, dynamic>> classHistory;
   final List<Map<String, dynamic>> notesReports;
-  final String profilePic;
+
+  /// New fields
+  final DateTime? registerDate;
+  final DateTime? updatedAt;
+  final String? createdBy;
+  final String? updatedBy;
+  final DateTime? lastLogin;
+  final List<String>? tags;
 
   StudentDetailModel({
     this.id = '',
@@ -28,6 +42,7 @@ class StudentDetailModel {
     this.subjects = const {},
     this.school = '',
     this.status,
+    this.notes,
     this.consentDetails,
     this.isAssigned = false,
     this.assignedTutors = const {},
@@ -39,7 +54,14 @@ class StudentDetailModel {
     this.classHistory = const [],
     this.classIdsAssigned,
     this.notesReports = const [],
-    this.profilePic=''
+    this.profilePic = '',
+    this.subjectsList,
+    this.registerDate,
+    this.updatedAt,
+    this.createdBy,
+    this.updatedBy,
+    this.lastLogin,
+    this.tags,
   });
 
   factory StudentDetailModel.fromMap(String id, Map<String, dynamic> data) {
@@ -48,35 +70,66 @@ class StudentDetailModel {
       name: data['name']?.toString() ?? '',
       phone: data['phone']?.toString() ?? '',
       studentClass: data['class']?.toString() ?? '',
-      subjects: data['subjects']==null?{}:Map<String, dynamic>.from(data['subjects'] ?? {}),
-      school: data['school']==null?"":data['school']?.toString() ?? '',
-      isAssigned:data['isAssigned']==null?false: data['isAssigned'] == true,
-      assignedTutors: data['assignedTutors']==null?{}:Map<String, List<String>>.from(
+      subjects: data['subjects'] == null
+          ? {}
+          : Map<String, dynamic>.from(data['subjects'] ?? {}),
+      school: data['school']?.toString() ?? '',
+      isAssigned: data['isAssigned'] == true,
+      assignedTutors: data['assignedTutors'] == null
+          ? {}
+          : Map<String, List<String>>.from(
         (data['assignedTutors'] ?? {}).map(
               (k, v) => MapEntry(k, List<String>.from(v)),
         ),
       ),
-      consentDetails: data['consentDetails']==null?{}:data['consentDetails'],
-      status: data['status']==null?'':data['status'],
-      attendancePercent:data['attendancePercent']==null?0.0: _toDouble(data['attendancePercent']),
-      personalInfo:data['personalInfo']==null?{} :Map<String, dynamic>.from(data['personalInfo'] ?? {}),
-      interests: data["interests"]==null?[]:List<String>.from(data['interests'] ?? []),
-      timingsAvailable: (data['timingsAvailable'] ?? []).map<Map<String, dynamic>>((e) {
-      return {
+      subjectsList: data['subjectsList']==null?[]:data['subjectsList'],
+      notes: data['notes']?.toString() ?? '',
+      consentDetails: data['consentDetails'] ?? {},
+      status: data['status']==null?'Unassigned':data['status'],
+      attendancePercent: _toDouble(data['attendancePercent']),
+      personalInfo: data['personalInfo'] == null
+          ? {}
+          : Map<String, dynamic>.from(data['personalInfo']),
+      interests: data['interests'] == null
+          ? []
+          : List<String>.from(data['interests']),
+      timingsAvailable: (data['timingsAvailable'] ?? [])
+          .map<Map<String, dynamic>>((e) => {
         'day': e['day']?.toString() ?? '',
         'start': e['start']?.toString() ?? '',
         'end': e['end']?.toString() ?? '',
-      };
-    }).toList(),
-
-
-      guardianDetails: data["guardianDetails"]==null?{}: Map<String, dynamic>.from(data['guardianDetails'] ?? {}),
-      classHistory:data["classHistory"]==null?[]: List<Map<String, dynamic>>.from(
-        (data['classHistory'] ?? []).map((e) => Map<String, dynamic>.from(e)),
+      })
+          .toList(),
+      guardianDetails: data['guardianDetails'] == null
+          ? {}
+          : Map<String, dynamic>.from(data['guardianDetails']),
+      classHistory: data['classHistory'] == null
+          ? []
+          : List<Map<String, dynamic>>.from(
+        (data['classHistory'] ?? [])
+            .map((e) => Map<String, dynamic>.from(e)),
       ),
-      notesReports:data["notesReports"]==null?[]: List<Map<String, dynamic>>.from(
-        (data['notesReports'] ?? []).map((e) => Map<String, dynamic>.from(e)),
+      notesReports: data['notesReports'] == null
+          ? []
+          : List<Map<String, dynamic>>.from(
+        (data['notesReports'] ?? [])
+            .map((e) => Map<String, dynamic>.from(e)),
       ),
+
+      /// New fields mapping
+      registerDate: data['registerDate'] != null
+          ? (data['registerDate'] as Timestamp).toDate()
+          : null,
+        updatedAt:data['updatedAt'] != null
+            ? (data['updatedAt'] as Timestamp).toDate()
+            : null,
+      createdBy: data['createdBy']?.toString(),
+      updatedBy: data['updatedBy']?.toString(),
+      lastLogin:
+      data['lastLogin'] != null
+          ? (data['lastLogin'] as Timestamp).toDate()
+          : null,
+      tags: data['tags'] == null ? [] : List<String>.from(data['tags']),
     );
   }
 
@@ -85,6 +138,19 @@ class StudentDetailModel {
     if (value is double) return value;
     if (value is String) return double.tryParse(value) ?? 0.0;
     return 0.0;
+  }
+
+  static DateTime? _toDate(dynamic value) {
+
+    print("date value ${value}");
+    if (value == null) return null;
+    if (value is DateTime) return value;
+    if (value is String) return DateTime.tryParse(value);
+    if (value is int) {
+      // Firestore Timestamp (millisecondsSinceEpoch)
+      return DateTime.fromMillisecondsSinceEpoch(value);
+    }
+    return null;
   }
 }
 
@@ -139,6 +205,8 @@ class TutorLite {
   final String studentClass;
   final Map<String, dynamic> subjects;
   final String school;
+  final String status;
+  final List<dynamic> subjectsList;
   final bool isAssigned;
   final Map<String, List<String>> assignedTutors;
   final double attendancePercent;
@@ -149,7 +217,9 @@ class TutorLite {
     required this.phone,
     required this.studentClass,
     required this.subjects,
+    required this.status,
     required this.school,
+    required this.subjectsList,
     required this.isAssigned,
     required this.assignedTutors,
     required this.attendancePercent,
@@ -164,6 +234,8 @@ class TutorLite {
       subjects: Map<String, dynamic>.from(data['subjects'] ?? {}),
       school: data['school']?.toString() ?? '',
       isAssigned: data['isAssigned'] == true,
+      subjectsList: data["subjectsList"]==null?[]:data["subjectsList"],
+      status: data['status']==null?'Unassigned':data['status'],
       assignedTutors: Map<String, List<String>>.from(
         (data['assignedTutors'] ?? {}).map(
               (k, v) => MapEntry(k, List<String>.from(v)),
