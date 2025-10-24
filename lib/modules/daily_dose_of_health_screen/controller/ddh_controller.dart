@@ -25,6 +25,89 @@ class DDHController extends GetxController{
       Get.context!,
       'xig7Sht8qFU',
     ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'uk4LkOIezxw',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '1aNxNpdH3is',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'dpJL-NQ7KeY',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'Dz3KrieaHQo',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '4HkvwPXAylc',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '29WkV2Prr2Q',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'te7qwlOlqj0',
+    ),CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'XKQEXFXfecE',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'sapQpxJDV2A',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'PcMPE-4H7Vg',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'kTTsjjyWsRg',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'ctiC-JYgLQw',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'ylpi4oZqn8U',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'FhO6GakCc0s',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'BQlZ2Cax8xw',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'mvEoEG8EZNk',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '8PsMOXwpl_I',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'LqXk8CKRJXs',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'xig7Sht8qFU',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'xig7Sht8qFU',
+    ),
+
   ];
 
   final List<Widget> hostList = <Widget>[

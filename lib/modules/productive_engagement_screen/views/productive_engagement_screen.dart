@@ -117,7 +117,7 @@ class ProductiveEngagementScreen extends StatelessWidget {
                 (){
                                 Get.toNamed(RoutingNames.KNOWLEDGE_CAFE_SCREEN);
 
-                              },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_1.jpeg?alt=media&token=ba6f2e83-66bc-4d06-8f8f-01f9cdde76db")
+                              },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_real.jpeg?alt=media&token=2483657d-6788-45be-84b2-2c816de66c0a")
 
 
                               ,
@@ -270,7 +270,7 @@ class ProductiveEngagementScreen extends StatelessWidget {
                                           (){
                                         Get.toNamed(RoutingNames.KNOWLEDGE_CAFE_SCREEN);
 
-                                      },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_1.jpeg?alt=media&token=ba6f2e83-66bc-4d06-8f8f-01f9cdde76db")
+                                      },"https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_real.jpeg?alt=media&token=2483657d-6788-45be-84b2-2c816de66c0a")
                                 ],),
 
                               ),

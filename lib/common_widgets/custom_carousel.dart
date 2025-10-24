@@ -31,14 +31,15 @@ class CustomCarousel extends StatelessWidget{
     return Column(
       children: [
         Container(
-          child: CarouselSlider(
-
-            items: carouselList,
+          child: CarouselSlider.builder(
+            itemCount: carouselList.length,
+            itemBuilder: (context, index, realIndex) {
+              return carouselList[index];
+            },
             options: CarouselOptions(
-              // enlargeCenterPage: true,
               enableInfiniteScroll: true,
-              viewportFraction:viewportsection==null? 0.5:viewportsection,
-              height:height==null? heightHere*0.4:height,
+              viewportFraction: viewportsection ?? 0.5,
+              height: height ?? heightHere * 0.4,
               autoPlay: false,
               autoPlayInterval: const Duration(seconds: 3),
               onPageChanged: (index, _) {
@@ -47,10 +48,13 @@ class CustomCarousel extends StatelessWidget{
             ),
           ),
         ),
-
         Container(
           margin: EdgeInsets.only(
-              bottom: isMobile?TextSizeDynamicUtils.dHeight18:TextSizeDynamicUtils.dHeight30,top:TextSizeDynamicUtils.dHeight30 ),
+            bottom: isMobile
+                ? TextSizeDynamicUtils.dHeight18
+                : TextSizeDynamicUtils.dHeight30,
+            top: TextSizeDynamicUtils.dHeight30,
+          ),
           child: _buildCircleIndicator(),
         ),
       ],

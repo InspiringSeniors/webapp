@@ -42,6 +42,76 @@ class FunWithArtController extends GetxController{
       Get.context!,
       'uqLNJPGwOVg',
     ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'hE82BqBTQaE',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'hPYktbkgoj0',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '4RM0j8nrT8w',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '5zJNBGITm6s',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'CAw51MCDeTU',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'yXr8KS0L9B0',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '13keKUkcAaY',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'lTX1qTXqJdg',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'noB-Ft4oOTQ',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '5Sk9Bce3UW0',
+    ),
+
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'ubEbYRo2k94',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'sQs1KcZg1rA',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'ugLfC36OvRg',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'rNW8y5-HRsA',
+    ),
+
   ];
   @override
   void onInit() {

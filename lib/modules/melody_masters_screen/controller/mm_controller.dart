@@ -29,6 +29,50 @@ class MelodyMastersController extends GetxController{
       '7-ed7Y5yDlo',
     ),
 
+
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'M9_busfghbI',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'gEk9o0aetWI',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'dxXo5UILkP0',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'hE0d32PpdCw',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'dInWW73jTEs',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'whhB3_0gAFU',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '4SEGkG06Tbg',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'c_p_hPstKOY',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'iU7mj4zFJVQ',
+    ),
+
+
+
+
   ];
   final List<Widget> hostList = <Widget>[
     CarouselForHosts.screen1(

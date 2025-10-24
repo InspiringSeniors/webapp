@@ -59,7 +59,7 @@ class KnowledgeCafeScreen extends StatelessWidget {
                       SizedBox(height: TextSizeDynamicUtils.dHeight28,),
                       Container(
 
-                        child: Image.network("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_1.jpeg?alt=media&token=ba6f2e83-66bc-4d06-8f8f-01f9cdde76db",fit: BoxFit.cover,),
+                        child: Image.network("https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_real.jpeg?alt=media&token=2483657d-6788-45be-84b2-2c816de66c0a",fit: BoxFit.cover,),
                         width: MediaQuery.of(context).size.width,
                         height:MediaQuery.of(context).size.height*0.33 ,
                         clipBehavior: Clip.hardEdge,
@@ -135,7 +135,7 @@ class KnowledgeCafeScreen extends StatelessWidget {
                           children: [
                             Container(
 
-                              child: CachedNetworkImage(imageUrl: "https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_1.jpeg?alt=media&token=ba6f2e83-66bc-4d06-8f8f-01f9cdde76db",fit: BoxFit.fill,),
+                              child: CachedNetworkImage(imageUrl: "https://firebasestorage.googleapis.com/v0/b/inspiringseniorswebapp.firebasestorage.app/o/posters%2Fknowledge_cafe_real.jpeg?alt=media&token=2483657d-6788-45be-84b2-2c816de66c0a",fit: BoxFit.fill,),
                               width: MediaQuery.of(context).size.width*0.4,
                               height:MediaQuery.of(context).size.height*0.45 ,
 

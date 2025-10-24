@@ -1594,7 +1594,10 @@ class MemberRegistrationScreen extends StatelessWidget {
                             ),
 
 
-                            Obx(()=>memberRegistrationController.isConsentGiven.value?Container():Text("Thankyou for filling the form , please mark the checkbox to give consent".tr,style: TextStyleUtils.smallGreyTextStyle.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),)),
+                            Obx(()=>memberRegistrationController.isConsentGiven.value?Container():Container(
+                              margin: EdgeInsets.symmetric(vertical: 12),
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                                child: Text("Thankyou for filling the form , please mark the checkbox to give consent".tr,style: TextStyleUtils.smallGreyTextStyle.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),))),
 
                             SizedBox(height: 32,),
 
@@ -3110,7 +3113,9 @@ class MemberRegistrationScreen extends StatelessWidget {
                               ),
                             ),
 
-                            Obx(()=>memberRegistrationController.isConsentGiven.value?Container():Text("Thankyou for filling the form , please mark the checkbox to give consent".tr,style: TextStyleUtils.smallGreyTextStyle.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),)),
+                            Obx(()=>memberRegistrationController.isConsentGiven.value?Container():Container(
+                                margin: EdgeInsets.symmetric(vertical: 12),
+                                child: Text("Thankyou for filling the form , please mark the checkbox to give consent".tr,style: TextStyleUtils.smallGreyTextStyle.copyWith(color: ColorUtils.ORANGE_COLOR_DARK),))),
 
                             SizedBox(height: 32,),
 

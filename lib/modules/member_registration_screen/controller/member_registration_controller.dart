@@ -492,7 +492,21 @@ class MemberRegistrationController extends GetxController{
 
     // Consent validation
     if (agreed.value == false) {
+
+      Get.snackbar(
+        "Please mark the checkbox",
+        "Thankyou for filling the form , please mark the checkbox to give consent",
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.red.shade600,
+        colorText: Colors.white,
+        margin: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(Get.context!).size.height * 0.1,
+          horizontal: MediaQuery.of(Get.context!).size.width * 0.25,
+        ),
+        snackPosition: SnackPosition.BOTTOM,
+      );
       isConsentGiven.value = false;
+
       return;
     } else {
       isConsentGiven.value = true;

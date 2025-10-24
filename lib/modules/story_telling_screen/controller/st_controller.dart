@@ -43,8 +43,94 @@ class StoryTellingController extends GetxController{
       'tNYDIhw5nxE',),
     CarouselBuilderScreenV2.screen1(
       Get.context!,
-      'XSl-AThOT48&',
+      'XSl-AThOT48',
     ),
+
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'aPIbgMBdy_Q',
+    ),
+
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'mNEKEgkoycI',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'ZF87omvsQIo',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '2wQUugaZh8U',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '6E5FHPOpXeg',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'JuM6Q7mda1A',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '3CHVe1WWUKc',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'QhrCkEVd0u0',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'ypwKiGxbTWo',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'J3KOzEIVjCY',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'EPZZYjsjZRU',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'gJkjCBVGewg',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'ewRhyZYXnzk',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'YWZlp953s8I',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'FMOIHMU6voI',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'zUENPOpqXCY',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'Eml46K7s3aY',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'usIHb0sm2UE',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '7N54sytWIG8',
+    ),
+
+
   ];
   @override
   void onInit() {

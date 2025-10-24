@@ -12,6 +12,20 @@ class BookClubController extends GetxController{
       Get.context!,
       'oC1hmdYMYes',
     ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '0ZvFaZC07mw',
+    ),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'EKwXooKcTuI',
+    ),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '2BQXnTOE7OU',
+    ),
     // CarouselBuilderScreenV2.screen1(
     //   Get.context!,
     //   '4TIF85SdGeQ',),

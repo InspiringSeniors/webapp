@@ -41,6 +41,58 @@ class KCController extends GetxController{
     CarouselBuilderScreenV2.screen1(
       Get.context!,
       'b43AKwJoYm8',),
+
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      't2bXfJUKJ7o',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'OpGscOvyl4s',),
+
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'grFX6yO9cXA',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '1AqnMsW4oKI',),
+
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'FByyFUlx-bM',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '3YUQfYigfNE',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'Xoc0OjxWgKU',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'cIOO5EOIeEo',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'qwtCZTYoP9Y',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'IMLoqa2Yw-4',),
+
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      'Eh0XsK987fE',),
+    CarouselBuilderScreenV2.screen1(
+      Get.context!,
+      '0SkIvFdo7MU',),
+
+
   ];
   @override
   void onInit() {
